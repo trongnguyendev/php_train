@@ -1,0 +1,43 @@
+version: '3.1'
+services:
+    mysql:
+        image: 'mysql:8.0.33'  # Docker tự động lấy đúng kiến trúc ARM hoặc AMD
+        environment:
+            - MYSQL_ROOT_PASSWORD=password
+            - MYSQL_DATABASE=db_test
+            - MYSQL_USER=php_train
+            - MYSQL_PASSWORD=password
+        ports:
+            - '3309:3306'
+        volumes:
+            - './phpdocker/db:/var/lib/mysql'
+
+    php-fpm:
+        build: phpdocker/php-fpm
+        container_name: php-fpm
+        restart: unless-stopped
+        volumes:
+            - '.:/var/www/html'
+
+    webserver:
+        image: 'nginx:alpine'
+        volumes:
+            - '.:/var/www/html'
+            - './phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
+        ports:
+            - '9000:80'
+        depends_on:
+            - php-fpm
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        restart: unless-stopped
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_HOST=mysql
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        ports:
+            - "8088:80"
+        depends_on:
+            - mysql
