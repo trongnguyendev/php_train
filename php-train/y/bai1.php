@@ -130,13 +130,21 @@
 //     echo $maxNumber;
 
 // Từ một mãng, trả về 2 mãng các số chẵn lẻ.
-$mangs = [2,3,6,8,1,3,6,9,4,3,6,4,6,8,5,4,3,6,7,9];
+// $mangs = [2,3,6,8,1,3,6,9,4,3,6,4,6,8,5,4,3,6,7,9];
 
-$c = [];
-$l = [];
-    foreach ($mangs as $mang){
-        if ($mang %2 == 0){ 
-            $c[] = $mang;
-        }
-    }
-    print_r ($c);
+// $c = [];
+// $l = [];
+//     foreach ($mangs as $mang){
+//         if ($mang %2 == 0){ 
+//             $c[] = $mang;
+//         }
+//     }
+//     print_r ($c);
+
+// Tính Tổng Các Số Trong Mảng
+$mangs = [2,3,6,8,1,3,6,9,4,3,6,4,6,8,5,4,3,6,7,9];
+$tong = 0;
+foreach ($mangs as $mang){
+    $tong += $mang;
+}
+    echo $tong;
