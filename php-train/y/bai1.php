@@ -142,9 +142,75 @@
 //     print_r ($c);
 
 // Tính Tổng Các Số Trong Mảng
-$mangs = [2,3,6,8,1,3,6,9,4,3,6,4,6,8,5,4,3,6,7,9];
-$tong = 0;
-foreach ($mangs as $mang){
-    $tong += $mang;
+// $mangs = [2,3,6,8,1,3,6,9,4,3,6,4,6,8,5,4,3,6,7,9];
+// $tong = 0;
+// foreach ($mangs as $mang){
+//     $tong += $mang;
+// }
+//     echo $tong;
+
+
+
+
+
+
+
+// 10/03/2025
+
+// Tính tổng 2 số bằng function
+
+// $a = 10;
+// $b = 20;
+
+// function tong ($a,$b){
+//     echo $a + $b;
+// }
+//     tong ($a,$b);
+
+
+// Đổi vị trí giữa biến a và biến b
+
+// $x = 10;
+// $y = 20;
+// $tam = $x;
+
+// $x = $y;
+// $y = $tam;
+// echo $x ." ". $y;
+
+
+//  Tìm số lớn nhất trong mảng
+// $a = [23,234,24,24,556,456,7,54,234,234,36,4,8,4,56,55,7,564,65,35,456];
+// $maxNumber = $a[0];
+
+// foreach ($a as $b){
+//     if($maxNumber < $b){
+//     $maxNumber = $b;
+//     }
+// }
+// echo $maxNumber;
+
+// Từ 1 mảng trả về 2 mảng có số chẳn và số lẻ
+
+// $a = [23,345,456,6,24,234,243,63,5,43647,7,23,2,47,9,87,3,4,5456,68,765,2,24,254565,7,65,2];
+// $x = [];
+// $y = [];
+// foreach ($a as $b){
+//     if ($b % 2 ==0){
+//         $x [] = $b;
+//     }
+//     if ($b % 3 == 0){
+//         $y [] = $b;
+//     }
+//     }
+//     print_r ($x);
+//     print_r ($y);
+
+
+// Tính tổng các số trong mảng
+$a = [23,345,456,6,24,234,243,63,5,43647,7,23,2,47,9,87,3,4,5456,68,765,2,24,254565,7,65];
+$c = 0;
+foreach ($a as $b){
+    $c += $b;
 }
-    echo $tong;
+echo $c;
