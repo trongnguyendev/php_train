@@ -1,7 +1,7 @@
 version: '3.1'
 services:
     mysql:
-        image: 'mysql:8.0.33'  # Docker tự động lấy đúng kiến trúc ARM hoặc AMD
+        image: 'mysql:8.0.33'
         environment:
             - MYSQL_ROOT_PASSWORD=password
             - MYSQL_DATABASE=db_test
@@ -10,7 +10,7 @@ services:
         ports:
             - '3309:3306'
         volumes:
-            - './phpdocker/db:/var/lib/mysql'
+            - './phpdocker/db:/var/db'
 
     php-fpm:
         build: phpdocker/php-fpm
