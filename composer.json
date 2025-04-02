@@ -1,0 +1,15 @@
+{
+    "name": "root/project",
+    "description": "Php MVC",
+    "autoload": {
+        "psr-4": {
+            "Root\\Project\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Toni Dev"
+        }
+    ],
+    "require": {}
+}
