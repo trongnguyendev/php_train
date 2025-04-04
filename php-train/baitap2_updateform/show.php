@@ -1,15 +1,11 @@
 <?php
-$file = fopen("dulieu.txt", "r");
-$datas =[];
-if ($file) {
-    while (($line = fgets($file)) !== false) { // Đọc từng dòng
-            $datas [] = explode(",",$line);
-            }
-            fclose($file);
-}
-else {
-    echo "Lỗi: Không thể mở file.";
-}
+  require_once ('./class/Employee.php');
+  $Employee = new Employee();
+  
+  $datas = $Employee->getEmployees();
+  // $datas = $Employee->index(); dùng return;
+
+  // $datas = $Employee->datas;
 ?>
 <table border = "1">
   <tr>

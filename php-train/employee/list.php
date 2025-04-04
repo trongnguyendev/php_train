@@ -26,7 +26,8 @@ if ($file) {
     <td><?php echo $data[1]; ?></td>
     <td><?php echo $data[2]; ?></td>
     <td><?php echo $data[3]; ?></td>
-    <td><a href= "update.php?id=<?php echo $key + 1; ?>">Cập Nhập</a></td>
+    <td><a href= "update.php?idUpdate=<?php echo $key + 1; ?>">Cập Nhập</a></td>
+    <td><a href= "delete.php?id=<?php echo $key + 1; ?>">Xóa</a></td>
   </tr>
   <?php endforeach;?>
 </table>

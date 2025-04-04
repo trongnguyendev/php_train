@@ -21,22 +21,25 @@ if($brithday === '' || $salary === ''){
     exit;
 }
 if($hasProcess){
+     if($id == $idUpdate ){
+        
+     }
 
-    $file = fopen("dulieu.txt", "r");
+    // $file = fopen("dulieu.txt", "r");
     
-    if ($file) {
-        while (($line = fgets($file)) !== false) { // Đọc từng dòng
-          if($id == $idUpdate){
-            $datas .= "$name,$email,$brithday,$salary\n";
-          }else{
-            $datas .= $line;
-          }
-          $id++;
-        }
-        fclose($file);
-    } else {
-        echo "Lỗi: Không thể mở file.";
-    }
+    // if ($file) {
+    //     while (($line = fgets($file)) !== false) { // Đọc từng dòng
+    //       if($id == $idUpdate){
+    //         $datas .= "$name,$email,$brithday,$salary\n";
+    //       }else{
+    //         $datas .= $line;
+    //       }
+    //       $id++;
+    //     }
+    //     fclose($file);
+    // } else {
+    //     echo "Lỗi: Không thể mở file.";
+    // }
 }
 $file = fopen("dulieu.txt", "w+"); // Mở file với chế độ ghi (xóa dữ liệu cũ)
 fwrite($file, $datas);
