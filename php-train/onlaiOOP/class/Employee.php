@@ -162,4 +162,11 @@ class Employee {
         fwrite($file, $datas);
         fclose($file);
     }
+    public function error(){
+        session_start();
+        $birthday = $_SESSION['error_birthday'] ?? '';
+        unset($_SESSION['error_birthday']);
+        $salary = $_SESSION['error_salary'] ?? '';
+        unset($_SESSION['error_salary']);
+    }
 }

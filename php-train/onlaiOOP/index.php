@@ -1,9 +1,11 @@
 <?php
 session_start();
-$birthday = $_SESSION['error_birthday'] ?? '';
-unset($_SESSION['error_birthday']);
-$salary = $_SESSION['error_salary'] ?? '';
-unset($_SESSION['error_salary']);
+require_once('./class/Employee.php');
+
+// $birthday = $_SESSION['error_birthday'] ?? '';
+// unset($_SESSION['error_birthday']);
+// $salary = $_SESSION['error_salary'] ?? '';
+// unset($_SESSION['error_salary']);
 
 ?>
 <form action="process.php" method="POST">

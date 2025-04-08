@@ -1,5 +1,14 @@
+<?php
 
-<form action="updateprocess.php" method="POST">
+$action = 'process.php';
+
+if (isset($data['is_update']) && $data['is_update'] ) {
+        $action = 'updateProcess.php';
+}
+
+?>
+
+<form action="<?php echo $action; ?>" method="POST">
     <label for="name">Tên Nhân Viên</label>
     <input type="text" name="name" value="<?php echo $data[0] ?? '';?>" required>
     <br>
