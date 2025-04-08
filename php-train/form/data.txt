@@ -1,3 +1,0 @@
-develop1,develop1@petabit.co.jp11,17
-develop1,develop1@petabit.co.jp11,17
-toni,toni123@petabit.co.jp,14
