@@ -1,5 +1,6 @@
 <?php
 require_once('../models/Customer.php');
+session_start();
 $name = $_POST['name'];
 $email = $_POST['email'];
 $birthday = $_POST['birthday'];
@@ -15,4 +16,5 @@ $infor = [
 
 $datas = new Customer();
 $datas->store($infor);
+$datas->session($infor);
 header ("Location: list.php");

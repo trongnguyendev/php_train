@@ -42,4 +42,18 @@ class Customer extends Basic {
         $writeDelete = $this->writeFileDetele($readDelete);
         return $writeDelete;
     }
+
+    public function session($infor){
+        if($infor['birthday'] == ''){
+            $_SESSION['error_birthday'] = "Chưa điền ngày sinh";
+        }
+        if($infor['address'] == ''){
+            $_SESSION['error_address'] = "Chưa điền địa chỉ";
+        }
+        if($infor['birthday'] === '' || $infor['address'] === ''){
+            
+            header("Location: index.php");
+            exit;
+        }
+    }
 }

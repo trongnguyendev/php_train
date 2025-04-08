@@ -4,6 +4,7 @@ class Employee extends Basic {
     protected $fileName = 'employee.txt';
     public $model = 'r';
 
+
     public function __construct() {
         $file = $this->fileName;
         // Truyền tên file 'employee.txt' khi khởi tạo đối tượng
@@ -42,5 +43,19 @@ class Employee extends Basic {
         // Tuỳ biến format cho dữ liệu riêng của employee
         $dataStr = $data['name'] . ',' . $data['email'] . ',' . $data['birthday'] . ',' . $data['salary']."\n";
         return $dataStr;
+    }
+
+    public function session($infor){
+        if($infor['birthday'] == ''){
+            $_SESSION['error_birthday'] = "Chưa điền ngày sinh";
+        }
+        if($infor['salary'] == ''){
+            $_SESSION['error_salary'] = "Chưa điền tiền lương";
+        }
+        if($infor['birthday'] === '' || $infor['salary'] === ''){
+            
+            header("Location: index.php");
+            exit;
+        }
     }
 }
