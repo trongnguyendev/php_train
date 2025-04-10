@@ -7,6 +7,8 @@ if ($employee) {
   $employees = $employee->all();
 }
 
-require_once '../views/employee/list.php';
+$pageTitle = 'Danh sách nhân viên';
+$content = '../views/employee/list.php';
+require_once('../views/layouts/default.php');
 
 ?>

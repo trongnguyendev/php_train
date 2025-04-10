@@ -35,5 +35,7 @@ function displayError($field, $errors)
     }
 }
 
-require_once '../views/employee/create.php';
+$pageTitle = 'Tạo mới nhân viên';
+$content = '../views/employee/create.php';
+require_once('../views/layouts/default.php');
 ?>
