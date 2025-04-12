@@ -24,10 +24,6 @@
                         <h1><?= $pageTitle ?></h1>
                     </div>
                     <div class="left">
-                        <form class="search-form" action="/search.php" method="GET">
-                            <input type="text" name="q" placeholder="Tìm kiếm...">
-                            <button type="submit">🔍</button>
-                        </form>
                     </div>
 
                     <div class="right">
