@@ -221,6 +221,54 @@ class Base {
 
         return true;
     }
+
+    /**
+     * Tìm một dòng dữ liệu theo chỉ số.
+     *
+     * @param int $indexData Chỉ số dòng cần tìm.
+     * @return array Mảng chứa dữ liệu của dòng đó hoặc mảng rỗng nếu không tìm thấy.
+     */
+    public function findRowByType($searchContent, $searchType)
+    {
+        if (!$file = $this->openFile('r')) {
+            return [];
+        }
+
+        $_SESSION['old_search'] = [
+            'search_content' => $searchContent,
+            'search_type' => $searchType,
+        ];
+
+        $columnMap = [
+            'name' => 0,
+            'email' => 1,
+            'age' => 2,
+        ];
+
+        if (!isset($columnMap[$searchType])) {
+            fclose($file);
+            return [];
+        }
+
+        $searchItems = array_map('trim', explode(',', $searchContent));
+        $columnIndex = $columnMap[$searchType];
+        $result = [];
+
+        while (($line = fgets($file)) !== false) {
+            $row = array_map('trim', explode(',', $line));
+            $valueToCheck = $row[$columnIndex] ?? '';
+
+            foreach ($searchItems as $item) {
+                if (str_contains($valueToCheck, $item)) {
+                    $result[] = $row;
+                    break;
+                }
+            }
+        }
+
+        fclose($file);
+        return $result;
+    }
 }
 
 ?>

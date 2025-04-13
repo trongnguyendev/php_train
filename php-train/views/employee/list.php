@@ -1,60 +1,36 @@
-<style>
-  .search-container {
-      background: #fff;
-      padding: 20px 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      display: flex;
-      gap: 12px;
-      width: 100%;
-      max-width: 500px;
-      margin-top: 20px;
-    }
+<?php
+$options = ['name' => 'Tên', 'email' => 'Email', 'age' => 'Tuổi'];
+$selectedValue = oldInput('search_type', $oldSearch ?? '');
+$oldContent = oldInput('search_content', $oldSearch ?? '');
+?>
 
-    .search-container input[type="text"] {
-      flex: 1;
-      padding: 12px 16px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: border-color 0.3s ease;
-      width: 200px;
-      margin: 0;
-    }
-
-    .search-container input[type="text"]:focus {
-      border-color: #007bff;
-      outline: none;
-    }
-
-    .search-container button {
-      padding: 12px 20px;
-      background-color: #007bff;
-      color: #fff;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin: 0px;
-      width: 120px;
-    }
-
-    .search-container button:hover {
-      background-color: #0056b3;
-    }
-  </style>
-<form class="search-container" action="<?php echo $_SERVER["PHP_SELF"];?>" method="GET">
-  <input type="text" name="query" placeholder="Nhập từ khóa tìm kiếm...">
-  <button type="submit">Tìm kiếm</button>
-</form>
+<div class="search-container">
+  <div class="tag-input-container" onclick="input.focus()">
+    <input type="text" name="content_search" id="tagInput" placeholder="Nhập giá trị và nhấn Enter">
+  </div>
+  <form class="form-search" action="<?php echo $_SERVER["PHP_SELF"];?>" method="GET">
+    <input type="hidden" name="tags_search" id="hiddenSearchContent" />
+    <select name="type" class="type_search">
+      <?php foreach ($options as $key => $label): ?>
+        <option value="<?= $key ?>" <?= $key === $selectedValue ? 'selected' : '' ?>>
+          <?= $label ?>
+        </option>
+      <?php endforeach; ?>
+    </select>
+    <button type="submit">Tìm kiếm</button>
+    <button id="resetBtn">Reset</button>
+  </form>
+  <button class="btn-create">
+    <a href="/employee/create.php">+ Tạo mới</a>
+  </button>
+</div>
 
 <div class="list">
   <?php if (empty($employees)): ?>
     <p class="no-data">Không có dữ liệu</p>
   <?php else: ?>
     <table>
-      <thead>
+      <thead> 
         <tr>
           <th>Tên</th>
           <th>Email</th>
@@ -77,6 +53,60 @@
       </tbody>
     </table>
   <?php endif; ?>
-
-  <a class="btn-create" href="/employee/create.php">+ Tạo mới</a>
 </div>
+
+<script>
+  const input = document.getElementById('tagInput');
+  const container = document.querySelector('.tag-input-container');
+  const hiddenInput = document.getElementById('hiddenSearchContent');
+  const resetBtn = document.getElementById('resetBtn');
+
+  let tags = [];
+
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && input.value.trim() !== '') {
+      e.preventDefault();
+      const value = input.value.trim();
+      if (!tags.includes(value) && input.value.trim() !== '') {
+        tags.push(value);
+        renderTags();
+        input.value = '';
+      }
+    }
+  });
+
+  resetBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    tags = [];
+    input.value = '';
+    hiddenInput.value = '';
+    container.querySelectorAll('.tag').forEach(tag => tag.remove());
+    const cleanUrl = window.location.origin + window.location.pathname;
+    window.history.pushState({}, '', cleanUrl);
+    window.location.reload();
+  });
+
+  function renderTags() {
+    container.querySelectorAll('.tag').forEach(tag => tag.remove());
+    tags.forEach((tag, index) => {
+      const tagEl = document.createElement('div');
+      tagEl.className = 'tag';
+      tagEl.innerHTML = `${tag}<span onclick="removeTag(${index})">&times;</span>`;
+      container.insertBefore(tagEl, input);
+    });
+    hiddenInput.value = tags.join(',');
+  }
+
+  function removeTag(index) {
+    tags.splice(index, 1);
+    renderTags();
+  }
+
+  function initTags(tagStr) {
+    if (tagStr == '') return
+    tags = tagStr.toString().split(",")
+    renderTags()
+  }
+
+  initTags("<?= $oldContent ?>")
+</script>

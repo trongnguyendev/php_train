@@ -1,7 +1,7 @@
-項目選択肢テスト商品2,develop44123@petabit.co.jp,42
-項目選択肢テスト商品2,develop44123@petabit.co.jp,42
-項目選択肢テスト商品2,develop44123@petabit.co.jp,42
-項目選択肢テスト商品2,develop44123@petabit.co.jp,42
+aaaa1,develop44123@petabit.co.jp,42
+aaa2,develop44123@petabit.co.jp,42
+aa33,develop44123@petabit.co.jp,42
+aaa4,develop44123@petabit.co.jp,42
 項目選択肢テスト商品2,develop44123@petabit.co.jp,42
 項目選択肢テスト商品2,develop44123@petabit.co.jp,42
 項目選択肢テスト商品2,develop44123@petabit.co.jp,42

@@ -1,3 +1,6 @@
-<?php 
+<?php
 
-echo 1111;
+header("Location: dashboard/index.php");
+
+?>
+ 
