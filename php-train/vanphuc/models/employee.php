@@ -14,4 +14,11 @@ class Employee extends Base {
         'name' => 'required',
         'email' => 'required',
     ];
+    public $columnMap = [
+        'name' => 0,
+        'age' => 1,
+        'email' => 2,
+        'phone' => 3,
+    ];
+
 }

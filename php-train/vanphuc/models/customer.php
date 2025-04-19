@@ -16,4 +16,9 @@ class Customer extends Base {
         'product',
     ];
 
+    public $columnMap = [
+        'name' => 0,
+        'phone' => 1,
+    ];
+
 }

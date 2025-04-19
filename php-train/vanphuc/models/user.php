@@ -14,4 +14,9 @@ class User extends Base {
         'is_verified',
         'password',
     ];
+    public $columnMap = [
+        'username' => 0,
+        'email' => 1,
+        'lastname' => 0,
+    ];
 }

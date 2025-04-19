@@ -1,14 +1,23 @@
+<?php 
+
+$selectedAge = $oldSearch['search_type'];
+$selectedSearch = $oldSearch['search_content'];
+?>
 <form class="form-search" action="<?php echo $_SERVER["PHP_SELF"];?>" method="GET">
-<input type="content_search" name="search">
+<input type="content_search" name="search" value="<?=  $selectedSearch ?? '' ?>" >
 <select name="type" id="">
-  <option value="name">Tên</option>
-  <option value="age">Tuổi</option>
-  <option value="email">email</option>
-  <option value="phone">Số Điện Thoại</option>
+  <option value="name" <?= $selectedAge === 'name' ? 'selected' : ''; ?>>Tên</option>
+  <option value="age" <?= $selectedAge === 'age' ? 'selected' : ''; ?>>Tuổi</option>
+  <option value="email" <?= $selectedAge === 'email' ? 'selected' : ''; ?>>email</option>
+  <option value="phone" <?= $selectedAge === 'phone' ? 'selected' : ''; ?>>Số Điện Thoại</option>
 </select>
-<button type="submit">Tìm Kiếm</button>
+<button type="submit" class="search_employee">Tìm Kiếm</button>
 </form>
 
+<style>
+
+  
+</style>
 
 
 <div class="list">

@@ -30,6 +30,8 @@ function oldInput($field, $oldInput)
 
 
 
-
-require_once('../views/employee/list.php');
+$content = '../views/employee/list.php';
+$pageTitle = 'Thông Tin Khách Hàng';
+// require_once('../views/employee/list.php');
+require_once('../views/layouts/default.php');
 ?>
