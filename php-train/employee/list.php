@@ -1,33 +1,33 @@
 <?php
-require_once '../models/Employee.php';
-$employee = new Employee();
-$employees = [];
-
-$searchQuery = $_GET['tags_search'] ?? '';
-$searchType = $_GET['type'] ?? '';
-
-if (!empty($searchQuery)) {
-  $employees = $employee->findRowByType($searchQuery, $searchType);
+$file = fopen("dataa.txt", "r");
+$datas = [];
+if ($file) {
+    while (($line = fgets($file)) !== false) { // Đọc từng dòng
+            $datas [] = explode("," , $line);
+        // echo htmlspecialchars($line) . "<br>";
+    }
+    fclose($file);
 } else {
-  $employees = $employee->all();
+    echo "Lỗi: Không thể mở file.";
 }
-
-$oldSearch = $_SESSION['old_search'] ?? [
-  'search_content' => '',
-  'search_type' => '',
-];
-
-unset(
-  $_SESSION['old_search']
-);
-
-function oldInput($field, $oldInput)
-{
-  return htmlspecialchars($oldInput[$field] ?? '');
-}
-
-$pageTitle = 'Danh sách nhân viên';
-$content = '../views/employee/list.php';
-require_once('../views/layouts/default.php');
-
+// var_dump ($data);
 ?>
+<table border = "1">
+  <tr>
+    <th>Tên Nhân Viên</th>
+    <th>Email</th>
+    <th>Ngày Sinh</th>
+    <th>Lương</th>
+    <th>Trạng Thái</th>
+  </tr>
+  <?php foreach ($datas as $key=>$data):?>
+  <tr>
+    <td><?php echo $data[0]; ?></td>
+    <td><?php echo $data[1]; ?></td>
+    <td><?php echo $data[2]; ?></td>
+    <td><?php echo $data[3]; ?></td>
+    <td><a href= "update.php?idUpdate=<?php echo $key + 1; ?>">Cập Nhập</a></td>
+    <td><a href= "delete.php?id=<?php echo $key + 1; ?>">Xóa</a></td>
+  </tr>
+  <?php endforeach;?>
+</table>

@@ -1,0 +1,319 @@
+
+/* === Global === */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #00c3ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+button:hover,
+.search-form button:hover,
+.list tbody td a:hover,
+.list .btn-create:hover {
+  background-color: #009acb;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 14px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  border-color: #00c3ff;
+  background-color: #fff;
+  outline: none;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 15px;
+  color: #555;
+}
+
+h2 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* === Layout === */
+.container {
+  display: flex;
+  height: 100vh;
+}
+.layout {
+  width: 100%;
+}
+
+.sidebar {
+  background-color: #1e1e2f;
+  color: #fff;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  width: 300px;
+  box-sizing: border-box;
+}
+
+.menu-title {
+  font-size: 20px;
+  margin-bottom: 30px;
+  color: #00d1ff;
+  text-align: center;
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-list li {
+  margin-bottom: 20px;
+}
+
+.menu-list a {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  color: #fff;
+  transition: 0.3s;
+}
+
+.menu-list a i {
+  margin-right: 10px;
+}
+
+.menu-list a:hover {
+  background-color: #00d1ff;
+  color: #000;
+}
+
+.main-content {
+  padding: 0;
+  background-color: #fff;
+  box-sizing: border-box;
+  overflow-y: auto;
+  width: calc(100% - 300px);
+  margin-left: 300px;
+}
+
+.main-content h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.header {
+  background-color: #f9f9f9;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header .page-title {
+  text-transform: uppercase;
+}
+
+.header .left,
+.header .right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 14px;
+}
+
+.logout {
+  color: #ff6b6b;
+  font-size: 13px;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+}
+
+.search-form input[type="text"] {
+  padding: 0 10px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 20px 0 0 20px;
+  outline: none;
+  font-size: 14px;
+  width: 200px;
+  margin: 0px;
+}
+
+.search-form button {
+  height: 41px;
+  border: 1px solid #00c3ff;
+  background-color: #00c3ff;
+  color: white;
+  border-radius: 0 20px 20px 0;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 0px;
+  width: 70px;
+}
+
+/* === Form Blocks === */
+.create,
+.update {
+  max-width: 800px;
+  margin: 50px auto;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+a.link {
+  display: block;
+  margin-top: 20px;
+  color: #00c3ff;
+  text-align: center;
+}
+
+/* === Table / List === */
+.page-content {
+  background: #fff;
+  padding: 0px 20px;
+}
+.list {
+  width: 100%;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.list table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.list thead {
+  background-color: #333;
+  color: #fff;
+}
+
+.list thead th,
+.list td,
+.list th {
+  padding: 12px;
+  text-align: left;
+}
+
+.list tbody td {
+  border-top: 1px solid #ddd;
+}
+
+.list tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+.list tbody td a {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #00c3ff;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.list .btn-create {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: #00c3ff;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+/* === Error / Empty States === */
+.error {
+  color: #ff6b6b;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  font-size: 18px;
+  margin-top: 30px;
+}
+
+/* === Footer === */
+footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}

@@ -1,13 +1,11 @@
 <?php
 
-require_once '../models/Employee.php';
-$employee = new Employee();
-
-$indexData = $_GET['id'];
-
-$isDeleted = $employee->delete($indexData);
-
-if ($isDeleted) {
-    header("Location: list.php");
-    exit;
+$file = fopen("data.txt", "r");
+if ($file) {
+    while (($line = fgets($file)) !== false) { // Đọc từng dòng
+        echo htmlspecialchars($line) . "<br>";
+    }
+    fclose($file);
+} else {
+    echo "Lỗi: Không thể mở file.";
 }
