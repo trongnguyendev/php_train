@@ -5,7 +5,7 @@ $employees = [];
 
 
 
-$searchQuery = $_GET['content_search'] ?? '';
+$searchQuery = $_GET['search'] ?? '';
 $searchType = $_GET['type'] ?? '';
 
 if (!empty($searchQuery)) {
@@ -30,13 +30,6 @@ function oldInput($field, $oldInput)
 
 
 
-
-
-
-
-if($employee){
-    $employees = $employee->all();
-}
 
 require_once('../views/employee/list.php');
 ?>
