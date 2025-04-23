@@ -1,5 +1,7 @@
 <?php
 
+namespace Models;
+
 class Base {
 
     /**
@@ -66,6 +68,7 @@ class Base {
         if (!$file) return false;
 
         $values = array_map(fn($field) => $line[$field] ?? '', $this->fields);
+
         fwrite($file, implode(',', $values) . PHP_EOL);
         fclose($file);
         return true;

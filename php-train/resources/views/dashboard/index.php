@@ -1,10 +1,3 @@
-<?php
-$labels = ['Customer', 'Employee', 'User'];
-$labels2 = ['Thháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7'];
-$data = [12, 19, 50];
-$data2 = [65, 59, 80, 81, 56, 55, 40];
-?>
-
 <div class="dashboard-cards">
     <div class="card-item">
         <div class="highlight">40</div>

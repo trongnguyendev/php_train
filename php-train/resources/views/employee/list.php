@@ -2,13 +2,18 @@
 $options = ['name' => 'Tên', 'email' => 'Email', 'age' => 'Tuổi'];
 $selectedValue = oldInput('search_type', $oldSearch ?? '');
 $oldContent = oldInput('search_content', $oldSearch ?? '');
+
+function oldInput($field, $oldInput)
+{
+  return htmlspecialchars($oldInput[$field] ?? '');
+}
 ?>
 
 <div class="search-container">
   <div class="tag-input-container" onclick="input.focus()">
     <input type="text" name="content_search" id="tagInput" placeholder="Nhập giá trị và nhấn Enter">
   </div>
-  <form class="form-search" action="<?php echo $_SERVER["PHP_SELF"];?>" method="GET">
+  <form class="form-search" action="/employee" method="GET">
     <input type="hidden" name="tags_search" id="hiddenSearchContent" />
     <select name="type" class="type_search">
       <?php foreach ($options as $key => $label): ?>
@@ -21,7 +26,7 @@ $oldContent = oldInput('search_content', $oldSearch ?? '');
     <button id="resetBtn">Reset</button>
   </form>
   <button class="btn-create">
-    <a href="/employee/create.php">+ Tạo mới</a>
+    <a href="/employee/create">+ Tạo mới</a>
   </button>
 </div>
 
@@ -45,8 +50,8 @@ $oldContent = oldInput('search_content', $oldSearch ?? '');
             <td><?= htmlspecialchars($emp[1]) ?></td>
             <td><?= htmlspecialchars($emp[2]); ?></td>
             <td>
-              <a href="/employee/update.php?id=<?= $index + 1 ?>">Cập nhật</a>
-              <a href="/employee/delete.php?id=<?= $index + 1 ?>">Xoá</a>
+              <a href="/employee/edit/<?= $index + 1 ?>">Cập nhật</a>
+              <a href="/employee/delete/<?= $index + 1 ?>">Xoá</a>
             </td>
           </tr>
         <?php endforeach; ?>

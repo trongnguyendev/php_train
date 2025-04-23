@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo isset($pageTitle) ? $pageTitle : 'Trang chủ'; ?></title>
-    <link rel="stylesheet" href="../resources/css/style.css">
+    <link rel="stylesheet" href="/resources/css/style.css">
     <link href="../resources/assets/fontawesome/css/fontawesome.css" rel="stylesheet" />
     <link href="../resources/assets/fontawesome/css/brands.css" rel="stylesheet" />
     <link href="../resources/assets/fontawesome/css/solid.css" rel="stylesheet" />
@@ -17,9 +17,9 @@
                 <div class="sidebar">
                     <h2 class="menu-title">CRM</h2>
                     <ul class="menu-list">
-                        <li><a href="../"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
-                        <li><a href="/employee/list.php"><i class="fa-regular fa-circle-user"></i> Quản lí nhân viên</a></li>
-                        <li><a href="/customer/list.php"><i class="fa fa-user-friends"></i> Quản lí khách hàng</a></li>
+                        <li><a href="/"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="/employee"><i class="fa-regular fa-circle-user"></i> Quản lí nhân viên</a></li>
+                        <li><a href="/customer"><i class="fa fa-user-friends"></i> Quản lí khách hàng</a></li>
                     </ul>
                 </div>
             </div>
@@ -40,11 +40,7 @@
                 </div>
 
                 <div class="page-content">
-                    <?php 
-                        if (isset($content)) {
-                            require_once($content);
-                        }
-                    ?>
+                    <?= $content ?>
                 </div>
             </div>
             </div>
