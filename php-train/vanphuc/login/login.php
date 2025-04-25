@@ -1,5 +1,5 @@
 <?php 
-
+session_start();
 $errors = [
     'username' => $_SESSION['errors']['error_username'] ?? '',
     'password' => $_SESSION['errors']['error_password'] ?? '',
