@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+require_once '../models/Authentication.php';
+$authentication = new Authentication();
+
+if (!$authentication->isLogined()) {
+    header("Location: /authenticate/login.php");
+    exit;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -20,6 +33,7 @@
                         <li><a href="../"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
                         <li><a href="/employee/list.php"><i class="fa-regular fa-circle-user"></i> Quản lí nhân viên</a></li>
                         <li><a href="/customer/list.php"><i class="fa fa-user-friends"></i> Quản lí khách hàng</a></li>
+                        <li><a href="/user/list.php"><i class="fa fa-user-friends"></i> Quản lí tài khoản</a></li>
                     </ul>
                 </div>
             </div>
@@ -33,8 +47,8 @@
                     <div class="right">
                         <img src="https://www.svgrepo.com/show/382109/male-avatar-boy-face-man-user-7.svg" alt="Avatar" class="avatar">
                         <div class="user-menu">
-                            <span class="username">Tên người dùng</span>
-                            <a href="/logout.php" class="logout">Đăng xuất</a>
+                            <span class="username"><?= $_SESSION['user_info']['name'] ?></span>
+                            <a href="/authenticate/logout.php" class="logout">Đăng xuất</a>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 // Lấy các lỗi từ session (nếu có)
 $errors = [

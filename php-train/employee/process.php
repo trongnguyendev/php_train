@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 require_once '../models/Employee.php';
 $employee = new Employee();
