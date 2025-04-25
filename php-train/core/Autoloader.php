@@ -6,7 +6,6 @@ class Autoloader {
         spl_autoload_register(function ($className) {
             $className = str_replace('\\', DIRECTORY_SEPARATOR, $className);
             $file = BASE_PATH . DIRECTORY_SEPARATOR . $className . '.php';
-            echo $file . "<br>";
             if (file_exists($file)) {
                 require_once $file;
                 return true;
