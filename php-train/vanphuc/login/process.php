@@ -19,8 +19,7 @@ $lines = file($filepath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 $found = false;
 
 foreach ($lines as $line) {
-    list($user, $email, $lastname, $firstname, $pass) = explode(',', trim($line));
-
+    list($user, $email, $lastname, $firstname,$is_verified , $pass) = explode(',', trim($line));
     if ($user === $username && $pass === $password) {
         $_SESSION['user_info'] = [
             'username' => $user,
