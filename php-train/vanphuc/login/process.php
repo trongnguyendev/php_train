@@ -1,6 +1,7 @@
 <?php
+require_once '../models/login.php';
 session_start();
-
+$login = new Login();
 $username = $_POST['username'] ?? '';
 $password = $_POST['password'] ?? '';
 
@@ -9,29 +10,8 @@ $dataLogin = [
     'password' => $password,
 ];
 
-$filepath = '../data/user/user.txt';
-if (!file_exists($filepath)) {
-    die("File không tồn tại: $filepath");
-}
-
-$lines = file($filepath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-$found = false;
-
-foreach ($lines as $line) {
-    list($user, $email, $lastname, $firstname,$is_verified , $pass) = explode(',', trim($line));
-    if ($user === $username && $pass === $password) {
-        $_SESSION['user_info'] = [
-            'username' => $user,
-            'email' => $email,
-            'fullname' => $firstname . ' ' . $lastname
-        ];
-        $found = true;
-        break;
-    }
-}
-
-if ($found) {
+$logins = $login->Authentication($username, $password);
+if ($logins) {
     header("Location: ../employee/list.php");
     exit;
 } else {

@@ -284,4 +284,36 @@ class Base {
         return $str;
  
     }
+
+    public function Authentication($username, $password){
+        if (!file_exists($this->filePath)) {
+            die("File không tồn tại: $filePath");
+        }
+        $lines = file($this->filePath,FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $keys = [
+            'username',
+            'email',
+            'lastname',
+            'firstname',
+            'is_verified',
+            'password'
+            ];
+        $found = false;
+
+        foreach ($lines as $line) {
+            $values = explode(',', trim($line));
+            $data = array_combine($keys, $values);
+
+            if ($data['username'] === $username && $data['password'] === $password) {
+                $_SESSION['user_info'] = [
+                    'username' => $data['username'],
+                    'email' => $data['email'],
+                    'fullname' => $data['firstname'] . ' ' . $data['lastname'],
+                ];
+                $found = true;
+                break;
+            }
+        }
+        return $found;
+    }
 }
