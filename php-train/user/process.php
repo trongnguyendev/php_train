@@ -8,6 +8,7 @@ $lastname = $_POST['lastname'] ?? '';
 $firstname = $_POST['firstname'] ?? '';
 $verified = $_POST['verified'] ?? '';
 $password = $_POST['password'] ?? '';
+$role = $_POST['role'] ?? '';
 
 $dataStore = [
     'username' => $username,
@@ -16,6 +17,7 @@ $dataStore = [
     'firstname' => $firstname, 
     'verified' => $verified, 
     'password' => password_hash($password, PASSWORD_DEFAULT),
+    'role' => $role
 ];
 
 $store = $user->store($dataStore);

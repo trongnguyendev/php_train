@@ -1,5 +1,8 @@
 <?php
+
 require_once 'Base.php';
+require_once 'Role.php';
+
 class User extends Base {
     public $filePath = '../data/user/user.txt';
     public $rules = [
@@ -13,6 +16,7 @@ class User extends Base {
         'firstname',
         'is_verified',
         'password',
+        'role',
     ];
     public $columnMap = [
         'username' => 0,

@@ -1,0 +1,3 @@
+admin,Quyền quản lí hệ thống
+manager,Quyền quản lí
+user,Quyền người dùng

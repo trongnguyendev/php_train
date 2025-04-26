@@ -1,4 +1,7 @@
 <?php
+
+require_once '../models/Role.php';
+
 $errors = [
     'username' => $_POST['errors']['users'] ?? '',
     'email' => $_POST['errors']['email'] ?? '',
@@ -23,8 +26,9 @@ unset(
     $_SESSION['old_input'],
 );
 
+$role = new Role();
+$roles = $role->all();
 //  Hàm tiện tích để hiển thị giá trị cũ input
-
 function oldinput($field, $oldInput){
     return htmlspecialchars($oldInput[$field] ?? '');
 }

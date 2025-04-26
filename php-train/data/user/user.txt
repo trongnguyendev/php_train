@@ -1,3 +1,4 @@
-admin1,thanhyphan@gmail.com,Ý,Phan,,$2y$10$ADnfmXffaDex8MrzrM4gKOfIY4G3X1riAxg/K0MlG9j76Vr.PX2nO
-thanh,haoduong.dmh@gmail.com,dương,nguyễn,,1223123
-admin2,admin2@gmail.com,Admin,Toni,,$2y$10$FiWFISWgO/B8DwXtsEVDUe8sWbsOlmVKF/HRO1OiE3o35fRG8lKLe
+admin1,thanhyphan@gmail.com,Ý,Phan,,$2y$10$ADnfmXffaDex8MrzrM4gKOfIY4G3X1riAxg/K0MlG9j76Vr.PX2nO,admin
+thanh,haoduong.dmh@gmail.com,dương,nguyễn,,1223123,user
+admin2,admin2@gmail.com,Admin,Toni,,$2y$10$iiKlrS/cEbtwncW6eBHGZ.A6u8TUpm1FtbmWOX2DQdi15WYyYydpS,user
+admin3,admin3@gmail.com,admin3,ok,,$2y$10$uC7.T0EzvOt.EcVJAJnbVeCUjuchpP.7MYBXO7JaheNCAe8GENfeW,user

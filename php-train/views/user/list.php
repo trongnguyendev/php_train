@@ -31,7 +31,7 @@
           <th>Tên</th>
           <th>Họ</th>
           <th>Xác Thực</th>
-          <th>Password</th>
+          <th>Quyền</th>
           <th>Hành Động</th>
         </tr>
       </thead>
@@ -42,8 +42,8 @@
             <td><?= htmlspecialchars($emp[1]); ?></td>
             <td><?= htmlspecialchars($emp[2]); ?></td>  
             <td><?= htmlspecialchars($emp[3]); ?></td>
-            <td><?= htmlspecialchars($emp[4]); ?></td>  
-            <td><?= htmlspecialchars($emp[5]); ?></td>
+            <td><?= htmlspecialchars($emp[4]); ?></td>
+            <td><?= htmlspecialchars($emp[6]); ?></td>
 
             <td>
               <a href="update.php?id=<?= $index + 1 ?>">Cập nhật</a>
