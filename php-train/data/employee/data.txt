@@ -1,15 +1,3 @@
-項目選択肢テスト商品2,develop44123@petabit.co.jp,42
-項目選択肢テスト商品2,develop44123@petabit.co.jp,42
-項目選択肢テスト商品2,develop44123@petabit.co.jp,42
-項目選択肢テスト商品2,develop44123@petabit.co.jp,42
-項目選択肢テスト商品2,develop44123@petabit.co.jp,42
-項目選択肢テスト商品2,develop44123@petabit.co.jp,42
-項目選択肢テスト商品2,develop44123@petabit.co.jp,42
-項目選択肢テスト商品2,develop44123@petabit.co.jp,42
-項目選択肢テスト商品2,develop44123@petabit.co.jp,42
-toni11,develop@petabit.co.jp,16
-toni1111,develop@petabit.co.jp,16
-グリーンレンタル22,develop@petabit.co.jp22,32
-グリーンレンタル22,develop@petabit.co.jp22,32
-グリーンレンタル22,develop@petabit.co.jp22,32
-toni123,develop123@petabit.co.jp,12
+toni1111,develop@petabit.co.jp,18
+toni1111,develop@petabit.co.jp,18
+Ghế ngồi ô tô cho bé,develop@petabit.co.jp,18
