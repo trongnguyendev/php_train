@@ -82,16 +82,16 @@
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" placeholder="Nhập email" />
 
-            <?php if (isset($errors['email'])):  ?>
-                <p style="color: red;"><?= $errors['email'] ?></p>
-            <?php endif; ?>
+            <?php if (isset($errors['email'])): ?>
+                <p style="color: red;"><?= implode(', ', $errors['email']) ?></p>
+            <?php endif;  ?>
         </div>
         <div class="form-group">
             <label for="password">Mật khẩu:</label>
             <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" />
-            <?php if (isset($errors['password'])):  ?>
-                <p style="color: red;"><?= $errors['password'] ?></p>
-            <?php endif; ?>
+            <?php if (isset($errors['password'])): ?>
+                <p style="color: red;"><?= implode(', ', $errors['password']) ?></p>
+            <?php endif;  ?>
         </div>
         <button type="submit">Đăng nhập</button>
     </form>

@@ -3,146 +3,127 @@
 namespace Controllers;
 
 use Core\Controller;
-use Core\Validator;
+use Core\Request;
+use Core\Validation;
 use Models\Employee;
 
 class EmployeeController extends Controller {
-
-    public function index()
+    public function index(Request $request = null)
     {
+        $searchQuery = $request->query('tags_search', '');
+        $searchType = $request->query('type', '');
+
         $employee = new Employee();
 
-        $employees = [];
+        $employees = !empty($searchQuery)
+                ? $employee->findRowByType($searchQuery, $searchType)
+                : $employee->all();
 
-        $searchQuery = $_GET['tags_search'] ?? '';
-        $searchType = $_GET['type'] ?? '';
-
-        if (!empty($searchQuery)) {
-            $employees = $employee->findRowByType($searchQuery, $searchType);
-        } else {
-            $employees = $employee->all();
-        }
-
-        $data = [
+        $this->view('employee/list',  [
             'pageTitle' => 'Danh sách nhân viên',
             'employees' => $employees,
             'oldSearch' => [
                 'search_content' => $searchQuery,
                 'search_type' => $searchType
             ]
-        ];
-
-        $this->view('employee/list', $data);
+        ]);
     }
 
     public function create()
     {
-        $data = [
+        $this->view('employee/create', [
             'pageTitle' => 'Tạo mới nhân viên'
-        ];
-
-        $this->view('employee/create', $data);
+        ]);
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $age = $_POST['age'];
+        $data = $request->all();
 
-        $errors = [];
-        if (empty($name)) {
-            $errors['name'] = 'Name is required';
-        }
-        
-        if (empty($email)) {
-            $errors['email'] = 'Email is required';
-        }
-
-        if (empty($age)) {
-            $errors['age'] = 'Age is required';
-        }
-
-        $data = [
-            'pageTitle' => 'Tạo mới nhân viên'
+        $rules = [
+            'name' => 'required',
+            'email' => 'required',
+            'age' => 'required|numeric'
         ];
-        
-        if (!empty($errors)) {
-            $data['errors'] = $errors;
-            $data['oldInput'] = $_POST;
-            $this->view('employee/create', $data);
+
+        $messages = [
+            'name.required' => 'Bắt buộc nhập tên',
+            'email.required' => 'Bắt buộc nhập email',
+            'age.required' => 'Bắt buộc nhập tuổi',
+            'age.numeric' => 'Tuổi phải là số'
+        ];
+
+        $validator = new Validation($data, $rules, $messages);
+
+        if (!$validator->validate()) {
+            $this->view('employee/create', [
+                'pageTitle' => 'Tạo mới nhân viên',
+                'errors' => $validator->getErrors(),
+                'oldInput' => $data,
+            ]);
             return;
         }
 
         $employee = new Employee();
 
-        $name = $_POST['name'] ?? '';
-        $email = $_POST['email'] ?? '';
-        $age = $_POST['age'] ?? '';
-
         $store = $employee->store([
-            'name' => $name,
-            'email' => $email,
-            'age' => $age
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'age' => $data['age'],
         ]);
 
         if ($store) {
             header("Location: /employee");
             exit;
-        } else {
-            header("Location: create");
         }
+
+        header("Location: create");
     }
 
     public function edit($id)
     {
         $employee = new Employee();
-        $data = [
+        $this->view('employee/update', [
             'pageTitle' => 'Cập nhật nhân viên',
             'employeeData' => $employee->findRowByIndex($id),
             'indexData' => $id
-        ];
-        $this->view('employee/update', $data);
+        ]);
     }
 
-    public function update($id)
+    public function update($id, Request $request)
     {
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $age = $_POST['age'];
+        $data = $request->all();
 
-        $errors = [];
+        $rules = [
+            'name' => 'required',
+            'email' => 'required|email',
+            'age' => 'required'
+        ];
 
-        if (empty($name)) {
-            $errors['name'] = 'Name is required';
-        }
+        $messages = [
+            'name.required' => 'Bắt buộc nhập tên',
+            'email.required' => 'Bắt buộc nhập email',
+            'age.required' => 'Bắt buộc nhập tuổi',
+        ];
 
-        if (empty($email)) {
-            $errors['email'] = 'Email is required';
-        }
+        $validator = new Validation($data, $rules, $messages);
 
-        if (empty($age)) {
-            $errors['age'] = 'Age is required';
-        }
-
-        if (!empty($errors)) {
-            $data = [
-                'errors' => $errors,
-                'oldInput' => $_POST,
-                'indexData' => $id,
+        if (!$validator->validate()) {
+            $this->view('employee/update', [
                 'pageTitle' => 'Cập nhật nhân viên',
-            ];
-
-            $this->view('employee/update', $data);
+                'errors' => $validator->getErrors(),
+                'oldInput' => $data,
+                'indexData' => $id
+            ]);
             return;
         }
 
         $employee = new Employee();
 
         $update = $employee->update($id, [
-            'name' => $name,
-            'email' => $email,
-            'age' => $age
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'age' => $data['age']
         ]);
 
         if ($update) {

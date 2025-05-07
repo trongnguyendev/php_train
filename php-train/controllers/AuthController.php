@@ -3,53 +3,33 @@
 namespace Controllers;
 
 use Core\Controller;
+use Core\Request;
+use Core\Validation;
 
 class AuthController extends Controller {
     
     public function showLogin() {
-        $data = [
-            'pageTitle' => 'Login Page'
-        ];
-
-        $this->view('auth/login', $data, false);
+        $this->view('auth/login', [ 'pageTitle' => 'Login Page' ], false);
     }
 
-    public function postLogin() {
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
+    public function postLogin(Request $request = null) {
+        $data = $request->all();
 
-        $errors = [];
+        $rules = [
+            'email' => 'required|email',
+            'password' => 'required|min:6|max:20'
+        ];
 
-        // Validate input
-        if (empty($email)) {
-            $errors['email'] = 'Email is required';
+        $validator = new Validation($data, $rules);
+
+        if (!$validator->validate()) {
+            $this->view('auth/login', [
+                'errors' => $validator->getErrors(),
+                'email' => $data['email'] ?? '',
+            ], false);
+            return;
         }
 
-        if (empty($password)) {
-            $errors['password'] = 'Password is required';
-        }
-
-        if (empty($errors)) {
-//            $user = new User();
-//            $loggedInUser = $user->validateLogin($email, $password);
-            $loggedInUser = [];
-
-            if ($loggedInUser) {
-                // Store user data in session
-                $_SESSION['user_id'] = $loggedInUser['id'];
-                $_SESSION['user_name'] = $loggedInUser['name'];
-                $_SESSION['user_email'] = $loggedInUser['email'];
-
-                $this->redirect('/');
-            } else {
-                $errors['login'] = 'Invalid email or password';
-            }
-        }
-
-        // If we get here, login failed
-        $this->view('auth/login', [
-            'errors' => $errors,
-            'email' => $email,
-        ], false);
+        $this->redirect('/');
     }
 }

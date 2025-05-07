@@ -24,7 +24,7 @@ class Router {
             return $this->callAction(self::$routes[$method][$uri]);
         }
         
-        // Check for pattern matches (like /customers/view/1)
+        // Check for pattern matches (like /employee/edit/1)
         // employee/1 =>  'EmployeeController@edit'
         foreach (self::$routes[$method] as $route => $controller) {
             $pattern = preg_replace('/\{([a-z]+)\}/', '([^/]+)', $route);
@@ -49,6 +49,12 @@ class Router {
             $controllerInstance = new $controllerClass(); // => $controllerInstance = new EmployeeController();
             
             if (method_exists($controllerInstance, $action)) {
+
+                $request = new Request();
+                if ($request->all()) {
+                    $params[] = $request;
+                }
+
                 return call_user_func_array([$controllerInstance, $action], $params); // => call_user_func_array([$controllerInstance, 'edit'], $params);
             }
         }
@@ -66,7 +72,7 @@ class Router {
     
     protected function renderView($view, $data = []) {
         extract($data);
-        require_once "views/{$view}.php";
+        require_once BASE_PATH . "./resources/views/{$view}.php";
     }
 }
 ?>
