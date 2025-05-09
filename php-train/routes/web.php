@@ -2,7 +2,6 @@
 
 use Core\Router;
 
-
 Router::get('/', 'DashboardController@index');
 
 Router::get('/login', 'AuthController@showLogin');

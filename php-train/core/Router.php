@@ -7,6 +7,21 @@ class Router {
         'GET' => [],
         'POST' => []
     ];
+
+    protected static $routes1 = [
+        'GET' => [
+            '/' => 'DashboardController@index',
+            '/login' => 'AuthController@showLogin',
+            'employee' => 'EmployeeController@index',
+            'employee/create' => 'EmployeeController@create',
+            'employee/edit/{id}' => 'EmployeeController@edit',
+        ],
+        'POST' => [
+            'employee/create' => 'EmployeeController@store',
+            'employee/edit/{id}' => 'EmployeeController@update',
+            'employee/delete/{id}' => 'EmployeeController@delete',
+        ]
+    ];
     
     public static function get($uri, $controller) {
         self::$routes['GET'][$uri] = $controller;
@@ -16,11 +31,11 @@ class Router {
         self::$routes['POST'][$uri] = $controller;
     }
     
-    public function dispatch($uri, $method) {
+    public function dispatch($uri, $method) { // $uri = /employee | $method = GET
         $uri = $this->removeQueryString($uri);
         
         // Check for exact match
-        if (isset(self::$routes[$method][$uri])) {
+        if (isset(self::$routes[$method][$uri])) { // self::$routes[$method][$uri] = EmployeeController@index
             return $this->callAction(self::$routes[$method][$uri]);
         }
         
@@ -40,11 +55,11 @@ class Router {
         $this->renderView('404');
     }
     
-    protected function callAction($controller, $params = []) {
-        list($controller, $action) = explode('@', $controller); // => $controller = 'EmployeeController'; $action = 'edit';
+    protected function callAction($controller, $params = []) { // $controller = 'EmployeeController@index'
+        list($controller, $action) = explode('@', $controller); // => $controller = 'EmployeeController'; $action = 'index';
 
         $controllerClass = "Controllers\\{$controller}"; // => $controllerClass = "Controllers\\EmployeeController";
-        
+
         if (class_exists($controllerClass)) {
             $controllerInstance = new $controllerClass(); // => $controllerInstance = new EmployeeController();
             
@@ -55,7 +70,7 @@ class Router {
                     $params[] = $request;
                 }
 
-                return call_user_func_array([$controllerInstance, $action], $params); // => call_user_func_array([$controllerInstance, 'edit'], $params);
+                return call_user_func_array([$controllerInstance, $action], $params); // => call_user_func_array([$controllerInstance, 'index'], $params);
             }
         }
         

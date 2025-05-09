@@ -10,8 +10,8 @@ use Models\Employee;
 class EmployeeController extends Controller {
     public function index(Request $request = null)
     {
-        $searchQuery = $request->query('tags_search', '');
-        $searchType = $request->query('type', '');
+        $searchQuery = $request ? $request->query('tags_search', '') : '';
+        $searchType = $request ? $request->query('type', '') : '';
 
         $employee = new Employee();
 
@@ -19,14 +19,15 @@ class EmployeeController extends Controller {
                 ? $employee->findRowByType($searchQuery, $searchType)
                 : $employee->all();
 
-        $this->view('employee/list',  [
+        $data = [
             'pageTitle' => 'Danh sách nhân viên',
             'employees' => $employees,
             'oldSearch' => [
                 'search_content' => $searchQuery,
                 'search_type' => $searchType
             ]
-        ]);
+        ];
+        $this->view('employee/list', $data);
     }
 
     public function create()
