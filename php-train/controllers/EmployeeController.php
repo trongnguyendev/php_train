@@ -8,13 +8,19 @@ use Core\Validation;
 use Models\Employee;
 
 class EmployeeController extends Controller {
-    public function index(Request $request = null)
+    public function index()
     {
-        $searchQuery = $request ? $request->query('tags_search', '') : '';
-        $searchType = $request ? $request->query('type', '') : '';
+        // Lấy dữ liệu từ request
+        // $_GET['tags_search'] là tên của input trong form tìm kiếm
+        // $_GET['type'] là tên của select trong form tìm kiếm
+        $searchQuery = $_GET['tags_search'] ?? '';
+        $searchType = $_GET['type'] ?? '';
+
 
         $employee = new Employee();
 
+        // Tìm kiếm nhân viên theo tên hoặc email
+        // Nếu không có tìm kiếm thì lấy tất cả nhân viên
         $employees = !empty($searchQuery)
                 ? $employee->findRowByType($searchQuery, $searchType)
                 : $employee->all();
@@ -37,9 +43,13 @@ class EmployeeController extends Controller {
         ]);
     }
 
-    public function store(Request $request)
+    public function store()
     {
-        $data = $request->all();
+        // Lấy dữ liệu từ request
+        // $_POST['name'] là tên của input trong form tạo mới nhân viên
+        // $_POST['email'] là tên của input trong form tạo mới nhân viên
+        // $_POST['age'] là tên của input trong form tạo mới nhân viên
+        $data = $_POST;
 
         $rules = [
             'name' => 'required',
@@ -47,14 +57,7 @@ class EmployeeController extends Controller {
             'age' => 'required|numeric'
         ];
 
-        $messages = [
-            'name.required' => 'Bắt buộc nhập tên',
-            'email.required' => 'Bắt buộc nhập email',
-            'age.required' => 'Bắt buộc nhập tuổi',
-            'age.numeric' => 'Tuổi phải là số'
-        ];
-
-        $validator = new Validation($data, $rules, $messages);
+        $validator = new Validation($data, $rules);
 
         if (!$validator->validate()) {
             $this->view('employee/create', [
@@ -91,9 +94,9 @@ class EmployeeController extends Controller {
         ]);
     }
 
-    public function update($id, Request $request)
+    public function update($id)
     {
-        $data = $request->all();
+        $data = $_POST;
 
         $rules = [
             'name' => 'required',
@@ -101,13 +104,7 @@ class EmployeeController extends Controller {
             'age' => 'required'
         ];
 
-        $messages = [
-            'name.required' => 'Bắt buộc nhập tên',
-            'email.required' => 'Bắt buộc nhập email',
-            'age.required' => 'Bắt buộc nhập tuổi',
-        ];
-
-        $validator = new Validation($data, $rules, $messages);
+        $validator = new Validation($data, $rules);
 
         if (!$validator->validate()) {
             $this->view('employee/update', [

@@ -1,6 +1,4 @@
-ẵ,trongnguyendev@gmail.com,12
-bbbb,develop44123@petabit.co.jp,12
-ccccd,admin@example.com,22
+ccccd11112,admin@example.com,22
 ccc,admin@example.com,23
 ccc,admin@example.com,23
 ccc,admin@example.com,23
