@@ -29,7 +29,5 @@ class AuthController extends Controller {
             ], false);
             return;
         }
-
-        $this->redirect('/');
     }
 }

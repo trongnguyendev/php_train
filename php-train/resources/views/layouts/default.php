@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="page-content">
-                    <?= $content ?>
+                    <?= require_once $content ?>
                 </div>
             </div>
             </div>
