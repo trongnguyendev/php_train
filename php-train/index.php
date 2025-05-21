@@ -24,6 +24,10 @@ static $routesArr = [
         '/employee/create' => 'EmployeeController@create',
         '/employee/edit/{id}' => 'EmployeeController@edit',
         '/employee/delete/{id}' => 'EmployeeController@delete',
+        '/customer' => 'CustomerController@index',
+        '/customer/create' => 'CustomerController@create',
+        '/customer/edit/{id}' => 'CustomerController@edit',
+        '/customer/delete/{id}' => 'CustomerController@delete',
         '/login' => 'AuthController@showLogin',
         '/' => 'DashboardController@index'
     ],
@@ -31,6 +35,9 @@ static $routesArr = [
         '/employee/create' => 'EmployeeController@store',
         '/employee/edit/{id}' => 'EmployeeController@update',
         '/employee/delete/{id}' => 'EmployeeController@delete',
+        '/customer/create' => 'CustomerController@store',
+        '/customer/edit/{id}' => 'CustomerController@update',
+        '/customer/delete/{id}' => 'CustomerController@delete',
     ]
 ];
 
