@@ -20,5 +20,12 @@ Router::get('/customer/edit/{id}', 'CustomerController@edit');
 Router::post('/customer/edit/{id}', 'CustomerController@update');
 Router::get('/customer/delete/{id}', 'CustomerController@delete');
 
+Router::get('/user', 'UserController@index');
+Router::get('/user/create', 'UserController@create');
+Router::post('/user/create', 'UserController@store');
+Router::get('/user/edit/{id}', 'UserController@edit');
+Router::post('/user/edit/{id}', 'UserController@update');
+Router::get('/user/delete/{id}', 'UserController@delete');
+
 Router::get('/login', 'AuthController@showLogin');
 Router::post('/login', 'AuthController@postLogin');

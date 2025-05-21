@@ -10,12 +10,6 @@ class Base {
      */
     public $filePath = '';
 
-    public $rules = [
-        'name' => 'required',
-        'email' => 'required',
-        'age' => 'required|max:100'
-    ];
-
     /**
      * Mở file với chế độ đọc/ghi.
      *
@@ -75,43 +69,6 @@ class Base {
     }
 
     /**
-     * Xác thực dữ liệu đầu vào theo các quy tắc.
-     *
-     * @param array $data Dữ liệu cần xác thực.
-     * @return array Mảng chứa lỗi nếu có, mảng rỗng nếu không có lỗi.
-     */
-    protected function validate(array $data): array
-    {
-        $errors = [];
-        
-        foreach ($this->rules as $field => $rule) {
-            if (isset($data[$field])) {
-                $_SESSION['old_input'][$field] = $data[$field];
-
-                if (strpos($rule, 'required') !== false && empty($data[$field])) {
-                    $errors["error_{$field}"] = "{$field} là bắt buộc.";
-                }
-                if (strpos($rule, 'max:') !== false && $field == 'age' && (int)$data[$field] > 100) {
-                    $errors["error_{$field}"] = "{$field} không được lớn hơn 100.";
-                }
-            } else {
-                if (strpos($rule, 'required') !== false) {
-                    $errors["error_{$field}"] = "{$field} là bắt buộc.";
-                }
-            }
-        }
-
-        // Lưu lỗi vào SESSION để hiển thị ở frontend
-        if (!empty($errors)) {
-            $_SESSION['errors'] = $errors;
-        } else {
-            $_SESSION['errors'] = [];  // Xóa lỗi nếu không còn lỗi
-        }
-
-        return $errors;
-    }
-
-    /**
      * Tìm một dòng dữ liệu theo chỉ số.
      *
      * @param int $indexData Chỉ số dòng cần tìm.
@@ -154,8 +111,6 @@ class Base {
      * @return bool Trả về true nếu lưu thành công, false nếu thất bại.
      */
     public function store($data) {
-        $errors = $this->validate($data);
-        if (!empty($errors)) return false;
         return $this->writeFile($data);
     }
 
@@ -168,8 +123,6 @@ class Base {
      */
     public function update(int $targetLine, array $newData): bool
     {
-        $errors = $this->validate($newData);
-        if (!empty($errors)) return false;
         $file = $this->openFile('r');
         if (!$file) return false;
 
