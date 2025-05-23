@@ -1,0 +1,20 @@
+1,1,đang làm gì á
+1,1,đang làm gì á
+1,1,đang làm gì á
+1,1,đang làm gì á
+,,
+1,Bạn đang làm gì?,Tôi đang học bài
+1,Bạn ăn cơm chưa1?,Tôi đã ăn bún
+1,Bạn ăn cơm chưa2?,Tôi đã ăn cơm
+1,Bạn ăn cơm chưa3?,Tôi đã ăn phở
+1,Bạn ăn cơm chưa4?,Tôi đã ăn mì quảng
+1,Bạn ăn cơm chưa5?,Tôi đã ăn hủ tiếu
+1,Bạn ăn cơm chưa6?,Tôi đã ăn bánh canh
+1,Bạn ăn cơm chưa7?,Tôi đã ăn súp
+1,Bạn ăn cơm chưa8?,Tôi đã ăn bánh trán trộn
+1,Bạn ăn cơm chưa9?,Tôi đã uống trà sữa
+1,Bạn ăn cơm chưa10?,Tôi đã uống nước ép
+,,
+1,TEN SALE,HÁDAD
+,,
+,,
