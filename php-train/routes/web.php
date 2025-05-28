@@ -36,3 +36,10 @@ Router::get('/login/create', 'LoginController@login');
 Router::post('/login/create', 'LoginController@create');
 
 Router::get('/logout', 'LoginController@logout');
+
+Router::get('/product', 'ProductController@index');
+Router::get('/product/create', 'ProductController@create');
+Router::post('/product/create', 'ProductController@store');
+Router::get('/product/eidt/{id}', 'ProductController@edit');
+Router::post('/product/edit/{id}', 'ProductController@update');
+Router::get('/product/delete/{id}', 'ProductController@delete');
