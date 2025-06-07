@@ -2,24 +2,14 @@
 
 namespace Models;
 
-// require_once 'Base.php';
-use Models\Base;
+//use Models\Base;
+use Core\Model;
 
-class Employee extends Base {
+class Employee extends Model {
 
     /**
-     * Đường dẫn tới file dữ liệu.
+     * Table name in the database
      * @var string
      */
-    public $filePath = './data/employee/data.txt';
-
-    /**
-     * Các trường dữ liệu cần xử lý trong file (ví dụ: name, email, age).
-     * @var array
-     */
-    public $fields = [
-        'name',
-        'email',
-        'age',
-    ];
+    protected $table = 'employees';
 }

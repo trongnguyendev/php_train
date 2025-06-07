@@ -16,7 +16,7 @@ class EmployeeController extends Controller {
         $employee = new Employee();
 
         $employees = !empty($searchQuery)
-                ? $employee->findRowByType($searchQuery, $searchType)
+                ? $employee->where('name', $searchQuery)
                 : $employee->all();
 
         $data = [
@@ -44,14 +44,13 @@ class EmployeeController extends Controller {
         $rules = [
             'name' => 'required',
             'email' => 'required',
-            'age' => 'required|numeric'
+            'salary' => 'required|numeric'
         ];
 
         $messages = [
             'name.required' => 'Bắt buộc nhập tên',
             'email.required' => 'Bắt buộc nhập email',
-            'age.required' => 'Bắt buộc nhập tuổi',
-            'age.numeric' => 'Tuổi phải là số'
+            'salary.required' => 'Bắt buộc nhập tuổi',
         ];
 
         $validator = new Validation($data, $rules, $messages);
@@ -67,10 +66,10 @@ class EmployeeController extends Controller {
 
         $employee = new Employee();
 
-        $store = $employee->store([
+        $store = $employee->create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'age' => $data['age'],
+            'salary' => $data['salary'],
         ]);
 
         if ($store) {
@@ -86,7 +85,7 @@ class EmployeeController extends Controller {
         $employee = new Employee();
         $this->view('employee/update', [
             'pageTitle' => 'Cập nhật nhân viên',
-            'employeeData' => $employee->findRowByIndex($id),
+            'employeeData' => $employee->whereOne('id', $id),
             'indexData' => $id
         ]);
     }
@@ -98,13 +97,13 @@ class EmployeeController extends Controller {
         $rules = [
             'name' => 'required',
             'email' => 'required|email',
-            'age' => 'required'
+            'salary' => 'required'
         ];
 
         $messages = [
             'name.required' => 'Bắt buộc nhập tên',
             'email.required' => 'Bắt buộc nhập email',
-            'age.required' => 'Bắt buộc nhập tuổi',
+            'salary.required' => 'Bắt buộc nhập tuổi',
         ];
 
         $validator = new Validation($data, $rules, $messages);
@@ -124,7 +123,7 @@ class EmployeeController extends Controller {
         $update = $employee->update($id, [
             'name' => $data['name'],
             'email' => $data['email'],
-            'age' => $data['age']
+            'salary' => $data['salary']
         ]);
 
         if ($update) {
@@ -137,7 +136,6 @@ class EmployeeController extends Controller {
     {
         $employee = new Employee();
         $isDeleted = $employee->delete($id);
-
         if ($isDeleted) {
             header("Location: /employee");
             exit;

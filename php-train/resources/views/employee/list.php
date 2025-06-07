@@ -39,16 +39,16 @@ function oldInput($field, $oldInput)
         <tr>
           <th>Tên</th>
           <th>Email</th>
-          <th>Tuổi</th>
+          <th>Lương</th>
           <th>Hành động</th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($employees as $index => $emp): ?>
           <tr>
-            <td><?= htmlspecialchars($emp[0]) ?></td>
-            <td><?= htmlspecialchars($emp[1]) ?></td>
-            <td><?= htmlspecialchars($emp[2]); ?></td>
+            <td><?= htmlspecialchars($emp['name']) ?></td>
+            <td><?= htmlspecialchars($emp['email']) ?></td>
+            <td><?= htmlspecialchars($emp['salary']); ?></td>
             <td>
               <a href="/employee/edit/<?= $index + 1 ?>">Cập nhật</a>
               <a href="/employee/delete/<?= $index + 1 ?>">Xoá</a>

@@ -13,9 +13,9 @@
         <?php endif;  ?>
 
         <label for="age">Tuổi:</label>
-        <input type="number" name="age" id="age" min="1" max="100" value="<?= $oldInput['age'] ?? '' ?>">
-        <?php if (isset($errors['age'])): ?>
-            <p class='error'><?= implode(', ', $errors['age']) ?></p>
+        <input type="text" name="salary" id="salary" value="<?= $oldInput['salary'] ?? '' ?>">
+        <?php if (isset($errors['salary'])): ?>
+            <p class='error'><?= implode(', ', $errors['salary']) ?></p>
         <?php endif;  ?>
 
         <button type="submit">Gửi</button>
