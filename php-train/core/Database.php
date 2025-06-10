@@ -29,11 +29,11 @@ public function __construct(){
     }
 }
 
-public static function getINstance(){
+public static function getInstance(){
     if (self::$instance === null) {
         self::$instance = new self();
     }
-    return <self::$instance;
+    return self::$instance;
 }
 
 public function getConnection(){
@@ -56,7 +56,7 @@ public function selectOne($sql, $params = []) {
 }
 
 public function insert($table, $data){
-    $colums = implode(', ' array_keys($data));
+    $colums = implode(', ', array_keys($data));
     $placeholders = implode(', ',array_fill(0, count($data), '?'));
 
     $sql = "INSERT INTO {$table}  ({$colums}) VALUSE ({$placeholders})";
@@ -78,7 +78,7 @@ public function update($table, $data, $conditions) {
         $where[] = "{$column} = ?";
     }
 
-    $sql = "UPDATE {$table} SET" . implode(', ',$set), " WHERE " . implode(' AND ', $where);
+    $sql = "UPDATE {$table} SET" . implode(', ',$set) . " WHERE " . implode(' AND ', $where);
     return $this->query($sql, array_merge(array_values($data), array_values($conditions)));
 }
 public function delete() {

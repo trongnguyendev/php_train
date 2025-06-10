@@ -7,7 +7,7 @@ abstract class Model {
     protected $table;
 
     public function __construct(){
-        $this->db = Database::get_defined_constants();
+        $this->db = Database::getInstance();
     }
 
     public function all() {
