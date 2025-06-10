@@ -15,7 +15,7 @@ class UserController extends Controller {
         $user = new User();
 
         $users = !empty($searchQuery)
-            ? $user->findRowByType($searchQuery,$searchType)
+            ? $user->where($searchType, $searchQuery)
             : $user->all();
 
             $data = [
@@ -74,7 +74,7 @@ class UserController extends Controller {
         $user = new User();
         $this->view('user/update',[
             'pageTitle' => 'Cập Nhập Nhân Viên Mới',
-            'userData' => $user->findRowByIndex($id),
+            'userData' => $user->whereOne($id),
             'indexData' => $id
         ]);
     }

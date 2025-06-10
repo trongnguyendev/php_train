@@ -16,7 +16,7 @@ class EmployeeController extends Controller {
         $employee = new Employee();
 
         $employees = !empty($searchQuery)
-                ? $employee->findRowByType($searchQuery, $searchType)
+                ? $employee->where( $searchType, $searchQuery)
                 : $employee->all();
 
         $data = [
@@ -67,7 +67,7 @@ class EmployeeController extends Controller {
 
         $employee = new Employee();
 
-        $store = $employee->store([
+        $store = $employee->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'age' => $data['age'],
@@ -86,7 +86,7 @@ class EmployeeController extends Controller {
         $employee = new Employee();
         $this->view('employee/update', [
             'pageTitle' => 'Cập nhật nhân viên',
-            'employeeData' => $employee->findRowByIndex($id),
+            'employeeData' => $employee->whereOne($id),
             'indexData' => $id
         ]);
     }

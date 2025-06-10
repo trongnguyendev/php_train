@@ -15,7 +15,7 @@ class ProductController extends Controller {
         $product = new Product();
 
         $products = !empty($searchQuery)
-            ? $product->findRowByType($searchQuery, $searchType)
+            ? $product->where($searchType, $searchQuery)
             : $product->all();
 
         $data = [
@@ -84,7 +84,7 @@ class ProductController extends Controller {
         $product = new Product();
         $this->view('product/update',[
             'pageTitle' => 'Cập Nhập Sản Phẩm',
-            'productData' => $product->findRowByIndex($id),
+            'productData' => $product->whereOne($id),
             'indexData' => $id
         ]);
     }
