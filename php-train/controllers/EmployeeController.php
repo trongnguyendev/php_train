@@ -86,7 +86,7 @@ class EmployeeController extends Controller {
         $employee = new Employee();
         $this->view('employee/update', [
             'pageTitle' => 'Cập nhật nhân viên',
-            'employeeData' => $employee->whereOne($id),
+            'employeeData' => $employee->whereOne('id',$id),
             'indexData' => $id
         ]);
     }

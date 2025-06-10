@@ -16,7 +16,7 @@ class CustomerController extends Controller {
         $customer = new Customer();
         
         $customers = !empty($searchQuery)
-            ? $customer->findRowByType($searchQuery, $searchType)
+            ? $customer->where($searchType, $searchQuery)
             : $customer->all();
 
         $data = [
@@ -86,7 +86,7 @@ class CustomerController extends Controller {
         $customer = new Customer();
         $this->view('customer/update', [
             'pageTitle' => 'Cập nhập thông tin Khách hàng',
-            'customerData' => $customer->findRowByIndex($id),
+            'customerData' => $customer->whereOne('id',$id),
             'indexData' => $id
         ]);
     } 

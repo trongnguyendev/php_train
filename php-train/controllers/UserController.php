@@ -74,7 +74,7 @@ class UserController extends Controller {
         $user = new User();
         $this->view('user/update',[
             'pageTitle' => 'Cập Nhập Nhân Viên Mới',
-            'userData' => $user->whereOne($id),
+            'userData' => $user->whereOne('id',$id),
             'indexData' => $id
         ]);
     }

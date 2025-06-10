@@ -84,7 +84,7 @@ class ProductController extends Controller {
         $product = new Product();
         $this->view('product/update',[
             'pageTitle' => 'Cập Nhập Sản Phẩm',
-            'productData' => $product->whereOne($id),
+            'productData' => $product->whereOne('id',$id),
             'indexData' => $id
         ]);
     }
