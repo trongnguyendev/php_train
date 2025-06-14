@@ -46,12 +46,12 @@ function oldInput($field, $oldInput)
       <tbody>
         <?php foreach ($employees as $index => $emp): ?>
           <tr>
-            <td><?= htmlspecialchars($emp[0]) ?></td>
             <td><?= htmlspecialchars($emp[1]) ?></td>
-            <td><?= htmlspecialchars($emp[2]); ?></td>
+            <td><?= htmlspecialchars($emp[2]) ?></td>
+            <td><?= htmlspecialchars($emp[3]); ?></td>
             <td>
-              <a href="/employee/edit/<?= $index + 1 ?>">Cập nhật</a>
-              <a href="/employee/delete/<?= $index + 1 ?>">Xoá</a>
+              <a href="/employee/edit/<?= $emp['id'] ?>">Cập nhật</a>
+              <a href="/employee/delete/<?= $emp['id'] ?>">Xoá</a>
             </td>
           </tr>
         <?php endforeach; ?>

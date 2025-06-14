@@ -48,11 +48,11 @@ function oldInput($field, $oldInput)
       <tbody>
         <?php foreach ($products as $index => $emp): ?>
           <tr>
-            <td><?= htmlspecialchars($emp[0]) ?></td>
             <td><?= htmlspecialchars($emp[1]) ?></td>
-            <td><?= htmlspecialchars($emp[2]); ?></td>
+            <td><?= htmlspecialchars($emp[2]) ?></td>
             <td><?= htmlspecialchars($emp[3]); ?></td>
             <td><?= htmlspecialchars($emp[4]); ?></td>
+            <td><?= htmlspecialchars($emp[5]); ?></td>
             <td>
               <a href="/product/edit/<?= $index + 1 ?>">Cập nhật</a>
               <a href="/product/delete/<?= $index + 1 ?>">Xoá</a>

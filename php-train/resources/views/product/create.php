@@ -25,7 +25,7 @@
         <?php endif;  ?>
 
         <label for="img">Hình Ảnh/Video:</label>
-        <input type="imge" name="img" id="img"  value="<?= $oldInput['img'] ?? '' ?>">
+        <input type="file" name="img" id="img"  value="<?= $oldInput['img'] ?? '' ?>">
         <?php if (isset($errors['img'])): ?>
             <p class='error'><?= implode(', ', $errors['img']) ?></p>
         <?php endif;  ?>

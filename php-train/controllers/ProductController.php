@@ -65,11 +65,11 @@ class ProductController extends Controller {
 
         $product = new Product();
 
-        $store = $product->store([
+        $store = $product->create([
             'name' => $data['name'],
             'sku' => $data['sku'],
             'quantity' => $data['quantity'],
-            'warehouse' => $data['warehoouse'],
+            'warehouse' => $data['warehouse'],
             'img' => $data['img']
         ]);
 

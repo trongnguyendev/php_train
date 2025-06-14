@@ -56,7 +56,7 @@ class UserController extends Controller {
             return;
         }
         $user = new User();
-        $store = $user->store([
+        $store = $user->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],

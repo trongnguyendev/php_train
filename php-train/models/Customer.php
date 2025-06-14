@@ -24,5 +24,6 @@ class Customer extends Model {
     //     'address',
     //     'age',
     // ];
-    protected $table = 'Customer';
+    protected $table = 'customer';
+
 }

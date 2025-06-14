@@ -16,7 +16,7 @@ public function __construct(){
     $this->host = 'mysql';
     $this->username = 'root';
     $this->password = 'password';
-    $this->database = 'crm';
+    $this->database = 'demo_enic';
 
     try {
         $this->connection = new \PDO(

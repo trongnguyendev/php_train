@@ -4,7 +4,7 @@ namespace Models;
 
 use Core\Model;
 
-class Product extends Base {
+class Product extends Model {
 
     // /**
     //  * Đường dẫn tới file dữ liệu.

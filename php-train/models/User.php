@@ -2,9 +2,9 @@
 
 namespace Models;
 
-use Core\model;
+use Core\Model;
 
-class User extends Base {
+class User extends Model {
 
     // /**
     //  * Đường dẫn tới file dữ liệu.
@@ -25,5 +25,5 @@ class User extends Base {
     //     'password',
     // ];
 
-    protected $table = 'User';
+    protected $table = 'user_name';
 }

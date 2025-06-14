@@ -3,12 +3,13 @@
 namespace Controllers;
 
 use Core\Controller;
-use Core\Validator;
 use Core\Validation;
 use Core\Request;
 use Models\Customer;
 
+
 class CustomerController extends Controller {
+    
     public function index (Request $request = null){
         $searchQuery = $request ? $request->query('tags_search', '') : '';
         $searchType = $request ? $request->query('type', '') :  '';
@@ -16,7 +17,7 @@ class CustomerController extends Controller {
         $customer = new Customer();
         
         $customers = !empty($searchQuery)
-            ? $customer->where($searchType, $searchQuery)
+            ? $customer->where( $searchType, $searchQuery)
             : $customer->all();
 
         $data = [
@@ -42,6 +43,7 @@ class CustomerController extends Controller {
         $rules = [
             'name' =>'required',
             'email' => 'required',
+            'phone' => 'required',
             'age' => 'required|numeric'
         ];
 
@@ -65,7 +67,7 @@ class CustomerController extends Controller {
 
         $customer = new Customer();
 
-        $store = $customer-> store([
+        $store = $customer-> create([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
@@ -91,7 +93,7 @@ class CustomerController extends Controller {
         ]);
     } 
 
-    public function update($id, $request){
+    public function update($id, Request $request){
         $data = $request->all();
 
         $rules = [
