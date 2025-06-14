@@ -10,6 +10,7 @@ use Models\Employee;
 class EmployeeController extends Controller {
     public function index(Request $request = null)
     {
+         $this->requireLogin();
         $searchQuery = $request ? $request->query('tags_search', '') : '';
         $searchType = $request ? $request->query('type', '') : '';
 

@@ -13,10 +13,10 @@ class Employee extends Model {
      */
     protected $table = 'employees';
 
-     public function countEmployee() {
-        $selectStr = "$this->table.name, $this->table.age
-         COUNT($table.email) as count"
-        // $sql = "SELECT  FROM {$this->table}";
-        return $this->countEmp($selectStr);
-    }
+//      public function countEmployee() {
+//         $selectStr = "$this->table.name, $this->table.age
+//          COUNT($table.email) as count"
+//         // $sql = "SELECT  FROM {$this->table}";
+//         return $this->countEmp($selectStr);
+//     }
 }

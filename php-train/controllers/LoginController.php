@@ -55,6 +55,7 @@ class LoginController extends Controller {
     }
 
     public function logout() {
+        unset($_SESSION['user_id']);
         unset($_SESSION['user_info']);
         header("Location: /login/create");
     }

@@ -33,8 +33,8 @@
                     <div class="right">
                         <img src="https://www.svgrepo.com/show/382109/male-avatar-boy-face-man-user-7.svg" alt="Avatar" class="avatar">
                         <div class="user-menu">
-                            <span class="username">Tên người dùng</span>
-                            <a href="/login/logout.php" class="logout">Đăng xuất</a>
+                            <span class="username"><?= $_SESSION['user_info']['name'] ?? 'Người dùng' ?></span>
+                            <a href="/logout" class="logout">Đăng xuất</a>
                         </div>
                     </div>
                 </div>

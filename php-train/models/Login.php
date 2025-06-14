@@ -35,7 +35,7 @@ class Login extends Model {
         $username = $data['username'];
         $pass = $data['password'];
 
-        $sql = "SELECT name, email, password FROM {$this->table} WHERE email = :email LIMIT 1";
+        $sql = "SELECT id, name, email, phone, password FROM {$this->table} WHERE email = :email LIMIT 1";
         $stmt = $this->db->getConnection()->prepare($sql);
         $stmt->bindParam(':email', $username);
         $stmt->execute();
@@ -43,6 +43,7 @@ class Login extends Model {
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if ($user && password_verify($pass, $user['password'])) {
+            $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_info'] = [
                 'name' => $user['name'] . ' ' . $user['phone']
             ];

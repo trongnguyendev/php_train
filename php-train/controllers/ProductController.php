@@ -9,6 +9,8 @@ use Models\Product;
 class ProductController extends Controller {
 
     public function index(Request $request = null){
+        $this->requireLogin();
+
         $searchQuery = $request ? $request->query('tags_search', '') : '';
         $searchType = $request ? $request->query('typpe', '') : '';
 

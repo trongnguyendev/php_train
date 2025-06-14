@@ -9,7 +9,9 @@ use Core\Request;
 use Models\Customer;
 
 class CustomerController extends Controller {
+
     public function index (Request $request = null){
+        $this->requireLogin();
         $searchQuery = $request ? $request->query('tags_search', '') : '';
         $searchType = $request ? $request->query('type', '') :  '';
 
@@ -18,7 +20,6 @@ class CustomerController extends Controller {
         $customers = !empty($searchQuery)
             ? $customer->where($searchType, $searchQuery)
             : $customer->all();
-
         $data = [
             'pageTitle' => 'Danh Sách Khách Hàng',
             'customers' => $customers,

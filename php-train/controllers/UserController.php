@@ -9,7 +9,8 @@ use Models\User;
 
 class UserController extends Controller {
     public function index(){
-         $searchQuery = $_GET['tags_search'] ?? '';
+        $this->requireLogin();
+        $searchQuery = $_GET['tags_search'] ?? '';
         $searchType = $_GET['type'] ?? '';
 
         $user = new User();
