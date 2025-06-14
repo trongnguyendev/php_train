@@ -2,26 +2,21 @@
 
 namespace Models;
 
-// require_once 'Base.php';
+//use Models\Base;
 use Core\Model;
 
 class Employee extends Model {
 
-    // /**
-    //  * Đường dẫn tới file dữ liệu.
-    //  * @var string
-    //  */
-    // public $filePath = './data/employee/data.txt';
-
-    // /**
-    //  * Các trường dữ liệu cần xử lý trong file (ví dụ: name, email, age).
-    //  * @var array
-    //  */
-    // public $fields = [
-    //     'name',
-    //     'email',
-    //     'age',
-    // ];
+    /**
+     * Table name in the database
+     * @var string
+     */
     protected $table = 'employees';
 
+     public function countEmployee() {
+        $selectStr = "$this->table.name, $this->table.age
+         COUNT($table.email) as count"
+        // $sql = "SELECT  FROM {$this->table}";
+        return $this->countEmp($selectStr);
+    }
 }

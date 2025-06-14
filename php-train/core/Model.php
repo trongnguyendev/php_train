@@ -47,5 +47,11 @@ abstract class Model {
         $result = $this->db->selectOne($sql);
         return $result['count'];
     }
+    // function có điều kiện của từng models riêng biệt
+    public function countEmp($sqlStr) {
+        $sql = "SELECT {$sqlStr} FROM {$this->table}";
+        $result = $this->db->selectOne($sql);
+        return $result['count'];
+    }
 }
 ?>

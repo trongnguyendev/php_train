@@ -3,13 +3,12 @@
 namespace Controllers;
 
 use Core\Controller;
+use Core\Validator;
 use Core\Validation;
 use Core\Request;
 use Models\Customer;
 
-
 class CustomerController extends Controller {
-    
     public function index (Request $request = null){
         $searchQuery = $request ? $request->query('tags_search', '') : '';
         $searchType = $request ? $request->query('type', '') :  '';
@@ -17,7 +16,7 @@ class CustomerController extends Controller {
         $customer = new Customer();
         
         $customers = !empty($searchQuery)
-            ? $customer->where( $searchType, $searchQuery)
+            ? $customer->where($searchType, $searchQuery)
             : $customer->all();
 
         $data = [
@@ -43,7 +42,6 @@ class CustomerController extends Controller {
         $rules = [
             'name' =>'required',
             'email' => 'required',
-            'phone' => 'required',
             'age' => 'required|numeric'
         ];
 
@@ -88,12 +86,12 @@ class CustomerController extends Controller {
         $customer = new Customer();
         $this->view('customer/update', [
             'pageTitle' => 'Cập nhập thông tin Khách hàng',
-            'customerData' => $customer->whereOne('id',$id),
+            'customerData' => $customer->whereOne('id', $id),
             'indexData' => $id
         ]);
     } 
 
-    public function update($id, Request $request){
+    public function update($id, $request){
         $data = $request->all();
 
         $rules = [
