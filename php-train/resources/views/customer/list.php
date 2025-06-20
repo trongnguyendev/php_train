@@ -49,15 +49,15 @@ function oldInput($field, $oldInput)
       <tbody>
         <?php foreach ($customers as $index => $emp): ?>
           <tr>
-            <td><?= htmlspecialchars($emp[0]) ?></td>
             <td><?= htmlspecialchars($emp[1]) ?></td>
             <td><?= htmlspecialchars($emp[2]) ?></td>
             <td><?= htmlspecialchars($emp[3]) ?></td>
             <td><?= htmlspecialchars($emp[4]) ?></td>
-            <td><?= htmlspecialchars($emp[5]); ?></td>
+            <td><?= htmlspecialchars($emp[5]) ?></td>
+            <td><?= htmlspecialchars($emp[6]); ?></td>
             <td>
-              <a href="/customer/edit/<?= $index + 1 ?>">Cập nhật</a>
-              <a href="/customer/delete/<?= $index + 1 ?>">Xoá</a>
+              <a href="/customer/edit/<?= $emp['id'] ?>">Cập nhật</a>
+              <a href="/customer/delete/<?= $emp['id'] ?>">Xoá</a>
             </td>
           </tr>
         <?php endforeach; ?>

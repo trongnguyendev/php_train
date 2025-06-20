@@ -9,13 +9,14 @@ use Models\User;
 
 class UserController extends Controller {
     public function index(){
-         $searchQuery = $_GET['tags_search'] ?? '';
+        $this->requireLogin();
+        $searchQuery = $_GET['tags_search'] ?? '';
         $searchType = $_GET['type'] ?? '';
 
         $user = new User();
 
         $users = !empty($searchQuery)
-            ? $user->findRowByType($searchQuery,$searchType)
+            ? $user->where($searchType, $searchQuery)
             : $user->all();
 
             $data = [
@@ -56,7 +57,7 @@ class UserController extends Controller {
             return;
         }
         $user = new User();
-        $store = $user->store([
+        $store = $user->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
@@ -64,17 +65,17 @@ class UserController extends Controller {
             'password' => password_hash($data['password'], PASSWORD_DEFAULT)
         ]);
         if($store){
-            header("Location: /user");
+            $this->redirect('/user');
             exit;
         }
-        header("Location: create");
+        $this->redirect('/user/create');
     }
 
     public function edit($id){
         $user = new User();
         $this->view('user/update',[
             'pageTitle' => 'Cập Nhập Nhân Viên Mới',
-            'userData' => $user->findRowByIndex($id),
+            'userData' => $user->whereOne('id',$id),
             'indexData' => $id
         ]);
     }
@@ -108,7 +109,7 @@ class UserController extends Controller {
             'password' => $data['password']
         ]);
         if($update){
-            header("Location: /user");
+            $this->redirect('/user');
             exit;
         }
     }
@@ -117,7 +118,7 @@ class UserController extends Controller {
         $isDeleted = $user->delete($id);
 
         if($isDeleted){
-            header("Location: /user");
+            $this->redirect('/user');
             exit;
         }
     }

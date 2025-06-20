@@ -9,16 +9,17 @@ use Core\Request;
 use Models\Customer;
 
 class CustomerController extends Controller {
+
     public function index (Request $request = null){
+        $this->requireLogin();
         $searchQuery = $request ? $request->query('tags_search', '') : '';
         $searchType = $request ? $request->query('type', '') :  '';
 
         $customer = new Customer();
         
         $customers = !empty($searchQuery)
-            ? $customer->findRowByType($searchQuery, $searchType)
+            ? $customer->where($searchType, $searchQuery)
             : $customer->all();
-
         $data = [
             'pageTitle' => 'Danh Sách Khách Hàng',
             'customers' => $customers,
@@ -65,7 +66,7 @@ class CustomerController extends Controller {
 
         $customer = new Customer();
 
-        $store = $customer-> store([
+        $store = $customer-> create([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
@@ -75,18 +76,18 @@ class CustomerController extends Controller {
         ]);
 
         if($store){
-            header("Location: /customer");
+            $this->redirect('/customer');
             exit;
         }
 
-        header("Location: create");
+        $this->redirect('/customer/create');
     }
 
     public function edit($id){
         $customer = new Customer();
         $this->view('customer/update', [
             'pageTitle' => 'Cập nhập thông tin Khách hàng',
-            'customerData' => $customer->findRowByIndex($id),
+            'customerData' => $customer->whereOne('id', $id),
             'indexData' => $id
         ]);
     } 
@@ -132,7 +133,7 @@ class CustomerController extends Controller {
         ]);
 
         if($update) {
-            header("Location: /customer");
+            $this->redirect('/customer');
             exit;
         }
     }
@@ -143,7 +144,7 @@ class CustomerController extends Controller {
         $isDeleted = $customer->delete($id);
 
         if($isDeleted){
-            header("Location: /customer");
+            $this->redirect('/customer');
             exit;
         }
     }

@@ -2,7 +2,6 @@
 
 namespace Models;
 
-//use Models\Base;
 use Core\Model;
 
 class Employee extends Model {

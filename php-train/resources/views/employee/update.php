@@ -13,9 +13,9 @@
         <?php endif;  ?>
 
         <label for="age">Tuổi:</label>
-        <input type="text" name="salary" id="age" value="<?php echo intval($employeeData['salary'] ?? $oldInput['salary'] ?? 0); ?>">
-        <?php if (isset($errors['salary'])): ?>
-            <p class='error'><?= implode(', ', $errors['salary']) ?></p>
+        <input type="number" name="age" id="age" value="<?php echo intval($employeeData[3] ?? $oldInput['age'] ?? 0); ?>">
+        <?php if (isset($errors['age'])): ?>
+            <p class='error'><?= implode(', ', $errors['age']) ?></p>
         <?php endif;  ?>
 
         <button type="submit">Cập nhật</button>

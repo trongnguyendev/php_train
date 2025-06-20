@@ -36,12 +36,12 @@ class Controller {
     }
 
     protected function isLoginedIn() {
-        return isset($_SESSION['user_id']);
+        return isset($_SESSION['user_info']);
     }
 
     protected function requireLogin() {
         if (!$this->isLoginedIn()) {
-            $this->redirect('/login');
+            $this->redirect('/login/create');
         }
     }
 

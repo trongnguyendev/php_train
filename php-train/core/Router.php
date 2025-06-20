@@ -29,6 +29,11 @@ class Router {
             'login/create' => 'LoginController@login',
 
             'logout' => 'LoginController@logout',
+
+            'product' => 'ProductController@index',
+            'product/create' => 'ProductController@create',
+            'product/edit/{id}' => 'ProductController@edit',
+            'product/delete/{id}' => 'ProductController@delete',
         ],
         'POST' => [
             'employee/create' => 'EmployeeController@store',
@@ -42,6 +47,9 @@ class Router {
             'user/edit/{id}' => 'UserController@update',
 
             'login/create' => 'LoginController@create',
+
+            'product/create' => 'ProductController@store',
+            'product/edit/{id}' => 'ProductController@update',
             
         ]
     ];

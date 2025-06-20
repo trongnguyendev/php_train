@@ -10,6 +10,7 @@ use Models\Employee;
 class EmployeeController extends Controller {
     public function index(Request $request = null)
     {
+         $this->requireLogin();
         $searchQuery = $request ? $request->query('tags_search', '') : '';
         $searchType = $request ? $request->query('type', '') : '';
 
@@ -73,11 +74,9 @@ class EmployeeController extends Controller {
         ]);
 
         if ($store) {
-            header("Location: /employee");
+            $this->redirect('/employee');
             exit;
         }
-
-        header("Location: create");
     }
 
     public function edit($id)
@@ -127,7 +126,7 @@ class EmployeeController extends Controller {
         ]);
 
         if ($update) {
-            header("Location: /employee");
+            $this->redirect('/employee');
             exit;
         }
     }
@@ -137,7 +136,7 @@ class EmployeeController extends Controller {
         $employee = new Employee();
         $isDeleted = $employee->delete($id);
         if ($isDeleted) {
-            header("Location: /employee");
+            $this->redirect('/employee');
             exit;
         }
     }

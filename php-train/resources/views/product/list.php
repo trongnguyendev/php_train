@@ -1,5 +1,5 @@
 <?php
-$options = ['name' => 'Tên', 'email' => 'Email', 'age' => 'Tuổi'];
+$options = ['name' => 'Tên Sản Phẩm', 'sku' => 'Mã Sản Phẩm'];
 $selectedValue = oldInput('search_type', $oldSearch ?? '');
 $oldContent = oldInput('search_content', $oldSearch ?? '');
 
@@ -13,7 +13,7 @@ function oldInput($field, $oldInput)
   <div class="tag-input-container" onclick="input.focus()">
     <input type="text" name="content_search" id="tagInput" placeholder="Nhập giá trị và nhấn Enter">
   </div>
-  <form class="form-search" action="/employee" method="GET">
+  <form class="form-search" action="/product" method="GET">
     <input type="hidden" name="tags_search" id="hiddenSearchContent" />
     <select name="type" class="type_search">
       <?php foreach ($options as $key => $label): ?>
@@ -26,32 +26,36 @@ function oldInput($field, $oldInput)
     <button id="resetBtn">Reset</button>
   </form>
   <button class="btn-create">
-    <a href="/employee/create">+ Tạo mới</a>
+    <a href="/product/create">+ Tạo mới</a>
   </button>
 </div>
 
 <div class="list">
-  <?php if (empty($employees)): ?>
+  <?php if (empty($products)): ?>
     <p class="no-data">Không có dữ liệu</p>
   <?php else: ?>
     <table>
       <thead> 
         <tr>
-          <th>Tên</th>
-          <th>Email</th>
-          <th>Lương</th>
+          <th>Tên Sản Phẩm</th>
+          <th>Mã Sản Phẩm</th>
+          <th>Số Lượng</th>
+          <th>Kho</th>
+          <th>Hình Ảnh</th>
           <th>Hành động</th>
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($employees as $index => $emp): ?>
+        <?php foreach ($products as $index => $emp): ?>
           <tr>
             <td><?= htmlspecialchars($emp['name']) ?></td>
-            <td><?= htmlspecialchars($emp['email']) ?></td>
-            <td><?= htmlspecialchars($emp['salary']); ?></td>
+            <td><?= htmlspecialchars($emp['id']) ?></td>
+            <td><?= htmlspecialchars($emp['quantity']); ?></td>
+            <td><?= htmlspecialchars($emp['id']); ?></td>
+            <td><img style="width: 100px; height: auto;" src="<?= htmlspecialchars($emp['image'] ?? ''); ?>"></td>
             <td>
-              <a href="/employee/edit/<?= $emp['id'] ?>">Cập nhật</a>
-              <a href="/employee/delete/<?= $emp['id'] ?>">Xoá</a>
+              <a href="/product/edit/<?= $index + 1 ?>">Cập nhật</a>
+              <a href="/product/delete/<?= $index + 1 ?>">Xoá</a>
             </td>
           </tr>
         <?php endforeach; ?>

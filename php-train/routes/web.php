@@ -4,8 +4,6 @@ use Core\Router;
 
 Router::get('/', 'DashboardController@index');
 
-Router::get('/login', 'AuthController@showLogin');
-
 Router::get('/employee', 'EmployeeController@index');
 Router::get('/employee/create', 'EmployeeController@create');
 Router::post('/employee/create', 'EmployeeController@store');
@@ -14,7 +12,6 @@ Router::post('/employee/edit/{id}', 'EmployeeController@update');
 Router::get('/employee/delete/{id}', 'EmployeeController@delete');
 
 Router::get('/login', 'AuthController@showLogin');
-Router::post('/login', 'AuthController@postLogin');
 Router::post('/login', 'AuthController@postLogin');
 
 Router::get('/customer', 'CustomerController@index');
@@ -36,3 +33,10 @@ Router::get('/login/create', 'LoginController@login');
 Router::post('/login/create', 'LoginController@create');
 
 Router::get('/logout', 'LoginController@logout');
+
+Router::get('/product', 'ProductController@index');
+Router::get('/product/create', 'ProductController@create');
+Router::post('/product/create', 'ProductController@store');
+Router::get('/product/edit/{id}', 'ProductController@edit');
+Router::post('/product/edit/{id}', 'ProductController@update');
+Router::get('/product/delete/{id}', 'ProductController@delete');
