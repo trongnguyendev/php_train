@@ -109,12 +109,12 @@ class ProductController extends Controller {
             'warehouse.required' => 'Bắt buộc nhập KHO'
         ];
 
-        $validator = new Validation($dta, $rules, $messages);
+        $validator = new Validation($data, $rules, $messages);
 
         if(!$validator->validate()) {
             $this->view('product/update',[
                 'pageTitle' => 'Cập Nhập Sản Phẩm',
-                'errors' => $valadator->getErrors(),
+                'errors' => $validator->getErrors(),
                 'oldInput' => $data,
                 'indexData' => $id
             ]);

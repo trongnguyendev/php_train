@@ -5,6 +5,7 @@ namespace Controllers;
 use Core\Controller;
 use Core\Request;
 use Core\Validation;
+use Models\Auth;
 
 class AuthController extends Controller {
     
@@ -30,6 +31,26 @@ class AuthController extends Controller {
             return;
         }
 
+        $loginIn = new Auth();
+
+        $isLogin = $loginIn->login([
+            'email' => $data['email'],
+            'password' => $data['password']
+        ]);
+
+        if (!$isLogin) {
+            $this->view('auth/login', [
+                'errors' => ['Invalid email or password.'],
+                'email' => $data['email'] ?? '',
+            ], false);
+            return;
+        }
+
         $this->redirect('/');
+    }
+
+    public function logout() {
+        unset($_SESSION['user_info']);
+        $this->redirect('/login');
     }
 }
