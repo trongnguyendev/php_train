@@ -75,11 +75,9 @@ class EmployeeController extends Controller {
         ]);
 
         if ($store) {
-            header("Location: /employee");
+            $this->redirect('/employee');
             exit;
         }
-
-        header("Location: create");
     }
 
     public function edit($id)
@@ -129,7 +127,7 @@ class EmployeeController extends Controller {
         ]);
 
         if ($update) {
-            header("Location: /employee");
+            $this->redirect('/employee');
             exit;
         }
     }
@@ -140,7 +138,7 @@ class EmployeeController extends Controller {
         $isDeleted = $employee->delete($id);
 
         if ($isDeleted) {
-            header("Location: /employee");
+            $this->redirect('/employee');
             exit;
         }
     }

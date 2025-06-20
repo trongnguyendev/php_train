@@ -76,11 +76,11 @@ class CustomerController extends Controller {
         ]);
 
         if($store){
-            header("Location: /customer");
+            $this->redirect('/customer');
             exit;
         }
 
-        header("Location: create");
+        $this->redirect('/customer/create');
     }
 
     public function edit($id){
@@ -133,7 +133,7 @@ class CustomerController extends Controller {
         ]);
 
         if($update) {
-            header("Location: /customer");
+            $this->redirect('/customer');
             exit;
         }
     }
@@ -144,7 +144,7 @@ class CustomerController extends Controller {
         $isDeleted = $customer->delete($id);
 
         if($isDeleted){
-            header("Location: /customer");
+            $this->redirect('/customer');
             exit;
         }
     }

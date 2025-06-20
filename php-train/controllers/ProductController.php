@@ -76,10 +76,10 @@ class ProductController extends Controller {
         ]);
 
         if($store) {
-            header("Location: /product");
+            $this->redirect('/product');
             exit;
         }
-        header("Location: create");
+        $this->redirect('/product/create');
     }
 
     public function edit($id){
@@ -91,8 +91,7 @@ class ProductController extends Controller {
         ]);
     }
 
-    public function update($id, Request $request){
-
+    public function update($id, Request $request) {
         $data = $request->all();
 
         $rules = [
@@ -131,7 +130,7 @@ class ProductController extends Controller {
         ]);
 
         if($update){
-            header("Location: /product");
+            $this->redirect('/product');
             exit;
         }
     }
@@ -141,7 +140,7 @@ class ProductController extends Controller {
         $isDeleted = $product->delete($id);
 
         if($isDeleted){
-            header("Location: /product");
+            $this->redirect('/product');
             exit;
         }
     }

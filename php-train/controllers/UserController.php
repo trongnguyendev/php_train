@@ -65,10 +65,10 @@ class UserController extends Controller {
             'password' => password_hash($data['password'], PASSWORD_DEFAULT)
         ]);
         if($store){
-            header("Location: /user");
+            $this->redirect('/user');
             exit;
         }
-        header("Location: create");
+        $this->redirect('/user/create');
     }
 
     public function edit($id){
@@ -109,7 +109,7 @@ class UserController extends Controller {
             'password' => $data['password']
         ]);
         if($update){
-            header("Location: /user");
+            $this->redirect('/user');
             exit;
         }
     }
@@ -118,7 +118,7 @@ class UserController extends Controller {
         $isDeleted = $user->delete($id);
 
         if($isDeleted){
-            header("Location: /user");
+            $this->redirect('/user');
             exit;
         }
     }
