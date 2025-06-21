@@ -63,40 +63,17 @@ class ProductController extends Controller {
             return;
         }
 
-        // Xử lý upload file
-        $imgFileName = null;
-        $uploadError = null;
-        if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = 'storage/public/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-            $fileTmpPath = $_FILES['img']['tmp_name'];
-            $fileName = basename($_FILES['img']['name']);
-            $fileName = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $fileName);
-            $destPath = $uploadDir . $fileName;
-            if (move_uploaded_file($fileTmpPath, $destPath)) {
-                $imgFileName = $fileName;
-            } else {
-                $uploadError = 'Không thể lưu file upload.';
-            }
-        } elseif (isset($_FILES['img']) && $_FILES['img']['error'] !== UPLOAD_ERR_NO_FILE) {
-            $uploadError = 'Lỗi upload file: ' . $_FILES['img']['error'];
-        }
-
-        if ($uploadError) {
+        // Xử lý upload file sử dụng hàm cha
+        $upload = $this->uploadImage('image', 'storage/public/');
+        if ($upload['error']) {
             $this->view('product/create',[
                 'pageTitle' => 'Tạo Sản Phẩm Mới',
-                'errors' => array_merge($validator->getErrors() ?? [], ['img' => [$uploadError]]),
+                'errors' => array_merge($validator->getErrors() ?? [], ['image' => [$upload['error']]]),
                 'oldInput' => $data,
             ]);
             return;
         }
-        if ($imgFileName) {
-            $data['img'] = '/storage/public/' . $imgFileName;
-        } else {
-            $data['img'] = '';
-        }
+        $data['image'] = $upload['path'] ?? '';
 
         $product = new Product();
 
@@ -154,37 +131,20 @@ class ProductController extends Controller {
 
         $product = new Product();
 
-        // Xử lý upload file mới nếu có
-        $imgFileName = null;
-        $uploadError = null;
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = 'storage/public/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-            $fileTmpPath = $_FILES['image']['tmp_name'];
-            $fileName = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', basename($_FILES['image']['name']));
-            $destPath = $uploadDir . $fileName;
-            if (move_uploaded_file($fileTmpPath, $destPath)) {
-                $imgFileName = '/storage/public/' . $fileName;
-            } else {
-                $uploadError = 'Không thể lưu file upload.';
-            }
-        } elseif (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
-            $uploadError = 'Lỗi upload file: ' . $_FILES['image']['error'];
-        }
-        if ($uploadError) {
+        // Xử lý upload file mới nếu có (sử dụng hàm cha)
+        $upload = $this->uploadImage('image', 'storage/public/');
+        if ($upload['error']) {
             $this->view('product/update',[
                 'pageTitle' => 'Cập Nhập Sản Phẩm',
-                'errors' => array_merge($validator->getErrors() ?? [], ['image' => [$uploadError]]),
+                'errors' => array_merge($validator->getErrors() ?? [], ['image' => [$upload['error']]]),
                 'oldInput' => $data,
                 'indexData' => $id
             ]);
             return;
         }
-        // Lấy dữ liệu cũ để giữ nguyên img nếu không upload mới
+        // Lấy dữ liệu cũ để giữ nguyên image nếu không upload mới
         $productData = $product->whereOne('id', $id);
-        $imgValue = $imgFileName ? $imgFileName : ($productData['image'] ?? '');
+        $imgValue = $upload['path'] ? $upload['path'] : ($productData['image'] ?? '');
 
         $update = $product->update($id,[
             'name' => $data['name'],

@@ -11,12 +11,26 @@ class Database {
     private $password;
     private $database;
 
+    private function loadEnv($path) {
+        if (!file_exists($path)) return;
+        $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            if (strpos(trim($line), '#') === 0) continue;
+            list($name, $value) = array_map('trim', explode('=', $line, 2));
+            if (!array_key_exists($name, $_ENV)) {
+                $_ENV[$name] = $value;
+            }
+        }
+    }
+
     public function __construct() {
-        // Get database configuration from environment variables
-        $this->host = 'mysql';
-        $this->username = 'root';
-        $this->password = 'password';
-        $this->database = 'crm';
+        // Load .env file if not loaded
+        $envPath = __DIR__ . '/../.env';
+        $this->loadEnv($envPath);
+        $this->host = $_ENV['DB_HOST'];
+        $this->username = $_ENV['DB_USERNAME'];
+        $this->password = $_ENV['DB_PASSWORD'];
+        $this->database = $_ENV['DB_DATABASE'];
 
         try {
             $this->connection = new \PDO(

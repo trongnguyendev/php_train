@@ -20,6 +20,9 @@
                         <li><a href="/"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
                         <li><a href="/employee"><i class="fa-regular fa-circle-user"></i> Quản lí nhân viên</a></li>
                         <li><a href="/customer"><i class="fa fa-user-friends"></i> Quản lí khách hàng</a></li>
+                        <li><a href="/user"><i class="fa-solid fa-user-tie"></i> Quản lí tài khoản</a></li>
+                        <li><a href="/product"><i class="fa-solid fa-store"></i> Quản lí sản phẩm</a></li>
+                        <li><a href="/stock"><i class="fa-duotone fa-regular fa-truck"></i> Quản lí kho</a></li>
                     </ul>
                 </div>
             </div>
