@@ -41,7 +41,7 @@ class Controller {
 
     protected function requireLogin() {
         if (!$this->isLoginedIn()) {
-            $this->redirect('/login/create');
+            $this->redirect('/login');
         }
     }
 

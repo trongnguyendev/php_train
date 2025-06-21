@@ -8,6 +8,7 @@ class DashboardController extends Controller {
     
     public function index() {
 
+        $this->requireLogin();
         $data = [
             'pageTitle' => 'Dashboard',
             'labels' => ['Customer', 'Employee', 'User'],

@@ -22,7 +22,8 @@
                         <li><a href="/customer"><i class="fa fa-user-friends"></i> Quản lí khách hàng</a></li>
                         <li><a href="/user"><i class="fa-solid fa-user-tie"></i> Quản lí tài khoản</a></li>
                         <li><a href="/product"><i class="fa-solid fa-store"></i> Quản lí sản phẩm</a></li>
-                        <li><a href="/stock"><i class="fa-duotone fa-regular fa-truck"></i> Quản lí kho</a></li>
+                        <li><a href="/warehouse"><i class="fa-duotone fa-regular fa-truck"></i> Quản lí kho</a></li>
+                        <li><a href="/stock"><i class="fa-duotone fa-regular fa-truck"></i> Quản lí Tồn Kho</a></li>
                     </ul>
                 </div>
             </div>

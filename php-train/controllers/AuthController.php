@@ -10,6 +10,7 @@ use Models\Auth;
 class AuthController extends Controller {
     
     public function showLogin() {
+        if ($this->isLoginedIn()) $this->redirect('/');
         $this->view('auth/login', [ 'pageTitle' => 'Login Page' ], false);
     }
 

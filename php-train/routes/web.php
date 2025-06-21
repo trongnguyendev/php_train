@@ -36,3 +36,18 @@ Router::post('/product/create', 'ProductController@store');
 Router::get('/product/edit/{id}', 'ProductController@edit');
 Router::post('/product/edit/{id}', 'ProductController@update');
 Router::get('/product/delete/{id}', 'ProductController@delete');
+
+Router::get('/stock', 'StockController@index');
+Router::get('/stock/create', 'StockController@create');
+Router::post('/stock/create', 'StockController@store');
+Router::get('/stock/edit/{id}', 'StockController@edit');
+Router::post('/stock/edit/{id}', 'StockController@update');
+Router::get('/stock/delete/{id}', 'StockController@delete');
+
+
+Router::get('/warehouse', 'WarehouseController@index');
+Router::get('/warehouse/create', 'WarehouseController@create');
+Router::post('/warehouse/create', 'WarehouseController@store');
+Router::get('/warehouse/edit/{id}', 'WarehouseController@edit');
+Router::post('/warehouse/edit/{id}', 'WarehouseController@update');
+Router::get('/warehouse/delete/{id}', 'WarehouseController@delete');

@@ -34,6 +34,17 @@ class Router {
             'product/create' => 'ProductController@create',
             'product/edit/{id}' => 'ProductController@edit',
             'product/delete/{id}' => 'ProductController@delete',
+
+
+            'stock' => 'StockController@index',
+            'stock/create' => 'StockController@create',
+            'stock/edit/{id}' => 'StockController@edit',
+            'stock/delete/{id}' => 'StockController@delete',
+
+            'warehouse' => 'WarehouseController@index',
+            'warehouse/create' => 'WarehouseController@create',
+            'warehouse/edit/{id}' => 'WarehouseController@edit',
+            'warehouse/delete/{id}' => 'WarehouseController@delete',
         ],
         'POST' => [
             'employee/create' => 'EmployeeController@store',
@@ -50,6 +61,13 @@ class Router {
 
             'product/create' => 'ProductController@store',
             'product/edit/{id}' => 'ProductController@update',
+
+
+            'stock/create' => 'StockController@store',
+            'stock/edit/{id}' => 'StockController@update',
+
+            'warehouse/create' => 'WarehouseController@store',
+            'warehouse/edit/{id}' => 'WarehouseController@update',
             
         ]
     ];
