@@ -13,6 +13,7 @@ Router::get('/employee/delete/{id}', 'EmployeeController@delete');
 
 Router::get('/login', 'AuthController@showLogin');
 Router::post('/login', 'AuthController@postLogin');
+Router::get('/logout', 'AuthController@logout');
 
 Router::get('/customer', 'CustomerController@index');
 Router::get('/customer/create', 'CustomerController@create');
@@ -28,11 +29,6 @@ Router::post('/user/create', 'UserController@store');
 Router::get('/user/edit/{id}' , 'UserController@edit');
 Router::post('/user/edit/{id}', 'UserController@update');
 Router::get('/user/delete/{id}', 'UserController@delete');
-
-Router::get('/login/create', 'LoginController@login');
-Router::post('/login/create', 'LoginController@create');
-
-Router::get('/logout', 'LoginController@logout');
 
 Router::get('/product', 'ProductController@index');
 Router::get('/product/create', 'ProductController@create');
