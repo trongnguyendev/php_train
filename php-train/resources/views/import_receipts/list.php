@@ -1,5 +1,5 @@
 <?php
-$options = ['name' => 'Tên Sản Phẩm', 'sku' => 'Mã Sản Phẩm'];
+$options = ['name' => 'Tên', 'email' => 'Email', 'age' => 'Tuổi'];
 $selectedValue = oldInput('search_type', $oldSearch ?? '');
 $oldContent = oldInput('search_content', $oldSearch ?? '');
 
@@ -13,7 +13,7 @@ function oldInput($field, $oldInput)
   <div class="tag-input-container" onclick="input.focus()">
     <input type="text" name="content_search" id="tagInput" placeholder="Nhập giá trị và nhấn Enter">
   </div>
-  <form class="form-search" action="/product" method="GET">
+  <form class="form-search" action="/employee" method="GET">
     <input type="hidden" name="tags_search" id="hiddenSearchContent" />
     <select name="type" class="type_search">
       <?php foreach ($options as $key => $label): ?>
@@ -26,34 +26,41 @@ function oldInput($field, $oldInput)
     <button id="resetBtn">Reset</button>
   </form>
   <button class="btn-create">
-    <a href="#">+ Tạo mới</a>
+    <a href="/import_receipts/create">+ Tạo mới</a>
   </button>
 </div>
 
 <div class="list">
-  <?php if (empty($stocks)): ?>
+  <?php if (empty($input_warehouse)): ?>
     <p class="no-data">Không có dữ liệu</p>
   <?php else: ?>
     <table>
       <thead> 
         <tr>
-          <th>Tên Sản Phẩm</th>
-          <th>Kho</th>
+          <th>KHO</th>
+          <th>Mã Đơn</th>
+          <th>Thời Gian Tạo Đơn</th>
+          <th>Ghi Chú</th>
+          <th>Sản Phẩm</th>
           <th>Số Lượng</th>
           <th>Hành động</th>
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($stocks as $index => $emp): ?>
-          <tr>
-            <td><?= htmlspecialchars($emp['name']) ?></td>
-            <td><?= htmlspecialchars($emp['warehouse']) ?></td>
-            <td><?= htmlspecialchars($emp['quantity']); ?></td>
-            <td>
-              <a href="/product/edit/<?= $emp['id'] ?>">Cập nhật</a>
-              <a href="/product/delete/<?= $emp['id']?>">Xoá</a>
-            </td>
-          </tr>
+        <?php foreach ($import_receiptsed as $index => $receipt): ?>
+          <?php foreach ($import_itemsed as $index => $item): ?>
+            <tr>
+              <td><?= htmlspecialchars($receipt['warehouse_id']) ?></td>
+              <td><?= htmlspecialchars($receipt['code'])?></td>
+              <td><?= htmlspecialchars($receipt['received_at']); ?></td>
+              <td><?= htmlspecialchars($item['product_id']) ?></td>
+              <td><?= htmlspecialchars($item['quantity']) ?></td>
+              <td>
+                <a href="/import_receipts/edit/<?= $receipt['id'] ?>">Cập nhật</a>
+                <a href="/import_receipts/delete/<?= $receipt['id'] ?>">Xoá</a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
         <?php endforeach; ?>
       </tbody>
     </table>

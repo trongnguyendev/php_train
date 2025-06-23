@@ -1,12 +1,12 @@
 <div class="create">
-    <form action="/stock/create" method="POST">
+    <form action="/import_receipts/create" method="POST">
         <label for="warehouse">KHO:</label>
 
-        <select name="product" id="product">
-            <option value="">-- Chọn Sản Phẩm --</option>
-            <?php foreach ($products as $item): ?>
-                <option value="<?= $item['product'] ?>"
-                    <?= ($oldInput['product'] ?? '') == $item['name'] ? 'selected' : '' ?>>
+        <select name="warehouse" id="warehouse">
+            <option value="">-- Chọn kho --</option>
+            <?php foreach ($warehoused as $item): ?>
+                <option value="<?= $item['name'] ?>"
+                    <?= ($oldInput['warehouse'] ?? '') == $item['name'] ? 'selected' : '' ?>>
                     <?= htmlspecialchars($item['name']) ?>
                 </option>
             <?php endforeach; ?>
@@ -58,6 +58,6 @@
 
         <button type="submit">Gửi</button>
 
-        <a class="link" href="/stock">← Quay về danh sách</a>
+        <a class="link" href="/import_receipts">← Quay về danh sách</a>
     </form>
 </div>

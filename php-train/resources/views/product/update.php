@@ -1,30 +1,37 @@
 <div class="update">
     <form action="/product/edit/<?= $indexData ?>" method="POST" enctype="multipart/form-data">
+        <label for="code">Mã Sản Phẩm:</label>
+        <input type="text" name="code" id="code" value="<?php echo htmlspecialchars($productData['code'] ?? $oldInput['code'] ?? ''); ?>">
+        <?php if (isset($errors['code'])): ?>
+            <p class='error'><?= implode(', ', $errors['code']) ?></p>
+        <?php endif;  ?>
+
         <label for="name">Tên Sản Phẩm:</label>
         <input type="text" name="name" id="name" value="<?php echo htmlspecialchars($productData['name'] ?? $oldInput['name'] ?? ''); ?>">
         <?php if (isset($errors['name'])): ?>
             <p class='error'><?= implode(', ', $errors['name']) ?></p>
         <?php endif;  ?>
 
-        <label for="sku">Mã Sản Phẩm:</label>
-        <input type="text" name="sku" id="sku" value="<?php echo htmlspecialchars($productData['sku'] ?? $oldInput['sku'] ?? ''); ?>">
-        <?php if (isset($errors['sku'])): ?>
-            <p class='error'><?= implode(', ', $errors['sku']) ?></p>
+        <label for="description">Mô Tả:</label>
+        <input type="text" name="description" id="description" value="<?php echo intval($productData['description'] ?? $oldInput['description'] ?? 0); ?>">
+        <?php if (isset($errors['description'])): ?>
+            <p class='error'><?= implode(', ', $errors['description']) ?></p>
         <?php endif;  ?>
 
-        <label for="quantity">Số Lượng:</label>
-        <input type="number" name="quantity" id="quantity" value="<?php echo intval($productData['quantity'] ?? $oldInput['quantity'] ?? 0); ?>">
-        <?php if (isset($errors['quantity'])): ?>
-            <p class='error'><?= implode(', ', $errors['quantity']) ?></p>
+        <label for="unit">Đơn Vị:</label>
+        <input type="text" name="unit" id="unit" value="<?php echo htmlspecialchars($productData['unit'] ?? $oldInput['unit'] ?? 0); ?>">
+        <?php if (isset($errors['unit'])): ?>
+            <p class='error'><?= implode(', ', $errors['unit']) ?></p>
         <?php endif;  ?>
 
-        <label for="warehouse">Kho:</label>
-        <input type="text" name="warehouse" id="warehouse" value="<?php echo htmlspecialchars($productData['warehouse'] ?? $oldInput['warehouse'] ?? 0); ?>">
-        <?php if (isset($errors['warehouse'])): ?>
-            <p class='error'><?= implode(', ', $errors['warehouse']) ?></p>
+
+        <label for="price">Giá:</label>
+        <input type="number" name="price" id="price" value="<?php echo htmlspecialchars($productData['price'] ?? $oldInput['price'] ?? 0); ?>">
+        <?php if (isset($errors['price'])): ?>
+            <p class='error'><?= implode(', ', $errors['price']) ?></p>
         <?php endif;  ?>
 
-        <label for="img">Hình ảnh/Video hiện tại:</label>
+        <label for="image">Hình ảnh/Video hiện tại:</label>
         <?php
             $imgPath = $productData['image'] ?? ($oldInput['image'] ?? '');
             if ($imgPath) {

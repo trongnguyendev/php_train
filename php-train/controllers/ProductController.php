@@ -41,15 +41,15 @@ class ProductController extends Controller {
         $data = $request->all();
 
         $rules = [
+            'code' => 'required',
             'name' => 'required',
-            'sku' => 'required',
-            'quantity' => 'required',
+            'price' => 'required',
         ];
 
         $messages = [
+            'code.required' => 'Bắt buộc nhập mã sản phẩm',
             'name.required' => 'Bắt buộc nhập tên sản phẩm',
-            'sku.required' => 'Bắt buộc nhập mã sản phẩm',
-            'quantity.required' => 'Bắt buộc nhập số lượng',
+            'price.required' => 'Bắt buộc nhập Giá',
         ];
 
         $validator = new Validation($data, $rules, $messages);
@@ -78,11 +78,12 @@ class ProductController extends Controller {
         $product = new Product();
 
         $store = $product->create([
+            'code' => $data['code'],
             'name' => $data['name'],
-            'sku' => $data['sku'],
-            'price' => 11111,
-            'quantity' => $data['quantity'],
-            'image' => $data['img']
+            'description' => $data['description'],
+            'unit' => $data['unit'],
+            'price' => $data['price'],
+            'image' => $data['image']
         ]);
 
         if($store) {
@@ -105,16 +106,16 @@ class ProductController extends Controller {
     public function update($id, Request $request) {
         $data = $request->all();
 
-        $rules = [
+         $rules = [
+            'code' => 'required',
             'name' => 'required',
-            'sku' => 'required',
-            'quantity' => 'required',
+            'price' => 'required',
         ];
 
         $messages = [
+            'code.required' => 'Bắt buộc nhập mã sản phẩm',
             'name.required' => 'Bắt buộc nhập tên sản phẩm',
-            'sku.required' => 'Bắt buộc nhập Mã Sản Phẩm',
-            'quantity.required' => 'Bắt buộc nhập số lượng',
+            'price.required' => 'Bắt buộc nhập Giá',
         ];
 
         $validator = new Validation($data, $rules, $messages);
@@ -147,9 +148,11 @@ class ProductController extends Controller {
         $imgValue = $upload['path'] ? $upload['path'] : ($productData['image'] ?? '');
 
         $update = $product->update($id,[
+            'code' => $data['code'],
             'name' => $data['name'],
-            'sku' => $data['sku'],
-            'quantity' => $data['quantity'],
+            'description' => $data['description'],
+            'unit' => $data['unit'],
+            'price' => $data['price'],
             'image' => $imgValue,
         ]);
 

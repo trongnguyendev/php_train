@@ -1,34 +1,41 @@
 <div class="create">
     <form action="/product/create" method="POST" enctype="multipart/form-data">
+        <label for="code">Mã Sản Phẩm:</label>
+        <input type="text" name="code" id="code" value="<?= $oldInput['code'] ?? '' ?>">
+        <?php if (isset($errors['code'])): ?>
+            <p class='error'><?= implode(', ', $errors['code']) ?></p>
+        <?php endif;  ?>
+
         <label for="name">Tên Sản Phẩm:</label>
         <input type="text" name="name" id="name" value="<?= $oldInput['name'] ?? '' ?>">
         <?php if (isset($errors['name'])): ?>
             <p class='error'><?= implode(', ', $errors['name']) ?></p>
         <?php endif;  ?>
 
-        <label for="sku">Mã Sản Phẩm:</label>
-        <input type="text" name="sku" id="sku" value="<?= $oldInput['sku'] ?? '' ?>">
-        <?php if (isset($errors['sku'])): ?>
-            <p class='error'><?= implode(', ', $errors['sku']) ?></p>
+        <label for="description">Mô Tả:</label>
+        <input type="text" name="description" id="description"  value="<?= $oldInput['description'] ?? '' ?>">
+        <?php if (isset($errors['description'])): ?>
+            <p class='error'><?= implode(', ', $errors['description']) ?></p>
         <?php endif;  ?>
 
-        <label for="quantity">Số Lượng:</label>
-        <input type="number" name="quantity" id="quantity"  value="<?= $oldInput['quantity'] ?? '' ?>">
-        <?php if (isset($errors['quantity'])): ?>
-            <p class='error'><?= implode(', ', $errors['quantity']) ?></p>
+         <label for="unit">Đơn Vị:</label>
+        <input type="text" name="unit" id="unit"  value="<?= $oldInput['unit'] ?? '' ?>">
+        <?php if (isset($errors['unit'])): ?>
+            <p class='error'><?= implode(', ', $errors['unit']) ?></p>
         <?php endif;  ?>
 
-         <label for="warehouse">Kho:</label>
-        <input type="text" name="warehouse" id="warehouse"  value="<?= $oldInput['warehouse'] ?? '' ?>">
-        <?php if (isset($errors['warehouse'])): ?>
-            <p class='error'><?= implode(', ', $errors['warehouse']) ?></p>
+        <label for="price">Giá :</label>
+        <input type="number" name="price" id="price">
+        <?php if (isset($errors['price'])): ?>
+            <p class='error'><?= implode(', ', $errors['price']) ?></p>
         <?php endif;  ?>
 
-        <label for="img">Hình Ảnh/Video:</label>
-        <input type="file" name="img" id="img">
-        <?php if (isset($errors['img'])): ?>
-            <p class='error'><?= implode(', ', $errors['img']) ?></p>
+         <label for="image">Hình Ảnh :</label>
+        <input type="file" name="image" id="image">
+        <?php if (isset($errors['image'])): ?>
+            <p class='error'><?= implode(', ', $errors['image']) ?></p>
         <?php endif;  ?>
+
 
         <button type="submit">Gửi</button>
 

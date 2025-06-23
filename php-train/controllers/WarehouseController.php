@@ -5,7 +5,7 @@ namespace Controllers;
 use Core\Controller;
 use Core\Request;
 use Core\Validation;
-use Models\warehouse;
+use Models\Warehouse;
 
 class WarehouseController extends Controller {
     public function index(Request $request = null)
@@ -15,14 +15,13 @@ class WarehouseController extends Controller {
         $searchType = $request ? $request->query('type', '') : '';
 
         $warehouse = new Warehouse();
-
-        $warehouse = !empty($searchQuery)
-                ? $warehouse->where('name', $searchQuery)
+        $warehoused = !empty($searchQuery)
+                ? $warehouse->where($searchType, $searchQuery)
                 : $warehouse->all();
 
         $data = [
-            'pageTitle' => 'Danh sách nhân viên',
-            'employees' => $warehouse,
+            'pageTitle' => 'Danh sách Kho',
+            'warehoused' => $warehoused,
             'oldSearch' => [
                 'search_content' => $searchQuery,
                 'search_type' => $searchType
@@ -48,8 +47,8 @@ class WarehouseController extends Controller {
         ];
 
         $messages = [
-            'name.required' => 'Bắt buộc nhập tên',
-            'localtion.required' => 'Bắt buộc nhập email',
+            'name.required' => 'Bắt buộc nhập KHO',
+            'localtion.required' => 'Bắt buộc nhập Vị Trí',
         ];
 
         $validator = new Validation($data, $rules, $messages);
@@ -65,9 +64,9 @@ class WarehouseController extends Controller {
 
         $warehouse = new Warehouse();
 
-        $store = $employee->create([
+        $store = $warehouse->create([
             'name' => $data['name'],
-            'warehouse' => $data['warehouse']
+            'localtion' => $data['localtion']
         ]);
 
         if ($store) {
@@ -78,10 +77,10 @@ class WarehouseController extends Controller {
 
     public function edit($id)
     {
-        $employee = new Employee();
+        $warehouse = new Warehouse();
         $this->view('warehouse/update', [
             'pageTitle' => 'Cập nhật KHO',
-            'warehouseData' => $employee->whereOne('id', $id),
+            'warehouseData' => $warehouse->whereOne('id', $id),
             'indexData' => $id
         ]);
     }
@@ -92,12 +91,12 @@ class WarehouseController extends Controller {
 
         $rules = [
             'name' => 'required',
-            'warehouse' => 'required|email'
+            'localtion' => 'required'
         ];
 
         $messages = [
-            'name.required' => 'Bắt buộc nhập tên',
-            'warehouse.required' => 'Bắt buộc nhập KHO'
+            'name.required' => 'Bắt buộc nhập KHO',
+            'localtion.required' => 'Bắt buộc nhập Vị Trí'
         ];
 
         $validator = new Validation($data, $rules, $messages);
@@ -116,7 +115,7 @@ class WarehouseController extends Controller {
 
         $update = $warehouse->update($id, [
             'name' => $data['name'],
-            'warehouse' => $data['warehouse']
+            'localtion' => $data['localtion']
         ]);
 
         if ($update) {

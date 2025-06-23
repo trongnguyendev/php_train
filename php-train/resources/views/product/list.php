@@ -37,10 +37,11 @@ function oldInput($field, $oldInput)
     <table>
       <thead> 
         <tr>
-          <th>Tên Sản Phẩm</th>
           <th>Mã Sản Phẩm</th>
-          <th>Số Lượng</th>
-          <th>Kho</th>
+          <th>Tên Sản Phẩm</th>
+          <th>Mô Tả</th>
+          <th>Đơn Vị</th>
+          <th>Giá</th>
           <th>Hình Ảnh</th>
           <th>Hành động</th>
         </tr>
@@ -48,10 +49,11 @@ function oldInput($field, $oldInput)
       <tbody>
         <?php foreach ($products as $index => $emp): ?>
           <tr>
+            <td><?= htmlspecialchars($emp['code']) ?></td>
             <td><?= htmlspecialchars($emp['name']) ?></td>
-            <td><?= htmlspecialchars($emp['id']) ?></td>
-            <td><?= htmlspecialchars($emp['quantity']); ?></td>
-            <td><?= htmlspecialchars($emp['id']); ?></td>
+            <td><?= htmlspecialchars($emp['description']); ?></td>
+            <td><?= htmlspecialchars($emp['unit']); ?></td>
+            <td><?= htmlspecialchars($emp['price']); ?></td>
             <td><img style="width: 100px; height: auto;" src="<?= htmlspecialchars($emp['image'] ?? ''); ?>"></td>
             <td>
               <a href="/product/edit/<?= $index + 1 ?>">Cập nhật</a>

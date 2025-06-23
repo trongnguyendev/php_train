@@ -38,11 +38,6 @@ Router::post('/product/edit/{id}', 'ProductController@update');
 Router::get('/product/delete/{id}', 'ProductController@delete');
 
 Router::get('/stock', 'StockController@index');
-Router::get('/stock/create', 'StockController@create');
-Router::post('/stock/create', 'StockController@store');
-Router::get('/stock/edit/{id}', 'StockController@edit');
-Router::post('/stock/edit/{id}', 'StockController@update');
-Router::get('/stock/delete/{id}', 'StockController@delete');
 
 
 Router::get('/warehouse', 'WarehouseController@index');
@@ -51,3 +46,19 @@ Router::post('/warehouse/create', 'WarehouseController@store');
 Router::get('/warehouse/edit/{id}', 'WarehouseController@edit');
 Router::post('/warehouse/edit/{id}', 'WarehouseController@update');
 Router::get('/warehouse/delete/{id}', 'WarehouseController@delete');
+
+
+Router::get('/import_receipts', 'Import_receiptsController@index');
+Router::get('/import_receipts/create', 'Import_receiptsController@create');
+Router::post('/import_receipts/create', 'Import_receiptsController@store');
+Router::get('/import_receipts/edit/{id}', 'Import_receiptsController@edit');
+Router::post('/import_receipts/edit/{id}', 'Import_receiptsController@update');
+Router::get('/import_receipts/delete/{id}', 'Import_receiptsController@delete');
+
+
+Router::get('/import_items', 'Import_itemsController@index');
+Router::get('/import_items/create', 'Import_itemsController@create');
+Router::post('/import_items/create', 'Import_itemsController@store');
+Router::get('/import_items/edit/{id}', 'Import_itemsController@edit');
+Router::post('/import_items/edit/{id}', 'Import_itemsController@update');
+Router::get('/import_items/delete/{id}', 'Import_itemsController@delete');

@@ -37,14 +37,21 @@ class Router {
 
 
             'stock' => 'StockController@index',
-            'stock/create' => 'StockController@create',
-            'stock/edit/{id}' => 'StockController@edit',
-            'stock/delete/{id}' => 'StockController@delete',
 
             'warehouse' => 'WarehouseController@index',
             'warehouse/create' => 'WarehouseController@create',
             'warehouse/edit/{id}' => 'WarehouseController@edit',
             'warehouse/delete/{id}' => 'WarehouseController@delete',
+
+            'import_receipts' => 'Import_receiptsController@index',
+            'import_receipts/create' => 'Import_receiptsController@create',
+            'import_receipts/edit/{id}' => 'Import_receiptsController@edit',
+            'import_receipts/delete/{id}' => 'Import_receiptsController@delete',
+
+            'import_items' => 'Import_itemsController@index',
+            'import_items/create' => 'Import_itemsController@create',
+            'import_items/edit/{id}' => 'Import_itemsController@edit',
+            'import_items/delete/{id}' => 'Import_itemsController@delete',
         ],
         'POST' => [
             'employee/create' => 'EmployeeController@store',
@@ -61,13 +68,15 @@ class Router {
 
             'product/create' => 'ProductController@store',
             'product/edit/{id}' => 'ProductController@update',
-
-
-            'stock/create' => 'StockController@store',
-            'stock/edit/{id}' => 'StockController@update',
-
+            
             'warehouse/create' => 'WarehouseController@store',
             'warehouse/edit/{id}' => 'WarehouseController@update',
+
+            'import_receipts/create' => 'Import_receiptsController@store',
+            'import_receipts/edit/{id}' => 'Import_receiptsController@update',
+
+            'import_items/create' => 'Import_itemsController@store',
+            'import_items/edit/{id}' => 'Import_itemsController@update',
             
         ]
     ];

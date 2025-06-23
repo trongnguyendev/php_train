@@ -66,7 +66,7 @@ class Controller {
         if ($onlyImage) {
             $imageInfo = @getimagesize($fileTmpPath);
             // Có thể kiểm tra thêm mime type nếu muốn giới hạn loại ảnh
-            $allowedTypes = ['image/jpeg','image/png','image/gif','image/webp','image/bmp','image/svg+xml'];
+            $allowedTypes = ['image/jpg','image/jpeg','image/png','image/gif','image/webp','image/bmp','image/svg+xml'];
             if (!is_array($imageInfo) || !in_array($imageInfo['mime'], $allowedTypes)) {
                 return ['path' => null, 'error' => 'Chỉ cho phép các định dạng ảnh jpeg, png, gif, webp, bmp, svg!'];
             }

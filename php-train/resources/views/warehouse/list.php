@@ -1,5 +1,5 @@
 <?php
-$options = ['name' => 'Tên Sản Phẩm', 'sku' => 'Mã Sản Phẩm'];
+$options = ['name' => 'KHO', 'localtion' => 'Vị Trí'];
 $selectedValue = oldInput('search_type', $oldSearch ?? '');
 $oldContent = oldInput('search_content', $oldSearch ?? '');
 
@@ -13,7 +13,7 @@ function oldInput($field, $oldInput)
   <div class="tag-input-container" onclick="input.focus()">
     <input type="text" name="content_search" id="tagInput" placeholder="Nhập giá trị và nhấn Enter">
   </div>
-  <form class="form-search" action="/product" method="GET">
+  <form class="form-search" action="/warehouse" method="GET">
     <input type="hidden" name="tags_search" id="hiddenSearchContent" />
     <select name="type" class="type_search">
       <?php foreach ($options as $key => $label): ?>
@@ -26,12 +26,11 @@ function oldInput($field, $oldInput)
     <button id="resetBtn">Reset</button>
   </form>
   <button class="btn-create">
-    <a href="/product/create">+ Tạo mới</a>
+    <a href="/warehouse/create">+ Tạo mới</a>
   </button>
 </div>
-
 <div class="list">
-  <?php if (empty($warehouses)): ?>
+  <?php if (empty($warehoused)): ?>
     <p class="no-data">Không có dữ liệu</p>
   <?php else: ?>
     <table>
@@ -43,13 +42,13 @@ function oldInput($field, $oldInput)
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($warehouses as $index => $emp): ?>
+        <?php foreach ($warehoused as $index => $emp): ?>
           <tr>
             <td><?= htmlspecialchars($emp['name']) ?></td>
             <td><?= htmlspecialchars($emp['localtion']) ?></td>
             <td>
-              <a href="/product/edit/<?= $emp[$id] ?>">Cập nhật</a>
-              <a href="/product/delete/<?= $emp[$id] ?>">Xoá</a>
+              <a href="/warehouse/edit/<?= $emp['id'] ?>">Cập nhật</a>
+              <a href="/warehouse/delete/<?= $emp['id'] ?>">Xoá</a>
             </td>
           </tr>
         <?php endforeach; ?>
