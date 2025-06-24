@@ -34,35 +34,46 @@ function oldInput($field, $oldInput)
   <?php if (empty($products)): ?>
     <p class="no-data">Không có dữ liệu</p>
   <?php else: ?>
-    <table>
-      <thead> 
-        <tr>
-          <th>Mã Sản Phẩm</th>
-          <th>Tên Sản Phẩm</th>
-          <th>Mô Tả</th>
-          <th>Đơn Vị</th>
-          <th>Giá</th>
-          <th>Hình Ảnh</th>
-          <th>Hành động</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($products as $index => $emp): ?>
+    <div class="table-responsive">
+      <table class="modern-table">
+        <thead>
           <tr>
-            <td><?= htmlspecialchars($emp['code']) ?></td>
-            <td><?= htmlspecialchars($emp['name']) ?></td>
-            <td><?= htmlspecialchars($emp['description']); ?></td>
-            <td><?= htmlspecialchars($emp['unit']); ?></td>
-            <td><?= htmlspecialchars($emp['price']); ?></td>
-            <td><img style="width: 100px; height: auto;" src="<?= htmlspecialchars($emp['image'] ?? ''); ?>"></td>
-            <td>
-              <a href="/product/edit/<?= $index + 1 ?>">Cập nhật</a>
-              <a href="/product/delete/<?= $index + 1 ?>">Xoá</a>
-            </td>
+            <th>Mã Sản Phẩm</th>
+            <th>Tên Sản Phẩm</th>
+            <th>Mô Tả</th>
+            <th>Đơn Vị</th>
+            <th>Giá</th>
+            <th>Hình Ảnh</th>
+            <th>Hành động</th>
           </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <?php foreach ($products as $index => $emp): ?>
+            <tr>
+              <td><?= $index + 1 ?></td>
+              <td>
+                <div class="emp-info">
+                  <div class="emp-avatar">
+                    <span><?= strtoupper(mb_substr($emp['name'], 0, 1, 'UTF-8')) ?></span>
+                  </div>
+                  <div>
+                    <div class="emp-name"><?= htmlspecialchars($emp['name']) ?></div>
+                  </div>
+                </div>
+              </td>
+              <td><?= htmlspecialchars($emp['id']) ?></td>
+              <td><?= htmlspecialchars($emp['quantity']); ?></td>
+              <td><?= htmlspecialchars($emp['id']); ?></td>
+              <td><img style="width: 56px; height: 40px; object-fit:cover; border-radius:6px; background:#f6f8fb;" src="<?= htmlspecialchars($emp['image'] ?? ''); ?>"></td>
+              <td>
+                <a href="/product/edit/<?= $index + 1 ?>" class="icon-btn edit" title="Cập nhật"><i class="fa fa-pen"></i></a>
+                <a href="/product/delete/<?= $index + 1 ?>" class="icon-btn delete" title="Xoá"><i class="fa fa-trash"></i></a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
   <?php endif; ?>
 </div>
 

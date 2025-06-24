@@ -34,29 +34,42 @@ function oldInput($field, $oldInput)
   <?php if (empty($employees)): ?>
     <p class="no-data">Không có dữ liệu</p>
   <?php else: ?>
-    <table>
-      <thead> 
-        <tr>
-          <th>Tên</th>
-          <th>Email</th>
-          <th>Lương</th>
-          <th>Hành động</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($employees as $index => $emp): ?>
+    <div class="table-responsive">
+      <table class="modern-table">
+        <thead>
           <tr>
-            <td><?= htmlspecialchars($emp['name']) ?></td>
-            <td><?= htmlspecialchars($emp['email']) ?></td>
-            <td><?= htmlspecialchars($emp['salary']); ?></td>
-            <td>
-              <a href="/employee/edit/<?= $emp['id'] ?>">Cập nhật</a>
-              <a href="/employee/delete/<?= $emp['id'] ?>">Xoá</a>
-            </td>
+            <th>#</th>
+            <th>Tên</th>
+            <th>Email</th>
+            <th>Lương</th>
+            <th>Hành động</th>
           </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <?php foreach ($employees as $index => $emp): ?>
+            <tr>
+              <td><?= $index + 1 ?></td>
+              <td>
+                <div class="emp-info">
+                  <div class="emp-avatar">
+                    <span><?= strtoupper(mb_substr($emp['name'], 0, 1, 'UTF-8')) ?></span>
+                  </div>
+                  <div>
+                    <div class="emp-name"><?= htmlspecialchars($emp['name']) ?></div>
+                  </div>
+                </div>
+              </td>
+              <td><?= htmlspecialchars($emp['email']) ?></td>
+              <td><?= htmlspecialchars($emp['salary']); ?></td>
+              <td>
+                <a href="/employee/edit/<?= $emp['id'] ?>" class="icon-btn edit" title="Cập nhật"><i class="fa fa-pen"></i></a>
+                <a href="/employee/delete/<?= $emp['id'] ?>" class="icon-btn delete" title="Xoá"><i class="fa fa-trash"></i></a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
   <?php endif; ?>
 </div>
 
