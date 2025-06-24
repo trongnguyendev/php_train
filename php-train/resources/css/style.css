@@ -502,7 +502,14 @@ ul { list-style: none; padding: 0; margin: 0; }
     font-size: 14px;
     font-weight: bold;
   }
-  
+  .multi-operations {
+    margin-left: auto !important;
+  }
+  .multi-operations .btn-import,
+  .multi-operations .btn-export {
+    width: fit-content;
+  }
+
   .btn-create {
     display: inline-block;
     padding: 10px 20px !important;

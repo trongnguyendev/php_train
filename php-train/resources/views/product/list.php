@@ -50,7 +50,7 @@ function oldInput($field, $oldInput)
         <tbody>
           <?php foreach ($products as $index => $emp): ?>
             <tr>
-              <td><?= $index + 1 ?></td>
+              <td><?= htmlspecialchars($emp['code']) ?></td>
               <td>
                 <div class="emp-info">
                   <div class="emp-avatar">
@@ -61,9 +61,9 @@ function oldInput($field, $oldInput)
                   </div>
                 </div>
               </td>
-              <td><?= htmlspecialchars($emp['id']) ?></td>
-              <td><?= htmlspecialchars($emp['quantity']); ?></td>
-              <td><?= htmlspecialchars($emp['id']); ?></td>
+              <td><?= htmlspecialchars($emp['description']) ?></td>
+                <td><?= htmlspecialchars($emp['unit']) ?></td>
+                <td><?= htmlspecialchars($emp['price']) ?></td>
               <td><img style="width: 56px; height: 40px; object-fit:cover; border-radius:6px; background:#f6f8fb;" src="<?= htmlspecialchars($emp['image'] ?? ''); ?>"></td>
               <td>
                 <a href="/product/edit/<?= $index + 1 ?>" class="icon-btn edit" title="Cập nhật"><i class="fa fa-pen"></i></a>

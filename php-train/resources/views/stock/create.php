@@ -22,8 +22,8 @@
             <p class='error'><?= implode(', ', $errors['code']) ?></p>
         <?php endif;  ?>
 
-        <label for="devlivered_at">Thời Gian Tạo Đơn:</label>
-        <input type="text" name="devlivered_at" id="devlivered_at" value="<?= $oldInput['devlivered_at'] ?? '' ?>">
+        <label for="delivered_at">Thời Gian Tạo Đơn:</label>
+        <input type="text" name="delivered_at" id="devlivered_at" value="<?= $oldInput['devlivered_at'] ?? '' ?>">
         <?php if (isset($errors['devlivered_at'])): ?>
             <p class='error'><?= implode(', ', $errors['devlivered_at']) ?></p>
         <?php endif;  ?>

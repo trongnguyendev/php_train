@@ -43,12 +43,12 @@ class WarehouseController extends Controller {
 
         $rules = [
             'name' => 'required',
-            'localtion' => 'required',
+            'location' => 'required',
         ];
 
         $messages = [
             'name.required' => 'Bắt buộc nhập KHO',
-            'localtion.required' => 'Bắt buộc nhập Vị Trí',
+            'location.required' => 'Bắt buộc nhập Vị Trí',
         ];
 
         $validator = new Validation($data, $rules, $messages);
@@ -66,7 +66,7 @@ class WarehouseController extends Controller {
 
         $store = $warehouse->create([
             'name' => $data['name'],
-            'localtion' => $data['localtion']
+            'location' => $data['location']
         ]);
 
         if ($store) {
@@ -91,12 +91,12 @@ class WarehouseController extends Controller {
 
         $rules = [
             'name' => 'required',
-            'localtion' => 'required'
+            'location' => 'required'
         ];
 
         $messages = [
             'name.required' => 'Bắt buộc nhập KHO',
-            'localtion.required' => 'Bắt buộc nhập Vị Trí'
+            'location.required' => 'Bắt buộc nhập Vị Trí'
         ];
 
         $validator = new Validation($data, $rules, $messages);
@@ -115,7 +115,7 @@ class WarehouseController extends Controller {
 
         $update = $warehouse->update($id, [
             'name' => $data['name'],
-            'localtion' => $data['localtion']
+            'location' => $data['location']
         ]);
 
         if ($update) {

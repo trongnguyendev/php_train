@@ -1,5 +1,5 @@
 <?php
-$options = ['name' => 'KHO', 'localtion' => 'Vị Trí'];
+$options = ['name' => 'KHO', 'location' => 'Vị Trí'];
 $selectedValue = oldInput('search_type', $oldSearch ?? '');
 $oldContent = oldInput('search_content', $oldSearch ?? '');
 
@@ -45,7 +45,7 @@ function oldInput($field, $oldInput)
         <?php foreach ($warehoused as $index => $emp): ?>
           <tr>
             <td><?= htmlspecialchars($emp['name']) ?></td>
-            <td><?= htmlspecialchars($emp['localtion']) ?></td>
+            <td><?= htmlspecialchars($emp['location']) ?></td>
             <td>
               <a href="/warehouse/edit/<?= $emp['id'] ?>">Cập nhật</a>
               <a href="/warehouse/delete/<?= $emp['id'] ?>">Xoá</a>

@@ -7,10 +7,10 @@
         <?php endif;  ?>
 
 
-        <label for="localtion">Vị Trí:</label>
-        <input type="text" name="localtion" id="localtion" value="<?= $oldInput['localtion'] ?? '' ?>">
-        <?php if (isset($errors['localtion'])): ?>
-            <p class='error'><?= implode(', ', $errors['localtion']) ?></p>
+        <label for="location">Vị Trí:</label>
+        <input type="text" name="location" id="location" value="<?= $oldInput['location'] ?? '' ?>">
+        <?php if (isset($errors['location'])): ?>
+            <p class='error'><?= implode(', ', $errors['location']) ?></p>
         <?php endif;  ?>
 
     
