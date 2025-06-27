@@ -5,15 +5,31 @@ namespace Core;
 abstract class Model {
     protected $db;
     protected $table;
+    protected $fk;
 
     public function __construct() {
         $this->db = Database::getInstance();
+    }
+
+    public function getTable() {
+        return $this->table;
+    }
+
+    public function getFk() {
+        return $this->fk;
     }
 
     public function all() {
         $sql = "SELECT * FROM {$this->table}";
         return $this->db->select($sql);
     }
+
+    public function allWidth($tableRelation, $fk, $columnSelection = []) {
+        $columnStr = implode (',', $columnSelection);
+        $sql = "SELECT {$columnStr} FROM {$this->table} INNER JOIN {$tableRelation} ON {$tableRelation}.id = {$this->table}.{$fk}";
+        return $this->db->select($sql);
+    }
+    
 
     public function find($id) {
         $sql = "SELECT * FROM {$this->table} WHERE id = ?";

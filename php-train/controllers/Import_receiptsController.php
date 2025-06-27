@@ -8,6 +8,7 @@ use Core\Validation;
 use Models\Import_receipts;
 use Models\Warehouse;
 use Models\Product;
+use Models\Import_items;
 
 class Import_receiptsController extends Controller {
     public function index(Request $request = null)
@@ -18,9 +19,21 @@ class Import_receiptsController extends Controller {
 
         $import_receipts = new Import_receipts();
 
+        $warehouse = new Warehouse;
+        $tableRelation = $warehouse->getTable();
+        $fk = $import_receipts->getFk();
+
+        $columnSelection = [
+            'warehouses.name',
+            'import_receipts.code',
+            'import_receipts.received_at',
+            'import_receipts.note',
+            'import_receipts.id'
+        ];
+
         $import_receiptsed = !empty($searchQuery)
                 ? $import_receipts->where('name', $searchQuery)
-                : $import_receipts->all();
+                : $import_receipts->allWidth($tableRelation,$fk,$columnSelection);
 
         $data = [
             'pageTitle' => 'Danh sách nhân viên',
@@ -53,13 +66,13 @@ class Import_receiptsController extends Controller {
         $rules = [
             'warehouse_id' => 'required',
             'code' => 'required',
-            'devlivered_at' => 'required'
+            'received_at' => 'required'
         ];
 
         $messages = [
-            'warehouse.required' => 'Bắt buộc nhập KHO',
+            'warehouse_id.required' => 'Bắt buộc nhập KHO',
             'code.required' => 'Bắt buộc nhập Mã Tạo Đơn',
-            'devlivered_at.required' => 'Bắt buộc nhập Ngày Tạo',
+            'received_at.required' => 'Bắt buộc nhập Ngày Tạo',
         ];
 
         $validator = new Validation($data, $rules, $messages);
@@ -75,13 +88,36 @@ class Import_receiptsController extends Controller {
 
         $import_receipts = new Import_receipts();
 
-        $store = $import_receipts->create([
-            'warehouse_id' => $data['warehouse'],
+        $storeId = $import_receipts->create([
+            'warehouse_id' => $data['warehouse_id'],
             'code' => $data['code'],
-            'devlivered_at' => $data['devlivered_at'],
+            'received_at' => $data['received_at'],
+            'note' => $data['note'],
         ]);
 
-        if ($store) {
+        if ($storeId) {
+             $import_items = new Import_items ();
+
+
+            $productIds = $data['products']; // <div 1,2,3=""></div>
+            $quantities = $data['quantities']; // []
+
+            foreach($productIds as $ids) {
+                $store_items = $import_items->create([
+                    'product_id' => $productIds,
+                    'quantity' => $data['quantity'],
+                    'import_receipt_id' => $storeId
+                ]);
+            }
+            // $store_items = $import_items->create([
+            //     'product_id' => $data['product'],
+            //     'quantity' => $data['quantity'],
+            //     'import_receipt_id' => $storeId
+            // ]);
+        }
+
+
+        if ($store_items) {
             $this->redirect('/import_receipts');
             exit;
         }
@@ -102,15 +138,15 @@ class Import_receiptsController extends Controller {
         $data = $request->all();
 
         $rules = [
-            'warehouse' => 'required',
+            'received_at' => 'required',
             'code' => 'required|email',
-            'devlivered_at' => 'required'
+            'received_at' => 'required'
         ];
 
         $messages = [
-            'warehouse.required' => 'Bắt buộc nhập KHO',
+            'received_at.required' => 'Bắt buộc nhập KHO',
             'code.required' => 'Bắt buộc nhập Mã Tạo Phiếu',
-            'devlivered_at.required' => 'Bắt buộc nhập Ngày Tạo',
+            'received_at.required' => 'Bắt buộc nhập Ngày Tạo',
         ];
 
         $validator = new Validation($data, $rules, $messages);
@@ -130,7 +166,7 @@ class Import_receiptsController extends Controller {
         $update = $import_receipts->update($id, [
             'warehouse' => $data['warehouse'],
             'code' => $data['code'],
-            'devlivered_at' => $data['devlivered_at']
+            'revlivered_at' => $data['revlivered_at']
         ]);
 
         if ($update) {
@@ -148,4 +184,19 @@ class Import_receiptsController extends Controller {
             exit;
         }
     }
+
+    public function indexItems($id) {
+        $import_items = new Import_items();
+        
+        $this->view('import_receipts/list_items', [
+            'pageTitle' => 'Cập nhật Chi Tiết Phiếu Nhập',
+            'indexItems' => $import_items->getInfoImport($id, 'import_receipt_id', 'import_receipts', [
+                'import_items.warehouses_id',
+                'products.name',
+                'products.quantity'
+            ])
+        ]);
+    }
+
+
 }
