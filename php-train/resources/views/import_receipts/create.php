@@ -1,7 +1,7 @@
 <div class="create">
     <div class="container">
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <h5>Thông tin đơn hàng nhập</h5>
                 <form action="/import_receipts/create" method="POST">
                     <div class="row">
@@ -12,8 +12,8 @@
                             <select name="warehouse" id="warehouse" class="form-select form-control">
                                 <option value="warehouse_id">-- Chọn kho --</option>
                                 <?php foreach ($warehouses as $item): ?>
-                                    <option value="<?= $item['name'] ?>"
-                                        <?= ($oldInput['warehouse'] ?? '') == $item['name'] ? 'selected' : '' ?>>
+                                    <option value="<?= $item['id'] ?>"
+                                        <?= ($oldInput['warehouse'] ?? '') == $item['id'] ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($item['name']) ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -67,14 +67,24 @@
                         <div class="col-md-8">
                             <div class="selected list-group"></div>
                             <input type="hidden" name="products" id="selectedProducts" value="">
+                            <?php if (isset($errors['products'])): ?>
+                                <p class='error'><?= implode(', ', $errors['products']) ?></p>
+                            <?php endif;  ?>
+                            <?php if (isset($errors['quantities'])): ?>
+                                <p class='error'><?= implode(', ', $errors['quantities']) ?></p>
+                            <?php endif;  ?>
                         </div>
                     </div>
+
+                    <?php if (isset($errors['error_system'])): ?>
+                        <p class='error'><?= $errors['error_system']; ?></p>
+                    <?php endif;  ?>
                     <button type="submit" class="form-control" style="margin-top: 30px;">Gửi</button>
 
                     <a class="link" href="/import_receipts">← Quay về danh sách</a>
                 </form>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-6">
                 <h5>Thông tin sản phẩm</h5>
                 <div class="form-search">
                     <input type="text" name="content_search" id="content_search" value="Lapo">
@@ -129,7 +139,7 @@
 
                         if (this.checked) {
                             if (!productSelected.includes(value)) {
-                                productSelected.push(value);
+                                productSelected.push(value.trim());
 
                                 const item = document.createElement('div');
                                 item.className = 'selected-item list-group-item';

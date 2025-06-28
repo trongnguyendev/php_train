@@ -9,6 +9,7 @@ use Models\Import_receipts;
 use Models\Warehouse;
 use Models\Product;
 use Models\Import_items;
+use Core\Database;
 
 class Import_receiptsController extends Controller {
     public function index(Request $request = null)
@@ -65,66 +66,71 @@ class Import_receiptsController extends Controller {
         $data = $request->all();
 
         $rules = [
-            'warehouse_id' => 'required',
+            'warehouse' => 'required',
             'code' => 'required',
             'received_at' => 'required',
-            'products' => 'required|array',
-            'quantities' => 'required|array',
+            'products' => 'required',
+            'quantities' => 'required',
         ];
 
         $messages = [
-            'warehouse_id.required' => 'Bắt buộc nhập KHO',
+            'warehouse.required' => 'Bắt buộc nhập KHO',
             'code.required' => 'Bắt buộc nhập Mã Tạo Đơn',
             'received_at.required' => 'Bắt buộc nhập Ngày Tạo',
             'products.required' => 'Bắt buộc chọn sản phẩm',
-            'products.array' => 'Sản phẩm phải là một mảng',
+            'quantities.required' => 'Bắt buộc nhập số lượng',
         ];
 
+
         $validator = new Validation($data, $rules, $messages);
+        $warehouses = (new Warehouse())->all();
 
         if (!$validator->validate()) {
             $this->view('import_receipts/create', [
                 'pageTitle' => 'Tạo mới Phiếu Nhập Kho',
                 'errors' => $validator->getErrors(),
                 'oldInput' => $data,
+                'warehouses' => $warehouses,
             ]);
-            return;
         }
 
-        $import_receipts = new Import_receipts();
+        $db = Database::getInstance();
 
-        $storeId = $import_receipts->create([
-            'warehouse_id' => $data['warehouse_id'],
-            'code' => $data['code'],
-            'received_at' => $data['received_at'],
-            'note' => $data['note'],
-        ]);
+        try {
+            $db->beginTransaction();
 
-        if ($storeId) {
-             $import_items = new Import_items ();
+            $import_receipts = new Import_receipts();
+            $storeId = $import_receipts->create([
+                'warehouse_id' => $data['warehouse'],
+                'code' => $data['code'],
+                'received_at' => $data['received_at'],
+                'note' => $data['note'],
+            ]);
 
+            $import_items = new Import_items();
+            $productIds = explode(',', $data['products']);
+            $quantities = $data['quantities'];
 
-            $productIds = $data['products']; // <div 1,2,3=""></div>
-            $quantities = $data['quantities']; // []
-
-            foreach($productIds as $ids) {
-                $store_items = $import_items->create([
-                    'product_id' => $productIds,
-                    'quantity' => $quantities,
+            foreach($productIds as $key => $ids) {
+                $import_items->create([
+                    'product_id' => $ids,
+                    'quantity' => $quantities[$key],
                     'import_receipt_id' => $storeId
                 ]);
             }
-            // $store_items = $import_items->create([
-            //     'product_id' => $data['product'],
-            //     'quantity' => $data['quantity'],
-            //     'import_receipt_id' => $storeId
-            // ]);
-        }
 
-
-        if ($store_items) {
+            $db->commit();
             $this->redirect('/import_receipts');
-            exit;
+        } catch (\Exception $e) {
+            // Rollback nếu có lỗi
+            $db->rollback();
+            // Xử lý lỗi...
+            $this->view('import_receipts/create', [
+                'pageTitle' => 'Tạo mới Phiếu Nhập Kho',
+                'errors' => ['error_system' => 'Lỗi hệ thống, vui lòng thử lại sau.'],
+                'oldInput' => $data,
+                'warehouses' => $warehouses,
+            ]);
         }
     }
 
@@ -147,13 +153,11 @@ class Import_receiptsController extends Controller {
             'code' => 'required|email',
             'received_at' => 'required'
         ];
-
         $messages = [
             'received_at.required' => 'Bắt buộc nhập KHO',
             'code.required' => 'Bắt buộc nhập Mã Tạo Phiếu',
             'received_at.required' => 'Bắt buộc nhập Ngày Tạo',
         ];
-
         $validator = new Validation($data, $rules, $messages);
 
         if (!$validator->validate()) {

@@ -55,6 +55,23 @@ class Database {
         return $this->connection;
     }
 
+    // Transaction methods
+    public function beginTransaction() {
+        return $this->connection->beginTransaction();
+    }
+
+    public function commit() {
+        return $this->connection->commit();
+    }
+
+    public function rollback() {
+        return $this->connection->rollBack();
+    }
+
+    public function inTransaction() {
+        return $this->connection->inTransaction();
+    }
+
     public function query($sql, $params = []) {
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($params);
