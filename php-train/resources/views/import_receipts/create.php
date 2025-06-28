@@ -156,7 +156,7 @@
                                 numberInput.value = 1; // Mặc định số lượng là 1
                                 numberInput.style.width = '100px';
                                 numberInput.style.marginLeft = 'auto';
-                                numberInput.name = 'quantity[]';
+                                numberInput.name = 'quantities[]';
 
                                 closeBtn.addEventListener('click', () => {
                                     // Xóa khỏi array
