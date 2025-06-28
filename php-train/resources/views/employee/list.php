@@ -60,7 +60,7 @@ function oldInput($field, $oldInput)
                 </div>
               </td>
               <td><?= htmlspecialchars($emp['email']) ?></td>
-              <td><?= htmlspecialchars($emp['salary']); ?></td>
+              <td><?= htmlspecialchars($emp['salary']) ?? ''; ?></td>
               <td>
                 <a href="/employee/edit/<?= $emp['id'] ?>" class="icon-btn edit" title="Cập nhật"><i class="fa fa-pen"></i></a>
                 <a href="/employee/delete/<?= $emp['id'] ?>" class="icon-btn delete" title="Xoá"><i class="fa fa-trash"></i></a>

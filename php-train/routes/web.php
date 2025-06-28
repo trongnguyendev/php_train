@@ -55,10 +55,6 @@ Router::get('/import_receipts/edit/{id}', 'Import_receiptsController@edit');
 Router::post('/import_receipts/edit/{id}', 'Import_receiptsController@update');
 Router::get('/import_receipts/delete/{id}', 'Import_receiptsController@delete');
 
+Router::get('/import_receipts/{id}', 'Import_receiptsController@indexItems');
 
-Router::get('/import_items', 'Import_itemsController@index');
-Router::get('/import_items/create', 'Import_itemsController@create');
-Router::post('/import_items/create', 'Import_itemsController@store');
-Router::get('/import_items/edit/{id}', 'Import_itemsController@edit');
-Router::post('/import_items/edit/{id}', 'Import_itemsController@update');
-Router::get('/import_items/delete/{id}', 'Import_itemsController@delete');
+

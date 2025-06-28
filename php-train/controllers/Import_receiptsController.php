@@ -105,7 +105,7 @@ class Import_receiptsController extends Controller {
             foreach($productIds as $ids) {
                 $store_items = $import_items->create([
                     'product_id' => $productIds,
-                    'quantity' => $data['quantity'],
+                    'quantity' => $quantities,
                     'import_receipt_id' => $storeId
                 ]);
             }
@@ -190,7 +190,7 @@ class Import_receiptsController extends Controller {
         
         $this->view('import_receipts/list_items', [
             'pageTitle' => 'Cập nhật Chi Tiết Phiếu Nhập',
-            'indexItems' => $import_items->getInfoImport($id, 'import_receipt_id', 'import_receipts', [
+            'indexItems' => $import_items->getInfoImport($id, 'products.name', 'products', [
                 'import_items.warehouses_id',
                 'products.name',
                 'products.quantity'

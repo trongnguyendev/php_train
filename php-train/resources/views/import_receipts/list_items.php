@@ -45,11 +45,11 @@ function oldInput($field, $oldInput)
       <tbody>
         <?php foreach ($indexItems as $index => $receipt): ?>
             <tr>
-              <td><?= htmlspecialchars($receipt['product']) ?></td>
+              <td><?= htmlspecialchars($receipt['warehouses_id']) ?></td>
+              <td><?= htmlspecialchars($receipt['name']) ?></td>
               <td><?= htmlspecialchars($receipt['quantity']) ?></td>
               
               <td>
-                <a href="/import_receipts/edit/<?= $receipt['id'] ?>">Chi Tiết</a>
                 <a href="/import_receipts/edit/<?= $receipt['id'] ?>">Cập nhật</a>
                 <a href="/import_receipts/delete/<?= $receipt['id'] ?>">Xoá</a>
               </td>

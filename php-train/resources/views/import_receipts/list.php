@@ -31,7 +31,7 @@ function oldInput($field, $oldInput)
 </div>
 
 <div class="list">
-  <?php if (empty($input_warehouse)): ?>
+  <?php if (empty($import_receipts)): ?>
     <p class="no-data">Không có dữ liệu</p>
   <?php else: ?>
     <table>
@@ -41,26 +41,22 @@ function oldInput($field, $oldInput)
           <th>Mã Đơn</th>
           <th>Thời Gian Tạo Đơn</th>
           <th>Ghi Chú</th>
-          <th>Sản Phẩm</th>
-          <th>Số Lượng</th>
           <th>Hành động</th>
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($import_receiptsed as $index => $receipt): ?>
-          <?php foreach ($import_itemsed as $index => $item): ?>
+        <?php foreach ($import_receipts as $index => $receipt): ?>
             <tr>
-              <td><?= htmlspecialchars($receipt['warehouse_id']) ?></td>
+              <td><?= htmlspecialchars($receipt['name']) ?></td>
               <td><?= htmlspecialchars($receipt['code'])?></td>
-              <td><?= htmlspecialchars($receipt['received_at']); ?></td>
-              <td><?= htmlspecialchars($item['product_id']) ?></td>
-              <td><?= htmlspecialchars($item['quantity']) ?></td>
+              <td><?= htmlspecialchars($receipt['received_at'])?></td>
+              <td><?= htmlspecialchars($receipt['note'] ?? ''); ?></td>
               <td>
+                <a href="/import_receipts/<?= $receipt['id'] ?>">Xem Chi Tiết</a>
                 <a href="/import_receipts/edit/<?= $receipt['id'] ?>">Cập nhật</a>
                 <a href="/import_receipts/delete/<?= $receipt['id'] ?>">Xoá</a>
               </td>
             </tr>
-          <?php endforeach; ?>
         <?php endforeach; ?>
       </tbody>
     </table>
