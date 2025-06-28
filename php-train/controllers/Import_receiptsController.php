@@ -47,13 +47,14 @@ class Import_receiptsController extends Controller {
     }
 
     public function create()
-    {   $warehouse = new Warehouse ();
-        $warehoused = $warehouse->all();
+    {
+        $warehouse = new Warehouse();
+        $warehouses = $warehouse->all();
 
-        $product = new Product ();
+        $product = new Product();
         $products = $product->all();
         $this->view('import_receipts/create', [
-            'warehoused' => $warehoused,
+            'warehouses' => $warehouses,
             'products' => $products,
             'pageTitle' => 'Tạo mới Phiếu Nhập'
         ]);
@@ -66,13 +67,17 @@ class Import_receiptsController extends Controller {
         $rules = [
             'warehouse_id' => 'required',
             'code' => 'required',
-            'received_at' => 'required'
+            'received_at' => 'required',
+            'products' => 'required|array',
+            'quantities' => 'required|array',
         ];
 
         $messages = [
             'warehouse_id.required' => 'Bắt buộc nhập KHO',
             'code.required' => 'Bắt buộc nhập Mã Tạo Đơn',
             'received_at.required' => 'Bắt buộc nhập Ngày Tạo',
+            'products.required' => 'Bắt buộc chọn sản phẩm',
+            'products.array' => 'Sản phẩm phải là một mảng',
         ];
 
         $validator = new Validation($data, $rules, $messages);

@@ -37,6 +37,8 @@ Router::get('/product/edit/{id}', 'ProductController@edit');
 Router::post('/product/edit/{id}', 'ProductController@update');
 Router::get('/product/delete/{id}', 'ProductController@delete');
 
+Router::post('/product/search', 'ProductController@search');
+
 Router::get('/stock', 'StockController@index');
 
 

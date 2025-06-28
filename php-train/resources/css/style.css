@@ -455,7 +455,7 @@ ul { list-style: none; padding: 0; margin: 0; }
   /* === Form Blocks === */
   .create,
   .update {
-    max-width: 800px;
+    /*max-width: 800px;*/
     margin: 50px auto;
     background-color: #fff;
     padding: 30px;
@@ -471,7 +471,6 @@ ul { list-style: none; padding: 0; margin: 0; }
   }
   
   /* === Table / List === */
-  }
   
   .list thead {
     background-color: #333;

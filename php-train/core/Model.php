@@ -49,8 +49,8 @@ abstract class Model {
     }
 
     public function where($column, $value) {
-        $sql = "SELECT * FROM {$this->table} WHERE {$column} = ?";
-        return $this->db->select($sql, [$value]);
+        $sql = "SELECT * FROM {$this->table} WHERE {$column} LIKE ?";
+        return $this->db->select($sql, ['%' . $value . '%']);
     }
 
     public function whereOne($column, $value) {

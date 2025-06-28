@@ -171,4 +171,19 @@ class ProductController extends Controller {
             exit;
         }
     }
+
+    public function search(Request $request) {
+        $this->requireLogin();
+
+        $searchQuery = $request->input('content', '');
+
+        $product = new Product();
+
+        $products = $product->where('name', $searchQuery);
+
+        echo json_encode([
+            'status' => 'success',
+            'data' => $products
+        ]);
+    }
 }
