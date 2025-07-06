@@ -138,10 +138,6 @@ class KeyController extends Controller {
             'pageTitle' => 'Cập nhật Key Full Bộ',
             'key' => $keyModel->whereOne('id', $id),
             'indexData' => $id,
-            'full_bo_sanphams' => $full_bo_sanphams,
-            'sanphams' => $sanphams,
-            'errors' => [],
-            'oldInput' => [],
         ]);
     }
 
