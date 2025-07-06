@@ -40,7 +40,6 @@ function oldInput($field, $oldInput)
           <th>Tên</th>
           <th>Email</th>
           <th>Số Điện Thoại</th>
-          <th>Tỉnh</th>
           <th>Password</th>
           <th>Hành động</th>
         </tr>
@@ -51,11 +50,10 @@ function oldInput($field, $oldInput)
             <td><?= htmlspecialchars($emp[1]) ?></td>
             <td><?= htmlspecialchars($emp[2]) ?></td>
             <td><?= htmlspecialchars($emp[3]); ?></td>
-            <td><?= htmlspecialchars($emp[4]) ?></td>
-            <td><?= htmlspecialchars($emp[5]); ?></td>
+            <td><?= htmlspecialchars($emp[4]); ?></td>
             <td>
-              <a href="/user/edit/<?= $index + 1 ?>">Cập nhật</a>
-              <a href="/user/delete/<?= $index + 1 ?>">Xoá</a>
+              <a href="/user/edit/<?= $emp['id'] ?>">Cập nhật</a>
+              <a href="/user/delete/<?=  $emp['id'] ?>">Xoá</a>
             </td>
           </tr>
         <?php endforeach; ?>

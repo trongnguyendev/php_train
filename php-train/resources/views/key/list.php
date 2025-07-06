@@ -13,7 +13,7 @@ function oldInput($field, $oldInput)
   <div class="tag-input-container" onclick="input.focus()">
     <input type="text" name="content_search" id="tagInput" placeholder="Nhập giá trị và nhấn Enter">
   </div>
-  <form class="form-search" action="/employee" method="GET">
+  <form class="form-search" action="/key" method="GET">
     <input type="hidden" name="tags_search" id="hiddenSearchContent" />
     <select name="type" class="type_search">
       <?php foreach ($options as $key => $label): ?>
@@ -26,37 +26,39 @@ function oldInput($field, $oldInput)
     <button id="resetBtn">Reset</button>
   </form>
   <button class="btn-create">
-    <a href="/import_receipts">+ Danh Sách</a>
+    <a href="/key/create">+ Tạo mới</a>
   </button>
 </div>
 
 <div class="list">
-  <?php if (empty($indexItems)): ?>
+  <?php if (empty($keys)): ?>
     <p class="no-data">Không có dữ liệu</p>
   <?php else: ?>
     <table>
       <thead> 
         <tr>
-          <th>Sản Phẩm</th>
+          <th>Tên Sản Phẩm Full Bộ</th>
+          <th>Sản Phẩm Lẻ</th>
           <th>Số Lượng</th>
-          <th>Kho</th>
           <th>Hành động</th>
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($indexItems['importItems'] as $index => $receipt): ?>
-          <tr>
-            <td><?= htmlspecialchars($receipt['name']) ?></td>
-            <td><?= htmlspecialchars($receipt['quantity']) ?></td>
-            <td><?= htmlspecialchars($receipt['warehouse_name']) ?></td>
-            <td>
-              <a href="/import_receipts/edit/<?= $receipt['id'] ?>">Cập nhật</a>
-              <a href="/import_receipts/delete/<?= $receipt['id'] ?>">Xoá</a>
-            </td>
-          </tr>
+        <?php foreach ($keys as $index => $receipt): ?>
+            <?php var_dump($index); ?>
+            <tr>
+              <td><?= htmlspecialchars($receipt['full_bo_sanpham_id']) ?></td>
+              <td><?= isset($receipt['sanpham_id']) ? htmlspecialchars($receipt['sanpham_id']) : '' ?></td>
+              <td><?= htmlspecialchars($receipt['quantity'])?></td>
+              <td>
+                <a href="/key/<?= $receipt['id'] ?? ''?>">Xem Chi Tiết</a>
+                <?php var_dump($index['id']);?>
+                <a href="/key/edit/<?= $receipt['id'] ?? ''?>">Cập nhật</a>
+                <a href="/key/delete/<?= $receipt['id'] ?? ''?>">Xoá</a>
+              </td>
+            </tr>
         <?php endforeach; ?>
       </tbody>
-
     </table>
   <?php endif; ?>
 </div>

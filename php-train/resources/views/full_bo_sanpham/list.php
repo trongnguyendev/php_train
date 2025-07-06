@@ -1,5 +1,5 @@
 <?php
-$options = ['name' => 'Tên', 'email' => 'Email', 'age' => 'Tuổi'];
+$options = ['name' => 'Tên Sản Phẩm', 'code' => 'Mã Sản Phẩm'];
 $selectedValue = oldInput('search_type', $oldSearch ?? '');
 $oldContent = oldInput('search_content', $oldSearch ?? '');
 
@@ -26,38 +26,37 @@ function oldInput($field, $oldInput)
     <button id="resetBtn">Reset</button>
   </form>
   <button class="btn-create">
-    <a href="/import_receipts">+ Danh Sách</a>
+    <a href="/full_bo_sanpham/create">+ Tạo mới</a>
   </button>
 </div>
 
 <div class="list">
-  <?php if (empty($indexItems)): ?>
+  <?php if (empty($full_bo_sanphams)): ?>
     <p class="no-data">Không có dữ liệu</p>
   <?php else: ?>
-    <table>
-      <thead> 
-        <tr>
-          <th>Sản Phẩm</th>
-          <th>Số Lượng</th>
-          <th>Kho</th>
-          <th>Hành động</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($indexItems['importItems'] as $index => $receipt): ?>
+    <div class="table-responsive">
+      <table class="modern-table">
+        <thead>
           <tr>
-            <td><?= htmlspecialchars($receipt['name']) ?></td>
-            <td><?= htmlspecialchars($receipt['quantity']) ?></td>
-            <td><?= htmlspecialchars($receipt['warehouse_name']) ?></td>
-            <td>
-              <a href="/import_receipts/edit/<?= $receipt['id'] ?>">Cập nhật</a>
-              <a href="/import_receipts/delete/<?= $receipt['id'] ?>">Xoá</a>
-            </td>
+            <th>Tên Sản Phẩm</th>
+            <th>Giá</th>
+            <th>Hành động</th>
           </tr>
-        <?php endforeach; ?>
-      </tbody>
-
-    </table>
+        </thead>
+        <tbody>
+          <?php foreach ($full_bo_sanphams as $index => $emp): ?>
+            <tr>
+              <td><?= htmlspecialchars($emp[1]) ?></td>
+              <td><?= htmlspecialchars($emp[2]) ?></td>
+              <td>
+                <a href="/full_bo_sanpham/edit/<?= $emp['id'] ?>" class="icon-btn edit" title="Cập nhật"><i class="fa fa-pen"></i></a>
+                <a href="/full_bo_sanpham/delete/<?= $emp['id'] ?>" class="icon-btn delete" title="Xoá"><i class="fa fa-trash"></i></a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
   <?php endif; ?>
 </div>
 

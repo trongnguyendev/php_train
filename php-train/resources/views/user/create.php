@@ -18,10 +18,6 @@
             <p class='error'><?= implode(', ', $errors['phone']) ?></p>
         <?php endif;  ?>
 
-        <label for="province">Tỉnh:</label>
-        <input type="text" name="province" id="province" value="<?= $oldInput['province'] ?? '' ?>">
-        
-
         <label for="password">Password:</label>
         <input type="text" name="password" id="password" value="<?= $oldInput['password'] ?? '' ?>">
         <?php if (isset($errors['password'])): ?>

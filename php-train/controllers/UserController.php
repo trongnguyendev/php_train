@@ -61,7 +61,6 @@ class UserController extends Controller {
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
-            'province' => $data['province'],
             'password' => password_hash($data['password'], PASSWORD_DEFAULT)
         ]);
         if($store){
@@ -105,7 +104,6 @@ class UserController extends Controller {
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
-            'province' => $data['province'],
             'password' => $data['password']
         ]);
         if($update){

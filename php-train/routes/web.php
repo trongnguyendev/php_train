@@ -60,3 +60,27 @@ Router::get('/import_receipts/delete/{id}', 'Import_receiptsController@delete');
 Router::get('/import_receipts/{id}', 'Import_receiptsController@indexItems');
 
 
+
+Router::get('/sanpham', 'SanphamController@index');
+Router::get('/sanpham/create', 'SanphamController@create');
+Router::post('/sanpham/create', 'SanphamController@store');
+Router::get('/sanpham/edit/{id}' , 'SanphamController@edit');
+Router::post('/sanpham/edit/{id}', 'SanphamController@update');
+Router::get('/sanpham/delete/{id}', 'SanphamController@delete');
+
+Router::get('/full_bo_sanpham', 'Full_bo_sanphamController@index');
+Router::get('/full_bo_sanpham/create', 'Full_bo_sanphamController@create');
+Router::post('/full_bo_sanpham/create', 'Full_bo_sanphamController@store');
+Router::get('/full_bo_sanpham/edit/{id}' , 'Full_bo_sanphamController@edit');
+Router::post('/full_bo_sanpham/edit/{id}', 'Full_bo_sanphamController@update');
+Router::get('/full_bo_sanpham/delete/{id}', 'Full_bo_sanphamController@delete');
+
+Router::get('/key', 'KeyController@index');
+Router::get('/key/create', 'KeyController@create');
+Router::post('/key/create', 'KeyController@store');
+Router::get('/key/edit/{id}' , 'KeyController@edit');
+Router::post('/key/edit/{id}', 'KeyController@update');
+Router::get('/key/delete/{id}', 'KeyController@delete');
+
+
+

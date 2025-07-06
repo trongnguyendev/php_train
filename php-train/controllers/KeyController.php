@@ -5,142 +5,143 @@ namespace Controllers;
 use Core\Controller;
 use Core\Request;
 use Core\Validation;
-use Models\Import_receipts;
-use Models\Warehouse;
+use Models\Sanpham;
+use Models\Full_bo_sanpham;
 use Models\Product;
-use Models\Import_items;
+use Models\Key;
 use Core\Database;
 
-class Import_receiptsController extends Controller {
+class KeyController extends Controller {
     public function index(Request $request = null)
     {
-         $this->requireLogin();
+        $this->requireLogin();
         $searchQuery = $request ? $request->query('tags_search', '') : '';
         $searchType = $request ? $request->query('type', '') : '';
 
-        $import_receipts = new Import_receipts();
+        $key = new Key();
 
-        $warehouse = new Warehouse;
-        $tableRelation = $warehouse->getTable();
-        $fk = $import_receipts->getFk();
+        $full_bo_sanpham = new Full_bo_sanpham;
+        $tableRelation = $full_bo_sanpham->getTable();
+        $fk = $key->getFk();
 
         $columnSelection = [
-            'warehouses.name',
-            'import_receipts.code',
-            'import_receipts.received_at',
-            'import_receipts.note',
-            'import_receipts.id'
+            'full_bo_sanpham_id',
+            'sanpham_id',
+            'quantity'
         ];
 
-        $import_receiptsed = !empty($searchQuery)
-                ? $import_receipts->where('name', $searchQuery)
-                : $import_receipts->allWidth($tableRelation,$fk,$columnSelection);
+        $keys = !empty($searchQuery)
+                ? $key->where('name', $searchQuery)
+                : $key->allWidth($tableRelation,$fk,$columnSelection);
 
         $data = [
-            'pageTitle' => 'Danh sách nhân viên',
-            'import_receipts' => $import_receiptsed,
+            'pageTitle' => 'Danh sách Sản Phẩm Full Bộ',
+            'keys' => $keys,
             'oldSearch' => [
                 'search_content' => $searchQuery,
                 'search_type' => $searchType
             ]
         ];
-        $this->view('import_receipts/list', $data);
+        $this->view('key/list', $data);
     }
 
     public function create()
     {
-        $warehouse = new Warehouse();
-        $warehouses = $warehouse->all();
+        $full_bo_sanphams = (new Full_bo_sanpham())->all();
+        $sanphams = (new Sanpham())->all();
 
-        $product = new Product();
-        $products = $product->all();
-        $this->view('import_receipts/create', [
-            'warehouses' => $warehouses,
-            'products' => $products,
-            'pageTitle' => 'Tạo mới Phiếu Nhập'
+        return $this->view('key/create', [
+            'pageTitle' => 'Tạo mới Full Bộ Sản Phẩm',
+            'full_bo_sanphams' => $full_bo_sanphams,
+            'sanphams' => $sanphams,
+            'errors' => [],        // tránh lỗi undefined
+            'oldInput' => [],      // tránh lỗi undefined
         ]);
     }
+
 
     public function store(Request $request)
     {
         $data = $request->all();
 
         $rules = [
-            'warehouse' => 'required',
-            'code' => 'required',
-            'received_at' => 'required',
+            'fullbo' => 'required',
             'products' => 'required',
-            'quantities' => 'required',
         ];
 
         $messages = [
-            'warehouse.required' => 'Bắt buộc nhập KHO',
-            'code.required' => 'Bắt buộc nhập Mã Tạo Đơn',
-            'received_at.required' => 'Bắt buộc nhập Ngày Tạo',
-            'products.required' => 'Bắt buộc chọn sản phẩm',
-            'quantities.required' => 'Bắt buộc nhập số lượng',
+            'fullbo.required' => 'Bắt buộc chọn sản phẩm Full Bộ',
+            'products.required' => 'Bắt buộc chọn ít nhất 1 sản phẩm lẻ',
         ];
 
-
         $validator = new Validation($data, $rules, $messages);
-        $warehouses = (new Warehouse())->all();
+        $full_bo_sanpham = (new Full_bo_sanpham())->all();
+        $sanphams = (new Sanpham())->all();
 
         if (!$validator->validate()) {
-            $this->view('import_receipts/create', [
-                'pageTitle' => 'Tạo mới Phiếu Nhập Kho',
+            return $this->view('key/create', [
+                'pageTitle' => 'Tạo mới Full Bộ Sản Phẩm',
                 'errors' => $validator->getErrors(),
                 'oldInput' => $data,
-                'warehouses' => $warehouses,
+                'full_bo_sanpham' => $full_bo_sanpham,
+                'sanphams' => $sanphams,
             ]);
         }
 
         $db = Database::getInstance();
-
         try {
             $db->beginTransaction();
 
-            $import_receipts = new Import_receipts();
-            $storeId = $import_receipts->create([
-                'warehouse_id' => $data['warehouse'],
-                'code' => $data['code'],
-                'received_at' => $data['received_at'],
-                'note' => $data['note'],
-            ]);
+            // Lưu đơn chính (nếu có bảng riêng, bạn có thể bỏ qua nếu không cần)
+            $key = new Key(); // <-- nếu bảng keys là bảng trung gian, thì bỏ dòng này
+            $storeId = null; // nếu bạn không có bảng đơn chính
 
-            $import_items = new Import_items();
-            $productIds = explode(',', $data['products']);
-            $quantities = $data['quantities'];
+            // Lưu từng sản phẩm lẻ
+            $key = new Key(); // Lúc này key là model bảng trung gian: keys
+            foreach ($data['products'] as $item) {
+                if (empty($item['id']) || !is_numeric($item['id'])) continue;
 
-            foreach($productIds as $key => $ids) {
-                $import_items->create([
-                    'product_id' => $ids,
-                    'quantity' => $quantities[$key],
-                    'import_receipt_id' => $storeId
+                $key->create([
+                    'full_bo_sanpham_id' => $data['fullbo'],
+                    'sanpham_id' => $item['id'],
+                    'quantity' => $item['qty'],
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'note' => $data['note'] ?? null,
                 ]);
             }
 
             $db->commit();
-            $this->redirect('/import_receipts');
+            $this->redirect('/key');
         } catch (\Exception $e) {
-            // Rollback nếu có lỗi
             $db->rollback();
-            // Xử lý lỗi...
-            $this->view('import_receipts/create', [
-                'pageTitle' => 'Tạo mới Phiếu Nhập Kho',
-                'errors' => ['error_system' => 'Lỗi hệ thống, vui lòng thử lại sau.'],
+
+            return $this->view('key/create', [
+                'pageTitle' => 'Tạo mới Full Bộ Sản Phẩm',
+                'errors' => ['error_system' => 'Lỗi hệ thống: ' . $e->getMessage()],
                 'oldInput' => $data,
-                'warehouses' => $warehouses,
+                'full_bo_sanpham' => $full_bo_sanpham,
+                'sanphams' => $sanphams,
             ]);
         }
     }
 
+
+
+
     public function edit($id)
     {
-        $import_receipts = new Import_receipts();
-        $this->view('import_receipts/update', [
-            'pageTitle' => 'Cập nhật Phiếu Nhập Kho',
-            'import_receiptsData' => $import_receipts->whereOne('id', $id),
-            'indexData' => $id
+        $keyModel = new Key();
+        $full_bo_sanphams = (new Full_bo_sanpham())->all();
+        $sanphams = (new Sanpham())->all();
+
+        $this->view('key/edit', [
+            'pageTitle' => 'Cập nhật Key Full Bộ',
+            'key' => $keyModel->whereOne('id', $id),
+            'indexData' => $id,
+            'full_bo_sanphams' => $full_bo_sanphams,
+            'sanphams' => $sanphams,
+            'errors' => [],
+            'oldInput' => [],
         ]);
     }
 
@@ -149,20 +150,20 @@ class Import_receiptsController extends Controller {
         $data = $request->all();
 
         $rules = [
-            'received_at' => 'required',
-            'code' => 'required|email',
-            'received_at' => 'required'
+            'full_bo_sanpham_id' => 'required',
+            'sanpham_id' => 'required|email',
+            'quantity' => 'required'
         ];
         $messages = [
-            'received_at.required' => 'Bắt buộc nhập KHO',
-            'code.required' => 'Bắt buộc nhập Mã Tạo Phiếu',
-            'received_at.required' => 'Bắt buộc nhập Ngày Tạo',
+            'full_bo_sanpham_id.required' => 'Bắt buộc nhập Full Bộ Sản Phẩm',
+            'sanpham_id.required' => 'Bắt buộc nhập Sản Phẩm Lẻ',
+            'quantity.required' => 'Bắt buộc nhập Số Lượng',
         ];
         $validator = new Validation($data, $rules, $messages);
 
         if (!$validator->validate()) {
             $this->view('import_receipts/update', [
-                'pageTitle' => 'Cập nhật Phiếu Nhập Kho',
+                'pageTitle' => 'Cập nhật Sản Phẩm Full Bộ',
                 'errors' => $validator->getErrors(),
                 'oldInput' => $data,
                 'indexData' => $id
