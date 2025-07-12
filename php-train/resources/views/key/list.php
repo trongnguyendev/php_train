@@ -46,8 +46,8 @@ function oldInput($field, $oldInput)
       <tbody>
         <?php foreach ($keys as $index => $receipt): ?>
             <tr>
-              <td><?= htmlspecialchars($receipt['full_bo_sanpham_id']) ?></td>
-              <td><?= isset($receipt['sanpham_id']) ? htmlspecialchars($receipt['sanpham_id']) : '' ?></td>
+              <td><?= isset($receipt['0']) ? htmlspecialchars($receipt['0']) : '' ?></td>
+              <td><?= isset($receipt['name']) ? htmlspecialchars($receipt['name']) : '' ?></td>
               <td><?= htmlspecialchars($receipt['quantity'])?></td>
               <td>
                 <a href="/key/<?= $receipt['id'] ?? ''?>">Xem Chi Tiết</a>

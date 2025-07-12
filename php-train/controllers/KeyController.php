@@ -32,8 +32,8 @@ class KeyController extends Controller {
 
         $keys = !empty($searchQuery)
                 ? $key->where('name', $searchQuery)
-                : $key->allWidth($tableRelation,$fk,$columnSelection);
-
+                : $key->getInfoImport();
+               
         $data = [
             'pageTitle' => 'Danh sách Sản Phẩm Full Bộ',
             'keys' => $keys,
