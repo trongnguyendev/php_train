@@ -68,12 +68,12 @@ Router::get('/sanpham/edit/{id}' , 'SanphamController@edit');
 Router::post('/sanpham/edit/{id}', 'SanphamController@update');
 Router::get('/sanpham/delete/{id}', 'SanphamController@delete');
 
-Router::get('/full_bo_sanpham', 'Full_bo_sanphamController@index');
-Router::get('/full_bo_sanpham/create', 'Full_bo_sanphamController@create');
-Router::post('/full_bo_sanpham/create', 'Full_bo_sanphamController@store');
-Router::get('/full_bo_sanpham/edit/{id}' , 'Full_bo_sanphamController@edit');
-Router::post('/full_bo_sanpham/edit/{id}', 'Full_bo_sanphamController@update');
-Router::get('/full_bo_sanpham/delete/{id}', 'Full_bo_sanphamController@delete');
+Router::get('/product-group', 'ProductGroupController@index');
+Router::get('/product-group/create', 'ProductGroupController@create');
+Router::post('/product-group/create', 'ProductGroupController@store');
+Router::get('/product-group/edit/{id}' , 'ProductGroupController@edit');
+Router::post('/product-group/edit/{id}', 'ProductGroupController@update');
+Router::get('/product-group/delete/{id}', 'ProductGroupController@delete');
 
 Router::get('/key', 'KeyController@index');
 Router::get('/key/create', 'KeyController@create');

@@ -6,33 +6,32 @@ use Core\Controller;
 use Core\Validator;
 use Core\Validation;
 use Core\Request;
-use Models\Full_bo_sanpham;
+use Models\ProductGroup;
 
-class Full_bo_sanphamController extends Controller {
+class ProductGroupController extends Controller {
 
     public function index (Request $request = null){
         $this->requireLogin();
-        $searchQuery = $request ? $request->query('tags_search', '') : '';
-        $searchType = $request ? $request->query('type', '') :  '';
+        $contentSearch = $request ? $request->query('content_search', '') : '';
 
-        $full_bo_sanpham = new full_bo_sanpham();
+        $productGroup = new ProductGroup();
         
-        $full_bo_sanphams = !empty($searchQuery)
-            ? $full_bo_sanpham->where($searchType, $searchQuery)
-            : $full_bo_sanpham->all();
+        $productGroup = !empty($contentSearch)
+            ? $productGroup->where('name', $contentSearch)
+            : $productGroup->all();
+
         $data = [
             'pageTitle' => 'Danh Sách Full Bộ Sản Phẩm',
-            'full_bo_sanphams' => $full_bo_sanphams,
+            'productGroup' => $productGroup,
             'oldSearch' => [
-                'search_content' => $searchQuery,
-                'search_type' => $searchType
+                'search_content' => $contentSearch,
             ]
         ];
-        $this->view('full_bo_sanpham/list', $data);
+        $this->view('productGroup/list', $data);
     }
 
     public function create(){
-        $this->view('full_bo_sanpham/create',[
+        $this->view('productGroup/create',[
             'pageTitle' => 'Tạo mới Full Bộ Sản Phẩm'
         ]);
     }
@@ -50,10 +49,10 @@ class Full_bo_sanphamController extends Controller {
             'price.required' => 'Bắt buộc nhập giá',
         ];
 
-        $validator = new Validation ($data,$rules,$messages);
+        $validator = new Validation($data,$rules,$messages);
 
         if (!$validator->validate()){
-            $this->view('sanpham/create',[
+            $this->view('productGroup/create',[
                 'pageTitle' => 'Tạo thông tin Full Bộ Sản Phẩm mới',
                 'errors' => $validator->getErrors(),
                 'oldInput' => $data,
@@ -61,26 +60,26 @@ class Full_bo_sanphamController extends Controller {
             return;
         }
 
-        $full_bo_sanpham = new Full_bo_sanpham();
+        $productGroup = new ProductGroup();
 
-        $store = $full_bo_sanpham-> create([
+        $store = $productGroup-> create([
             'name' => $data['name'],
             'price' => $data['price']
         ]);
 
         if($store){
-            $this->redirect('/full_bo_sanpham');
+            $this->redirect('/product-group');
             exit;
         }
 
-        $this->redirect('/full_bo_sanpham/create');
+        $this->redirect('/product-group/create');
     }
 
     public function edit($id){
-        $full_bo_sanpham = new Full_bo_sanpham();
-        $this->view('full_bo_sanpham/update', [
+        $productGroup = new ProductGroup();
+        $this->view('productGroup/update', [
             'pageTitle' => 'Cập nhập thông tin Full Bộ Sản Phẩm',
-            'full_bo_sanphamData' => $full_bo_sanpham->whereOne('id', $id),
+            'productGroup' => $productGroup->whereOne('id', $id),
             'indexData' => $id
         ]);
     } 
@@ -101,7 +100,7 @@ class Full_bo_sanphamController extends Controller {
         $validator = new Validation($data, $rules, $messages);
 
         if(!$validator->validate()){
-            $this->view('full_bo_sanpham/update',[
+            $this->view('productGroup/update',[
                 'pageTitle' => 'Cập nhập thông tin Full Bộ sản phẩm',
                 'errors' => $validator->getErrors(),
                 'oldInput' => $data,
@@ -110,26 +109,25 @@ class Full_bo_sanphamController extends Controller {
             return;
         }
 
-        $full_bo_sanpham = new Full_bo_sanpham();
+        $productGroup = new ProductGroup();
 
-        $full_bo_sanpham = $full_bo_sanpham->update($id, [
+        $productGroupUpdate = $productGroup->update($id, [
             'name' => $data['name'],
             'price' => $data['price']
         ]);
 
-        if($update) {
-            $this->redirect('/full_bo_sanpham');
+        if($productGroupUpdate) {
+            $this->redirect('/product-group');
             exit;
         }
     }
 
     public function delete($id){
-
-        $full_bo_sanpham = new Full_bo_sanpham();
-        $isDeleted = $full_bo_sanpham->delete($id);
+        $productGroup = new ProductGroup();
+        $isDeleted = $productGroup->delete($id);
 
         if($isDeleted){
-            $this->redirect('/full_bo_sanpham');
+            $this->redirect('/product-group');
             exit;
         }
     }

@@ -6,7 +6,7 @@ use Core\Controller;
 use Core\Request;
 use Core\Validation;
 use Models\Sanpham;
-use Models\Full_bo_sanpham;
+use Models\ProductGroup;
 use Models\Product;
 use Models\Key;
 use Core\Database;
@@ -20,8 +20,8 @@ class KeyController extends Controller {
 
         $key = new Key();
 
-        $full_bo_sanpham = new Full_bo_sanpham;
-        $tableRelation = $full_bo_sanpham->getTable();
+        $productGroup = new ProductGroup();
+        $tableRelation = $productGroup->getTable();
         $fk = $key->getFk();
 
         $columnSelection = [
