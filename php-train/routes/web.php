@@ -82,5 +82,7 @@ Router::get('/key/edit/{id}' , 'KeyController@edit');
 Router::post('/key/edit/{id}', 'KeyController@update');
 Router::get('/key/delete/{id}', 'KeyController@delete');
 
+Router::get('/key/{id}', 'KeyController@indexItems');
+
 
 

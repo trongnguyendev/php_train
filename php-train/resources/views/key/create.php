@@ -13,18 +13,24 @@ function oldInput($field, $oldInput)
       <h3>Thông tin đơn hàng</h3>
 
       <?php if (!empty($errors['fullbo'])): ?>
-        <p style="color: red"><?= $errors['fullbo'] ?></p>
+        <p style="color: red"><?= implode(', ', $errors['fullbo']); ?></p>
+      <?php endif; ?>
+      <?php if (!empty($errors['error_system'])): ?>
+        <p style="color: red"><?= implode(', ', $errors['error_system']); ?></p>
       <?php endif; ?>
 
-      <label for="fullbo">Chọn sản phẩm Full Bộ:</label>
-      <select name="fullbo" id="fullbo">
-        <option value="">-- Chọn Sản Phẩm Full Bộ --</option>
-        <?php foreach ($full_bo_sanphams as $item): ?>
-          <option value="<?= $item['id'] ?>" <?= oldInput('fullbo', $oldInput) == $item['id'] ? 'selected' : '' ?>>
-            <?= htmlspecialchars($item['name']) ?>
-          </option>
-        <?php endforeach; ?>
-      </select>
+      <label for="name">Chọn sản phẩm Full Bộ:</label>
+        <input type="text" name="name" id="name" value="<?= $oldInput['name'] ?? '' ?>">
+        <?php if (isset($errors['name'])): ?>
+            <p class='error'><?= implode(', ', $errors['name']) ?></p>
+        <?php endif; ?>
+
+        <label for="price">Giá:</label>
+        <input type="number" name="price" id="price" value="<?= $oldInput['price'] ?? '' ?>">
+        <?php if (isset($errors['price'])): ?>
+            <p class='error'><?= implode(', ', $errors['price']) ?></p>
+        <?php endif;  ?>
+
 
       <label>Sản phẩm lẻ đã chọn:</label>
       <div id="selectedProducts" style="border:1px solid #ccc; padding:10px;"></div>
@@ -37,7 +43,7 @@ function oldInput($field, $oldInput)
       <h3>Chọn sản phẩm lẻ</h3>
       <input type="text" oninput="filterProducts(this.value)" placeholder="Tìm...">
       <div id="productList">
-        <?php foreach ($sanphams as $sp): ?>
+        <?php foreach ($products as $sp): ?>
           <label style="display: flex; margin-bottom: 8px;">
             <input type="checkbox"
                    value="<?= $sp['id'] ?>"

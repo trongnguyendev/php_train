@@ -9,12 +9,13 @@ class Key extends Model {
 
     protected $fk = 'full_bo_sanpham_id';
     
-    public function getInfoImport() {
+    public function getInfoProductGroup($id) {
             $sql = "
-                SELECT full_bo_sanpham.name, sanpham.name, sanpham.code, sanpham.price,bundle.quantity 
+                SELECT product_group.name, product.name, product.code, product.price, bundle.quantity 
                 FROM bundle 
-                INNER JOIN sanpham ON bundle.sanpham_id = sanpham.id 
-                INNER JOIN full_bo_sanpham ON bundle.full_bo_sanpham_id = full_bo_sanpham.id;
+                INNER JOIN product ON bundle.product = product.id 
+                INNER JOIN product_group ON bundle.full_bo_sanpham_id = product_group.id
+                WHERE product_group.id = $id;
             ";
         
         return $this->db->select($sql);

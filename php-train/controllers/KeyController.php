@@ -15,31 +15,19 @@ class KeyController extends Controller {
     public function index(Request $request = null)
     {
         $this->requireLogin();
-        $searchQuery = $request ? $request->query('tags_search', '') : '';
-        $searchType = $request ? $request->query('type', '') : '';
-
-        $key = new Key();
+        $contentSearch = $request ? $request->query('content_search', '') : '';
 
         $productGroup = new ProductGroup();
-        $tableRelation = $productGroup->getTable();
-        $fk = $key->getFk();
+        
+        $productGroup = !empty($contentSearch)
+            ? $productGroup->where('name', $contentSearch)
+            : $productGroup->all();
 
-        $columnSelection = [
-            'full_bo_sanpham_id',
-            'sanpham_id',
-            'quantity'
-        ];
-
-        $keys = !empty($searchQuery)
-                ? $key->where('name', $searchQuery)
-                : $key->getInfoImport();
-               
         $data = [
-            'pageTitle' => 'Danh sách Sản Phẩm Full Bộ',
-            'keys' => $keys,
+            'pageTitle' => 'Danh Sách Full Bộ Sản Phẩm',
+            'productGroup' => $productGroup,
             'oldSearch' => [
-                'search_content' => $searchQuery,
-                'search_type' => $searchType
+                'search_content' => $contentSearch,
             ]
         ];
         $this->view('key/list', $data);
@@ -47,13 +35,13 @@ class KeyController extends Controller {
 
     public function create()
     {
-        $full_bo_sanphams = (new Full_bo_sanpham())->all();
-        $sanphams = (new Sanpham())->all();
+        $productGroups = (new ProductGroup())->all();
+        $products = (new Product())->all();
 
         return $this->view('key/create', [
             'pageTitle' => 'Tạo mới Full Bộ Sản Phẩm',
-            'full_bo_sanphams' => $full_bo_sanphams,
-            'sanphams' => $sanphams,
+            'productGroups' => $productGroups,
+            'products' => $products,
             'errors' => [],        // tránh lỗi undefined
             'oldInput' => [],      // tránh lỗi undefined
         ]);
@@ -65,26 +53,27 @@ class KeyController extends Controller {
         $data = $request->all();
 
         $rules = [
-            'fullbo' => 'required',
+            'name' => 'required',
+            'price' => 'required',
             'products' => 'required',
         ];
 
         $messages = [
-            'fullbo.required' => 'Bắt buộc chọn sản phẩm Full Bộ',
+            'name.required' => 'Bắt buộc chọn sản phẩm Full Bộ',
             'products.required' => 'Bắt buộc chọn ít nhất 1 sản phẩm lẻ',
         ];
 
         $validator = new Validation($data, $rules, $messages);
-        $full_bo_sanpham = (new Full_bo_sanpham())->all();
-        $sanphams = (new Sanpham())->all();
+        $productGroup = (new ProductGroup())->all();
+        $products = (new Product())->all();
 
         if (!$validator->validate()) {
             return $this->view('key/create', [
                 'pageTitle' => 'Tạo mới Full Bộ Sản Phẩm',
                 'errors' => $validator->getErrors(),
                 'oldInput' => $data,
-                'full_bo_sanpham' => $full_bo_sanpham,
-                'sanphams' => $sanphams,
+                'productGroup' => $productGroup,
+                'products' => $products,
             ]);
         }
 
@@ -96,13 +85,20 @@ class KeyController extends Controller {
             $key = new Key(); // <-- nếu bảng keys là bảng trung gian, thì bỏ dòng này
             $storeId = null; // nếu bạn không có bảng đơn chính
 
+            // Tạo product group => product_group
+            $productGroup = new ProductGroup();
+            $idProductGroup = $productGroup->create([
+                'name' => $data['name'],
+                'price' => $data['price']
+            ]);
+
             // Lưu từng sản phẩm lẻ
             $key = new Key(); // Lúc này key là model bảng trung gian: keys
             foreach ($data['products'] as $item) {
                 if (empty($item['id']) || !is_numeric($item['id'])) continue;
 
                 $key->create([
-                    'full_bo_sanpham_id' => $data['fullbo'],
+                    'full_bo_sanpham_id' => $idProductGroup,
                     'sanpham_id' => $item['id'],
                     'quantity' => $item['qty'],
                     'created_at' => date('Y-m-d H:i:s'),
@@ -119,8 +115,8 @@ class KeyController extends Controller {
                 'pageTitle' => 'Tạo mới Full Bộ Sản Phẩm',
                 'errors' => ['error_system' => 'Lỗi hệ thống: ' . $e->getMessage()],
                 'oldInput' => $data,
-                'full_bo_sanpham' => $full_bo_sanpham,
-                'sanphams' => $sanphams,
+                'productGroup' => $productGroup,
+                'products' => $products,
             ]);
         }
     }
@@ -131,7 +127,7 @@ class KeyController extends Controller {
     public function edit($id)
     {
         $keyModel = new Key();
-        $full_bo_sanphams = (new Full_bo_sanpham())->all();
+        $productGroup = (new ProductGroup())->all();
         $sanphams = (new Sanpham())->all();
 
         $this->view('key/edit', [
@@ -208,25 +204,18 @@ class KeyController extends Controller {
     // }
 
     public function indexItems($id) {
-        $import_items = new Import_items();
-
-        $data = $import_items->getInfoImport(
-            $id,
-            [
-                'import_items.id',
-                'import_items.quantity',
-                'products.name',
-                'warehouses.name AS warehouse_name'
-            ]
+        $productGroup = new ProductGroup();
+        $data = $productGroup->getInfoProductGroup(
+            $id
         );
 
         // Lấy tên kho từ dòng đầu tiên
-        $warehouseName = !empty($data) ? $data[0]['warehouse_name'] : '';
+        $productGroup = !empty($data) ? $data[0]['productGroup'] : '';
 
-        $this->view('import_receipts/list_items', [
-            'pageTitle' => 'Chi tiết phiếu nhập',
+        $this->view('key/list_items', [
+            'pageTitle' => 'Chi tiết Sản Phẩm Full Bộ',
             'indexItems' => [
-                'warehouse_name' => $warehouseName,
+                'productGroup' => $productGroup,
                 'importItems' => $data
             ]
         ]);

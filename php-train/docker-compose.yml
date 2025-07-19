@@ -7,6 +7,7 @@ services:
             - MYSQL_DATABASE=db_test
             - MYSQL_USER=php_train
             - MYSQL_PASSWORD=password
+        container_name: mysql
         ports:
             - '3309:3306'
         volumes:

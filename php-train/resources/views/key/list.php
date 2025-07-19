@@ -31,24 +31,22 @@ function oldInput($field, $oldInput)
 </div>
 
 <div class="list">
-  <?php if (empty($keys)): ?>
+  <?php if (empty($productGroup)): ?>
     <p class="no-data">Không có dữ liệu</p>
   <?php else: ?>
     <table>
       <thead> 
         <tr>
           <th>Tên Sản Phẩm Full Bộ</th>
-          <th>Sản Phẩm Lẻ</th>
-          <th>Số Lượng</th>
+          <th>Giá Sản Phẩm</th>
           <th>Hành động</th>
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($keys as $index => $receipt): ?>
+        <?php foreach ($productGroup as $index => $receipt): ?>
             <tr>
-              <td><?= isset($receipt['0']) ? htmlspecialchars($receipt['0']) : '' ?></td>
               <td><?= isset($receipt['name']) ? htmlspecialchars($receipt['name']) : '' ?></td>
-              <td><?= htmlspecialchars($receipt['quantity'])?></td>
+              <td><?= isset($receipt['price']) ? htmlspecialchars($receipt['price']) : '' ?></td>
               <td>
                 <a href="/key/<?= $receipt['id'] ?? ''?>">Xem Chi Tiết</a>
                 <a href="/key/edit/<?= $receipt['id'] ?? ''?>">Cập nhật</a>
