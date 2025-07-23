@@ -50,23 +50,15 @@ Router::post('/warehouse/edit/{id}', 'WarehouseController@update');
 Router::get('/warehouse/delete/{id}', 'WarehouseController@delete');
 
 
-Router::get('/import_receipts', 'Import_receiptsController@index');
-Router::get('/import_receipts/create', 'Import_receiptsController@create');
-Router::post('/import_receipts/create', 'Import_receiptsController@store');
-Router::get('/import_receipts/edit/{id}', 'Import_receiptsController@edit');
-Router::post('/import_receipts/edit/{id}', 'Import_receiptsController@update');
-Router::get('/import_receipts/delete/{id}', 'Import_receiptsController@delete');
-
-Router::get('/import_receipts/{id}', 'Import_receiptsController@indexItems');
-
+Router::get('/import_receipts', 'ImportReceiptsController@index');
+Router::get('/import_receipts/create', 'ImportReceiptsController@create');
+Router::post('/import_receipts/create', 'ImportReceiptsController@store');
+Router::get('/import_receipts/edit/{id}', 'ImportReceiptsController@edit');
+Router::post('/import_receipts/edit/{id}', 'ImportReceiptsController@update');
+Router::get('/import_receipts/delete/{id}', 'ImportReceiptsController@delete');
+Router::get('/import_receipts/{id}', 'ImportReceiptsController@indexItems');
 
 
-Router::get('/sanpham', 'SanphamController@index');
-Router::get('/sanpham/create', 'SanphamController@create');
-Router::post('/sanpham/create', 'SanphamController@store');
-Router::get('/sanpham/edit/{id}' , 'SanphamController@edit');
-Router::post('/sanpham/edit/{id}', 'SanphamController@update');
-Router::get('/sanpham/delete/{id}', 'SanphamController@delete');
 
 Router::get('/product-group', 'ProductGroupController@index');
 Router::get('/product-group/create', 'ProductGroupController@create');
@@ -74,15 +66,7 @@ Router::post('/product-group/create', 'ProductGroupController@store');
 Router::get('/product-group/edit/{id}' , 'ProductGroupController@edit');
 Router::post('/product-group/edit/{id}', 'ProductGroupController@update');
 Router::get('/product-group/delete/{id}', 'ProductGroupController@delete');
-
-Router::get('/key', 'KeyController@index');
-Router::get('/key/create', 'KeyController@create');
-Router::post('/key/create', 'KeyController@store');
-Router::get('/key/edit/{id}' , 'KeyController@edit');
-Router::post('/key/edit/{id}', 'KeyController@update');
-Router::get('/key/delete/{id}', 'KeyController@delete');
-
-Router::get('/key/{id}', 'KeyController@indexItems');
+Router::get('/product-group/{id}', 'ProductGroupController@indexItems');
 
 
 

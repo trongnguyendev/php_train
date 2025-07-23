@@ -25,9 +25,16 @@ function oldInput($field, $oldInput)
     <button type="submit">Tìm kiếm</button>
     <button id="resetBtn">Reset</button>
   </form>
-  <button class="btn-create">
-    <a href="/product/create">+ Tạo mới</a>
-  </button>
+  <div class="btn-create">
+    <button class="btn-create">
+      <a href="/product/create">+ Tạo mới</a>
+    </button>
+
+    <button class="btn-create">
+      <a href="/product-group">Thiếu lập full bộ sản phẩm</a>
+    </button>
+  </div>
+  
 </div>
 
 <div class="list">

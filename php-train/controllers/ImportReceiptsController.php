@@ -11,7 +11,7 @@ use Models\Product;
 use Models\Import_items;
 use Core\Database;
 
-class Import_receiptsController extends Controller {
+class ImportReceiptsController extends Controller {
     public function index(Request $request = null)
     {
          $this->requireLogin();
@@ -44,7 +44,7 @@ class Import_receiptsController extends Controller {
                 'search_type' => $searchType
             ]
         ];
-        $this->view('import_receipts/list', $data);
+        $this->view('importReceipts/list', $data);
     }
 
     public function create()
@@ -54,7 +54,7 @@ class Import_receiptsController extends Controller {
 
         $product = new Product();
         $products = $product->all();
-        $this->view('import_receipts/create', [
+        $this->view('importReceipts/create', [
             'warehouses' => $warehouses,
             'products' => $products,
             'pageTitle' => 'Tạo mới Phiếu Nhập'
@@ -86,7 +86,7 @@ class Import_receiptsController extends Controller {
         $warehouses = (new Warehouse())->all();
 
         if (!$validator->validate()) {
-            $this->view('import_receipts/create', [
+            $this->view('importReceipts/create', [
                 'pageTitle' => 'Tạo mới Phiếu Nhập Kho',
                 'errors' => $validator->getErrors(),
                 'oldInput' => $data,
@@ -125,7 +125,7 @@ class Import_receiptsController extends Controller {
             // Rollback nếu có lỗi
             $db->rollback();
             // Xử lý lỗi...
-            $this->view('import_receipts/create', [
+            $this->view('importReceipts/create', [
                 'pageTitle' => 'Tạo mới Phiếu Nhập Kho',
                 'errors' => ['error_system' => 'Lỗi hệ thống, vui lòng thử lại sau.'],
                 'oldInput' => $data,
@@ -137,7 +137,7 @@ class Import_receiptsController extends Controller {
     public function edit($id)
     {
         $import_receipts = new Import_receipts();
-        $this->view('import_receipts/update', [
+        $this->view('importReceipts/update', [
             'pageTitle' => 'Cập nhật Phiếu Nhập Kho',
             'import_receiptsData' => $import_receipts->whereOne('id', $id),
             'indexData' => $id
@@ -161,7 +161,7 @@ class Import_receiptsController extends Controller {
         $validator = new Validation($data, $rules, $messages);
 
         if (!$validator->validate()) {
-            $this->view('import_receipts/update', [
+            $this->view('importReceipts/update', [
                 'pageTitle' => 'Cập nhật Phiếu Nhập Kho',
                 'errors' => $validator->getErrors(),
                 'oldInput' => $data,
@@ -194,22 +194,6 @@ class Import_receiptsController extends Controller {
         }
     }
 
-    // public function indexItems($id) {
-    //     $import_items = new Import_items();
-        
-    //     $this->view('import_receipts/list_items', [
-    //         'pageTitle' => 'Cập nhật Chi Tiết Phiếu Nhập',
-    //         'indexItems' => $import_items->getInfoImport($id,  'products', 'products.name', [
-    //             [
-    //                 'import_items.id',
-    //                 'products.name',
-    //                 'import_items.quantity' // 👈 sửa lại đúng cột
-    //             ]
-
-    //         ])
-    //     ]);
-    // }
-
     public function indexItems($id) {
         $import_items = new Import_items();
 
@@ -226,7 +210,7 @@ class Import_receiptsController extends Controller {
         // Lấy tên kho từ dòng đầu tiên
         $warehouseName = !empty($data) ? $data[0]['warehouse_name'] : '';
 
-        $this->view('import_receipts/list_items', [
+        $this->view('importReceipts/list_items', [
             'pageTitle' => 'Chi tiết phiếu nhập',
             'indexItems' => [
                 'warehouse_name' => $warehouseName,
