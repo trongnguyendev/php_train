@@ -100,7 +100,6 @@ function renderSelectedProducts(selectedIds, allProducts) {
       if (sp) {
         const checkbox = document.querySelector(`input[type="checkbox"][value="${sp.id}"]`);
         if (checkbox) checkbox.checked = true;
-
         const html = `
           <div id="product-${sp.id}" style="margin-bottom:10px;">
             <input type="hidden" name="products[${sp.id}][id]" value="${sp.id}">

@@ -68,5 +68,13 @@ Router::post('/product-group/edit/{id}', 'ProductGroupController@update');
 Router::get('/product-group/delete/{id}', 'ProductGroupController@delete');
 Router::get('/product-group/{id}', 'ProductGroupController@indexItems');
 
+Router::get('/export_receipts', 'ExportReceiptsController@index');
+Router::get('/export_receipts/create', 'ExportReceiptsController@create');
+Router::post('/export_receipts/create', 'ExportReceiptsController@store');
+Router::get('/export_receipts/edit/{id}', 'ExportReceiptsController@edit');
+Router::post('/export_receipts/edit/{id}', 'ExportReceiptsController@update');
+Router::get('/export_receipts/delete/{id}', 'ExportReceiptsController@delete');
+Router::get('/export_receipts/{id}', 'ExportReceiptsController@indexItems');
+
 
 

@@ -136,10 +136,35 @@ class ImportReceiptsController extends Controller {
 
     public function edit($id)
     {
+        // Lấy thông tin đơn nhập hàng (warehouse, danh sách sản phẩm, thông tin đơn nhập)
         $import_receipts = new Import_receipts();
+        $import_receiptsData = $import_receipts->whereOne('id', $id);
+
+        // Lấy tất cả các kho
+        $warehouse = new Warehouse();
+        $warehouses = $warehouse->all();
+
+        // Lấy tất cả sản phẩm
+        $product = new Product();
+        $products = $product->all();
+
+        // Lấy danh sách id của import_item
+        $import_items = new Import_items();
+        $import_item = $import_items->where('import_receipt_id', $id);
+        // var_dump($import_item);
+
+         $importIdSelected = array_map(function ($products) {
+            return $products['product_id'];
+        }, $import_item);
+
+        // Lấy danh sách các sản phẩm của đơn nhập hàng
+        
         $this->view('importReceipts/update', [
             'pageTitle' => 'Cập nhật Phiếu Nhập Kho',
-            'import_receiptsData' => $import_receipts->whereOne('id', $id),
+            'import_receiptsData' => $import_receiptsData,
+            'warehouses' => $warehouses,
+            'products' => $products,
+            'importIdSelected' => $importIdSelected,
             'indexData' => $id
         ]);
     }
@@ -148,13 +173,18 @@ class ImportReceiptsController extends Controller {
     {
         $data = $request->all();
 
+
+
+        // var_dump($data);
+        // exit;
+
         $rules = [
-            'received_at' => 'required',
-            'code' => 'required|email',
+            'warehouse' => 'required',
+            'code' => 'required',
             'received_at' => 'required'
         ];
         $messages = [
-            'received_at.required' => 'Bắt buộc nhập KHO',
+            'warehouse.required' => 'Bắt buộc nhập KHO',
             'code.required' => 'Bắt buộc nhập Mã Tạo Phiếu',
             'received_at.required' => 'Bắt buộc nhập Ngày Tạo',
         ];
@@ -170,19 +200,83 @@ class ImportReceiptsController extends Controller {
             return;
         }
 
-        $import_receipts = new Import_receipts();
 
-        $update = $import_receipts->update($id, [
-            'warehouse' => $data['warehouse'],
-            'code' => $data['code'],
-            'revlivered_at' => $data['revlivered_at']
-        ]);
+        $db = Database::getInstance();
+        try {
+            $db->beginTransaction();
 
-        if ($update) {
+            $importReceiptsData = new Import_receipts();
+            $imports_items = new Import_items();
+
+            $importReceiptsDatas = $importReceiptsData->update( $id, [
+                'warehouse_id' => $data['warehouse'],
+                'code' => $data['code'],
+                'received_at' => $data['received_at'],
+                'note' => $data['note'],
+            ]);
+
+            $importsItems = $imports_items->where('import_receipt_id', $id);
+
+            foreach ($importsItems as $keyItem) {
+                $deleteProduct = $imports_items->delete($keyItem['id']);
+            };
+
+            // var_dump($data['products']);
+            // exit;
+            foreach ($data['products'] as $item) {
+                if (empty($item['id']) || !is_numeric($item['id'])) continue;
+                $created = $imports_items->create([
+                    'import_receipt_id' => $id,
+                    'product_id' => $item['id'],
+                    'quantity' => $item['qty']
+                ]);
+            }
+
+            // Cập nhật tồn kho
+            $stock = new Stock();
+            $stockInfo = $stock->where([
+                'product_id' => 1,
+                'warehouse_id' => 3
+            ]);
+
+            $quantityOld = $stockInfo['quantity'];
+            $newQUantity = 6;
+
+            $dataUpdate = [
+                'quantity' => ($quantityOld + $newQUantity)
+            ]
+
+            $stock->update($stockInfo['id'], $dataUpdate);
+
+
+            $db->commit();
+
             $this->redirect('/import_receipts');
-            exit;
-        }
+
+        } catch (\Exception $e) {
+            $db->rollback();
+            return $this->view('importReceipts/update', [
+                'pageTitle' => 'Cập Nhập Full Bộ Sản Phẩm',
+                'errors' => ['error_system' => 'Lỗi hệ thống: ' . $e->getMessage()],
+                'oldInput' => $data,
+                'indexData' => $id
+            ]);
+        };
+
     }
+    //     $import_receipts = new Import_receipts();
+
+    //     $update = $import_receipts->update($id, [
+    //         'warehouse' => $data['warehouse'],
+    //         'code' => $data['code'],
+    //         'revlivered_at' => $data['revlivered_at']
+    //     ]);
+
+    //     if ($update) {
+    //         $this->redirect('/import_receipts');
+    //         exit;
+    //     }
+    // }
 
     public function delete($id)
     {

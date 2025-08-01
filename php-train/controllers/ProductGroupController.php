@@ -107,8 +107,6 @@ class ProductGroupController extends Controller {
             $this->redirect('/product-group');
         } catch (\Exception $e) {
             $db->rollback();
-            var_dump($e->getMessage());
-            exit;
             return $this->view('productGroup/create', [
                 'pageTitle' => 'Tạo mới Full Bộ Sản Phẩm',
                 'errors' => ['error_system' => 'Lỗi hệ thống: ' . $e->getMessage()],
@@ -148,6 +146,75 @@ class ProductGroupController extends Controller {
     {
         $data = $request->all();
 
+        $rules = [
+            'name' => 'required',
+            'price' => 'required',
+            'products' => 'required',
+        ];
+
+        $messages = [
+            'name.required' => 'Bắt buộc chọn sản phẩm Full Bộ',
+            'products.required' => 'Bắt buộc chọn ít nhất 1 sản phẩm lẻ',
+        ];
+
+        $validator = new Validation($data, $rules, $messages);
+        
+        if(!$validator->validate()) {
+            return $this->view('productGroup/create', [
+                'pageTitle' => 'Cập Nhập Full Bộ Sản Phẩm',
+                'errors' => $validator->getErrors(),
+                'oldInput' => $data,
+                'indexData' => $id
+            ]);
+        }
+
+
+        $db = Database::getInstance();
+        try {
+            $db->beginTransaction();
+
+            $productData = new productGroup();
+            $producted = new product();
+            $key = new Key();
+            
+
+            $groupInfo = $productData->update( $id, [
+                'name' => $data['name'],
+                'price' => $data['price']
+            ]);
+
+            $isKey = $key->where('product_group_id',$id);
+
+            foreach ($isKey as $keyItem) {
+                $deleteProduct = $key->delete($keyItem['id']);
+            };
+
+            foreach ($data['products'] as $item) {
+                if (empty($item['id']) || !is_numeric($item['id'])) continue;
+                $created = $key->create([
+                    'product_group_id' => $id,
+                    'product_id' => $item['id'],
+                    'quantity' => $item['qty'],
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'note' => $data['note'] ?? null,
+                ]);
+            }
+
+            $db->commit();
+
+            $this->redirect('/product-group');
+
+        } catch (\Exception $e) {
+            $db->rollback();
+            return $this->view('productGroup/create', [
+                'pageTitle' => 'Cập Nhập Full Bộ Sản Phẩm',
+                'errors' => ['error_system' => 'Lỗi hệ thống: ' . $e->getMessage()],
+                'oldInput' => $data,
+                'productGroup' => $productGroup,
+                'products' => $products,
+            ]);
+        };
+    }
         // $rules = [
         //     'full_bo_sanpham_id' => 'required',
         //     'sanpham_id' => 'required|email',
@@ -182,16 +249,20 @@ class ProductGroupController extends Controller {
         //     $this->redirect('/product-group/edit/'.$id);
         //     exit;
         // }
-    }
+    
 
     public function delete($id)
     {
-        // $import_receipts = new import_receipts();
-        // $isDeleted = $import_receipts->delete($id);
-        // if ($isDeleted) {
-        //     $this->redirect('/product-group');
-        //     exit;
-        // }
+        $key = new Key();
+        $isKey = $key->where('product_group_id',$id);
+        foreach ($isKey as $keyItem) {
+            $deleteProduct = $key->delete($keyItem['id']);
+        };
+
+        $productGroup = new ProductGroup();
+        $deleteProductGroup = $productGroup->delete($id);
+
+        $this->redirect('/product-group');
     }
 
     public function indexItems($id) {

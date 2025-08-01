@@ -2,8 +2,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <h5>Cập Nhập Thông tin đơn hàng nhập</h5>
-                <form action="/import_receipts/edit/<?= $indexData; ?>" method="POST">
+                <h5>Thông tin đơn hàng xuất</h5>
+                <form action="/export_receipts/create" method="POST">
                     <div class="row">
                         <div class="col-md-4">
                             <label for="warehouse">Kho:</label>
@@ -13,8 +13,7 @@
                                 <option value="warehouse_id">-- Chọn kho --</option>
                                 <?php foreach ($warehouses as $item): ?>
                                     <option value="<?= $item['id'] ?>"
-                                        // selected cho option
-                                        <?= ($import_receiptsData['warehouse_id'] ?? '') == $item['id'] ? 'selected' : '' ?>>
+                                        <?= ($oldInput['warehouse'] ?? '') == $item['id'] ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($item['name']) ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -30,7 +29,7 @@
                             <label for="code">Mã Đơn:</label>
                         </div>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="code" id="code" value="<?= $import_receiptsData['code'] ?? '' ?>">
+                            <input type="text" class="form-control" name="code" id="code" value="<?= $oldInput['code'] ?? '' ?>">
                             <?php if (isset($errors['code'])): ?>
                                 <p class='error'><?= implode(', ', $errors['code']) ?></p>
                             <?php endif;  ?>
@@ -39,12 +38,12 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <label for="received_at">Thời Gian Tạo Đơn:</label>
+                            <label for="delivered_at">Thời Gian Tạo Đơn:</label>
                         </div>
                         <div class="col-md-8">
-                            <input type="date" class="form-control" name="received_at" id="received_at" value="<?= $import_receiptsData['received_at'] ?? '' ?>">
-                            <?php if (isset($errors['received_at'])): ?>
-                                <p class='error'><?= implode(', ', $errors['received_at']) ?></p>
+                            <input type="date" class="form-control" name="delivered_at" id="delivered_at" value="<?= $oldInput['delivered_at'] ?? '' ?>">
+                            <?php if (isset($errors['delivered_at'])): ?>
+                                <p class='error'><?= implode(', ', $errors['delivered_at']) ?></p>
                             <?php endif;  ?>
                         </div>
                     </div>
@@ -54,7 +53,7 @@
                             <label for="note">Ghi Chú:</label>
                         </div>
                         <div class="col-md-8">
-                            <textarea name="note" class="form-control" id="note" cols="30" rows="10"><?= $import_receiptsData['note'] ?? '' ?></textarea>
+                            <textarea name="note" class="form-control" id="note" cols="30" rows="10"><?= $oldInput['note'] ?? '' ?></textarea>
                             <?php if (isset($errors['note'])): ?>
                                 <p class='error'><?= implode(', ', $errors['note']) ?></p>
                             <?php endif;  ?>
@@ -66,10 +65,8 @@
                             <label for="products">Sản Phẩm:</label>
                         </div>
                         <div class="col-md-8">
-                            <div class="selected list-product">
-
-                            </div>
-                            
+                            <div class="selected list-group"></div>
+                            <input type="hidden" name="products" id="selectedProducts" value="">
                             <?php if (isset($errors['products'])): ?>
                                 <p class='error'><?= implode(', ', $errors['products']) ?></p>
                             <?php endif;  ?>
@@ -84,7 +81,7 @@
                     <?php endif;  ?>
                     <button type="submit" class="form-control" style="margin-top: 30px;">Gửi</button>
 
-                    <a class="link" href="/import_receipts">← Quay về danh sách</a>
+                    <a class="link" href="/export_receipts">← Quay về danh sách</a>
                 </form>
             </div>
             <div class="col-md-6">
@@ -94,26 +91,6 @@
                 </div>
 
                 <div id="result" class="list-group list_product"></div>
-                <div style="flex: 1;">
-                    <h3>Chọn sản phẩm lẻ</h3>
-                    <!-- <input type="text" oninput="filterProducts(this.value)" placeholder="Tìm..."> -->
-                    <div id="productList">
-                    <?php foreach ($products as $sp): ?>
-                        <label style="display: flex; margin-bottom: 8px;">
-                        <input type="checkbox"
-                                <?= in_array($sp['id'], $importIdSelected) ? 'checked' : '' ?>
-                                value="<?= $sp['id'] ?>"
-                                data-name="<?= htmlspecialchars($sp['name']) ?>"
-                                data-price="<?= $sp['price'] ?>"
-                                onchange="toggleProduct(this)">
-                        <div style="margin-left: 8px;">
-                            <strong><?= htmlspecialchars($sp['name']) ?></strong><br>
-                            Giá: <?= number_format($sp['price'], 0, ',', '.') ?> đ
-                        </div>
-                        </label>
-                    <?php endforeach; ?>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -281,60 +258,5 @@
         };
 
         xhr.send(formData);
-    });
-
-    function toggleProduct(checkbox) {
-        const id = checkbox.value;
-        if (!id) return;
-        const name = checkbox.dataset.name;
-        const price = checkbox.dataset.price;
-        const container = document.querySelector('.list-product');
-
-        if (checkbox.checked) {
-            const html = `
-            <div id="product-${id}" style="margin-bottom:10px;">
-                <input type="hidden" name="products[${id}][id]" value="${id}">
-                <strong>${name}</strong>
-                <input type="number" name="products[${id}][qty]" value="1" min="1" style="width:60px;">
-                <button type="button" onclick="removeProduct('${id}')">X</button>
-            </div>
-            `;
-            container.insertAdjacentHTML('beforeend', html);
-        } else {
-            removeProduct(id);
-        }
-    }
-    function removeProduct(id) {
-        const el = document.getElementById(`product-${id}`);
-        if (el) el.remove();
-        const cb = document.querySelector(`input[type="checkbox"][value="${id}"]`);
-        if (cb) cb.checked = false;
-    }
-    function renderSelectedProducts(selectedIds, allProducts) {
-        const container = document.querySelector('.list-product');
-        if (!container) return;
-
-        selectedIds.forEach((id) => {
-        const sp = allProducts.find(p => p.id == id);
-        if (sp) {
-            const checkbox = document.querySelector(`input[type="checkbox"][value="${sp.id}"]`);
-            if (checkbox) checkbox.checked = true;
-            const html = `
-            <div id="product-${sp.id}" style="margin-bottom:10px;">
-                <input type="hidden" name="products[${sp.id}][id]" value="${sp.id}">
-                <strong>${sp.name}</strong>
-                <input type="number" name="products[${sp.id}][qty]" value="1" min="1" style="width:60px;">
-                <button type="button" onclick="removeProduct('${sp.id}')">X</button>
-            </div>
-            `;
-            container.insertAdjacentHTML('beforeend', html);
-        }
-        });
-    }
-
-    const importIdSelected = <?= json_encode($importIdSelected ?? []) ?>;
-    const products = <?= json_encode($products) ?>;
-    window.addEventListener('DOMContentLoaded', () => {
-        renderSelectedProducts(importIdSelected, products);
     });
 </script>
