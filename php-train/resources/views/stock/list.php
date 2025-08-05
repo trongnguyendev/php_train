@@ -54,8 +54,8 @@ function oldInput($field, $oldInput)
       <tbody>
         <?php foreach ($stocks as $index => $emp): ?>
           <tr>
-            <td><?= htmlspecialchars($emp['name']) ?></td>
-            <td><?= htmlspecialchars($emp['warehouse']) ?></td>
+            <td><?= htmlspecialchars($emp['product_id']) ?></td>
+            <td><?= htmlspecialchars($emp['warehouse_id']) ?></td>
             <td><?= htmlspecialchars($emp['quantity']); ?></td>
             <td>
               <a href="/product/edit/<?= $emp['id'] ?>">Cập nhật</a>

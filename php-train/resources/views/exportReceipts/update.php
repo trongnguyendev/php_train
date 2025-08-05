@@ -1,42 +1,340 @@
-<div class="update">
-    <form action="/export_receipts/edit/<?= $indexData ?>" method="POST">
-        <label for="warehouse">KHO:</label>
-        <input type="text" name="warehouse" id="warehouse" value="<?php echo htmlspecialchars($export_receiptsData['warehouse'] ?? $oldInput['warehouse'] ?? ''); ?>">
-        <?php if (isset($errors['warehouse'])): ?>
-            <p class='error'><?= implode(', ', $errors['warehouse']) ?></p>
-        <?php endif;  ?>
+<div class="create">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Cập Nhập Thông tin đơn hàng nhập</h5>
+                <form action="/export_receipts/edit/<?= $indexData; ?>" method="POST">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="warehouse">Kho:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <select name="warehouse" id="warehouse" class="form-select form-control">
+                                <option value="warehouse_id">-- Chọn kho --</option>
+                                <?php foreach ($warehouses as $item): ?>
+                                    <option value="<?= $item['id'] ?>"
+                                        // selected cho option
+                                        <?= ($export_receiptsData['warehouse_id'] ?? '') == $item['id'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($item['name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <?php if (isset($errors['warehouse'])): ?>
+                                <p class='error'><?= implode(', ', $errors['warehouse']) ?></p>
+                            <?php endif;  ?>
+                        </div>
+                    </div>
 
-        <label for="code">Mã Đơn:</label>
-        <input type="code" name="code" id="code" value="<?php echo htmlspecialchars($export_receiptsData['code'] ?? $oldInput['code'] ?? ''); ?>">
-        <?php if (isset($errors['code'])): ?>
-            <p class='error'><?= implode(', ', $errors['code']) ?></p>
-        <?php endif;  ?>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="code">Mã Đơn:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="code" id="code" value="<?= $export_receiptsData['code'] ?? '' ?>">
+                            <?php if (isset($errors['code'])): ?>
+                                <p class='error'><?= implode(', ', $errors['code']) ?></p>
+                            <?php endif;  ?>
+                        </div>
+                    </div>
 
-        <label for="devlivered_at">Thời Gian Tạo Đơn:</label>
-        <input type="datetime" name="devlivered_at" id="devlivered_at" value="<?php echo intval($export_receiptsData['devlivered_at'] ?? $oldInput['devlivered_at'] ?? 0); ?>">
-        <?php if (isset($errors['devlivered_at'])): ?>
-            <p class='error'><?= implode(', ', $errors['devlivered_at']) ?></p>
-        <?php endif;  ?>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="delivered_at">Thời Gian Tạo Đơn:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="date" class="form-control" name="delivered_at" id="delivered_at" value="<?= $export_receiptsData['delivered_at'] ?? '' ?>">
+                            <?php if (isset($errors['delivered_at'])): ?>
+                                <p class='error'><?= implode(', ', $errors['delivered_at']) ?></p>
+                            <?php endif;  ?>
+                        </div>
+                    </div>
 
-        <label for="note">Ghi Chú:</label>
-        <input type="text" name="note" id="note" value="<?php echo intval($export_itemsData['note'] ?? $oldInput['note'] ?? 0); ?>">
-        <?php if (isset($errors['note'])): ?>
-            <p class='error'><?= implode(', ', $errors['note']) ?></p>
-        <?php endif;  ?>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="note">Ghi Chú:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea name="note" class="form-control" id="note" cols="30" rows="10"><?= $export_receiptsData['note'] ?? '' ?></textarea>
+                            <?php if (isset($errors['note'])): ?>
+                                <p class='error'><?= implode(', ', $errors['note']) ?></p>
+                            <?php endif;  ?>
+                        </div>
+                    </div>
 
-        <label for="product">Sản Phẩm:</label>
-        <input type="text" name="product" id="product" value="<?php echo intval($export_itemsData['product'] ?? $oldInput['product'] ?? 0); ?>">
-        <?php if (isset($errors['product'])): ?>
-            <p class='error'><?= implode(', ', $errors['product']) ?></p>
-        <?php endif;  ?>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="products">Sản Phẩm:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="selected list-product">
 
-        <label for="quantity">Số Lượng:</label>
-        <input type="number" name="quantity" id="quantity" value="<?php echo intval($export_itemsData['quantity'] ?? $oldInput['quantity'] ?? 0); ?>">
-        <?php if (isset($errors['quantity'])): ?>
-            <p class='error'><?= implode(', ', $errors['quantity']) ?></p>
-        <?php endif;  ?>
+                            </div>
+                            
+                            <?php if (isset($errors['products'])): ?>
+                                <p class='error'><?= implode(', ', $errors['products']) ?></p>
+                            <?php endif;  ?>
+                            <?php if (isset($errors['quantities'])): ?>
+                                <p class='error'><?= implode(', ', $errors['quantities']) ?></p>
+                            <?php endif;  ?>
+                        </div>
+                    </div>
 
-        <button type="submit">Cập nhật</button>
-        <a class="link-back" href="/employee">← Quay lại danh sách</a>
-    </form>
+                    <?php if (isset($errors['error_system'])): ?>
+                        <p class='error'><?= $errors['error_system']; ?></p>
+                    <?php endif;  ?>
+                    <button type="submit" class="form-control" style="margin-top: 30px;">Gửi</button>
+
+                    <a class="link" href="/export_receipts">← Quay về danh sách</a>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <h5>Thông tin sản phẩm</h5>
+                <div class="form-search">
+                    <input type="text" name="content_search" id="content_search" value="Lapo">
+                </div>
+
+                <div id="result" class="list-group list_product"></div>
+                <div style="flex: 1;">
+                    <h3>Chọn sản phẩm lẻ</h3>
+                    <!-- <input type="text" oninput="filterProducts(this.value)" placeholder="Tìm..."> -->
+                    <div id="productList">
+                    <?php foreach ($products as $sp): ?>
+                        <label style="display: flex; margin-bottom: 8px;">
+                        <input type="checkbox"
+                                <?= in_array($sp['id'], $importIdSelected) ? 'checked' : '' ?>
+                                value="<?= $sp['id'] ?>"
+                                data-name="<?= htmlspecialchars($sp['name']) ?>"
+                                data-price="<?= $sp['price'] ?>"
+                                onchange="toggleProduct(this)">
+                        <div style="margin-left: 8px;">
+                            <strong><?= htmlspecialchars($sp['name']) ?></strong><br>
+                            Giá: <?= number_format($sp['price'], 0, ',', '.') ?> đ
+                        </div>
+                        </label>
+                    <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    .list_product .list-group-item {
+        display: flex;
+        gap: 10px;
+    }
+</style>
+
+<script>
+    const productSelected = []; // Dùng array thay vì Set
+    const selectedContainer = document.querySelector('.selected');
+    const selectedProductsInput = document.getElementById('selectedProducts');
+    const resultContainer = document.getElementById('result');
+
+    document.getElementById('content_search').addEventListener('keydown', function () {
+        const content = document.getElementById('content_search').value;
+        if (event.key !== 'Enter' || content == '') return;
+        const formData = new FormData();
+        formData.append('content', content);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/product/search', true);
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                const products = response.data || [];
+                resultContainer.innerHTML = '';
+
+                products.forEach(product => {
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = `product-${product.id}`;
+                    checkbox.className = 'product-checkbox';
+                    checkbox.name = 'products[]';
+                    checkbox.value = product.id;
+                    checkbox.setAttribute('data-name', product.name);
+
+                    checkbox.addEventListener('change', function () {
+                        const value = this.value
+                        const name = this.getAttribute('data-name');
+
+                        if (this.checked) {
+                            if (!productSelected.includes(value)) {
+                                productSelected.push(value.trim());
+
+                                const item = document.createElement('div');
+                                item.className = 'selected-item list-group-item';
+                                item.dataset.value = value;
+                                item.style.display = 'flex';
+                                item.style.alignItems = 'center';
+
+                                const nameSpan = document.createElement('span');
+                                nameSpan.innerText = name;
+                                nameSpan.style.fontWeight = 'bold';
+                                nameSpan.style.fontSize = '14px';
+                                nameSpan.style.flexGrow = '1';
+                                nameSpan.style.marginLeft = '10px';
+
+
+                                const closeBtn = document.createElement('span');
+                                closeBtn.innerText = ' ❌';
+                                closeBtn.style.cursor = 'pointer';
+                                closeBtn.style.marginLeft = '5px';
+                                closeBtn.style.fontSize = '13px';
+
+                                const numberInput = document.createElement('input');
+                                numberInput.type = 'number';
+                                numberInput.value = 1; // Mặc định số lượng là 1
+                                numberInput.style.width = '100px';
+                                numberInput.style.marginLeft = 'auto';
+                                numberInput.name = 'quantities[]';
+
+                                closeBtn.addEventListener('click', () => {
+                                    // Xóa khỏi array
+                                    const index = productSelected.indexOf(value);
+                                    if (index !== -1) productSelected.splice(index, 1);
+
+                                    // Cập nhật DOM
+                                    item.remove();
+                                    selectedProductsInput.value = productSelected.join(', ');
+
+                                    // Bỏ check checkbox
+                                    const checkbox = document.querySelector(`.product-checkbox[value="${value}"]`);
+                                    if (checkbox) checkbox.checked = false;
+                                });
+
+                                item.appendChild(closeBtn);
+                                item.appendChild(nameSpan);
+                                item.appendChild(numberInput);
+
+                                selectedContainer.appendChild(item);
+                            }
+                        } else {
+                            const index = productSelected.indexOf(value);
+                            if (index !== -1) {
+                                productSelected.splice(index, 1);
+                            }
+
+                            const selectedItem = selectedContainer.querySelector(`.selected-item[data-value="${value}"]`);
+                            if (selectedItem) selectedItem.remove();
+                        }
+
+                        selectedProductsInput.value = productSelected.join(', ');
+                    });
+
+                    const label = document.createElement('label');
+                    label.htmlFor = checkbox.id;
+                    label.style.display = 'flex';
+                    label.style.justifyContent = 'space-between';
+                    label.style.alignItems = 'center';
+                    label.style.width = '100%';
+                    label.style.cursor = 'pointer';
+                    label.style.padding = '5px 10px';
+                    label.style.gap = '10px';
+
+                    const image = document.createElement('img');
+                    image.src = product.image || 'https://muave.newwayjsc.com.vn/static/assets/img/empty.jpg';
+                    image.style.width = '56px';
+                    image.style.height = '40px';
+                    image.style.objectFit = 'cover';
+                    image.style.borderRadius = '6px';
+                    image.style.background = '#f6f8fb';
+                    label.appendChild(image);
+
+                    const name = document.createElement('div');
+                    name.innerText = product.name;
+                    name.style.fontWeight = 'bold';
+                    name.style.fontSize = '1.1em';
+                    name.style.width = '200px';
+                    label.appendChild(name);
+
+                    const info = document.createElement('div');
+                    info.innerText = `Mã: ${product.code}`;
+                    info.style.fontSize = '0.9em';
+                    info.style.color = '#555';
+
+                    const price = document.createElement('span');
+                    const formattedPrice = new Intl.NumberFormat('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    }).format(product.price);
+                    price.innerText = `Giá: ${formattedPrice}`;
+
+                    const divPrice = document.createElement('div');
+                    divPrice.style.marginLeft = 'auto';
+                    divPrice.appendChild(price);
+                    divPrice.appendChild(info);
+                    label.appendChild(divPrice);
+
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'list-group-item';
+                    wrapper.appendChild(checkbox);
+                    wrapper.appendChild(label);
+
+                    resultContainer.appendChild(wrapper);
+                });
+            } else {
+                resultContainer.innerText = 'Lỗi khi gọi AJAX';
+            }
+        };
+
+        xhr.send(formData);
+    });
+
+    function toggleProduct(checkbox) {
+        const id = checkbox.value;
+        if (!id) return;
+        const name = checkbox.dataset.name;
+        const price = checkbox.dataset.price;
+        const container = document.querySelector('.list-product');
+
+        if (checkbox.checked) {
+            const html = `
+            <div id="product-${id}" style="margin-bottom:10px;">
+                <input type="hidden" name="products[${id}][id]" value="${id}">
+                <strong>${name}</strong>
+                <input type="number" name="products[${id}][qty]" value="1" min="1" style="width:60px;">
+                <button type="button" onclick="removeProduct('${id}')">X</button>
+            </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        } else {
+            removeProduct(id);
+        }
+    }
+    function removeProduct(id) {
+        const el = document.getElementById(`product-${id}`);
+        if (el) el.remove();
+        const cb = document.querySelector(`input[type="checkbox"][value="${id}"]`);
+        if (cb) cb.checked = false;
+    }
+    function renderSelectedProducts(selectedIds, allProducts) {
+        const container = document.querySelector('.list-product');
+        if (!container) return;
+
+        selectedIds.forEach((id) => {
+        const sp = allProducts.find(p => p.id == id);
+        if (sp) {
+            const checkbox = document.querySelector(`input[type="checkbox"][value="${sp.id}"]`);
+            if (checkbox) checkbox.checked = true;
+            const html = `
+            <div id="product-${sp.id}" style="margin-bottom:10px;">
+                <input type="hidden" name="products[${sp.id}][id]" value="${sp.id}">
+                <strong>${sp.name}</strong>
+                <input type="number" name="products[${sp.id}][qty]" value="1" min="1" style="width:60px;">
+                <button type="button" onclick="removeProduct('${sp.id}')">X</button>
+            </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        }
+        });
+    }
+
+    const importIdSelected = <?= json_encode($importIdSelected ?? []) ?>;
+    const products = <?= json_encode($products) ?>;
+    window.addEventListener('DOMContentLoaded', () => {
+        renderSelectedProducts(importIdSelected, products);
+    });
+</script>

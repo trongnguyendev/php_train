@@ -13,7 +13,7 @@ function oldInput($field, $oldInput)
   <div class="tag-input-container" onclick="input.focus()">
     <input type="text" name="content_search" id="tagInput" placeholder="Nhập giá trị và nhấn Enter">
   </div>
-  <form class="form-search" action="/export_receipts" method="GET">
+  <form class="form-search" action="/employee" method="GET">
     <input type="hidden" name="tags_search" id="hiddenSearchContent" />
     <select name="type" class="type_search">
       <?php foreach ($options as $key => $label): ?>

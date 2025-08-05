@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <h5>Thông tin đơn hàng xuất</h5>
+                <h5>Thông tin đơn hàng nhập</h5>
                 <form action="/export_receipts/create" method="POST">
                     <div class="row">
                         <div class="col-md-4">

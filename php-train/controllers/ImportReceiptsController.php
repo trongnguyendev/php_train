@@ -8,6 +8,7 @@ use Core\Validation;
 use Models\Import_receipts;
 use Models\Warehouse;
 use Models\Product;
+use Models\Stock;
 use Models\Import_items;
 use Core\Database;
 
@@ -232,21 +233,46 @@ class ImportReceiptsController extends Controller {
                 ]);
             }
 
+            // Lấy danh sách sản phẩm trong phiếu nhập
+            $items = $imports_items->where('import_receipt_id', $id);
+
+            foreach ($items as $item) {
+                $productId = $item['product_id'];
+                $importQty = (int)$item['quantity'];
+
+                $stockInfo = $stock->where([
+                    'product_id' => $productId,
+                    'warehouse_id' => $data['warehouse']
+                ]);
+
+                if (!empty($stockInfo)) {
+                    $newQty = $stockInfo['quantity'] + $importQty;
+                    $stock->update($stockInfo['id'], ['quantity' => $newQty]);
+                } else {
+                    $stock->create([
+                        'product_id' => $productId,
+                        'warehouse_id' => $data['warehouse'],
+                        'quantity' => $importQty
+                    ]);
+                }
+            }
+
+
             // Cập nhật tồn kho
-            $stock = new Stock();
-            $stockInfo = $stock->where([
-                'product_id' => 1,
-                'warehouse_id' => 3
-            ]);
+            // $stock = new Stock();
+            // $stockInfo = $stock->where([
+            //     'product_id' => 1,
+            //     'warehouse_id' => 3
+            // ]);
 
-            $quantityOld = $stockInfo['quantity'];
-            $newQUantity = 6;
+            // $quantityOld = $stockInfo['quantity'];
+            // $newQUantity = 6;
 
-            $dataUpdate = [
-                'quantity' => ($quantityOld + $newQUantity)
-            ]
+            // $dataUpdate = [
+            //     'quantity' => ($quantityOld + $newQUantity)
+            // ]
 
-            $stock->update($stockInfo['id'], $dataUpdate);
+            // $stock->update($stockInfo['id'], $dataUpdate);
 
 
             $db->commit();

@@ -16,13 +16,13 @@ class StockController extends Controller {
 
         $stock = new Stock();
 
-        $stock = !empty($searchQuery)
+        $stocks = !empty($searchQuery)
                 ? $stock->where('name', $searchQuery)
                 : $stock->all();
 
         $data = [
             'pageTitle' => 'Danh sách tồn kho',
-            'stock' => $stock,
+            'stocks' => $stocks,
             'oldSearch' => [
                 'search_content' => $searchQuery,
                 'search_type' => $searchType
