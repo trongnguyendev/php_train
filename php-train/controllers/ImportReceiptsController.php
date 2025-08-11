@@ -65,6 +65,7 @@ class ImportReceiptsController extends Controller {
     public function store(Request $request)
     {
         $data = $request->all();
+        $stock = new Stock();
 
         $rules = [
             'warehouse' => 'required',
@@ -118,7 +119,52 @@ class ImportReceiptsController extends Controller {
                     'quantity' => $quantities[$key],
                     'import_receipt_id' => $storeId
                 ]);
+                $stockData = $stock->whereMulti([
+                    'product_id' => $ids,
+                    'warehouse_id' => $data['warehouse']
+                ]);
+
+                $stockInfo = !empty($stockData) ? $stockData[0] : [];
+
+                 if (!empty($stockInfo)) {
+                    $newQty = $stockInfo['quantity'] + $quantities[$key];
+                    $stock->update($stockInfo['id'], ['quantity' => $newQty]);
+                } else {
+                    $stock->create([
+                        'product_id' => $ids,
+                        'warehouse_id' => $data['warehouse'],
+                        'quantity' => $quantities[$key]
+                    ]);
+                }
             }
+
+
+            // Lấy danh sách sản phẩm trong phiếu nhập
+            // $items = $imports_items->where('import_receipt_id', $id);
+            // $stock = new Stock();
+
+            // foreach ($items as $item) {
+            //     $productId = $item['product_id'];
+            //     $importQty = (int)$item['quantity'];
+
+            //     $stockData = $stock->whereMulti([
+            //         'product_id' => $productId,
+            //         'warehouse_id' => $data['warehouse']
+            //     ]);
+
+            //     $stockInfo = !empty($stockData) ? $stockData[0] : [];
+
+            //     if (!empty($stockInfo)) {
+            //         $newQty = $stockInfo['quantity'] + $importQty;
+            //         $stock->update($stockInfo['id'], ['quantity' => $newQty]);
+            //     } else {
+            //         $stock->create([
+            //             'product_id' => $productId,
+            //             'warehouse_id' => $data['warehouse'],
+            //             'quantity' => $importQty
+            //         ]);
+            //     }
+            // }
 
             $db->commit();
             $this->redirect('/import_receipts');
@@ -222,8 +268,6 @@ class ImportReceiptsController extends Controller {
                 $deleteProduct = $imports_items->delete($keyItem['id']);
             };
 
-            // var_dump($data['products']);
-            // exit;
             foreach ($data['products'] as $item) {
                 if (empty($item['id']) || !is_numeric($item['id'])) continue;
                 $created = $imports_items->create([
@@ -235,15 +279,18 @@ class ImportReceiptsController extends Controller {
 
             // Lấy danh sách sản phẩm trong phiếu nhập
             $items = $imports_items->where('import_receipt_id', $id);
+            $stock = new Stock();
 
             foreach ($items as $item) {
                 $productId = $item['product_id'];
                 $importQty = (int)$item['quantity'];
 
-                $stockInfo = $stock->where([
+                $stockData = $stock->whereMulti([
                     'product_id' => $productId,
                     'warehouse_id' => $data['warehouse']
                 ]);
+
+                $stockInfo = !empty($stockData) ? $stockData[0] : [];
 
                 if (!empty($stockInfo)) {
                     $newQty = $stockInfo['quantity'] + $importQty;

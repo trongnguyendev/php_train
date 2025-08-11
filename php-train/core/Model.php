@@ -53,6 +53,23 @@ abstract class Model {
         return $this->db->select($sql, ['%' . $value . '%']);
     }
 
+    public function whereMulti($conditions = []) {
+        $strWhere = '';
+
+        $columns = array_keys($conditions);
+        $arrValue= array_values($conditions);
+
+        foreach($columns as $key => $value) {
+            $strWhere .= $value . ' LIKE ? ';
+            if ($key+1 < count($columns)) {
+                $strWhere .= ' AND ';
+            }
+        }
+
+        $sql = "SELECT * FROM {$this->table} WHERE {$strWhere}";
+        return $this->db->select($sql, $arrValue);
+    }
+
     public function whereOne($column, $value) {
         $sql = "SELECT * FROM {$this->table} WHERE {$column} = ?";
         return $this->db->selectOne($sql, [$value]);
