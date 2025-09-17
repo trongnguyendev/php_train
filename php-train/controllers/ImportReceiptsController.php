@@ -102,12 +102,23 @@ class ImportReceiptsController extends Controller {
             $db->beginTransaction();
 
             $import_receipts = new Import_receipts();
+
+
+
             $storeId = $import_receipts->create([
                 'warehouse_id' => $data['warehouse'],
                 'code' => $data['code'],
                 'received_at' => $data['received_at'],
                 'note' => $data['note'],
             ]);
+
+            // $createdPost = Post::create([
+            // 'title' => 'Bài viết mới',
+            // 'content' => 'Nội dung...',
+            // 'user_id' => 1,
+            // ]);
+
+            // $createdPost->getLastInsertID;
 
             $import_items = new Import_items();
             $productIds = explode(',', $data['products']);

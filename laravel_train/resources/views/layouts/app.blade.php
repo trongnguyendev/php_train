@@ -30,6 +30,24 @@
                         <span>Quản lý Users</span>
                     </a>
                 </li>
+                <li class="active">
+                    <a href="{{ route('products.index') }}" class="nav-link">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Quản lý Sản phẩm</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="{{ route('customer.index') }}" class="nav-link">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Quản lý Khách hàng</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="{{ route('warehouses.index') }}" class="nav-link">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Quản lý Kho</span>
+                    </a>
+                </li>
                 <li>
                     <a href="#" class="nav-link">
                         <i class="bi bi-gear-fill"></i>
