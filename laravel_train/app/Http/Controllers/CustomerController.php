@@ -5,14 +5,24 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use Carbon\Carbon;
+use Auth;
 
 class CustomerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // $users = User::latest()->paginate(10);
-        $customer = Customer::all();
-        return view('customer.index', compact('customer'));
+        $statusList = ['Quan Tâm', 'Tiền Năng'];
+
+        $customer = Customer::query();
+        
+        if($request->has('current_guest_status')) {
+            $customer = $customer->where('current_guest_status', $request->current_guest_status);
+        }
+
+        $customer = $customer->get();
+        
+        return view('customer.index', compact('customer', 'statusList'));
     }
 
     /**

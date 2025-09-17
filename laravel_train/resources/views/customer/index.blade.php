@@ -32,12 +32,23 @@
 
     <!-- Customer Table -->
     <div class="card fade-in">
-        <div class="card-header">
+        <div class="card-header" style="display: flex; align-items: center; gap: 50px;">
             <h5 class="mb-0">
                 <i class="bi bi-table me-2"></i>
                 Danh sách Khách hàng
             </h5>
+            <form method="GET" action="{{ route('customer.index') }}" style="width: 300px;">
+                <div class="form-group" style="display: flex; gap: 10px;">
+                    <select name="current_guest_status" class="form-control">
+                        @foreach($statusList as $key => $c)
+                            <option value="{{ $c }}">{{ $c }}</option>
+                        @endforeach
+                    </select>
+                    <input type="submit" value="Tìm kiếm" class="btn btn-primary">
+                </div>
+            </form>
         </div>
+        
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
