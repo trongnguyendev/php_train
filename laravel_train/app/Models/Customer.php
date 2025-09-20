@@ -25,4 +25,12 @@ class Customer extends Model
         ];
         
     protected $table = 'customer'; 
+
+    public function CustomerStatus() {
+        return $this->hasOne();
+    }
+
+    public function CustomerType() {
+        return $this->hasMany(CustomerType::class);
+    }
 }

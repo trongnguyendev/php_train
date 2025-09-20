@@ -11,13 +11,26 @@ class CustomerController extends Controller
 {
     public function index(Request $request)
     {
+        // [
+        //     'customer_type_id': 1,
+        //     'name': 'abc',
+        // ]
+        // $searchs = CustomerType::find($request->customer_type_id);
         // $users = User::latest()->paginate(10);
+
+        // $users = User::with('CustomerType')
+        //     ->latest()
+        //     ->paginate(10);
+
         $statusList = ['Quan Tâm', 'Tiền Năng'];
 
         $customer = Customer::query();
         
         if($request->has('current_guest_status')) {
             $customer = $customer->where('current_guest_status', $request->current_guest_status);
+        }
+        if($request->has('customer_type_id')) {
+            $customer = $customer->where('customer_type_id', $request->customer_type_id);
         }
 
         $customer = $customer->get();

@@ -21,14 +21,39 @@
         </div>
     </div>
 
-    <!-- Success Alert -->
+    <!-- Success Alert
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i>
             <strong>Thành công!</strong> {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
+    @endif -->
+
+    @if(session('success'))
+    <div class="toast-container position-fixed top-0 end-0 p-3"> 
+        <div class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+            <div class="toast-body">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong>Thành công!</strong> {{ session('success') }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
     @endif
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+            var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl, { delay: 3000 }) // 3 giây
+            })
+            toastList.forEach(toast => toast.show())
+        });
+    </script>
+
 
     <!-- Customer Table -->
     <div class="card fade-in">
