@@ -16,7 +16,7 @@ return new class extends Migration
             $table->date('customer_for_showroom'); 
             $table->string('name');
             $table->string('phone');
-            $table->foreignId('province_id')->constrained('provinces')->onDelete('restrict');
+            $table->foreignId('province_id')->constrained('province')->onDelete('restrict');
             $table->text('address');
             $table->string('zalo_feedback')->nullable();
             $table->foreignId('type_customer_yet_id')->constrained('type_customers')->onDelete('restrict');
