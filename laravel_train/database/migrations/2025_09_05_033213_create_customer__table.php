@@ -11,25 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customer', function (Blueprint $table) { // Đổi từ 'customer_' thành 'customers'
-                $table->id();
-                $table->date('start_date'); // Đổi từ 'star_date' thành 'start_date' và dùng date()
-                $table->string('name'); // Đổi từ text() thành string()
-                $table->string('phone'); // Đổi từ phone() thành string()
-                $table->string('province'); // Đổi từ text() thành string()
-                $table->text('address');
-                $table->string('type_customer'); // Đổi từ text() thành string()
-                $table->string('page_source'); // Đổi từ text() thành string()
-                $table->string('sale_product'); // Đổi từ text() thành string()
-                $table->string('first_guest_status'); // Đổi từ text() thành string()
-                $table->text('note');
-                $table->text('sale_infor');
-                $table->string('current_guest_status'); // Đổi từ text() thành string()
-                $table->text('information_exchange');
-                $table->text('results');
-                $table->date('take_care_guest_first_one');
-                $table->timestamps();
+        Schema::create('customer', function (Blueprint $table) {
+            $table->id();
+            $table->date('customer_for_showroom'); 
+            $table->string('name');
+            $table->string('phone');
+            $table->foreignId('province_id')->constrained('provinces')->onDelete('restrict');
+            $table->text('address');
+            $table->string('zalo_feedback')->nullable();
+            $table->foreignId('type_customer_yet_id')->constrained('type_customers')->onDelete('restrict');
+            $table->foreignId('type_customer_id')->constrained('type_customers')->onDelete('restrict');
+            $table->foreignId('type_showroom_id')->constrained('type_showrooms')->onDelete('restrict');
+            $table->foreignId('type_category_id')->constrained('type_categories')->onDelete('restrict');
+            $table->foreignId('status_first_id')->constrained('statuses')->onDelete('restrict');
+            $table->string('note_sale')->nullable();
+            $table->foreignId('salename_infor_id')->constrained('sale_names')->onDelete('restrict');
+            $table->foreignId('salename_support_id')->constrained('sale_names')->onDelete('restrict');
+            $table->foreignId('current_status_id')->constrained('statuses')->onDelete('restrict');
+            $table->decimal('order_value', 15, 2)->nullable();
+            $table->foreignId('customer_support_yet_id')->constrained('sources')->onDelete('restrict');
+            $table->timestamps();
         });
+
     }
 
     /**
