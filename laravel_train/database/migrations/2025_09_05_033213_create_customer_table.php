@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customer', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->date('customer_for_showroom'); 
             $table->string('name');
             $table->string('phone');
-            $table->foreignId('province_id')->constrained('province')->onDelete('restrict');
             $table->text('address');
             $table->string('zalo_feedback')->nullable();
+            $table->foreignId('province_id')->constrained('provinces')->onDelete('restrict');
             $table->foreignId('type_customer_yet_id')->constrained('type_customers')->onDelete('restrict');
             $table->foreignId('type_customer_id')->constrained('type_customers')->onDelete('restrict');
             $table->foreignId('type_showroom_id')->constrained('type_showrooms')->onDelete('restrict');
-            $table->foreignId('type_category_id')->constrained('type_categories')->onDelete('restrict');
+            $table->foreignId('type_category_id')->constrained('categories')->onDelete('restrict');
             $table->foreignId('status_first_id')->constrained('statuses')->onDelete('restrict');
             $table->string('note_sale')->nullable();
             $table->foreignId('salename_infor_id')->constrained('sale_names')->onDelete('restrict');
@@ -40,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customer');
+        Schema::dropIfExists('customers');
     }
 };
