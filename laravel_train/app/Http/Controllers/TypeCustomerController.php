@@ -2,64 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\typeCustomer;
+use App\Models\TypeCustomer;
 use Illuminate\Http\Request;
 
 class TypeCustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $typeCustomers = TypeCustomer::all();
+        return view('type_customer.index', compact('typeCustomers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('type_customer.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:type_customers,name'
+        ]);
+
+        TypeCustomer::create($request->only('name'));
+
+        return redirect()->route('type_customer.index')->with('success', 'Thêm loại khách hàng thành công!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(typeCustomer $typeCustomer)
+    public function show(TypeCustomer $typeCustomer)
     {
-        //
+        return view('type_customer.show', compact('typeCustomer'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(typeCustomer $typeCustomer)
+    public function edit(TypeCustomer $typeCustomer)
     {
-        //
+        return view('type_customer.edit', compact('typeCustomer'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, typeCustomer $typeCustomer)
+    public function update(Request $request, TypeCustomer $typeCustomer)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:type_customers,name,' . $typeCustomer->id
+        ]);
+
+        $typeCustomer->update($request->only('name'));
+
+        return redirect()->route('type_customer.index')->with('success', 'Cập nhật loại khách hàng thành công!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(typeCustomer $typeCustomer)
+    public function destroy(TypeCustomer $typeCustomer)
     {
-        //
+        $typeCustomer->delete();
+        return redirect()->route('type_customer.index')->with('success', 'Xóa loại khách hàng thành công!');
     }
 }

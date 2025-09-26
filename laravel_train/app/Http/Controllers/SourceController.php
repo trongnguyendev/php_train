@@ -2,64 +2,59 @@
 
 namespace App\Http\Controllers;
 
+namespace App\Http\Controllers;
+
 use App\Models\Source;
 use Illuminate\Http\Request;
 
 class SourceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $sources = Source::all();
+        return view('source.index', compact('sources'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('source.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:sources,name'
+        ]);
+
+        Source::create($request->only('name'));
+
+        return redirect()->route('source.index')->with('success', 'Nguồn khách hàng đã được thêm!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Source $source)
     {
-        //
+        return view('source.show', compact('source'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Source $source)
     {
-        //
+        return view('source.edit', compact('source'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Source $source)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:sources,name,' . $source->id
+        ]);
+
+        $source->update($request->only('name'));
+
+        return redirect()->route('source.index')->with('success', 'Cập nhật nguồn khách hàng thành công!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Source $source)
     {
-        //
+        $source->delete();
+        return redirect()->route('source.index')->with('success', 'Xóa nguồn khách hàng thành công!');
     }
 }

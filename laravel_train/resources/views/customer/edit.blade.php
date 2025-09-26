@@ -12,10 +12,10 @@
                 </a>
                 <div>
                     <h1 class="h2 mb-2">
-                        <i class="bi bi-pencil-fill text-warning"></i>
+                        <i class="bi bi-pencil-square text-warning"></i>
                         Chỉnh sửa Khách hàng
                     </h1>
-                    <p class="text-muted">Cập nhật thông tin khách hàng: {{ $customer->name }}</p>
+                    <p class="text-muted">Cập nhật thông tin khách hàng trong hệ thống</p>
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
 
@@ -46,139 +46,187 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('customer.update', $customer) }}" method="POST">
+                    <form action="{{ route('customer.update', $customer->id) }}" method="POST">
                         @csrf
                         @method('PUT')
-
+                        
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="start_date" class="form-label">Ngày bắt đầu</label>
-                                <input type="date" name="start_date" id="start_date"
-                                       class="form-control @error('start_date') is-invalid @enderror"
-                                       value="{{ old('start_date', $customer->start_date) }}">
-                                @error('start_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label for="customer_for_showroom" class="form-label">Ngày tương tác đầu tiên</label>
+                                <input type="date" name="customer_for_showroom" id="customer_for_showroom" class="form-control" value="{{ old('customer_for_showroom', $customer->customer_for_showroom) }}">
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="name" class="form-label">Tên khách hàng</label>
-                                <input type="text" name="name" id="name"
-                                       class="form-control @error('name') is-invalid @enderror"
-                                       value="{{ old('name', $customer->name) }}">
-                                @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label for="name" class="form-label">Tên Khách / Tên Pancake</label>
+                                <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $customer->name) }}">
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label for="phone" class="form-label">Số điện thoại</label>
-                                <input type="text" name="phone" id="phone"
-                                       class="form-control @error('phone') is-invalid @enderror"
-                                       value="{{ old('phone', $customer->phone) }}">
-                                @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <input type="number" name="phone" id="phone" class="form-control" value="{{ old('phone', $customer->phone) }}">
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="province" class="form-label">Tỉnh/Thành phố</label>
-                                <input type="text" name="province" id="province"
-                                       class="form-control @error('province') is-invalid @enderror"
-                                       value="{{ old('province', $customer->province) }}">
-                                @error('province') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label for="province_id" class="form-label">Tỉnh/TP</label>
+                                <select name="province_id" id="province_id" class="form-select">
+                                    <option value="">-- Chọn Tỉnh/TP --</option>
+                                    @foreach($provinces as $province)
+                                        <option value="{{ $province->id }}" 
+                                            {{ old('province_id', $customer->province_id) == $province->id ? 'selected' : '' }}>
+                                            {{ $province->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-12 mb-3">
-                                <label for="address" class="form-label">Địa chỉ</label>
-                                <input type="text" name="address" id="address"
-                                       class="form-control @error('address') is-invalid @enderror"
-                                       value="{{ old('address', $customer->address) }}">
-                                @error('address') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="type_customer" class="form-label">Loại khách hàng</label>
-                                <input type="text" name="type_customer" id="type_customer"
-                                       class="form-control @error('type_customer') is-invalid @enderror"
-                                       value="{{ old('type_customer', $customer->type_customer) }}">
-                                @error('type_customer') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="page_source" class="form-label">Nguồn trang</label>
-                                <input type="text" name="page_source" id="page_source"
-                                       class="form-control @error('page_source') is-invalid @enderror"
-                                       value="{{ old('page_source', $customer->page_source) }}">
-                                @error('page_source') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="sale_product" class="form-label">Sản phẩm quan tâm</label>
-                                <input type="text" name="sale_product" id="sale_product"
-                                       class="form-control @error('sale_product') is-invalid @enderror"
-                                       value="{{ old('sale_product', $customer->sale_product) }}">
-                                @error('sale_product') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="first_guest_status" class="form-label">Trạng thái khách lần đầu</label>
-                                <input type="text" name="first_guest_status" id="first_guest_status"
-                                       class="form-control @error('first_guest_status') is-invalid @enderror"
-                                       value="{{ old('first_guest_status', $customer->first_guest_status) }}">
-                                @error('first_guest_status') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label for="address" class="form-label">Địa chỉ chi tiết</label>
+                                <textarea name="address" id="address" rows="2" class="form-control">{{ old('address', $customer->address) }}</textarea>
                             </div>
 
                             <div class="col-md-12 mb-3">
-                                <label for="note" class="form-label">Ghi chú</label>
-                                <textarea name="note" id="note" rows="3"
-                                          class="form-control @error('note') is-invalid @enderror">{{ old('note', $customer->note) }}</textarea>
-                                @error('note') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label for="zalo_feedback" class="form-label">Zalo Feedback</label>
+                                <input type="text" name="zalo_feedback" id="zalo_feedback" class="form-control" value="{{ old('zalo_feedback', $customer->zalo_feedback) }}">
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="sale_infor" class="form-label">Thông tin Sale</label>
-                                <input type="text" name="sale_infor" id="sale_infor"
-                                       class="form-control @error('sale_infor') is-invalid @enderror"
-                                       value="{{ old('sale_infor', $customer->sale_infor) }}">
-                                @error('sale_infor') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label for="type_customer_yet_id" class="form-label">Khách Đã Đặt Hàng Chưa?</label>
+                                <select name="type_customer_yet_id" id="type_customer_yet_id" class="form-select">
+                                    <option value="">-- Chọn tình trạng khách hàng --</option>
+                                    @foreach($typeCustomer as $typeCus)
+                                        <option value="{{ $typeCus->id }}" 
+                                            {{ old('type_customer_yet_id', $customer->type_customer_yet_id) == $typeCus->id ? 'selected' : '' }}>
+                                            {{ $typeCus->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="current_guest_status" class="form-label">Trạng thái hiện tại</label>
-                                <input type="text" name="current_guest_status" id="current_guest_status"
-                                       class="form-control @error('current_guest_status') is-invalid @enderror"
-                                       value="{{ old('current_guest_status', $customer->current_guest_status) }}">
-                                @error('current_guest_status') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label for="type_customer_id" class="form-label">Phân Loại Khách Hàng</label>
+                                <select name="type_customer_id" id="type_customer_id" class="form-select">
+                                    <option value="">-- Chọn Phân Loại Khách Hàng --</option>
+                                    @foreach($typeCustomer as $typeCus)
+                                        <option value="{{ $typeCus->id }}" 
+                                            {{ old('type_customer_id', $customer->type_customer_id) == $typeCus->id ? 'selected' : '' }}>
+                                            {{ $typeCus->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-12 mb-3">
-                                <label for="information_exchange" class="form-label">Trao đổi thông tin</label>
-                                <textarea name="information_exchange" id="information_exchange" rows="3"
-                                          class="form-control @error('information_exchange') is-invalid @enderror">{{ old('information_exchange', $customer->information_exchange) }}</textarea>
-                                @error('information_exchange') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label for="type_showroom_id" class="form-label">Showroom nào?</label>
+                                <select name="type_showroom_id" id="type_showroom_id" class="form-select">
+                                    <option value="">-- Chọn Showroom --</option>
+                                    @foreach($typeShowroom as $typeShow)
+                                        <option value="{{ $typeShow->id }}" 
+                                            {{ old('type_showroom_id', $customer->type_showroom_id) == $typeShow->id ? 'selected' : '' }}>
+                                            {{ $typeShow->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="results" class="form-label">Kết quả</label>
-                                <input type="text" name="results" id="results"
-                                       class="form-control @error('results') is-invalid @enderror"
-                                       value="{{ old('results', $customer->results) }}">
-                                @error('results') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label for="type_category_id" class="form-label">Sản Phẩm Cần Tư Vấn Đầu Tiên</label>
+                                <select name="type_category_id" id="type_category_id" class="form-select">
+                                    <option value="">-- Chọn Danh Mục Sản Phẩm --</option>
+                                    @foreach($category as $cate)
+                                        <option value="{{ $cate->id }}" 
+                                            {{ old('type_category_id', $customer->type_category_id) == $cate->id ? 'selected' : '' }}>
+                                            {{ $cate->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="take_care_guest_first_one" class="form-label">Người chăm sóc đầu tiên</label>
-                                <input type="date" name="take_care_guest_first_one" id="take_care_guest_first_one"
-                                       class="form-control @error('take_care_guest_first_one') is-invalid @enderror"
-                                       value="{{ old('take_care_guest_first_one', $customer->take_care_guest_first_one) }}">
-                                @error('take_care_guest_first_one') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label for="status_first_id" class="form-label">Tình Trạng Khách Đầu Tiên</label>
+                                <select name="status_first_id" id="status_first_id" class="form-select">
+                                    <option value="">-- Chọn Tình Trạng Đầu Tiên Của Khách --</option>
+                                    @foreach($status as $statusfrist)
+                                        <option value="{{ $statusfrist->id }}" 
+                                            {{ old('status_first_id', $customer->status_first_id) == $statusfrist->id ? 'selected' : '' }}>
+                                            {{ $statusfrist->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="note_sale" class="form-label">Ghi Chú</label>
+                                <input type="text" name="note_sale" id="note_sale" class="form-control" value="{{ old('note_sale', $customer->note_sale) }}">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="salename_infor_id" class="form-label">Sale Nhận Thông Tin KH</label>
+                                <select name="salename_infor_id" id="salename_infor_id" class="form-select">
+                                    <option value="">-- Chọn Sale Nhận Thông Tin KH --</option>
+                                    @foreach($salename as $saleinfor)
+                                        <option value="{{ $saleinfor->id }}" 
+                                            {{ old('salename_infor_id', $customer->salename_infor_id) == $saleinfor->id ? 'selected' : '' }}>
+                                            {{ $saleinfor->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="salename_support_id" class="form-label">Sale Hỗ Trợ KH</label>
+                                <select name="salename_support_id" id="salename_support_id" class="form-select">
+                                    <option value="">-- Chọn Sale Hỗ Trợ KH --</option>
+                                    @foreach($salename as $salesupport)
+                                        <option value="{{ $salesupport->id}}" 
+                                            {{ old('salename_support_id', $customer->salename_support_id) == $salesupport->id ? 'selected' : '' }}>
+                                            {{ $salesupport->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="current_status_id" class="form-label">Tình Trạng KH hiện tại đến Showroom</label>
+                                <select name="current_status_id" id="current_status_id" class="form-select">
+                                    <option value="">-- Chọn Tình Trạng Hiện Tại Của Khách --</option>
+                                    @foreach($status as $statuscurrent)
+                                        <option value="{{ $statuscurrent->id }}" 
+                                            {{ old('current_status_id', $customer->current_status_id) == $statuscurrent->id ? 'selected' : '' }}>
+                                            {{ $statuscurrent->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="order_value" class="form-label">Giá trị đơn chốt được</label>
+                                <input type="number" name="order_value" id="order_value" class="form-control" value="{{ old('order_value', $customer->order_value) }}">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="customer_support_yet_id" class="form-label">Khách Đã Được Hỗ Trợ Chưa?</label>
+                                <select name="customer_support_yet_id" id="customer_support_yet_id" class="form-select">
+                                    <option value="">-- Chọn Khách Đã Được Hỗ Trợ Chưa? --</option>
+                                    @foreach($source as $src)
+                                        <option value="{{ $src->id }}" 
+                                            {{ old('customer_support_yet_id', $customer->customer_support_yet_id) == $src->id ? 'selected' : '' }}>
+                                            {{ $src->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
-                        <!-- Action Buttons -->
+                        <hr class="my-4">
+
                         <div class="d-flex justify-content-end gap-2">
                             <a href="{{ route('customer.index') }}" class="btn btn-secondary">
                                 <i class="bi bi-x-circle me-2"></i>
                                 Hủy bỏ
                             </a>
-                            <button type="submit" class="btn btn-warning">
-                                <i class="bi bi-check-circle me-2"></i>
-                                Cập nhật thông tin
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-save me-2"></i>
+                                Cập nhật khách hàng
                             </button>
                         </div>
                     </form>
@@ -186,19 +234,17 @@
             </div>
         </div>
 
-        <!-- Sidebar (Current Info) -->
         <div class="col-lg-4">
+            <!-- Tips Card -->
             <div class="card fade-in">
-                <div class="card-header bg-info text-white">
+                <div class="card-header bg-warning text-white">
                     <h5 class="mb-0">
-                        <i class="bi bi-info-circle me-2"></i>
-                        Thông tin hiện tại
+                        <i class="bi bi-lightbulb me-2"></i>
+                        Lưu ý
                     </h5>
                 </div>
                 <div class="card-body">
-                    <p><strong>ID:</strong> {{ $customer->id }}</p>
-                    <p><strong>Ngày tạo:</strong> {{ $customer->created_at->format('d/m/Y H:i') }}</p>
-                    <p><strong>Cập nhật lần cuối:</strong> {{ $customer->updated_at->format('d/m/Y H:i') }}</p>
+                    <p>Hãy kiểm tra lại kỹ trước khi lưu, thông tin chỉnh sửa sẽ cập nhật trực tiếp trong hệ thống.</p>
                 </div>
             </div>
         </div>

@@ -2,64 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\typeShowroom;
+use App\Models\TypeShowroom;
 use Illuminate\Http\Request;
 
 class TypeShowroomController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $typeShowrooms = TypeShowroom::all();
+        return view('type_showroom.index', compact('typeShowrooms'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('type_showroom.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:type_showrooms,name'
+        ]);
+
+        TypeShowroom::create($request->only('name'));
+
+        return redirect()->route('type_showroom.index')->with('success', 'Thêm loại showroom thành công!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(typeShowroom $typeShowroom)
+    public function show(TypeShowroom $typeShowroom)
     {
-        //
+        return view('type_showroom.show', compact('typeShowroom'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(typeShowroom $typeShowroom)
+    public function edit(TypeShowroom $typeShowroom)
     {
-        //
+        return view('type_showroom.edit', compact('typeShowroom'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, typeShowroom $typeShowroom)
+    public function update(Request $request, TypeShowroom $typeShowroom)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:type_showrooms,name,' . $typeShowroom->id
+        ]);
+
+        $typeShowroom->update($request->only('name'));
+
+        return redirect()->route('type_showroom.index')->with('success', 'Cập nhật loại showroom thành công!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(typeShowroom $typeShowroom)
+    public function destroy(TypeShowroom $typeShowroom)
     {
-        //
+        $typeShowroom->delete();
+        return redirect()->route('type_showroom.index')->with('success', 'Xóa loại showroom thành công!');
     }
 }

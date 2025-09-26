@@ -7,59 +7,52 @@ use Illuminate\Http\Request;
 
 class StatusController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $statuses = Status::all();
+        return view('status.index', compact('statuses'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('status.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:statuses,name'
+        ]);
+
+        Status::create($request->only('name'));
+
+        return redirect()->route('status.index')->with('success', 'Trạng thái đã được thêm!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Status $status)
     {
-        //
+        return view('status.show', compact('status'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Status $status)
     {
-        //
+        return view('status.edit', compact('status'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Status $status)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:statuses,name,' . $status->id
+        ]);
+
+        $status->update($request->only('name'));
+
+        return redirect()->route('status.index')->with('success', 'Cập nhật trạng thái thành công!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Status $status)
     {
-        //
+        $status->delete();
+        return redirect()->route('status.index')->with('success', 'Xóa trạng thái thành công!');
     }
 }

@@ -51,8 +51,8 @@
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="start_date" class="form-label">Ngày tương tác đầu tiên</label>
-                                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ old('start_date') }}">
+                                <label for="customer_for_showroom" class="form-label">Ngày tương tác đầu tiên</label>
+                                <input type="date" name="customer_for_showroom" id="customer_for_showroom" class="form-control" value="{{ old('customer_for_showroom') }}">
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -62,67 +62,158 @@
 
                             <div class="col-md-6 mb-3">
                                 <label for="phone" class="form-label">Số điện thoại</label>
-                                <input type="text" name="phone" id="phone" class="form-control" value="{{ old('phone') }}" placeholder="VD: 098xxxxxxx">
+                                <input type="number" name="phone" id="phone" class="form-control" value="{{ old('phone') }}" placeholder="VD: 098xxxxxxx">
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="province" class="form-label">Tỉnh/Thành Phố</label>
-                                <input type="text" name="province" id="province" class="form-control" value="{{ old('province') }}">
+                                <label for="province_id" class="form-label">Tỉnh/TP</label>
+                                <select name="province_id" id="province_id" class="form-select">
+                                    <option value="">-- Chọn Tỉnh/TP --</option>
+                                    @foreach($provinces as $province)
+                                        <option value="{{ $province->id }}" 
+                                            {{ old('province_id') == $province->id ? 'selected' : '' }}>
+                                            {{ $province->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
+
 
                             <div class="col-md-12 mb-3">
                                 <label for="address" class="form-label">Địa chỉ chi tiết</label>
                                 <textarea name="address" id="address" rows="2" class="form-control">{{ old('address') }}</textarea>
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="type_customer" class="form-label">Phân loại khách hàng</label>
-                                <input type="text" name="type_customer" id="type_customer" class="form-control" value="{{ old('type_customer') }}">
+                            <div class="col-md-12 mb-3">
+                                <label for="zalo_feedback" class="form-label">Zalo Feedback</label>
+                                <input type="number" name="zalo_feedback" id="zalo_feedback" rows="2" class="form-control">{{ old('zalo_feedback') }}</input>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="page_source" class="form-label">Nguồn</label>
-                                <input type="text" name="page_source" id="page_source" class="form-control" value="{{ old('page_source') }}">
+                                <label for="type_customer_yet_id" class="form-label">Khách Đã Đặt Hàng Chưa?</label>
+                                <select name="type_customer_yet_id" id="type_customer_yet_id" class="form-select">
+                                    <option value="">-- Chọn tình trạng khách hàng --</option>
+                                    @foreach($typeCustomer as $typeCus)
+                                        <option value="{{ $typeCus->id }}" 
+                                            {{ old('type_customer_yet_id') == $typeCus->id ? 'selected' : '' }}>
+                                            {{ $typeCus->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="sale_product" class="form-label">Sản phẩm cần tư vấn</label>
-                                <input type="text" name="sale_product" id="sale_product" class="form-control" value="{{ old('sale_product') }}">
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="first_guest_status" class="form-label">Tình trạng khách đầu tiên</label>
-                                <input type="text" name="first_guest_status" id="first_guest_status" class="form-control" value="{{ old('first_guest_status') }}">
+                                <label for="type_customer_id" class="form-label">Phân Loại Khách Hàng</label>
+                                <select name="type_customer_id" id="type_customer_id" class="form-select">
+                                    <option value="">-- Chọn Phân Loại Khách Hàng --</option>
+                                    @foreach($typeCustomer as $typeCus)
+                                        <option value="{{ $typeCus->id }}" 
+                                            {{ old('type_customer_id') == $typeCus->id ? 'selected' : '' }}>
+                                            {{ $typeCus->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-12 mb-3">
-                                <label for="note" class="form-label">Ghi chú (Sale nhận khách)</label>
-                                <textarea name="note" id="note" rows="2" class="form-control">{{ old('note') }}</textarea>
+                                <label for="type_showroom_id" class="form-label">Showroom nào?</label>
+                                <select name="type_showroom_id" id="type_showroom_id" class="form-select">
+                                    <option value="">-- Chọn Showroom --</option>
+                                    @foreach($typeShowroom as $typeShow)
+                                        <option value="{{ $typeShow->id }}" 
+                                            {{ old('type_showroom_id') == $typeShow->id ? 'selected' : '' }}>
+                                            {{ $typeShow->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="sale_infor" class="form-label">Sale nhận thông tin khách</label>
-                                <input type="text" name="sale_infor" id="sale_infor" class="form-control" value="{{ old('sale_infor') }}">
+                                <label for="type_category_id" class="form-label">Sản Phẩm Cần Tư Vấn Đầu Tiên</label>
+                                <select name="type_category_id" id="type_category_id" class="form-select">
+                                    <option value="">-- Chọn Danh Mục Sản Phẩm --</option>
+                                    @foreach($category as $category)
+                                        <option value="{{ $category->id }}" 
+                                            {{ old('type_category_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="current_guest_status" class="form-label">Tình trạng khách hiện tại</label>
-                                <input type="text" name="current_guest_status" id="current_guest_status" class="form-control" value="{{ old('current_guest_status') }}">
+                                <label for="status_first_id" class="form-label">Tình Trạng Khách Đầu Tiên</label>
+                                <select name="status_first_id" id="status_first_id" class="form-select">
+                                    <option value="">-- Chọn Tình Trạng Đầu Tiên Của Khách --</option>
+                                    @foreach($status as $statusfrist)
+                                        <option value="{{ $statusfrist->id }}" 
+                                            {{ old('status_first_id') == $statusfrist->id ? 'selected' : '' }}>
+                                            {{ $statusfrist->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="information_exchange" class="form-label">Thông tin trao đổi với KH</label>
-                                <textarea name="information_exchange" id="information_exchange" rows="2" class="form-control">{{ old('information_exchange') }}</textarea>
+                                <label for="note_sale" class="form-label">Ghi Chú</label>
+                                <input type="text" name="note_sale" id="note_sale" class="form-control" value="{{ old('note_sale') }}">
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="results" class="form-label">Kết quả</label>
-                                <input type="text" name="results" id="results" class="form-control" value="{{ old('results') }}">
+                                <label for="salename_infor_id" class="form-label">Sale Nhận Thông Tin KH</label>
+                                <select name="salename_infor_id" id="salename_infor_id" class="form-select">
+                                    <option value="">-- Chọn Sale Nhận Thông Tin KH --</option>
+                                    @foreach($salename as $saleinfor)
+                                        <option value="{{ $saleinfor->id }}" 
+                                            {{ old('salename_infor_id') == $saleinfor->id ? 'selected' : '' }}>
+                                            {{ $saleinfor->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="take_care_guest_first_one" class="form-label">Ngày sẽ chăm khách lần 1</label>
-                                <input type="date" name="take_care_guest_first_one" id="take_care_guest_first_one" class="form-control" value="{{ old('take_care_guest_first_one') }}">
+                                <label for="salename_support_id" class="form-label">Sale Hỗ Trợ KH</label>
+                                <select name="salename_support_id" id="salename_support_id" class="form-select">
+                                    <option value="">-- Chọn Sale Hỗ Trợ KH --</option>
+                                    @foreach($salename as $salesupport)
+                                        <option value="{{ $salesupport->id}}" 
+                                            {{ old('salename_support_id') == $salesupport->id ? 'selected' : '' }}>
+                                            {{ $salesupport->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="current_status_id" class="form-label">Tình Trạng KH hiện tại đến Showroom</label>
+                                <select name="current_status_id" id="status_current_status_idfirst_id" class="form-select">
+                                    <option value="">-- Chọn Tình Trạng Hiện Tại Của Khách --</option>
+                                    @foreach($status as $statuscurrent)
+                                        <option value="{{ $statuscurrent->id }}" 
+                                            {{ old('current_status_id') == $statuscurrent->id ? 'selected' : '' }}>
+                                            {{ $statuscurrent->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="order_value" class="form-label">Giá trị đơn chốt được</label>
+                                <input type="number" name="order_value" id="order_value" class="form-control" value="{{ old('order_value') }}">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="customer_support_yet_id" class="form-label">Khách Đã Được Hỗ Trợ Chưa?</label>
+                                <select name="customer_support_yet_id" id="customer_support_yet_id" class="form-select">
+                                    <option value="">-- Chọn Khách Đã Đặt Hàng Chưa? --</option>
+                                    @foreach($source as $source)
+                                        <option value="{{ $source->id }}" 
+                                            {{ old('customer_support_yet_id') == $source->id ? 'selected' : '' }}>
+                                            {{ $source->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 

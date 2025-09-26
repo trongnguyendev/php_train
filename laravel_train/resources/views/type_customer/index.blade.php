@@ -2,13 +2,11 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-12 d-flex justify-content-between align-items-center">
-            <h1 class="h2"><i class="bi bi-person-badge-fill text-primary"></i> Quản lý Tên Sale</h1>
-            <a href="{{ route('salename.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Thêm Sale Mới
-            </a>
-        </div>
+    <div class="d-flex justify-content-between mb-3">
+        <h1 class="h3"><i class="bi bi-people text-primary"></i> Quản lý Loại Khách hàng</h1>
+        <a href="{{ route('type_customer.create') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Thêm loại khách hàng
+        </a>
     </div>
 
     @if(session('success'))
@@ -18,31 +16,31 @@
     @endif
 
     <div class="card">
-        <div class="card-header">Danh sách Sale</div>
+        <div class="card-header">Danh sách loại khách hàng</div>
         <div class="card-body">
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Tên Sale</th>
+                        <th>Tên loại</th>
                         <th class="text-end">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($saleNames as $salename)
+                    @forelse($typeCustomers as $typeCustomer)
                         <tr>
-                            <td>{{ $salename->name }}</td>
+                            <td>{{ $typeCustomer->name }}</td>
                             <td class="text-end">
-                                <a href="{{ route('salename.show', $salename) }}" class="btn btn-sm btn-info">
+                                <a href="{{ route('type_customer.show', $typeCustomer) }}" class="btn btn-sm btn-info">
                                     <i class="bi bi-eye"></i>
                                 </a>
-                                <a href="{{ route('salename.edit', $salename) }}" class="btn btn-sm btn-warning">
+                                <a href="{{ route('type_customer.edit', $typeCustomer) }}" class="btn btn-sm btn-warning">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <form action="{{ route('salename.destroy', $salename) }}" method="POST" class="d-inline">
+                                <form action="{{ route('type_customer.destroy', $typeCustomer) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Bạn có chắc chắn muốn xóa Sale này?')">
+                                            onclick="return confirm('Bạn có chắc chắn muốn xóa loại này?')">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </form>
@@ -50,7 +48,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="2" class="text-center">Chưa có Sale nào</td>
+                            <td colspan="2" class="text-center">Chưa có loại khách hàng nào</td>
                         </tr>
                     @endforelse
                 </tbody>
