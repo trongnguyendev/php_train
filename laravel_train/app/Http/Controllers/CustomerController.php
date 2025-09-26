@@ -11,15 +11,20 @@ use App\Models\Status;
 use App\Models\Salename;
 use App\Models\Source;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB; // <- 📌 Chú ý: cần để dùng DB::transaction
 
 class CustomerController extends Controller
 {
     /**
      * Danh sách khách hàng
      */
-    public function index()
+    public function index(Request $request)
     {
-        $customer = Customer::with([
+        // Lấy danh sách status để hiển thị dropdown search
+        $statusList = Status::all();
+
+        // Bắt đầu query
+        $query = Customer::with([
             'province',
             'typeCustomerYet',
             'typeCustomer',
@@ -31,10 +36,27 @@ class CustomerController extends Controller
             'salenameSupport',
             'cateloryProduct',
             'source'
-        ])->latest()->paginate(20);
+        ]);
 
-        return view('customer.index', compact('customer'));
+        // Lọc theo status_first_id nếu có
+        if ($request->filled('status_first_id')) {
+            $query->where('status_first_id', $request->status_first_id);
+        }
+
+        // Lọc theo tên khách hàng nếu có
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%'.$request->name.'%');
+        }
+
+        // Lấy kết quả phân trang
+        $customer = $query->latest()->paginate(20);
+
+        // Giữ các tham số tìm kiếm khi phân trang
+        $customer->appends($request->all());
+
+        return view('customer.index', compact('customer', 'statusList'));
     }
+
 
     /**
      * Form thêm mới
@@ -65,7 +87,8 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // 📌 Validation dữ liệu: bắt buộc đúng trước khi lưu
+        $validatedData = $request->validate([
             'customer_for_showroom' => 'nullable|date',
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
@@ -85,7 +108,10 @@ class CustomerController extends Controller
             'customer_support_yet_id' => 'nullable|exists:sources,id',
         ]);
 
-        Customer::create($request->all());
+        // 📌 Sử dụng Laravel Transaction tích hợp để rollback tự động khi lỗi
+        DB::transaction(function () use ($validatedData) {
+            Customer::create($validatedData); // ✅ Chỉ lưu khi dữ liệu hợp lệ
+        });
 
         return redirect()->route('customer.index')->with('success', 'Thêm khách hàng thành công!');
     }
@@ -120,35 +146,35 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        $request->validate([
+        // 📌 Validation dữ liệu bắt buộc
+        $validatedData = $request->validate([
             'customer_for_showroom' => 'required|date',
-            'name' => 'required|string',
-            'phone' => 'required|string',
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'province_id' => 'nullable|exists:provinces,id',
+            'address' => 'nullable|string',
+            'zalo_feedback' => 'nullable|string|max:255',
+            'type_customer_yet_id' => 'nullable|exists:type_customers,id',
+            'type_customer_id' => 'nullable|exists:type_customers,id',
+            'type_showroom_id' => 'nullable|exists:type_showrooms,id',
+            'type_category_id' => 'nullable|exists:categories,id',
+            'status_first_id' => 'nullable|exists:statuses,id',
+            'note_sale' => 'nullable|string|max:255',
+            'salename_infor_id' => 'nullable|exists:sale_names,id',
+            'salename_support_id' => 'nullable|exists:sale_names,id',
+            'current_status_id' => 'nullable|exists:statuses,id',
+            'order_value' => 'nullable|numeric',
+            'customer_support_yet_id' => 'nullable|exists:sources,id',
         ], [
             'customer_for_showroom.required' => 'Ngày không được để trống',
             'name.required' => 'Tên không được để trống',
             'phone.required' => 'Số Điện Thoại không được để trống',
         ]);
 
-        $customer->update([
-            'customer_for_showroom'   => $request->customer_for_showroom,
-            'name'                    => $request->name,
-            'phone'                   => $request->phone,
-            'province_id'             => $request->province_id,
-            'address'                 => $request->address,
-            'zalo_feedback'           => $request->zalo_feedback, // nhớ sửa lại key, form bạn đặt là zalo_feedback
-            'type_customer_yet_id'    => $request->type_customer_yet_id,
-            'type_customer_id'        => $request->type_customer_id,
-            'type_showroom_id'        => $request->type_showroom_id,
-            'type_category_id'        => $request->type_category_id,
-            'status_first_id'         => $request->status_first_id,
-            'note_sale'               => $request->note_sale,
-            'salename_infor_id'       => $request->salename_infor_id,
-            'salename_support_id'     => $request->salename_support_id,
-            'current_status_id'       => $request->current_status_id,
-            'order_value'             => $request->order_value,
-            'customer_support_yet_id' => $request->customer_support_yet_id,
-        ]);
+        // 📌 Transaction Laravel: đảm bảo rollback nếu lỗi
+        DB::transaction(function () use ($validatedData, $customer) {
+            $customer->update($validatedData); // ✅ Chỉ update khi dữ liệu hợp lệ
+        });
 
         return redirect()
             ->route('customer.index')

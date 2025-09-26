@@ -23,6 +23,35 @@
         </div>
     @endif
 
+    <!-- Search Form -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <form action="{{ route('customer.index') }}" method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" name="name" value="{{ request('name') }}" class="form-control" placeholder="Tìm theo tên khách hàng">
+                </div>
+                <div class="col-md-4">
+                    <select name="status_first_id" class="form-select">
+                        <option value="">Chọn Tình Trạng Khách Đến Đầu Tiên</option>
+                        @foreach($statusList as $status)
+                            <option value="{{ $status->id }}" @selected(request('status_first_id') == $status->id)>
+                                {{ $status->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search"></i> Tìm kiếm
+                    </button>
+                    <a href="{{ route('customer.index') }}" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Customer Table -->
     <div class="card fade-in">
         <div class="card-body table-responsive">
@@ -51,34 +80,34 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($customer as $customer)
+                    @forelse($customer as $item)
                         <tr>
-                            <td>{{ $customer->customer_for_showroom }}</td>
-                            <td>{{ $customer->name }}</td>
-                            <td>{{ $customer->phone }}</td>
-                            <td>{{ $customer->province?->name }}</td>
-                            <td>{{ $customer->address }}</td>
-                            <td>{{ $customer->zalo_feedback }}</td>
-                            <td>{{ $customer->typeCustomerYet?->name }}</td>
-                            <td>{{ $customer->typeCustomer?->name }}</td>
-                            <td>{{ $customer->typeShowroom?->name }}</td>
-                            <td>{{ $customer->cateloryProduct?->name }}</td>
-                            <td>{{ $customer->statusFirst?->name }}</td>
-                            <td>{{ $customer->note_sale }}</td>
-                            <td>{{ $customer->salenameInfor?->name }}</td>
-                            <td>{{ $customer->salenameSupport?->name }}</td>
-                            <td>{{ $customer->currentStatus?->name }}</td>
-                            <td>{{ number_format($customer->order_value) }} đ</td>
-                            <td>{{ $customer->source?->name }}</td>
-                            <td>{{ $customer->created_at->format('d/m/Y H:i') }}</td>
+                            <td>{{ $item->customer_for_showroom }}</td>
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->phone }}</td>
+                            <td>{{ $item->province?->name }}</td>
+                            <td>{{ $item->address }}</td>
+                            <td>{{ $item->zalo_feedback }}</td>
+                            <td>{{ $item->typeCustomerYet?->name }}</td>
+                            <td>{{ $item->typeCustomer?->name }}</td>
+                            <td>{{ $item->typeShowroom?->name }}</td>
+                            <td>{{ $item->cateloryProduct?->name }}</td>
+                            <td>{{ $item->statusFirst?->name }}</td>
+                            <td>{{ $item->note_sale }}</td>
+                            <td>{{ $item->salenameInfor?->name }}</td>
+                            <td>{{ $item->salenameSupport?->name }}</td>
+                            <td>{{ $item->currentStatus?->name }}</td>
+                            <td>{{ number_format($item->order_value) }} đ</td>
+                            <td>{{ $item->source?->name }}</td>
+                            <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
                             <td class="text-center">
-                                <a href="{{ route('customer.show', $customer->id) }}" class="btn btn-sm btn-info">
+                                <a href="{{ route('customer.show', $item->id) }}" class="btn btn-sm btn-info">
                                     <i class="bi bi-eye"></i>
                                 </a>
-                                <a href="{{ route('customer.edit', $customer->id) }}" class="btn btn-sm btn-warning">
+                                <a href="{{ route('customer.edit', $item->id) }}" class="btn btn-sm btn-warning">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <form action="{{ route('customer.destroy', $customer->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa?')">
+                                <form action="{{ route('customer.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa?')">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm btn-danger">
@@ -94,6 +123,11 @@
                     @endforelse
                 </tbody>
             </table>
+
+            <!-- Pagination -->
+            <div class="mt-3">
+                {{ $customer->links() }}
+            </div>
         </div>
     </div>
 </div>
