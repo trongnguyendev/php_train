@@ -62,4 +62,5 @@ Route::resource('category', CategoryController::class);
 
 
 Route::get('/statistics', [CustomerStatisticsController::class, 'index'])->name('statistics.index');
-Route::get('/statistics/data', [CustomerStatisticsController::class, 'getData'])->name('statistics.data');
+Route::get('/statistics/data', [CustomerStatisticsController::class, 'statisticsData'])->name('statistics.data');
+

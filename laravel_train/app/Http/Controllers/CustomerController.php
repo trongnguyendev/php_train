@@ -192,26 +192,4 @@ class CustomerController extends Controller
     }
 
 
-    public function statisticsView()
-    {
-        return view('customer.statistics');
-    }
-
-    public function statisticsData()
-    {
-        $data = Customer::select(
-                DB::raw('DATE(customer_for_showroom) as ngay'),   // ngày khách đến
-                'customers.type_showroom_id',
-                'type_showrooms.name as showroom_name',           // ✅ Lấy tên showroom
-                DB::raw('COUNT(*) as tong_khach')
-            )
-            ->join('type_showrooms', 'customers.type_showroom_id', '=', 'type_showrooms.id')
-            ->groupBy('ngay', 'customers.type_showroom_id', 'type_showrooms.name')
-            ->orderBy('ngay', 'asc')
-            ->get();
-
-        return response()->json($data);
-    }
-
-
 }
