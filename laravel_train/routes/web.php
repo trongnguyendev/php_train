@@ -15,6 +15,7 @@ use App\Http\Controllers\TypeCustomerController;
 use App\Http\Controllers\TypeShowroomController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerStatisticsController;
+use App\Http\Controllers\LeadOnlineController;
 
 // Routes không cần đăng nhập
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -34,6 +35,7 @@ Route::resource('products', ProductController::class);
 // Customer CRUD routes
 Route::resource('customer', CustomerController::class);
 
+Route::resource('leadonline', LeadOnlineController::class);
 
 // Importreceipts CRUD routes
 Route::resource('importreceipts', ImportReceiptController::class);
