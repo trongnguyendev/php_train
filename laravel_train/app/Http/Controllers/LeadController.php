@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LeadOnline;
+use App\Models\Lead;
 use App\Models\Province;
 use App\Models\TypeCustomer;
 use App\Models\TypeShowroom;
@@ -13,13 +13,16 @@ use App\Models\Source;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class LeadOnlineController extends Controller
+class LeadController extends Controller
 {
+    /**
+     * Danh sách Lead
+     */
     public function index(Request $request)
     {
         $statusList = Status::all();
 
-        $query = LeadOnline::with([
+        $query = Lead::with([
             'province',
             'typeCustomerYet',
             'typeCustomer',
@@ -38,15 +41,18 @@ class LeadOnlineController extends Controller
         }
 
         if ($request->filled('name')) {
-            $query->where('name', 'like', '%'.$request->name.'%');
+            $query->where('name', 'like', '%' . $request->name . '%');
         }
 
-        $leadonline = $query->latest()->paginate(20);
-        $leadonline->appends($request->all());
+        $lead = $query->latest()->paginate(20);
+        $lead->appends($request->all());
 
-        return view('leadonline.index', compact('leadonline', 'statusList'));
+        return view('lead.index', compact('lead', 'statusList'));
     }
 
+    /**
+     * Form thêm mới
+     */
     public function create()
     {
         $provinces = Province::all();
@@ -57,7 +63,7 @@ class LeadOnlineController extends Controller
         $salename = Salename::all();
         $source = Source::all();
 
-        return view('leadonline.create', compact(
+        return view('lead.create', compact(
             'provinces',
             'typeCustomer',
             'typeShowroom',
@@ -68,6 +74,9 @@ class LeadOnlineController extends Controller
         ));
     }
 
+    /**
+     * Lưu mới Lead
+     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -87,22 +96,32 @@ class LeadOnlineController extends Controller
             'salename_support_id' => 'nullable|exists:sale_names,id',
             'current_status_id' => 'nullable|exists:statuses,id',
             'order_value' => 'nullable|numeric',
+            'customer_support_yet_id' => 'nullable|exists:sources,id',
+
+            // ✅ 6 trường chăm sóc
             'first_care_date' => 'nullable|date',
-            'result1' => 'nullable|string',
+            'result1' => 'nullable|string|max:255',
             'two_care_date' => 'nullable|date',
-            'result2' => 'nullable|string',
+            'result2' => 'nullable|string|max:255',
             'three_care_date' => 'nullable|date',
-            'result3' => 'nullable|string',
+            'result3' => 'nullable|string|max:255',
+        ], [
+            'customer_for_showroom.required' => 'Ngày không được để trống',
+            'name.required' => 'Tên không được để trống',
+            'phone.required' => 'Số điện thoại không được để trống',
         ]);
 
         DB::transaction(function () use ($validatedData) {
-            LeadOnline::create($validatedData);
+            Lead::create($validatedData);
         });
 
-        return redirect()->route('leadonline.index')->with('success', 'Thêm khách hàng thành công!');
+        return redirect()->route('lead.index')->with('success', 'Thêm lead thành công!');
     }
 
-    public function edit(leadOnline $leadonline)
+    /**
+     * Form chỉnh sửa
+     */
+    public function edit(Lead $lead)
     {
         $provinces = Province::all();
         $typeCustomer = TypeCustomer::all();
@@ -112,8 +131,8 @@ class LeadOnlineController extends Controller
         $salename = Salename::all();
         $source = Source::all();
 
-        return view('leadOnline.edit', compact(
-            'leadonline',
+        return view('lead.edit', compact(
+            'lead',
             'provinces',
             'typeCustomer',
             'typeShowroom',
@@ -124,12 +143,15 @@ class LeadOnlineController extends Controller
         ));
     }
 
-    public function update(Request $request, LeadOnline $leadOnline)
+    /**
+     * Cập nhật Lead
+     */
+    public function update(Request $request, Lead $lead)
     {
         $validatedData = $request->validate([
-            'customer_for_showroom' => 'nullable|date',
+            'customer_for_showroom' => 'required|date',
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'required|string|max:20',
             'province_id' => 'nullable|exists:provinces,id',
             'address' => 'nullable|string',
             'zalo_feedback' => 'nullable|string|max:255',
@@ -143,31 +165,36 @@ class LeadOnlineController extends Controller
             'salename_support_id' => 'nullable|exists:sale_names,id',
             'current_status_id' => 'nullable|exists:statuses,id',
             'order_value' => 'nullable|numeric',
+
+            // ✅ 6 trường chăm sóc
             'first_care_date' => 'nullable|date',
-            'result1' => 'nullable|string',
+            'result1' => 'nullable|string|max:255',
             'two_care_date' => 'nullable|date',
-            'result2' => 'nullable|string',
+            'result2' => 'nullable|string|max:255',
             'three_care_date' => 'nullable|date',
-            'result3' => 'nullable|string',
+            'result3' => 'nullable|string|max:255',
+        ], [
+            'customer_for_showroom.required' => 'Ngày không được để trống',
+            'name.required' => 'Tên không được để trống',
+            'phone.required' => 'Số điện thoại không được để trống',
         ]);
 
-        DB::transaction(function () use ($validatedData, $leadOnline) {
-            $leadOnline->update($validatedData);
+        DB::transaction(function () use ($validatedData, $lead) {
+            $lead->update($validatedData);
         });
 
-        return redirect()->route('leadonline.index')->with('success', 'Cập nhật khách hàng thành công!');
+        return redirect()
+            ->route('lead.index')
+            ->with('success', 'Cập nhật lead thành công!');
     }
 
-    public function show(LeadOnline $leadOnline)
+    /**
+     * Xóa Lead
+     */
+    public function destroy(Lead $lead)
     {
-        return view('leadonline.show', compact('leadOnline'));
-    }
+        $lead->delete();
 
-
-    public function destroy(LeadOnline $leadOnline)
-    {
-        $leadOnline->delete();
-
-        return redirect()->route('leadonline.index')->with('success', 'Xóa khách hàng thành công!');
+        return redirect()->route('lead.index')->with('success', 'Xóa lead thành công!');
     }
 }

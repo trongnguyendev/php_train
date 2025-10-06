@@ -16,6 +16,7 @@ use App\Http\Controllers\TypeShowroomController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerStatisticsController;
 use App\Http\Controllers\LeadOnlineController;
+use App\Http\Controllers\LeadController;
 
 // Routes không cần đăng nhập
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -66,3 +67,6 @@ Route::resource('category', CategoryController::class);
 Route::get('/statistics', [CustomerStatisticsController::class, 'index'])->name('statistics.index');
 Route::get('/statistics/data', [CustomerStatisticsController::class, 'statisticsData'])->name('statistics.data');
 
+
+
+Route::resource('lead', LeadController::class);
