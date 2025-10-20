@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ShowroomController;
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -14,3 +15,6 @@ Route::get('/', function (){
     }
     return redirect()->route('login');
 });
+
+Route::resource('showrooms', ShowroomController::class);
+Route::resource('users', UserController::class);
