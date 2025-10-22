@@ -99,7 +99,9 @@
                             <td>{{ $item->currentStatus?->name }}</td>
                             <td>{{ number_format($item->order_value) }} đ</td>
                             <td>{{ $item->source?->name }}</td>
-                            <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
+                            @if ($item?->created_at)
+                            <td>{{ $item?->created_at->format('d/m/Y H:i') }}</td>
+                            @endif
                             <td class="text-center">
                                 <a href="{{ route('customer.show', $item->id) }}" class="btn btn-sm btn-info">
                                     <i class="bi bi-eye"></i>

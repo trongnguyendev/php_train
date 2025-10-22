@@ -151,6 +151,8 @@ class LeadOnlineController extends Controller
             'result3' => 'nullable|string',
         ]);
 
+        // dd($validatedData);
+
         DB::transaction(function () use ($validatedData, $leadOnline) {
             $leadOnline->update($validatedData);
         });
