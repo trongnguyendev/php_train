@@ -10,6 +10,7 @@ use App\Http\Controllers\SaleUserController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\CustomerSourceController;
 use App\Http\Controllers\CustomerTypeController;
+use App\Http\Controllers\ProvinceController;
 
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -31,3 +32,4 @@ Route::resource('sale_users', SaleUserController::class);
 Route::resource('leads', LeadController::class);
 Route::resource('customer_sources', CustomerSourceController::class);
 Route::resource('customer_types', CustomerTypeController::class);
+Route::resource('provinces', ProvinceController::class);

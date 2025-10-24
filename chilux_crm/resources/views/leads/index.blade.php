@@ -17,6 +17,12 @@
         value="{{ request('type_phone') }}"
         style="max-width: 200px;"
     >
+    {{-- Ô Lead Type --}}
+    <select name="lead_type" class="form-select" style="max-width: 200px;">
+        <option value="">-- Chọn loại Lead --</option>
+        <option value="1" {{ (isset($lead) && $lead->lead_type == 1) ? 'selected' : '' }}>Trực tiếp</option>
+        <option value="2" {{ (isset($lead) && $lead->lead_type == 2) ? 'selected' : '' }}>Online</option>
+    </select>
 
     {{-- Ô chọn ngày --}}
     <input 
@@ -62,7 +68,6 @@
                 <th>Trạng thái hỗ trợ</th>
                 <th>Nội dung trao đổi</th>
                 <th>Kết quả</th>
-                <th>Loại Lead</th>
 
                 {{-- 3 lần chăm sóc --}}
                 <th>Kế hoạch chăm sóc 1</th>
@@ -117,8 +122,9 @@
                     <td>{{ $lead->supportStatus->name ?? '' }}</td>
                     <td>{{ Str::limit($lead->exchange_content, 30) }}</td>
                     <td>{{ $lead->results }}</td>
-                    <td>{{ $lead->lead_type }}</td>
-
+                    @if($lead->lead_type == 1)
+                    
+                    @else
                     {{-- Lần chăm sóc 1 --}}
                     <td>{{ $care1->take_care_plan ?? '' }}</td>
                     <td>{{ $care1->take_care_date ?? '' }}</td>
@@ -132,7 +138,8 @@
                     {{-- Lần chăm sóc 3 --}}
                     <td>{{ $care3->take_care_plan ?? '' }}</td>
                     <td>{{ $care3->take_care_date ?? '' }}</td>
-                    <td>{{ $care3->take_care_result ?? '' }}</td>
+                    <td>{{ $care3->take_care_result ?? '' }}</td> 
+                    @endif
 
                     <td>
                         <a href="{{ route('leads.show', $lead->id) }}" class="btn btn-sm btn-info">Xem</a>

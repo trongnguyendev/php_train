@@ -30,6 +30,10 @@ class LeadController extends Controller
         $query->where('first_arrival_date', 'like', '%' . $request->first_arrival_date . '%');
         }
 
+        if ($request->lead_type) {
+        $query->where('lead_type', $request->lead_type );
+        }
+
         $leads = $query->get();
         $leadTakeCare = LeadTakeCare::all();
         

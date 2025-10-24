@@ -12,7 +12,8 @@ class ProvinceController extends Controller
      */
     public function index()
     {
-        //
+        $province = Province::all();
+        return view('provinces.index', compact('province'));
     }
 
     /**
@@ -20,7 +21,7 @@ class ProvinceController extends Controller
      */
     public function create()
     {
-        //
+         return view('provinces.create');
     }
 
     /**
@@ -28,7 +29,18 @@ class ProvinceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $request->validate([
+            'name' => 'required|string'
+        ], [
+            'name.required' => 'Tên Tỉnh không được để trống!'
+        ]);
+
+        $province = Province::create([
+            'name' => $request->name
+        ]);
+
+        return redirect()->route('provinces.index')->with('success', 'Tạo tỉnh thành công!');
     }
 
     /**
@@ -36,7 +48,7 @@ class ProvinceController extends Controller
      */
     public function show(Province $province)
     {
-        //
+        return view('provinces.show', compact('province'));
     }
 
     /**
@@ -44,7 +56,7 @@ class ProvinceController extends Controller
      */
     public function edit(Province $province)
     {
-        //
+        return view('provinces.edit', compact('province'));
     }
 
     /**
@@ -52,7 +64,17 @@ class ProvinceController extends Controller
      */
     public function update(Request $request, Province $province)
     {
-        //
+        $request->validate([
+            'name' => 'required|string'
+        ], [
+            'name.required' => 'Tên Tỉnh không được để trống!'
+        ]);
+
+        $province->update([
+            'name' => $request->name
+        ]);
+
+        return redirect()->route('provinces.index')->with('success', 'Cập nhập tên tỉnh thành công!');
     }
 
     /**
@@ -60,6 +82,7 @@ class ProvinceController extends Controller
      */
     public function destroy(Province $province)
     {
-        //
+        $province->delete();
+        return redirect()->route('provinces.index')->with('success', 'Xóa tên tỉnh thành công!');
     }
 }

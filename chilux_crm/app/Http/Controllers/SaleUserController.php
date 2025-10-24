@@ -21,7 +21,7 @@ class SaleUserController extends Controller
      */
     public function create()
     {
-        return view('sale_user.create');
+        return view('sale_users.create');
     }
 
     /**
@@ -39,7 +39,7 @@ class SaleUserController extends Controller
             'name' => $request->name
         ]);
 
-        return redirect()->route('sale_user.index')->with('success', 'Tạo tên sale thành công!');
+        return redirect()->route('sale_users.index')->with('success', 'Tạo tên sale thành công!');
     }
 
     /**
@@ -47,7 +47,7 @@ class SaleUserController extends Controller
      */
     public function show(SaleUser $saleUser)
     {
-        return view('sale_user.show', compact('saleUser'));
+        return view('sale_users.show', compact('saleUser'));
     }
 
     /**
@@ -55,7 +55,7 @@ class SaleUserController extends Controller
      */
     public function edit(SaleUser $saleUser)
     {
-        return view('sale_user.edit', compact('saleUser'));
+        return view('sale_users.edit', compact('saleUser'));
     }
 
     /**
@@ -73,7 +73,7 @@ class SaleUserController extends Controller
             'name' => $request->name
         ]);
 
-        return redirect()->route('sale_user.index')->with('success', 'Cập nhập tên sale thành công!');
+        return redirect()->route('sale_users.index')->with('success', 'Cập nhập tên sale thành công!');
     }
 
     /**
@@ -82,6 +82,6 @@ class SaleUserController extends Controller
     public function destroy(SaleUser $saleUser)
     {
         $saleUser->delete();
-        return redirect()->route('sale_user.index')->with('success', 'Xóa tên sale thành công!');
+        return redirect()->route('sale_users.index')->with('success', 'Xóa tên sale thành công!');
     }
 }

@@ -168,12 +168,7 @@
             {{-- Support Status --}}
             <div class="col-md-4 mb-3">
                 <label class="form-label">Trạng thái hỗ trợ</label>
-                <select name="support_status_customer_id" class="form-select">
-                    <option value="">-- Chọn trạng thái hỗ trợ --</option>
-                    @foreach($supportStatuses as $st)
-                        <option value="{{ $st->id }}">{{ $st->name }}</option>
-                    @endforeach
-                </select>
+                <textarea name="exchange_content" class="form-control" rows="2"></textarea>
             </div>
 
             <div class="col-md-6 mb-3">

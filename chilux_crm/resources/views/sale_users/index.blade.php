@@ -25,7 +25,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($saleUsers as $item)
+                    @forelse($saleUser as $item)
                         <tr>
                             <td>{{ $item->name }}</td>
                             <td class="text-end">
