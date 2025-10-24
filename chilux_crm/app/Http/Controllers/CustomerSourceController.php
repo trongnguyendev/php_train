@@ -13,7 +13,7 @@ class CustomerSourceController extends Controller
     public function index()
     {
         $customerSource = CustomerSource::all();
-        return view('customer_sources.index', compact('customerSource'));222
+        return view('customer_sources.index', compact('customerSource'));
     }
 
     /**
@@ -35,7 +35,10 @@ class CustomerSourceController extends Controller
             'name.required' => 'Tình trạng khách hàng không được để trống!'
         ]);
 
-        $customerSource = CustomerSource::create();
+        $customerSource = CustomerSource::create([
+             'name' => $request->name
+        ]
+        );
 
         return redirect()->route('customer_sources.index')->with('success', 'Tạo tình trạng khách hàng thành công!');
     }

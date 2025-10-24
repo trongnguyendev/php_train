@@ -12,8 +12,8 @@ class CustomerTypeController extends Controller
      */
     public function index()
     {
-        $customerType = CustomerType::all();
-        return view('customer_types.index', compact('customerType'));
+        $customerTy = CustomerType::all();
+        return view('customer_types.index', compact('customerTy'));
     }
 
     /**
