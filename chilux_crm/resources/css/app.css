@@ -718,9 +718,59 @@ body {
     color: var(--text-primary);
 }
 
-/* Button group */
-.btn-group .btn {
-    border-radius: 0;
+/* Tab styling for leads */
+.nav-tabs {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-muted);
+    font-weight: 500;
+    padding: 1rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: transparent;
+    border-bottom-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background-color: transparent;
+}
+
+.nav-tabs .nav-link .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Tab content */
+.tab-content {
+    border: none;
+}
+
+.tab-pane {
+    padding: 0;
+}
+
+/* Avatar styling for different lead types */
+.avatar-sm {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1rem;
+}
+
+.bg-info-light {
+    background-color: rgba(13, 202, 240, 0.1);
+}
+
+.bg-warning-light {
+    background-color: rgba(255, 193, 7, 0.1);
 }
 
 .btn-group .btn:first-child {
@@ -754,6 +804,29 @@ body {
 
 .care-plan:hover {
     box-shadow: var(--shadow-sm);
+}
+
+/* Customer care card animation */
+#customer-care-card {
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+#customer-care-card.fade-in {
+    animation: slideDown 0.3s ease-in-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 1000px;
+    }
 }
 
 .care-number {

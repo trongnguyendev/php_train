@@ -274,8 +274,7 @@
                             <label for="lead_type" class="form-label">
                                 <i class="bi bi-diagram-3 me-1"></i>Loại Lead
                             </label>
-                            <select name="lead_type" id="lead_type" 
-                                    class="form-select @error('lead_type') is-invalid @enderror">
+                            <select name="lead_type" id="lead_type" class="form-select @error('lead_type') is-invalid @enderror">
                                 <option value="1" {{ old('lead_type', '1') == '1' ? 'selected' : '' }}>Trực tiếp</option>
                                 <option value="2" {{ old('lead_type') == '2' ? 'selected' : '' }}>Online</option>
                             </select>
@@ -285,7 +284,7 @@
                         </div>
 
                         <!-- Sales Team -->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="sale_receive_customer_info_id" class="form-label">
                                 <i class="bi bi-person-badge me-1"></i>Sale nhận KH
                             </label>
@@ -303,7 +302,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="sale_support_id" class="form-label">
                                 <i class="bi bi-headset me-1"></i>Sale hỗ trợ
                             </label>
@@ -350,7 +349,7 @@
                             <label for="results" class="form-label">
                                 <i class="bi bi-trophy me-1"></i>Kết quả
                             </label>
-                            <textarea name="results" id="results" rows="2" 
+                            <textarea name="results" id="results" rows="5" 
                                       class="form-control @error('results') is-invalid @enderror"
                                       placeholder="Nhập kết quả đạt được">{{ old('results') }}</textarea>
                             @error('results')
@@ -379,7 +378,7 @@
     
     <div class="col-lg-4">
         <!-- Customer Care Information Card -->
-        <div class="card fade-in mb-4">
+        <div class="card fade-in mb-4" id="customer-care-card" style="display: none;">
             <div class="card-header bg-white border-bottom">
                 <div class="d-flex align-items-center">
                     <div class="icon-circle bg-success-light text-success me-3">
@@ -398,35 +397,31 @@
                             <h6 class="mb-0 text-primary">Lần chăm sóc {{ $i }}</h6>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4">
-                                <label for="take_care_plan_{{ $i }}" class="form-label">Kế hoạch chăm sóc</label>
-                                <input type="text" name="take_care_plan[]" id="take_care_plan_{{ $i }}" 
-                                        class="form-control @error('take_care_plan.'.$i-1) is-invalid @enderror"
-                                        value="{{ old('take_care_plan.'.$i-1) }}" 
-                                        placeholder="Nhập kế hoạch chăm sóc">
-                                @error('take_care_plan.'.$i-1)
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-4">
-                                <label for="take_care_date_{{ $i }}" class="form-label">Ngày chăm sóc</label>
-                                <input type="date" name="take_care_date[]" id="take_care_date_{{ $i }}" 
-                                        class="form-control @error('take_care_date.'.$i-1) is-invalid @enderror"
-                                        value="{{ old('take_care_date.'.$i-1) }}">
-                                @error('take_care_date.'.$i-1)
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-4">
-                                <label for="take_care_result_{{ $i }}" class="form-label">Kết quả chăm sóc</label>
-                                <input type="text" name="take_care_result[]" id="take_care_result_{{ $i }}" 
-                                        class="form-control @error('take_care_result.'.$i-1) is-invalid @enderror"
-                                        value="{{ old('take_care_result.'.$i-1) }}" 
-                                        placeholder="Nhập kết quả chăm sóc">
-                                @error('take_care_result.'.$i-1)
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <label for="take_care_plan_{{ $i }}">Kế hoạch chăm sóc</label>
+                            <input type="text" name="take_care_plan[]" id="take_care_plan_{{ $i }}" 
+                                    class="form-control @error('take_care_plan.'.$i-1) is-invalid @enderror"
+                                    value="{{ old('take_care_plan.'.$i-1) }}" 
+                                    placeholder="Nhập kế hoạch chăm sóc">
+                            @error('take_care_plan.'.$i-1)
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+
+                            <label for="take_care_date_{{ $i }}">Ngày chăm sóc</label>
+                            <input type="date" name="take_care_date[]" id="take_care_date_{{ $i }}" 
+                                    class="form-control @error('take_care_date.'.$i-1) is-invalid @enderror"
+                                    value="{{ old('take_care_date.'.$i-1) }}">
+                            @error('take_care_date.'.$i-1)
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+
+                            <label for="take_care_result_{{ $i }}">Kết quả chăm sóc</label>
+                            <input type="text" name="take_care_result[]" id="take_care_result_{{ $i }}" 
+                                    class="form-control @error('take_care_result.'.$i-1) is-invalid @enderror"
+                                    value="{{ old('take_care_result.'.$i-1) }}" 
+                                    placeholder="Nhập kết quả chăm sóc">
+                            @error('take_care_result.'.$i-1)
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                 @endfor
@@ -445,6 +440,26 @@ document.addEventListener('DOMContentLoaded', function() {
         const today = new Date().toISOString().split('T')[0];
         firstArrivalDate.value = today;
     }
+    
+    // Handle lead type change
+    const leadTypeSelect = document.getElementById('lead_type');
+    const customerCareCard = document.getElementById('customer-care-card');
+    
+    function toggleCustomerCare() {
+        if (leadTypeSelect.value === '2') { // Online
+            customerCareCard.style.display = 'block';
+            customerCareCard.classList.add('fade-in');
+        } else { // Trực tiếp
+            customerCareCard.style.display = 'none';
+            customerCareCard.classList.remove('fade-in');
+        }
+    }
+    
+    // Initial check
+    toggleCustomerCare();
+    
+    // Listen for changes
+    leadTypeSelect.addEventListener('change', toggleCustomerCare);
 });
 
 // Auto-hide alerts after 5 seconds

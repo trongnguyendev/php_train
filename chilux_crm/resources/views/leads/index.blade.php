@@ -12,7 +12,6 @@
 @endsection
 
 @section('content')
-
 <!-- Main Content Card -->
 <div class="card">
     <div class="card-header bg-white border-bottom">
@@ -83,154 +82,322 @@
         </form>
     </div>
 
-    <!-- Data Table -->
-    <div class="card-body p-0">
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
-                <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        @if($leads->count() > 0)
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th width="60">ID</th>
-                            <th width="220">Ngày</th>
-                            <th width="200">Tên KH</th>
-                            <th width="250">Điện thoại</th>
-                            <th width="250">Zalo</th>
-                            <th width="200">Tỉnh/Thành</th>
-                            <th width="200">Loại KH</th>
-                            <th width="300">Tình trạng</th>
-                            <th width="300">Nguồn KH</th>
-                            <th width="300">Showroom</th>
-                            <th width="250">Giá trị đơn</th>
-                            <th width="300">Sale nhận</th>
-                            <th width="200">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($leads as $lead)
-                            <tr>
-                                <td>
-                                    <span class="badge bg-secondary">#{{ $lead->id }}</span>
-                                </td>
-                                <td>
-                                    <small class="text-muted">{{ \Carbon\Carbon::parse($lead->first_arrival_date)->format('d/m/Y') }}</small>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar-sm bg-primary-light rounded-circle d-flex align-items-center justify-content-center me-2">
-                                            <i class="bi bi-person text-primary"></i>
-                                        </div>
-                                        <div>
-                                            <div class="fw-medium">{{ $lead->name }}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <a href="tel:{{ $lead->phone }}" class="text-decoration-none">
-                                        <i class="bi bi-chat-dots me-1"></i>{{ $lead->zalo }}
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="tel:{{ $lead->phone }}" class="text-decoration-none">
-                                        <i class="bi bi-telephone me-1"></i>{{ $lead->phone }}
-                                    </a>
-                                </td>
-                                <td>
-                                    <small>{{ $lead->province->name ?? '-' }}</small>
-                                </td>
-                                <td>
-                                    @if($lead->customerType)
-                                        <span class="badge bg-info">{{ $lead->customerType->name }}</span>
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($lead->is_new_customer)
-                                        <span class="badge bg-success">Mới</span>
-                                    @else
-                                        <span class="badge bg-secondary">Cũ</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($lead->customerSource)
-                                        <small>{{ $lead->customerSource->name }}</small>
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($lead->showroom)
-                                        <small>{{ $lead->showroom->name }}</small>
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($lead->order_value)
-                                        <span class="fw-medium text-success">{{ number_format($lead->order_value) }}đ</span>
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($lead->saleReceive)
-                                        <small>{{ $lead->saleReceive->name }}</small>
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="{{ route('leads.show', $lead->id) }}" 
-                                           class="btn btn-sm btn-outline-info" 
-                                           title="Xem chi tiết">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="{{ route('leads.edit', $lead->id) }}" 
-                                           class="btn btn-sm btn-outline-warning" 
-                                           title="Chỉnh sửa">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button type="button" 
-                                                class="btn btn-sm btn-outline-danger" 
-                                                title="Xóa"
-                                                onclick="confirmDelete({{ $lead->id }})">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </div>
-                                    
-                                    <!-- Hidden Delete Form -->
-                                    <form id="delete-form-{{ $lead->id }}" 
-                                          action="{{ route('leads.destroy', $lead->id) }}" 
-                                          method="POST" 
-                                          class="d-none">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @else
-            <div class="text-center py-5">
-                <i class="bi bi-inbox display-1 text-muted"></i>
-                <h5 class="mt-3 text-muted">Không có lead nào</h5>
-                <p class="text-muted">Chưa có lead nào được tạo hoặc không tìm thấy kết quả phù hợp.</p>
-                <a href="{{ route('leads.create') }}" class="btn btn-primary">
-                    <i class="bi bi-plus-circle me-2"></i>Tạo Lead đầu tiên
-                </a>
-            </div>
-        @endif
+    <!-- Tab Navigation -->
+    <div class="card-header bg-light border-bottom p-0">
+        <ul class="nav nav-tabs nav-fill" id="leadTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="online-tab" data-bs-toggle="tab" data-bs-target="#online-pane" type="button" role="tab" aria-controls="online-pane" aria-selected="true">
+                    <i class="bi bi-globe me-2"></i>Lead Online
+                    <span class="badge bg-info ms-2">{{ $leads->where('lead_type', 2)->count() }}</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="direct-tab" data-bs-toggle="tab" data-bs-target="#direct-pane" type="button" role="tab" aria-controls="direct-pane" aria-selected="false">
+                    <i class="bi bi-telephone me-2"></i>Lead Trực tiếp
+                    <span class="badge bg-warning ms-2">{{ $leads->where('lead_type', 1)->count() }}</span>
+                </button>
+            </li>
+        </ul>
     </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="leadTabsContent">
+        <!-- Lead Online Tab -->
+        <div class="tab-pane fade show active" id="online-pane" role="tabpanel" aria-labelledby="online-tab">
+            <!-- Online Leads Table -->
+            <div class="card-body p-0">
+                @if($leads->where('lead_type', 2)->count() > 0)
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="60">ID</th>
+                                    <th width="120">Ngày</th>
+                                    <th>Tên KH</th>
+                                    <th width="120">Điện thoại</th>
+                                    <th width="100">Tỉnh/Thành</th>
+                                    <th width="100">Loại KH</th>
+                                    <th width="100">Tình trạng</th>
+                                    <th width="100">Nguồn KH</th>
+                                    <th width="100">Showroom</th>
+                                    <th width="120">Giá trị đơn</th>
+                                    <th width="100">Sale nhận</th>
+                                    <th width="100">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($leads->where('lead_type', 2) as $lead)
+                                    <tr>
+                                        <td>
+                                            <span class="badge bg-info">#{{ $lead->id }}</span>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">{{ \Carbon\Carbon::parse($lead->first_arrival_date)->format('d/m/Y') }}</small>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sm bg-info-light rounded-circle d-flex align-items-center justify-content-center me-2">
+                                                    <i class="bi bi-globe text-info"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-medium">{{ $lead->name }}</div>
+                                                    @if($lead->zalo)
+                                                        <small class="text-muted">
+                                                            <i class="bi bi-chat-dots me-1"></i>{{ $lead->zalo }}
+                                                        </small>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="tel:{{ $lead->phone }}" class="text-decoration-none">
+                                                <i class="bi bi-telephone me-1"></i>{{ $lead->phone }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <small>{{ $lead->province->name ?? '-' }}</small>
+                                        </td>
+                                        <td>
+                                            @if($lead->customerType)
+                                                <span class="badge bg-info">{{ $lead->customerType->name }}</span>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($lead->is_new_customer)
+                                                <span class="badge bg-success">Mới</span>
+                                            @else
+                                                <span class="badge bg-secondary">Cũ</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($lead->customerSource)
+                                                <small>{{ $lead->customerSource->name }}</small>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($lead->showroom)
+                                                <small>{{ $lead->showroom->name }}</small>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($lead->order_value)
+                                                <span class="fw-medium text-success">{{ number_format($lead->order_value) }}đ</span>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($lead->saleReceive)
+                                                <small>{{ $lead->saleReceive->name }}</small>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{{ route('leads.show', $lead->id) }}" 
+                                                    class="btn btn-sm btn-outline-info" 
+                                                    title="Xem chi tiết">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a href="{{ route('leads.edit', $lead->id) }}" 
+                                                    class="btn btn-sm btn-outline-warning" 
+                                                    title="Chỉnh sửa">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <button type="button" 
+                                                        class="btn btn-sm btn-outline-danger" 
+                                                        title="Xóa"
+                                                        onclick="confirmDelete({{ $lead->id }})">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                            
+                                            <!-- Hidden Delete Form -->
+                                            <form id="delete-form-{{ $lead->id }}" 
+                                                    action="{{ route('leads.destroy', $lead->id) }}" 
+                                                    method="POST" 
+                                                    class="d-none">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <div class="text-center py-5">
+                        <i class="bi bi-globe display-1 text-muted"></i>
+                        <h5 class="mt-3 text-muted">Không có Lead Online</h5>
+                        <p class="text-muted">Chưa có lead online nào được tạo.</p>
+                        <a href="{{ route('leads.create') }}" class="btn btn-info">
+                            <i class="bi bi-plus-circle me-2"></i>Tạo Lead Online đầu tiên
+                        </a>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        <!-- Lead Trực tiếp Tab -->
+        <div class="tab-pane fade" id="direct-pane" role="tabpanel" aria-labelledby="direct-tab">
+            <!-- Direct Leads Table -->
+            <div class="card-body p-0">
+                @if($leads->where('lead_type', 1)->count() > 0)
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="60">ID</th>
+                                    <th width="120">Ngày</th>
+                                    <th>Tên KH</th>
+                                    <th width="120">Điện thoại</th>
+                                    <th width="100">Tỉnh/Thành</th>
+                                    <th width="100">Loại KH</th>
+                                    <th width="100">Tình trạng</th>
+                                    <th width="100">Nguồn KH</th>
+                                    <th width="100">Showroom</th>
+                                    <th width="120">Giá trị đơn</th>
+                                    <th width="100">Sale nhận</th>
+                                    <th width="100">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($leads->where('lead_type', 1) as $lead)
+                                    <tr>
+                                        <td>
+                                            <span class="badge bg-warning">#{{ $lead->id }}</span>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">{{ \Carbon\Carbon::parse($lead->first_arrival_date)->format('d/m/Y') }}</small>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sm bg-warning-light rounded-circle d-flex align-items-center justify-content-center me-2">
+                                                    <i class="bi bi-telephone text-warning"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-medium">{{ $lead->name }}</div>
+                                                    @if($lead->zalo)
+                                                        <small class="text-muted">
+                                                            <i class="bi bi-chat-dots me-1"></i>{{ $lead->zalo }}
+                                                        </small>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="tel:{{ $lead->phone }}" class="text-decoration-none">
+                                                <i class="bi bi-telephone me-1"></i>{{ $lead->phone }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <small>{{ $lead->province->name ?? '-' }}</small>
+                                        </td>
+                                        <td>
+                                            @if($lead->customerType)
+                                                <span class="badge bg-info">{{ $lead->customerType->name }}</span>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($lead->is_new_customer)
+                                                <span class="badge bg-success">Mới</span>
+                                            @else
+                                                <span class="badge bg-secondary">Cũ</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($lead->customerSource)
+                                                <small>{{ $lead->customerSource->name }}</small>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($lead->showroom)
+                                                <small>{{ $lead->showroom->name }}</small>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($lead->order_value)
+                                                <span class="fw-medium text-success">{{ number_format($lead->order_value) }}đ</span>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($lead->saleReceive)
+                                                <small>{{ $lead->saleReceive->name }}</small>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{{ route('leads.show', $lead->id) }}" 
+                                                    class="btn btn-sm btn-outline-info" 
+                                                    title="Xem chi tiết">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a href="{{ route('leads.edit', $lead->id) }}" 
+                                                    class="btn btn-sm btn-outline-warning" 
+                                                    title="Chỉnh sửa">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <button type="button" 
+                                                        class="btn btn-sm btn-outline-danger" 
+                                                        title="Xóa"
+                                                        onclick="confirmDelete({{ $lead->id }})">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                            
+                                            <!-- Hidden Delete Form -->
+                                            <form id="delete-form-{{ $lead->id }}" 
+                                                    action="{{ route('leads.destroy', $lead->id) }}" 
+                                                    method="POST" 
+                                                    class="d-none">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <div class="text-center py-5">
+                        <i class="bi bi-telephone display-1 text-muted"></i>
+                        <h5 class="mt-3 text-muted">Không có Lead Trực tiếp</h5>
+                        <p class="text-muted">Chưa có lead trực tiếp nào được tạo.</p>
+                        <a href="{{ route('leads.create') }}" class="btn btn-warning">
+                            <i class="bi bi-plus-circle me-2"></i>Tạo Lead Trực tiếp đầu tiên
+                        </a>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- Flash Messages -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+            <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 </div>
 
 <!-- Delete Confirmation Modal -->
@@ -271,7 +438,6 @@ function confirmDelete(leadId) {
     modal.show();
 }
 
-// Auto-hide alerts after 5 seconds
 setTimeout(function() {
     const alerts = document.querySelectorAll('.alert');
     alerts.forEach(function(alert) {
@@ -279,5 +445,34 @@ setTimeout(function() {
         bsAlert.close();
     });
 }, 5000);
+
+document.addEventListener('DOMContentLoaded', function() {
+    const leadTypeSelect = document.getElementById('lead_type');
+    const onlineTab = document.getElementById('online-tab');
+    const directTab = document.getElementById('direct-tab');
+    
+    if (leadTypeSelect && onlineTab && directTab) {
+        leadTypeSelect.addEventListener('change', function() {
+            const selectedValue = this.value;
+            
+            if (selectedValue === '2') {
+                const onlineTabTrigger = new bootstrap.Tab(onlineTab);
+                onlineTabTrigger.show();
+            } else if (selectedValue === '1') {
+                const directTabTrigger = new bootstrap.Tab(directTab);
+                directTabTrigger.show();
+            }
+        });
+        
+        const currentLeadType = leadTypeSelect.value;
+        if (currentLeadType === '2') {
+            const onlineTabTrigger = new bootstrap.Tab(onlineTab);
+            onlineTabTrigger.show();
+        } else if (currentLeadType === '1') {
+            const directTabTrigger = new bootstrap.Tab(directTab);
+            directTabTrigger.show();
+        }
+    }
+});
 </script>
 @endpush
