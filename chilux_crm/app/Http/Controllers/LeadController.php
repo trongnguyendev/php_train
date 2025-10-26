@@ -109,6 +109,7 @@ class LeadController extends Controller
             'sale_receive_customer_info_id.required' => 'Sale nhận thông tin không được để trống!',
             'sale_support_id.required' => 'Sale hỗ trợ không được để trống!',
             'current_customer_status_id.required' => 'Tình trạng hiện tại không được để trống!',
+            'support_status_customer_id.required' => 'Tình trạng hỗ trợ không được để trống!',
             'exchange_content.required' => 'Không được để trống!'
              
         ]);

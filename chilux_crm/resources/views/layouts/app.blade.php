@@ -107,6 +107,15 @@
                         </div>
                     @endif
 
+                    <!-- Breadcrumb -->
+                    @hasSection('breadcrumb')
+                        <nav aria-label="breadcrumb" class="mb-4">
+                            <ol class="breadcrumb">
+                                @yield('breadcrumb')
+                            </ol>
+                        </nav>
+                    @endif
+
                     @yield('content')
                 </main>
             </div>

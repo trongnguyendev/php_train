@@ -12,7 +12,6 @@ use App\Http\Controllers\CustomerSourceController;
 use App\Http\Controllers\CustomerTypeController;
 use App\Http\Controllers\ProvinceController;
 
-
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
@@ -22,7 +21,7 @@ Route::get('/', function (){
         return redirect()->route('users.index');
     }
     return redirect()->route('login');
-});
+})->name('dashboard');
 
 Route::resource('showrooms', ShowroomController::class);
 Route::resource('users', UserController::class);
