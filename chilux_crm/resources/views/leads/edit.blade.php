@@ -36,11 +36,21 @@
                 <label class="form-label">Số điện thoại</label>
                 <input type="text" name="phone" value="{{ $lead->phone }}" class="form-control">
             </div>
+             <label class="form-label">Tỉnh/Thành phố</label>
 
             <div class="col-md-4 mb-3">
-                <label class="form-label">Tỉnh/Thành phố</label>
-                <input type="text" name="province_id" value="{{ $lead->province_id }}" class="form-control">
+                <label for="province_id" class="form-label">Tỉnh / Thành phố</label>
+                <select name="province_id" id="province_id" class="form-control">
+                    <option value="">-- Chọn Tỉnh / Thành --</option>
+                    @foreach($provinces as $province)
+                        <option value="{{ $province->id }}" 
+                            {{ $lead->province_id == $province->id ? 'selected' : '' }}>
+                            {{ $province->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
+
             <div class="col-md-8 mb-3">
                 <label class="form-label">Địa chỉ</label>
                 <input type="text" name="address" value="{{ $lead->address }}" class="form-control">
@@ -50,22 +60,54 @@
                 <label class="form-label">Zalo</label>
                 <input type="text" name="zalo" value="{{ $lead->zalo }}" class="form-control">
             </div>
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Loại khách hàng</label>
-                <input type="text" name="customer_type_id" value="{{ $lead->customer_type_id }}" class="form-control">
-            </div>
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Khách hàng mới?</label>
-                <select name="is_new_customer" class="form-select">
-                    <option value="1" {{ $lead->is_new_customer ? 'selected' : '' }}>Có</option>
-                    <option value="0" {{ !$lead->is_new_customer ? 'selected' : '' }}>Không</option>
+
+           <div class="col-md-4 mb-3">
+                <label for="customer_type_id" class="form-label">Loại khách hàng</label>
+                <select name="customer_type_id" id="customer_type_id" class="form-control">
+                    <option value="">-- Chọn Loại khách hàng --</option>
+                    @foreach($customerTypes as $customerType)
+                        <option value="{{ $customerType->id }}" 
+                            {{ $lead->customer_type_id == $customerType->id ? 'selected' : '' }}>
+                            {{ $customerType->name }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
 
             <div class="col-md-4 mb-3">
-                <label class="form-label">Nguồn khách hàng</label>
-                <input type="text" name="customer_source_id" value="{{ $lead->customer_source_id }}" class="form-control">
+                <label class="form-label">Khách hàng mới?</label>
+                <select name="is_new_customer" class="form-select">
+                    <option value="1" {{ $lead->is_new_customer ? 'selected' : '' }}>Khách Hàng Mới </option>
+                    <option value="0" {{ !$lead->is_new_customer ? 'selected' : '' }}>Khách Hàng Cũ</option>
+                </select>
             </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="customer_source_id" class="form-label">Nguồn khách hàng</label>
+                <select name="customer_source_id" id="customer_source_id" class="form-control">
+                    <option value="">-- Chọn Nguồn khách hàng --</option>
+                    @foreach($customerSources as $customerSource)
+                        <option value="{{ $customerSource->id }}" 
+                            {{ $lead->customer_source_id == $customerSource->id ? 'selected' : '' }}>
+                            {{ $customerSource->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="product_category_id" class="form-label">Danh mục sản phẩm</label>
+                <select name="product_category_id" id="product_category_id" class="form-control">
+                    <option value="">-- Chọn Danh mục sản phẩm --</option>
+                    @foreach($productCategories as $productCategorie)
+                        <option value="{{ $productCategorie->id }}" 
+                            {{ $lead->product_category_id == $productCategorie->id ? 'selected' : '' }}>
+                            {{ $productCategorie->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            
             <div class="col-md-4 mb-3">
                 <label class="form-label">Danh mục sản phẩm</label>
                 <input type="text" name="product_category_id" value="{{ $lead->product_category_id }}" class="form-control">

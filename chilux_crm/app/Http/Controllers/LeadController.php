@@ -171,8 +171,28 @@ class LeadController extends Controller
      */
     public function edit(Lead $lead)
     {
-        $leadTakeCare = $lead->leadTakeCare; 
-        return view('leads.edit', compact('lead', 'leadTakeCare'));
+        $leadTakeCare = LeadTakeCare::all();
+        $provinces = Province::all();
+        $customerTypes = CustomerType::all();
+        $customerSources = CustomerSource::all();
+        $productCategories = ProductCategory::all();
+        $showrooms = Showroom::all();
+        $customerStatuses = CustomerStatus::all();
+        $saleUsers = SaleUser::all();
+        $supportStatuses = SaleUser::all(); 
+        return view('leads.edit', compact(
+            'lead',
+            'leadTakeCare',
+            'provinces',
+            'customerTypes',
+            'customerSources',
+            'productCategories',
+            'showrooms',
+            'customerStatuses',
+            'saleUsers',
+            'supportStatuses'
+
+        ));
     }
 
     /**
