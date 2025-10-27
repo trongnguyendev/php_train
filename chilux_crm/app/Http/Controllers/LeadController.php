@@ -31,7 +31,7 @@ class LeadController extends Controller
         }
 
         if ($request->lead_type) {
-        $query->where('lead_type', $request->lead_type );
+        $query->where('lead_type', $request->lead_type);
         }
 
         $leads = $query->get();
@@ -171,6 +171,7 @@ class LeadController extends Controller
      */
     public function edit(Lead $lead)
     {
+
         $leadTakeCare = LeadTakeCare::all();
         $provinces = Province::all();
         $customerTypes = CustomerType::all();
