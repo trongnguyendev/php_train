@@ -88,7 +88,7 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="online-tab" data-bs-toggle="tab" data-bs-target="#online-pane" type="button" role="tab" aria-controls="online-pane" aria-selected="true">
                     <i class="bi bi-globe me-2"></i>Lead Online
-                    <span class="badge bg-info ms-2">{{ $leads->where('lead_type', 2)->count() }}</span>
+                    <span class="badge bg-info ms-2">{{ $leadsOnline->where('lead_type', 2)->count() }}</span>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
