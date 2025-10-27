@@ -20,7 +20,7 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Lead::query();
+        $query = Lead::with('leadTakeCare');
 
         if ($request->type_phone) {
         $query->where('phone', 'like', '%' . $request->type_phone . '%');
@@ -30,14 +30,11 @@ class LeadController extends Controller
         $query->where('first_arrival_date', 'like', '%' . $request->first_arrival_date . '%');
         }
 
-        if ($request->lead_type) {
-        $query->where('lead_type', $request->lead_type);
-        }
-
-        $leads = $query->get();
-        $leadTakeCare = LeadTakeCare::all();
         
-        return view('leads.index', compact('leads', 'leadTakeCare'));
+        $leads = $query->where('lead_type', 1)->get();
+        $leadsOnline = $query->where('lead_type', 2)->get();
+        
+        return view('leads.index', compact('leads', 'leadsOnline'));
     }
 
     /**

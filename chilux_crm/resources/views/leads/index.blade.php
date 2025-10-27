@@ -354,10 +354,11 @@
                                     <th width="100">Tình Trạng Khách Hiện Tại</th>
                                     <th width="100">Thông tin trạo đổi với KH</th>
                                     <th width="100">Kết Quả</th>
+                                    <th width="100">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($leads->where('lead_type', 2) as $lead)
+                                @foreach ($leads->where('lead_type', 1) as $lead)
                                     <tr>
                                         <td>
                                             <span class="badge bg-info">#{{ $lead->id }}</span>
