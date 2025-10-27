@@ -25,6 +25,11 @@
         <h4 class="text-primary mt-3">📋 Thông tin Lead</h4>
         <div class="row">
             <div class="col-md-4 mb-3">
+                <label class="form-label">Loại Lead</label>
+                <input type="text" name="lead_type" value="{{ $lead->lead_type }}" class="form-control">
+            </div>
+            
+            <div class="col-md-4 mb-3">
                 <label class="form-label">Ngày khách đến lần đầu</label>
                 <input type="date" name="first_arrival_date" value="{{ $lead->first_arrival_date }}" class="form-control">
             </div>
@@ -107,36 +112,75 @@
                     @endforeach
                 </select>
             </div>
-            
+
             <div class="col-md-4 mb-3">
-                <label class="form-label">Danh mục sản phẩm</label>
-                <input type="text" name="product_category_id" value="{{ $lead->product_category_id }}" class="form-control">
-            </div>
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Showroom</label>
-                <input type="text" name="showroom_id" value="{{ $lead->showroom_id }}" class="form-control">
+                <label for="showroom_id" class="form-label">Showroom</label>
+                <select name="showroom_id" id="showroom_id" class="form-control">
+                    <option value="">-- Chọn Showroom --</option>
+                    @foreach($showrooms as $showroom)
+                        <option value="{{ $showroom->id }}" 
+                            {{ $lead->showroom_id == $showroom->id ? 'selected' : '' }}>
+                            {{ $showroom->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="col-md-4 mb-3">
-                <label class="form-label">Tình trạng KH ban đầu</label>
-                <input type="text" name="first_customer_status_id" value="{{ $lead->first_customer_status_id }}" class="form-control">
+                <label for="first_customer_status_id" class="form-label">Tình trạng KH ban đầu</label>
+                <select name="first_customer_status_id" id="first_customer_status_id" class="form-control">
+                    <option value="">-- Chọn Tình trạng KH ban đầu --</option>
+                    @foreach($customerStatuses as $customerStatuse)
+                        <option value="{{ $customerStatuse->id }}" 
+                            {{ $lead->first_customer_status_id == $customerStatuse->id ? 'selected' : '' }}>
+                            {{ $customerStatuse->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
+
             <div class="col-md-8 mb-3">
                 <label class="form-label">Ghi chú</label>
                 <textarea name="note" class="form-control" rows="2">{{ $lead->note }}</textarea>
             </div>
 
             <div class="col-md-4 mb-3">
-                <label class="form-label">Sale nhận KH</label>
-                <input type="text" name="sale_receive_customer_info_id" value="{{ $lead->sale_receive_customer_info_id }}" class="form-control">
+                <label for="sale_receive_customer_info_id" class="form-label">Sale nhận KH</label>
+                <select name="sale_receive_customer_info_id" id="sale_receive_customer_info_id" class="form-control">
+                    <option value="">-- Chọn Sale nhận KH --</option>
+                    @foreach($saleUsers as $saleUser)
+                        <option value="{{ $saleUser->id }}" 
+                            {{ $lead->sale_receive_customer_info_id == $saleUser->id ? 'selected' : '' }}>
+                            {{ $saleUser->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
+
             <div class="col-md-4 mb-3">
-                <label class="form-label">Sale hỗ trợ</label>
-                <input type="text" name="sale_support_id" value="{{ $lead->sale_support_id }}" class="form-control">
+                <label for="sale_support_id" class="form-label">Sale hỗ trợ</label>
+                <select name="sale_support_id" id="sale_support_id" class="form-control">
+                    <option value="">-- Chọn Sale hỗ trợ --</option>
+                    @foreach($saleUsers as $saleUser)
+                        <option value="{{ $saleUser->id }}" 
+                            {{ $lead->sale_support_id == $saleUser->id ? 'selected' : '' }}>
+                            {{ $saleUser->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
+
             <div class="col-md-4 mb-3">
-                <label class="form-label">Tình trạng KH hiện tại</label>
-                <input type="text" name="current_customer_status_id" value="{{ $lead->current_customer_status_id }}" class="form-control">
+                <label for="current_customer_status_id" class="form-label">Tình trạng KH hiện tại</label>
+                <select name="current_customer_status_id" id="current_customer_status_id" class="form-control">
+                    <option value="">-- Chọn Tình trạng KH hiện tại--</option>
+                    @foreach($customerStatuses as $customerStatuse)
+                        <option value="{{ $customerStatuse->id }}" 
+                            {{ $lead->current_customer_status_id == $customerStatuse->id ? 'selected' : '' }}>
+                            {{ $customerStatuse->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="col-md-4 mb-3">
@@ -155,11 +199,6 @@
             <div class="col-md-6 mb-3">
                 <label class="form-label">Kết quả</label>
                 <textarea name="results" class="form-control" rows="2">{{ $lead->results }}</textarea>
-            </div>
-
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Loại Lead</label>
-                <input type="text" name="lead_type" value="{{ $lead->lead_type }}" class="form-control">
             </div>
         </div>
 

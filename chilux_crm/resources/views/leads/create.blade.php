@@ -37,6 +37,18 @@
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="lead_type" class="form-label">
+                                <i class="bi bi-diagram-3 me-1"></i>Loại Lead
+                            </label>
+                            <select name="lead_type" id="lead_type" class="form-select @error('lead_type') is-invalid @enderror">
+                                <option value="1" {{ old('lead_type', '1') == '1' ? 'selected' : '' }}>Trực tiếp</option>
+                                <option value="2" {{ old('lead_type') == '2' ? 'selected' : '' }}>Online</option>
+                            </select>
+                            @error('lead_type')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <!-- Basic Information -->
                         <div class="col-md-6">
                             <label for="first_arrival_date" class="form-label">
@@ -270,18 +282,6 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4">
-                            <label for="lead_type" class="form-label">
-                                <i class="bi bi-diagram-3 me-1"></i>Loại Lead
-                            </label>
-                            <select name="lead_type" id="lead_type" class="form-select @error('lead_type') is-invalid @enderror">
-                                <option value="1" {{ old('lead_type', '1') == '1' ? 'selected' : '' }}>Trực tiếp</option>
-                                <option value="2" {{ old('lead_type') == '2' ? 'selected' : '' }}>Online</option>
-                            </select>
-                            @error('lead_type')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
 
                         <!-- Sales Team -->
                         <div class="col-md-4">
