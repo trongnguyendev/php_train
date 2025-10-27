@@ -106,7 +106,7 @@
         <div class="tab-pane fade show active" id="online-pane" role="tabpanel" aria-labelledby="online-tab">
             <!-- Online Leads Table -->
             <div class="card-body p-0">
-                @if($leads->where('lead_type', 2)->count() > 0)
+                @if($leadsOnline->where('lead_type', 2)->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
                             <thead class="table-light">
@@ -142,7 +142,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($leads->where('lead_type', 2) as $lead)
+                                @foreach ($leadsOnline->where('lead_type', 2) as $lead)
                                     <tr>
                                         <td>
                                             <span class="badge bg-info">#{{ $lead->id }}</span>
