@@ -241,12 +241,20 @@
                                             @endif
                                         </td>
                                         <td>
+                                            @if($lead->saleSupport)
+                                                <small>{{ $lead->saleSupport->name }}</small>
+                                            @else
+                                                <small class="text-muted">-</small>
+                                            @endif
+                                        </td>
+
+                                        <!-- <td>
                                             @if($lead->customerStatuses)
                                                 <small>{{ $lead->customerStatuses->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
-                                    
+                                        </td> -->
                                         <td>
                                             @if($lead->exchange_content)
                                                 <small>{{ $lead->exchange_content }}</small>

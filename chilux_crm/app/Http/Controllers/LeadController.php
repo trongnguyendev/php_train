@@ -21,7 +21,19 @@ class LeadController extends Controller
     public function index(Request $request)
     {
         $query = Lead::query();
-        $queryOnline = Lead::with('leadTakeCare');
+        $queryOnline = Lead::with([
+            'province',
+            'customerType',
+            'customerSource',
+            'productCategory',
+            'showroom',
+            'firstStatus',
+            'saleReceive',
+            'saleSupport',
+            'currentStatus',
+            'supportStatus',
+            'leadTakeCares'
+            ]);
 
         if ($request->type_phone) {
         $query->where('phone', 'like', '%' . $request->type_phone . '%');
@@ -37,7 +49,10 @@ class LeadController extends Controller
         $leads = $query->where('lead_type', 1)->get();
         $leadsOnline = $queryOnline->where('lead_type', 2)->get();
         
-        return view('leads.index', compact('leads', 'leadsOnline'));
+        return view('leads.index', compact(
+            'leads',
+            'leadsOnline',
+        ));
     }
 
     /**
