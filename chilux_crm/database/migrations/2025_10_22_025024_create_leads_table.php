@@ -29,10 +29,10 @@ return new class extends Migration
             $table->string('sale_receive_customer_info_id');
             $table->string('sale_support_id');
             $table->string('current_customer_status_id');
-            $table->integer('order_value');
+            $table->integer('order_value')->default(0)->change();
             $table->string('support_status_customer_id');
             $table->text('exchange_content');
-            $table->string('results');
+            $table->string('results')->default('')->change();
             $table->string('lead_type');
             $table->timestamps();
         });

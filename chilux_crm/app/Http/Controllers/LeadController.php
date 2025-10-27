@@ -109,7 +109,6 @@ class LeadController extends Controller
             'sale_receive_customer_info_id.required' => 'Sale nhận thông tin không được để trống!',
             'sale_support_id.required' => 'Sale hỗ trợ không được để trống!',
             'current_customer_status_id.required' => 'Tình trạng hiện tại không được để trống!',
-            'support_status_customer_id.required' => 'Tình trạng hỗ trợ không được để trống!',
             'exchange_content.required' => 'Không được để trống!'
              
         ]);
@@ -120,7 +119,7 @@ class LeadController extends Controller
             'phone' => $request->phone,
             'province_id' => $request->province_id,
             'address' => $request->address,
-            'zalo' => $request->zalo,
+            'zalo' => $request->zalo ?? '',
             'customer_type_id' => $request->customer_type_id,
             'is_new_customer' => $request->is_new_customer,
             'customer_source_id' => $request->customer_source_id,
@@ -131,10 +130,10 @@ class LeadController extends Controller
             'sale_receive_customer_info_id' => $request->sale_receive_customer_info_id,
             'sale_support_id' => $request->sale_support_id,
             'current_customer_status_id' => $request->current_customer_status_id,
-            'order_value' => $request->order_value,
+            'order_value' => $request->order_value ?? 0,
             'support_status_customer_id' => $request->support_status_customer_id,
             'exchange_content' => $request->exchange_content,
-            'results' => $request->results,
+            'results' => $request->results ?? '',
             'lead_type' => $request->lead_type
         ]);
 
