@@ -88,13 +88,13 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="online-tab" data-bs-toggle="tab" data-bs-target="#online-pane" type="button" role="tab" aria-controls="online-pane" aria-selected="true">
                     <i class="bi bi-globe me-2"></i>Lead Online
-                    <span class="badge bg-info ms-2">{{ $leadsOnline->where('lead_type', 2)->count() }}</span>
+                    <span class="badge bg-info ms-2">{{ $leadsOnline->count() }}</span>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="direct-tab" data-bs-toggle="tab" data-bs-target="#direct-pane" type="button" role="tab" aria-controls="direct-pane" aria-selected="false">
                     <i class="bi bi-telephone me-2"></i>Lead Trực tiếp
-                    <span class="badge bg-warning ms-2">{{ $leads->where('lead_type', 1)->count() }}</span>
+                    <span class="badge bg-warning ms-2">{{ $leads->count() }}</span>
                 </button>
             </li>
         </ul>
@@ -106,43 +106,43 @@
         <div class="tab-pane fade show active" id="online-pane" role="tabpanel" aria-labelledby="online-tab">
             <!-- Online Leads Table -->
             <div class="card-body p-0">
-                @if($leadsOnline->where('lead_type', 2)->count() > 0)
+                @if($leadsOnline->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th width="60">ID</th>
-                                    <th width="120">Ngày</th>
-                                    <th width="200">Tên KH</th>
-                                    <th width="120">Điện thoại</th>
-                                    <th width="100">Tỉnh/Thành</th>
-                                    <th width="100">Địa Chỉ</th>
-                                    <th width="100">Zalo Feedback</th>
-                                    <th width="100">Khách Hàng Đã Đặt Hàng Chưa?</th>
-                                    <th width="100">Phân Loại Khách Hàng</th>
-                                    <th width="100">Nguồn</th>
-                                    <th width="100">Sản Phẩm Cần Tư Vấn</th>
-                                    <th width="100">Tình Trạng Khách Hàng Đầu Tiên</th>
-                                    <th width="100">Note</th>
-                                    <th width="100">Sale Nhận Thông Tin</th>
-                                    <th width="100">Sale Hỗ Trợ Khách</th>
-                                    <th width="100">Tình Trạng Khách Hiện Tại</th>
-                                    <th width="100">Thông tin trạo đổi với KH</th>
-                                    <th width="100">Kết Quả</th>
-                                    <th width="100">Ngày Chăm Khách Lần 1</th>
-                                    <th width="100">Kế hoạch lần 1</th>
-                                    <th width="100">Kết quả lần 1</th>
-                                    <th width="100">Ngày Chăm Khách Lần 2</th>
-                                    <th width="100">Kế hoạch lần 2</th>
-                                    <th width="100">Kết quả lần 2</th>
-                                    <th width="100">Ngày Chăm Khách Lần 3</th>
-                                    <th width="100">Kế hoạch lần 3</th>
-                                    <th width="100">Kết quả lần 3</th>
-                                    <th width="100">Hành động</th>
+                                    <th style="min-width: 60px;">ID</th>
+                                    <th style="min-width: 120px;">Ngày</th>
+                                    <th style="min-width: 200px;">Tên KH</th>
+                                    <th style="min-width: 120px;">Điện thoại</th>
+                                    <th style="min-width: 200px;">Tỉnh/Thành</th>
+                                    <th style="min-width: 300px;">Địa Chỉ</th>
+                                    <th style="min-width: 100px;">Zalo Feedback</th>
+                                    <th style="min-width: 100px;">Khách Hàng Đã Đặt Hàng Chưa?</th>
+                                    <th style="min-width: 200px;">Phân Loại Khách Hàng</th>
+                                    <th style="min-width: 100px;">Nguồn</th>
+                                    <th style="min-width: 200px;">Sản Phẩm Cần Tư Vấn</th>
+                                    <th style="min-width: 200px;">Tình Trạng Khách Hàng Đầu Tiên</th>
+                                    <th style="min-width: 300px;">Note</th>
+                                    <th style="min-width: 200px;">Sale Nhận Thông Tin</th>
+                                    <th style="min-width: 100px;">Sale Hỗ Trợ Khách</th>
+                                    <th style="min-width: 200px;">Tình Trạng Khách Hiện Tại</th>
+                                    <th style="min-width: 200px;">Thông tin trạo đổi với KH</th>
+                                    <th style="min-width: 300px;">Kết Quả</th>
+                                    <th style="min-width: 200px;">Ngày Chăm Khách Lần 1</th>
+                                    <th style="min-width: 200px;">Kế hoạch lần 1</th>
+                                    <th style="min-width: 200px;">Kết quả lần 1</th>
+                                    <th style="min-width: 200px;">Ngày Chăm Khách Lần 2</th>
+                                    <th style="min-width: 200px;">Kế hoạch lần 2</th>
+                                    <th style="min-width: 200px;">Kết quả lần 2</th>
+                                    <th style="min-width: 200px;">Ngày Chăm Khách Lần 3</th>
+                                    <th style="min-width: 200px;">Kế hoạch lần 3</th>
+                                    <th style="min-width: 200px;">Kết quả lần 3</th>
+                                    <th style="min-width: 200px;">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($leadsOnline->where('lead_type', 2) as $lead)
+                                @foreach ($leadsOnline as $lead)
                                     <tr>
                                         <td>
                                             <span class="badge bg-info">#{{ $lead->id }}</span>
@@ -198,22 +198,22 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($lead->customerSources)
-                                                <small>{{ $lead->customerSources->name }}</small>
+                                            @if($lead->customerSource)
+                                                <small>{{ $lead->customerSource->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
                                         <td>
-                                            @if($lead->productCategories)
-                                                <small>{{ $lead->productCategories->name }}</small>
+                                            @if($lead->productCategory)
+                                                <small>{{ $lead->productCategory->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
                                         <td>
-                                            @if($lead->customerStatuses)
-                                                <small>{{ $lead->customerStatuses->name }}</small>
+                                            @if($lead->firstStatus)
+                                                <small>{{ $lead->firstStatus->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
@@ -227,15 +227,15 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($lead->saleUsers)
-                                                <small>{{ $lead->saleUsers->name }}</small>
+                                            @if($lead->saleReceive)
+                                                <small>{{ $lead->saleReceive->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
                                          <td>
-                                            @if($lead->saleUsers)
-                                                <small>{{ $lead->saleUsers->name }}</small>
+                                            @if($lead->saleSupport)
+                                                <small>{{ $lead->saleSupport->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
@@ -339,34 +339,34 @@
         <div class="tab-pane fade" id="direct-pane" role="tabpanel" aria-labelledby="direct-tab">
             <!-- Direct Leads Table -->
             <div class="card-body p-0">
-                @if($leads->where('lead_type', 1)->count() > 0)
+                @if($leads->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th width="60">ID</th>
-                                    <th width="120">Ngày</th>
-                                    <th width="120">Tên KH</th>
-                                    <th width="120">Điện thoại</th>
-                                    <th width="100">Tỉnh/Thành</th>
-                                    <th width="100">Địa Chỉ</th>
-                                    <th width="100">Zalo Feedback</th>
-                                    <th width="100">Khách Hàng Đã Đặt Hàng Chưa?</th>
-                                    <th width="100">Phân Loại Khách Hàng</th>
-                                    <th width="100">Nguồn</th>
-                                    <th width="100">Sản Phẩm Cần Tư Vấn</th>
-                                    <th width="100">Tình Trạng Khách Hàng Đầu Tiên</th>
-                                    <th width="100">Note</th>
-                                    <th width="100">Sale Nhận Thông Tin</th>
-                                    <th width="100">Sale Hỗ Trợ Khách</th>
-                                    <th width="100">Tình Trạng Khách Hiện Tại</th>
-                                    <th width="100">Thông tin trạo đổi với KH</th>
-                                    <th width="100">Kết Quả</th>
-                                    <th width="100">Hành động</th>
+                                    <th style="min-width: 60px;">ID</th>
+                                    <th style="min-width: 120px;">Ngày</th>
+                                    <th style="min-width: 200px;">Tên KH</th>
+                                    <th style="min-width: 120px;">Điện thoại</th>
+                                    <th style="min-width: 100px;">Tỉnh/Thành</th>
+                                    <th style="min-width: 300px;">Địa Chỉ</th>
+                                    <th style="min-width: 100px;">Zalo Feedback</th>
+                                    <th style="min-width: 100px;">Khách Hàng Đã Đặt Hàng Chưa?</th>
+                                    <th style="min-width: 100px;">Phân Loại Khách Hàng</th>
+                                    <th style="min-width: 100px;">Nguồn</th>
+                                    <th style="min-width: 100px;">Sản Phẩm Cần Tư Vấn</th>
+                                    <th style="min-width: 100px;">Tình Trạng Khách Hàng Đầu Tiên</th>
+                                    <th style="min-width: 100px;">Note</th>
+                                    <th style="min-width: 100px;">Sale Nhận Thông Tin</th>
+                                    <th style="min-width: 100px;">Sale Hỗ Trợ Khách</th>
+                                    <th style="min-width: 100px;">Tình Trạng Khách Hiện Tại</th>
+                                    <th style="min-width: 100px;">Thông tin trạo đổi với KH</th>
+                                    <th style="min-width: 100px;">Kết Quả</th>
+                                    <th style="min-width: 100px;">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($leads->where('lead_type', 1) as $lead)
+                                @foreach ($leads as $lead)
                                     <tr>
                                         <td>
                                             <span class="badge bg-info">#{{ $lead->id }}</span>
@@ -422,15 +422,15 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($lead->customerSources)
-                                                <small>{{ $lead->customerSources->name }}</small>
+                                            @if($lead->customerSource)
+                                                <small>{{ $lead->customerSource->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
                                         <td>
-                                            @if($lead->productCategories)
-                                                <small>{{ $lead->productCategories->name }}</small>
+                                            @if($lead->productCategory)
+                                                <small>{{ $lead->productCategory->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
@@ -451,22 +451,22 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($lead->saleUsers)
-                                                <small>{{ $lead->saleUsers->name }}</small>
+                                            @if($lead->saleReceive)
+                                                <small>{{ $lead->saleReceive->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
                                          <td>
-                                            @if($lead->saleUsers)
-                                                <small>{{ $lead->saleUsers->name }}</small>
+                                            @if($lead->saleSupport)
+                                                <small>{{ $lead->saleSupport->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
                                         <td>
-                                            @if($lead->customerStatuses)
-                                                <small>{{ $lead->customerStatuses->name }}</small>
+                                            @if($lead->currentStatus)
+                                                <small>{{ $lead->currentStatus->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
