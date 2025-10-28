@@ -28,10 +28,9 @@ class LeadController extends Controller
             'productCategory',
             'showroom',
             'firstStatus',
+            'currentStatus',
             'saleReceive',
             'saleSupport',
-            'currentStatus',
-            'supportStatus',
             'leadTakeCares'
             ]);
 

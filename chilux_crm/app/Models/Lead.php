@@ -31,21 +31,44 @@ class Lead extends Model
     ];
 
 
-    public function leadTakeCare()
-    {
-        return $this->hasOne(LeadTakeCare::class, 'lead_id');
+    public function province() { 
+        return $this->belongsTo(Province::class, 'province_id'); 
     }
 
-    public function province() { return $this->belongsTo(Province::class); }
-    public function customerType() { return $this->belongsTo(CustomerType::class); }
-    public function customerSource() { return $this->belongsTo(CustomerSource::class); }
-    public function productCategory() { return $this->belongsTo(ProductCategory::class); }
-    public function showroom() { return $this->belongsTo(Showroom::class); }
-    public function firstStatus() { return $this->belongsTo(CustomerStatus::class, 'first_customer_status_id'); }
-    public function saleReceive() { return $this->belongsTo(User::class, 'sale_receive_customer_info_id'); }
-    public function saleSupport() { return $this->belongsTo(User::class, 'sale_support_id'); }
-    public function currentStatus() { return $this->belongsTo(CustomerStatus::class, 'current_customer_status_id'); }
-    public function supportStatus() { return $this->belongsTo(CustomerSource::class, 'support_status_customer_id'); }
-    public function leadTakeCares() { return $this->hasMany(LeadTakeCare::class, 'lead_id'); }
+    public function customerType() { 
+        return $this->belongsTo(CustomerType::class, 'customer_type_id'); 
+    }
 
+    public function customerSource() { 
+        return $this->belongsTo(CustomerSource::class, 'customer_source_id'); 
+    }
+
+    public function productCategory() { 
+        return $this->belongsTo(ProductCategory::class, 'product_category_id'); 
+    }
+
+    public function showroom() { 
+        return $this->belongsTo(Showroom::class, 'showroom_id'); 
+    }
+
+    public function firstStatus() { 
+        return $this->belongsTo(CustomerStatus::class, 'first_customer_status_id'); 
+    }
+
+    public function currentStatus() { 
+        return $this->belongsTo(CustomerStatus::class, 'current_customer_status_id'); 
+    }
+
+    public function saleReceive() { 
+        return $this->belongsTo(SaleUser::class, 'sale_receive_customer_info_id'); 
+    }
+
+    public function saleSupport() { 
+        return $this->belongsTo(SaleUser::class, 'sale_support_id'); 
+    }
+
+
+    public function leadTakeCares() { 
+        return $this->hasMany(LeadTakeCare::class, 'lead_id'); 
+    }
 }
