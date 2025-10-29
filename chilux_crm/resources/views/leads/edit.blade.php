@@ -189,7 +189,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <label class="form-label">Trạng thái hỗ trợ</label>
-                <input type="text" name="support_status_customer_id" value="{{ $lead->support_status_customer_id }}" class="form-control">
+                <input type="text" name="support_status_customer_id" value="{{ $lead->supportStatuses }}" class="form-control">
             </div>
 
             <div class="col-md-6 mb-3">

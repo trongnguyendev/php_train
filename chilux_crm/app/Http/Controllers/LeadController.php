@@ -47,7 +47,6 @@ class LeadController extends Controller
         
         $leads = $query->where('lead_type', 1)->get();
         $leadsOnline = $queryOnline->where('lead_type', 2)->get();
-        
         return view('leads.index', compact(
             'leads',
             'leadsOnline',
@@ -158,15 +157,24 @@ class LeadController extends Controller
                 continue;
             }
 
-            LeadTakeCare::create([
-                'lead_id' => $lead->id,
-                'take_care_plan' => $plan,
-                'take_care_date' => $request->take_care_date[$index] ?? null,
-                'take_care_result' => $request->take_care_result[$index] ?? null,
-            ]);
+            // LeadTakeCare::create([
+            //     'lead_id' => $lead->id,
+            //     'take_care_plan' => $plan,
+            //     'take_care_date' => $request->take_care_date[$index] ?? null,
+            //     'take_care_result' => $request->take_care_result[$index] ?? null,
+            // ]);
+            try {
+                LeadTakeCare::create([
+                    'lead_id' => $lead->id,
+                    'take_care_plan' => $plan,
+                    'take_care_date' => $request->take_care_date[$index] ?? null,
+                    'take_care_result' => $request->take_care_result[$index] ?? null,
+                ]);
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
         }
-    }
-
+    }       
 
         return redirect()->route('leads.index')->with('success', 'Tạo Lead thành công!');
     }

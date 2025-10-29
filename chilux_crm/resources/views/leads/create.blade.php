@@ -378,7 +378,8 @@
     
     <div class="col-lg-4">
         <!-- Customer Care Information Card -->
-        <div class="card fade-in mb-4" id="customer-care-card" style="display: none;">
+         <!-- style="display: none;" -->
+        <div class="card fade-in mb-4" id="customer-care-card" style="visibility: hidden;">
             <div class="card-header bg-white border-bottom">
                 <div class="d-flex align-items-center">
                     <div class="icon-circle bg-success-light text-success me-3">
