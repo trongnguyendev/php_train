@@ -151,11 +151,11 @@ class LeadController extends Controller
         ]);
 
         if ($request->has('take_care_plan')) {
-        foreach ($request->take_care_plan as $index => $plan) {
-            // Bỏ qua dòng trống (nếu user không nhập)
-            if (empty($plan) && empty($request->take_care_date[$index]) && empty($request->take_care_result[$index])) {
-                continue;
-            }
+            foreach ($request->take_care_plan as $index => $plan) {
+                // Bỏ qua dòng trống (nếu user không nhập)
+                if (empty($plan) && empty($request->take_care_date[$index]) && empty($request->take_care_result[$index])) {
+                    continue;
+                }
 
             // LeadTakeCare::create([
             //     'lead_id' => $lead->id,
@@ -285,12 +285,25 @@ class LeadController extends Controller
 
         $leadTakeCare = LeadTakeCare::Where('lead_id', $lead->id)->first();
          
-            if($leadTakeCare){
-                $leadTakeCare->update([
-                'take_care_plan' => $request->take_care_plan,
-                'take_care_date' => $request->take_care_date,
-                'take_care_result' => $request->take_care_result,
-            ]);
+        if($leadTakeCare){
+            foreach($request->take_care_plan as $index => $plan) {
+                $leadTakeCare = LeadTakeCare::updateOrCreate(
+                    ['lead_id' => $lead->id, 'take_care_date' => $request->take_care_date[$index] ?? null],
+                    [
+                        'take_care_plan' => $plan,
+                        'take_care_result' => $request->take_care_result[$index] ?? null,
+                    ]
+                );
+            }
+        } else {
+            foreach($request->take_care_plan as $index => $plan) {
+                LeadTakeCare::create([
+                    'lead_id' => $lead->id,
+                    'take_care_plan' => $plan,
+                    'take_care_date' => $request->take_care_date[$index] ?? null,
+                    'take_care_result' => $request->take_care_result[$index] ?? null,
+                ]);
+            }
         }
 
         return redirect()->route('leads.index')->with('success', 'Cập nhập Lead thành công!');

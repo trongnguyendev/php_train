@@ -12,6 +12,10 @@ class LeadTakeCare extends Model
         'take_care_date',
         'take_care_result'
     ];
+
+    protected $casts = [
+        'take_care_date' => 'date',
+    ];
     
     public function lead()
     {

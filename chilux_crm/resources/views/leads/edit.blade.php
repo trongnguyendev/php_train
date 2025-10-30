@@ -26,7 +26,8 @@
         <div class="row">
             <div class="col-md-4 mb-3">
                 <label class="form-label">Loại Lead</label>
-                <input type="text" name="lead_type" value="{{ $lead->lead_type }}" class="form-control">
+                <input type="hidden" name="lead_type" value="{{ $lead->lead_type }}">
+                <div class="form-text">@if($lead->lead_type == 1) Trực tiếp @else Online @endif</div>
             </div>
             
             <div class="col-md-4 mb-3">
@@ -207,6 +208,8 @@
         {{-- ========================= --}}
         {{-- 3 LẦN CHĂM SÓC --}}
         {{-- ========================= --}}
+
+        @if($lead->lead_type == 2)
         <h4 class="text-success mb-3">💬 Thông tin chăm sóc khách hàng (3 lần)</h4>
 
         @php
@@ -226,7 +229,7 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Ngày chăm sóc</label>
-                        <input type="date" name="take_care_date[]" value="{{ $care->take_care_date ?? '' }}" class="form-control">
+                        <input type="date" name="take_care_date[]" value="{{ $care?->take_care_date ? date('Y-m-d', strtotime($care?->take_care_date)) : '' }}" class="form-control">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Kết quả chăm sóc</label>
@@ -235,6 +238,7 @@
                 </div>
             </div>
         @endfor
+        @endif
 
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-warning px-4">💾 Cập nhật Lead</button>
