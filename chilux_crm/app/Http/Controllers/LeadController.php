@@ -157,22 +157,22 @@ class LeadController extends Controller
                     continue;
                 }
 
-            // LeadTakeCare::create([
-            //     'lead_id' => $lead->id,
-            //     'take_care_plan' => $plan,
-            //     'take_care_date' => $request->take_care_date[$index] ?? null,
-            //     'take_care_result' => $request->take_care_result[$index] ?? null,
-            // ]);
-            try {
-                LeadTakeCare::create([
-                    'lead_id' => $lead->id,
-                    'take_care_plan' => $plan,
-                    'take_care_date' => $request->take_care_date[$index] ?? null,
-                    'take_care_result' => $request->take_care_result[$index] ?? null,
-                ]);
-            } catch (\Exception $e) {
-                dd($e->getMessage());
-            }
+                // LeadTakeCare::create([
+                //     'lead_id' => $lead->id,
+                //     'take_care_plan' => $plan,
+                //     'take_care_date' => $request->take_care_date[$index] ?? null,
+                //     'take_care_result' => $request->take_care_result[$index] ?? null,
+                // ]);
+                try {
+                    LeadTakeCare::create([
+                        'lead_id' => $lead->id,
+                        'take_care_plan' => $plan,
+                        'take_care_date' => $request->take_care_date[$index] ?? null,
+                        'take_care_result' => $request->take_care_result[$index] ?? null,
+                    ]);
+                } catch (\Exception $e) {
+                    dd($e->getMessage());
+                }
         }
     }       
 
