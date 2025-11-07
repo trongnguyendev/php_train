@@ -6,6 +6,7 @@
         <h1 class="h3"><i class="bi bi-building text-primary"></i> Loại Khách Hàng</h1>
         <a href="{{ route('customer_types.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Thêm danh sách Sale
+        </a>
     </div>
 
     @if(session('success'))

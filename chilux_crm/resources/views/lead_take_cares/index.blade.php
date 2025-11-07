@@ -6,6 +6,7 @@
         <h1 class="h3"><i class="bi bi-building text-primary"></i> Quản lý Loại Danh mục Sale</h1>
         <a href="{{ route('sale_users.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Thêm danh sách Sale
+        </a>
     </div>
 
     @if(session('success'))

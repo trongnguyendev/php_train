@@ -6,6 +6,7 @@
         <h1 class="h3"><i class="bi bi-building text-primary"></i> Quản lý Tỉnh</h1>
         <a href="{{ route('provinces.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Thêm danh sách Tỉnh
+        </a>
     </div>
 
     @if(session('success'))

@@ -6,6 +6,7 @@
         <h1 class="h3"><i class="bi bi-building text-primary"></i> Quản lý Loại Danh mục sản phẩm</h1>
         <a href="{{ route('product_categories.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Thêm danh mục sản phẩm
+        </a>
     </div>
 
     @if(session('success'))

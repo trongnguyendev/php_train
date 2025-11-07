@@ -6,6 +6,7 @@
         <h1 class="h3"><i class="bi bi-building text-primary"></i> Quản lý Phân loại khách hàng</h1>
         <a href="{{ route('customer_sources.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Thêm danh Phân loại khách hàng
+        </a>
     </div>
 
     @if(session('success'))
