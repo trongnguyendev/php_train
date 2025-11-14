@@ -11,6 +11,8 @@ use App\Http\Controllers\LeadController;
 use App\Http\Controllers\CustomerSourceController;
 use App\Http\Controllers\CustomerTypeController;
 use App\Http\Controllers\ProvinceController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionController;
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -32,3 +34,11 @@ Route::resource('leads', LeadController::class);
 Route::resource('customer_sources', CustomerSourceController::class);
 Route::resource('customer_types', CustomerTypeController::class);
 Route::resource('provinces', ProvinceController::class);
+
+// Role and Permission routes
+Route::resource('roles', RoleController::class);
+Route::resource('permissions', PermissionController::class)->only(['index', 'show']);
+
+// User role assignment routes
+Route::get('users/{user}/assign-roles', [UserController::class, 'assignRoles'])->name('users.assign-roles');
+Route::put('users/{user}/sync-roles', [UserController::class, 'syncRoles'])->name('users.sync-roles');

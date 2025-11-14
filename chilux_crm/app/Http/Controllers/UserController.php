@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -13,8 +15,10 @@ class UserController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', User::class);
+        
         // $users = User::latest()->paginate(10);
-        $users = User::all();
+        $users = User::with('roles')->get();
         return view('users.index', compact('users'));
     }
 
@@ -23,6 +27,8 @@ class UserController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', User::class);
+        
         return view('users.create');
     }
 
@@ -31,6 +37,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', User::class);
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -61,6 +69,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        Gate::authorize('view', $user);
+        
+        $user->load('roles');
         return view('users.show', compact('user'));
     }
 
@@ -69,7 +80,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        Gate::authorize('update', $user);
+        
+        $roles = Role::all();
+        $user->load('roles');
+        return view('users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -77,6 +92,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        Gate::authorize('update', $user);
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
@@ -102,6 +119,11 @@ class UserController extends Controller
             ]);
         }
 
+        // Sync roles if provided
+        if ($request->has('roles')) {
+            $user->syncRoles($request->roles);
+        }
+
         return redirect()->route('users.index')->with('success', 'Cập nhật tài khoản thành công!');
     }
 
@@ -110,7 +132,38 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        Gate::authorize('delete', $user);
+        
         $user->delete();
         return redirect()->route('users.index')->with('success', 'Xóa tài khoản thành công!');
+    }
+
+    /**
+     * Hiển thị form gán roles cho user
+     */
+    public function assignRoles(User $user)
+    {
+        Gate::authorize('update', $user);
+        
+        $roles = Role::all();
+        $user->load('roles');
+        return view('users.assign-roles', compact('user', 'roles'));
+    }
+
+    /**
+     * Gán roles cho user
+     */
+    public function syncRoles(Request $request, User $user)
+    {
+        Gate::authorize('update', $user);
+        
+        $request->validate([
+            'roles' => 'nullable|array',
+            'roles.*' => 'exists:roles,id',
+        ]);
+
+        $user->syncRoles($request->roles ?? []);
+
+        return redirect()->route('users.index')->with('success', 'Gán roles thành công!');
     }
 }

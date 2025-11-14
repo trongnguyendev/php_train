@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@can('viewAny', App\Models\User::class)
 <div class="container-fluid">
     <!-- Page Header -->
     <div class="row mb-4">
@@ -13,10 +14,12 @@
                     </h1>
                     <p class="text-muted">Quản lý tất cả người dùng trong hệ thống một cách dễ dàng</p>
                 </div>
-                <a href="{{ route('users.create') }}" class="btn btn-primary btn-lg">
-                    <i class="bi bi-person-plus-fill"></i>
-                    Thêm Người dùng mới
-                </a>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('users.create') }}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-person-plus-fill"></i>
+                        Thêm Người dùng mới
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -29,6 +32,34 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+
+    <!-- Quick Links Card -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-link-45deg me-2"></i>
+                        Liên kết nhanh
+                    </h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ route('roles.index') }}" class="btn btn-outline-info">
+                            <i class="bi bi-shield-check me-2"></i>
+                            Quản lý Roles
+                        </a>
+                        <a href="{{ route('roles.create') }}" class="btn btn-outline-info">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            Tạo Role mới
+                        </a>
+                        <a href="{{ route('permissions.index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-key me-2"></i>
+                            Xem Permissions
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Stats Cards -->
     <div class="row mb-4">
@@ -75,7 +106,7 @@
                             <th><i class="bi bi-person me-1"></i>Tên</th>
                             <th><i class="bi bi-envelope me-1"></i>Email</th>
                             <th><i class="bi bi-calendar me-1"></i>Ngày tạo</th>
-                            <th><i class="bi bi-shield-check me-1"></i>Trạng thái</th>
+                            <th><i class="bi bi-shield-check me-1"></i>Roles</th>
                             <th><i class="bi bi-gear me-1"></i>Thao tác</th>
                         </tr>
                     </thead>
@@ -109,16 +140,14 @@
                                     </span>
                                 </td>
                                 <td>
-                                    @if($user->email_verified_at)
-                                        <span class="badge bg-success">
-                                            <i class="bi bi-check-circle me-1"></i>
-                                            Đã xác thực
-                                        </span>
+                                    @if($user->roles->count() > 0)
+                                        <div class="d-flex flex-wrap gap-1">
+                                            @foreach($user->roles as $role)
+                                                <span class="badge bg-info">{{ $role->name }}</span>
+                                            @endforeach
+                                        </div>
                                     @else
-                                        <span class="badge bg-warning">
-                                            <i class="bi bi-exclamation-triangle me-1"></i>
-                                            Chưa xác thực
-                                        </span>
+                                        <span class="badge bg-secondary">Chưa có role</span>
                                     @endif
                                 </td>
                                 <td>
@@ -132,6 +161,11 @@
                                            class="btn btn-sm btn-outline-warning" 
                                            title="Chỉnh sửa">
                                             <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a href="{{ route('users.assign-roles', $user) }}" 
+                                           class="btn btn-sm btn-outline-info" 
+                                           title="Gán roles">
+                                            <i class="bi bi-shield-check"></i>
                                         </a>
                                         <form action="{{ route('users.destroy', $user) }}" method="POST" class="d-inline">
                                             @csrf
@@ -167,4 +201,31 @@
         </div>
     </div>
 </div>
+@endcan
+@cannot('viewAny', App\Models\User::class)
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="text-center">
+                <!-- Icon -->
+                <div class="mb-4">
+                    <i class="bi bi-shield-lock text-danger" style="font-size: 5rem; opacity: 0.8;"></i>
+                </div>
+                
+                <!-- Content -->
+                <h3 class="fw-bold mb-3">Không có quyền truy cập</h3>
+                <p class="text-muted mb-4">
+                    Tài khoản của bạn không có quyền xem danh sách Người dùng.
+                </p>
+                
+                <!-- Action -->
+                <a href="{{ route('dashboard') }}" class="btn btn-primary">
+                    <i class="bi bi-arrow-left me-2"></i>
+                    Quay về trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+@endcannot
 @endsection

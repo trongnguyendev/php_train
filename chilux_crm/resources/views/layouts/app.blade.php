@@ -25,13 +25,77 @@
                 </div>
 
                 <ul class="list-unstyled components">
+                    <!-- User Management -->
                     <li class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
                         <a href="{{ route('users.index') }}" class="nav-link">
                             <i class="bi bi-people-fill"></i>
                             <span>Quản lý Users</span>
                         </a>
                     </li>
-                    <li>
+
+                    <!-- Role and Permission Section -->
+                    <li class="{{ request()->routeIs('roles.*') ? 'active' : '' }}">
+                        <a href="{{ route('roles.index') }}" class="nav-link">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Quản lý Roles</span>
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('permissions.*') ? 'active' : '' }}">
+                        <a href="{{ route('permissions.index') }}" class="nav-link">
+                            <i class="bi bi-key"></i>
+                            <span>Quản lý Permissions</span>
+                        </a>
+                    </li>
+
+                    <!-- Lead Management -->
+                    <li class="{{ request()->routeIs('leads.*') ? 'active' : '' }}">
+                        <a href="{{ route('leads.index') }}" class="nav-link">
+                            <i class="bi bi-people-fill"></i>
+                            <span>Quản lý Lead</span>
+                        </a>
+                    </li>
+
+                    <!-- Customer Source Management -->
+                    <li class="{{ request()->routeIs('customer_sources.*') ? 'active' : '' }}">
+                        <a href="{{ route('customer_sources.index') }}" class="nav-link">
+                            <i class="bi bi-building"></i>
+                            <span>Quản lý Nguồn khách hàng</span>
+                        </a>
+                    </li>
+
+                    <!-- Product category Management -->
+                    <li class="{{ request()->routeIs('product_categories.*') ? 'active' : '' }}">
+                        <a href="{{ route('product_categories.index') }}" class="nav-link">
+                            <i class="bi bi-building"></i>
+                            <span>Quản lý Danh mục sản phẩm</span>
+                        </a>
+                    </li>
+
+                     <!-- Sale user Management -->
+                    <li class="{{ request()->routeIs('sale_users.*') ? 'active' : '' }}">
+                        <a href="{{ route('sale_users.index') }}" class="nav-link">
+                            <i class="bi bi-people-fill"></i>
+                            <span>Quản lý Sale user</span>
+                        </a>
+                    </li>
+
+                     <!-- Showroom Management -->
+                    <li class="{{ request()->routeIs('showrooms.*') ? 'active' : '' }}">
+                        <a href="{{ route('showrooms.index') }}" class="nav-link">
+                            <i class="bi bi-building"></i>
+                            <span>Quản lý Showroom</span>
+                        </a>
+                    </li>
+
+                    <!-- Customer status Management -->
+                    <li class="{{ request()->routeIs('customer_status.*') ? 'active' : '' }}">
+                        <a href="{{ route('customer_status.index') }}" class="nav-link">
+                            <i class="bi bi-building"></i>
+                            <span>Quản lý Tình trạng khách hàng</span>
+                        </a>
+                    </li>
+                    
+                    <li class="mt-3">
                         <a href="#" class="nav-link">
                             <i class="bi bi-gear-fill"></i>
                             <span>Cài đặt</span>

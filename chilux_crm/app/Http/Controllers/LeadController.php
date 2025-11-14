@@ -12,6 +12,7 @@ use App\Models\Showroom;
 use App\Models\CustomerStatus;
 use App\Models\SaleUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class LeadController extends Controller
 {
@@ -20,6 +21,8 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
+        // Gate::authorize('viewAny', Lead::class);
+        
         $query = Lead::query();
         $queryOnline = Lead::with([
             'province',
@@ -58,6 +61,8 @@ class LeadController extends Controller
      */
     public function create()
     {
+        // Gate::authorize('create', Lead::class);
+        
         $lead = Lead::all();
         $leadTakeCares = LeadTakeCare::all();
         $provinces = Province::all();
@@ -90,6 +95,8 @@ class LeadController extends Controller
      */
     public function store(Request $request)
     {
+        // Gate::authorize('create', Lead::class);
+        
         $request->validate([
             'first_arrival_date' => 'required|date',
             'name' => 'required|string',
@@ -184,6 +191,8 @@ class LeadController extends Controller
      */
     public function show(Lead $lead)
     {
+        // Gate::authorize('view', $lead);
+        
         $leadTakeCare = $lead->leadTakeCare;
         return view('leads.show', compact('lead', 'leadTakeCare'));
     }
@@ -193,6 +202,7 @@ class LeadController extends Controller
      */
     public function edit(Lead $lead)
     {
+        // Gate::authorize('update', $lead);
 
         $leadTakeCare = LeadTakeCare::all();
         $provinces = Province::all();
@@ -223,6 +233,8 @@ class LeadController extends Controller
      */
     public function update(Request $request, Lead $lead)
     {
+        // Gate::authorize('update', $lead);
+        
         $request->validate([
             'first_arrival_date' => 'required|date',
             'name' => 'required|string',
@@ -314,6 +326,8 @@ class LeadController extends Controller
      */
     public function destroy(Lead $lead)
     {
+        // Gate::authorize('delete', $lead);
+        
         LeadTakeCare::where('lead_id', $lead->id)->delete();
         $lead->delete();
         return redirect()->route('leads.index')->with('success', 'Đã xóa Lead và dữ liệu chăm sóc liên quan!');
