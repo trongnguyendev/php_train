@@ -13,6 +13,7 @@ class CustomerSourceController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', CustomerSource::class);
         $customerSource = CustomerSource::all();
         return view('customer_sources.index', compact('customerSource'));
     }
@@ -22,6 +23,7 @@ class CustomerSourceController extends Controller
      */
     public function create()
     {
+        Gate::authorize('viewAny', CustomerSource::class);
         return view('customer_sources.create');
     }
 
@@ -30,6 +32,7 @@ class CustomerSourceController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('viewAny', CustomerSource::class);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -49,6 +52,7 @@ class CustomerSourceController extends Controller
      */
     public function show(CustomerSource $customerSource)
     {
+        Gate::authorize('viewAny', CustomerSource::class);
         return view('customer_sources.show', compact('customerSource'));
     }
 
@@ -57,6 +61,7 @@ class CustomerSourceController extends Controller
      */
     public function edit(CustomerSource $customerSource)
     {
+        Gate::authorize('viewAny', CustomerSource::class);
         return view('customer_sources.edit', compact('customerSource'));
     }
 
@@ -65,6 +70,7 @@ class CustomerSourceController extends Controller
      */
     public function update(Request $request, CustomerSource $customerSource)
     {
+        Gate::authorize('viewAny', CustomerSource::class);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -83,6 +89,7 @@ class CustomerSourceController extends Controller
      */
     public function destroy(CustomerSource $customerSource)
     {
+        Gate::authorize('viewAny', CustomerSource::class);
         $customerSource->delete();
         return redirect()->route('customer_sources.index')->with('success', 'Xóa tình trạng khách hàng thành công!');
     }

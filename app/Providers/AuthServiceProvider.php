@@ -5,7 +5,13 @@ namespace App\Providers;
 use App\Models\Lead;
 use App\Models\User;
 use App\Policies\LeadPolicy;
+use App\Policies\CustomerSourcePolicy;
+use App\Policies\SaleUserPolicy;
+use App\Policies\ShowroomPolicy;
+use App\Policies\ProvincePolicy;
 use App\Policies\UserPolicy;
+use App\Policies\CustomerStatusPolicy;
+use App\Policies\CustomerTypePolicy;
 use App\Policies\RolePolicy;
 use App\Policies\PermissionPolicy;
 use App\Models\Role;
@@ -23,8 +29,12 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
     Lead::class => LeadPolicy::class,
     User::class => UserPolicy::class,
+    CustomerSource::class => CustomerSourcePolicy::class,
     Showroom::class => ShowroomPolicy::class,
+    CustomerStatus::class => CustomerStatusPolicy::class,
+    Province::class => ProvincePolicy::class,
     SaleUser::class => SaleUserPolicy::class,
+    CustomerType::class => CustomerTypePolicy::class,
     Role::class => RolePolicy::class,
     Permission::class => PermissionPolicy::class,
     ];

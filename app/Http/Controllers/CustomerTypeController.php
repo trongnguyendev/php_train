@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CustomerType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CustomerTypeController extends Controller
 {
@@ -12,6 +13,7 @@ class CustomerTypeController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', CustomerType::class);
         $customerTy = CustomerType::all();
         return view('customer_types.index', compact('customerTy'));
     }
@@ -21,6 +23,7 @@ class CustomerTypeController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', CustomerType::class);
         return view('customer_types.create');
     }
 
@@ -29,6 +32,7 @@ class CustomerTypeController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', CustomerType::class);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -47,6 +51,7 @@ class CustomerTypeController extends Controller
      */
     public function show(CustomerType $customerType)
     {
+        Gate::authorize('view', $customerType);
         return view('customer_types.show', compact('customerType'));
     }
 
@@ -55,6 +60,7 @@ class CustomerTypeController extends Controller
      */
     public function edit(CustomerType $customerType)
     {
+        Gate::authorize('update', $customerType);
         return view('customer_types.edit', compact('customerType'));
     }
 
@@ -63,6 +69,7 @@ class CustomerTypeController extends Controller
      */
     public function update(Request $request, CustomerType $customerType)
     {
+        Gate::authorize('update', $customerType);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -81,6 +88,7 @@ class CustomerTypeController extends Controller
      */
     public function destroy(CustomerType $customerType)
     {
+        Gate::authorize('delete', $customerType);
         $customerType->delete();
         return view('customer_types.index')->with('success', 'Xóa loại khách hàng thành công!');
     }

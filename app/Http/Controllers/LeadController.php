@@ -21,7 +21,7 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
-        // Gate::authorize('viewAny', Lead::class);
+        Gate::authorize('viewAny', Lead::class);
         
         $query = Lead::query();
         $queryOnline = Lead::with([
@@ -61,7 +61,7 @@ class LeadController extends Controller
      */
     public function create()
     {
-        // Gate::authorize('create', Lead::class);
+        Gate::authorize('create', Lead::class);
         
         $lead = Lead::all();
         $leadTakeCares = LeadTakeCare::all();
@@ -95,7 +95,7 @@ class LeadController extends Controller
      */
     public function store(Request $request)
     {
-        // Gate::authorize('create', Lead::class);
+        Gate::authorize('create', Lead::class);
         
         $request->validate([
             'first_arrival_date' => 'required|date',
@@ -191,7 +191,7 @@ class LeadController extends Controller
      */
     public function show(Lead $lead)
     {
-        // Gate::authorize('view', $lead);
+        Gate::authorize('view', $lead);
         
         $leadTakeCare = $lead->leadTakeCare;
         return view('leads.show', compact('lead', 'leadTakeCare'));
@@ -202,7 +202,7 @@ class LeadController extends Controller
      */
     public function edit(Lead $lead)
     {
-        // Gate::authorize('update', $lead);
+        Gate::authorize('update', $lead);
 
         $leadTakeCare = LeadTakeCare::all();
         $provinces = Province::all();
@@ -233,7 +233,7 @@ class LeadController extends Controller
      */
     public function update(Request $request, Lead $lead)
     {
-        // Gate::authorize('update', $lead);
+        Gate::authorize('update', $lead);
         
         $request->validate([
             'first_arrival_date' => 'required|date',
@@ -326,7 +326,7 @@ class LeadController extends Controller
      */
     public function destroy(Lead $lead)
     {
-        // Gate::authorize('delete', $lead);
+        Gate::authorize('delete', $lead);
         
         LeadTakeCare::where('lead_id', $lead->id)->delete();
         $lead->delete();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Province;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ProvinceController extends Controller
 {
@@ -12,6 +13,7 @@ class ProvinceController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', Province::class);
         $province = Province::all();
         return view('provinces.index', compact('province'));
     }
@@ -21,6 +23,7 @@ class ProvinceController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Province::class);
          return view('provinces.create');
     }
 
@@ -29,7 +32,7 @@ class ProvinceController extends Controller
      */
     public function store(Request $request)
     {
-        
+        Gate::authorize('create', Province::class);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -48,6 +51,7 @@ class ProvinceController extends Controller
      */
     public function show(Province $province)
     {
+        Gate::authorize('view', $province);
         return view('provinces.show', compact('province'));
     }
 
@@ -56,6 +60,7 @@ class ProvinceController extends Controller
      */
     public function edit(Province $province)
     {
+        Gate::authorize('update', $province);
         return view('provinces.edit', compact('province'));
     }
 
@@ -64,6 +69,7 @@ class ProvinceController extends Controller
      */
     public function update(Request $request, Province $province)
     {
+        Gate::authorize('update', $province);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -82,6 +88,8 @@ class ProvinceController extends Controller
      */
     public function destroy(Province $province)
     {
+        
+        Gate::authorize('delete', $province);
         $province->delete();
         return redirect()->route('provinces.index')->with('success', 'Xóa tên tỉnh thành công!');
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CustomerStatus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CustomerStatusController extends Controller
 {
@@ -12,6 +13,7 @@ class CustomerStatusController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', Showroom::class);
         $customerStatus = CustomerStatus::all();
         return view('customer_status.index', compact('customerStatus'));
     }
@@ -21,6 +23,7 @@ class CustomerStatusController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', CustomerStatus::class);
         return view('customer_status.create');
     }
 
@@ -29,6 +32,7 @@ class CustomerStatusController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', CustomerStatus::class);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -47,6 +51,7 @@ class CustomerStatusController extends Controller
      */
     public function show(CustomerStatus $customerStatus)
     {
+        Gate::authorize('view', $customerStatus);
         return view('customer_status.show', compact('customerStatus'));
     }
 
@@ -55,6 +60,7 @@ class CustomerStatusController extends Controller
      */
     public function edit(CustomerStatus $customerStatus)
     {
+        Gate::authorize('update', $customerStatus);
         return view('customer_status.edit', compact('customerStatus'));
     }
 
@@ -63,6 +69,7 @@ class CustomerStatusController extends Controller
      */
     public function update(Request $request, CustomerStatus $customerStatus)
     {
+        Gate::authorize('update', $customerStatus);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -81,6 +88,7 @@ class CustomerStatusController extends Controller
      */
     public function destroy(CustomerStatus $customerStatus)
     {
+        Gate::authorize('delete', $customerStatus);
         $customerStatus->delete();
         return redirect()->route('customer_status.index')->with('success', 'Xóa trạng thái thành công!');
     }

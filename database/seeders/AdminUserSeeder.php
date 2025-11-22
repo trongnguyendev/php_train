@@ -28,8 +28,14 @@ class AdminUserSeeder extends Seeder
         $adminPermissions = Permission::where(function($query) {
             $query->where('slug', 'like', 'users.%')
                   ->orWhere('slug', 'like', 'roles.%')
+                  ->orWhere('slug', 'like', 'leads.%')
                   ->orWhere('slug', 'like', 'sale_users.%')
                   ->orWhere('slug', 'like', 'showrooms.%')
+                  ->orWhere('slug', 'like', 'provinces.%')
+                  ->orWhere('slug', 'like', 'customer_statuses.%')
+                  ->orWhere('slug', 'like', 'customer_types.%')
+                  ->orWhere('slug', 'like', 'product_categories.%')
+                  ->orWhere('slug', 'like', 'customer_sources.%')
                   ->orWhere('slug', 'like', 'permissions.%');
         })->get();
 

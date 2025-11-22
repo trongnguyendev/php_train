@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ProductCategoryController extends Controller
 {
@@ -12,6 +13,7 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', ProductCategory::class);
         $productCategory = ProductCategory::all();
         return view('product_categories.index', compact('productCategory'));
 
@@ -22,6 +24,7 @@ class ProductCategoryController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', ProductCategory::class);
         return view('product_categories.create');
     }
 
@@ -30,6 +33,7 @@ class ProductCategoryController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', ProductCategory::class);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -48,6 +52,7 @@ class ProductCategoryController extends Controller
      */
     public function show(ProductCategory $productCategory)
     {
+        Gate::authorize('view', $productCategory);
         return view('product_categories.show', compact('productCategory'));
     }
 
@@ -56,6 +61,7 @@ class ProductCategoryController extends Controller
      */
     public function edit(ProductCategory $productCategory)
     {
+        Gate::authorize('update', $productCategory);
         return view('product_categories.edit', compact('productCategory'));
     }
 
@@ -64,6 +70,7 @@ class ProductCategoryController extends Controller
      */
     public function update(Request $request, ProductCategory $productCategory)
     {
+        Gate::authorize('update', $productCategory);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -82,6 +89,7 @@ class ProductCategoryController extends Controller
      */
     public function destroy(ProductCategory $productCategory)
     {
+        Gate::authorize('delete', $productCategory);
         $productCategory->delete();
         return redirect()->route('product_categories.index')->with('success', 'Xóa Danh mục thành công!');
     }

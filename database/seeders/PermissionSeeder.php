@@ -17,6 +17,11 @@ class PermissionSeeder extends Seeder
             'users' => 'Users',
             'sale_users' => 'Sale Users',
             'showrooms' => 'Showrooms',
+            'provinces' => 'Provinces',
+            'customer_statuses' => 'Customer Statuses',
+            'customer_types' => 'Customer Types',
+            'product_categories' => 'Product Categories',
+            'customer_sources' => 'Customer Sources',
             'roles' => 'Roles',
             'permissions' => 'Permissions',
         ];
