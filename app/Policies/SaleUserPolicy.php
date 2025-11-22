@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Policies;
+
 use App\Models\User;
 use App\Models\SaleUser;
 
@@ -15,6 +16,7 @@ class SaleUserPolicy
     }
 
     /**
+
      * Determine if the user can view the sale user.
      */
     public function view(User $user, SaleUser $saleUser): bool
@@ -30,8 +32,7 @@ class SaleUserPolicy
         return $user->hasPermission('sale_users.create');
     }
 
-    /**
-     * Determine if the user can update the sale user.
+    /**     * Determine if the user can update the sale user.
      */
     public function update(User $user, SaleUser $saleUser): bool
     {
