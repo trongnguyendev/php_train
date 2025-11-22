@@ -15,6 +15,8 @@ class PermissionSeeder extends Seeder
         $resources = [
             'leads' => 'Leads',
             'users' => 'Users',
+            'sale_users' => 'Sale Users',
+            'showrooms' => 'Showrooms',
             'roles' => 'Roles',
             'permissions' => 'Permissions',
         ];

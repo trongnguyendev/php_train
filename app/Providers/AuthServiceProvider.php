@@ -21,12 +21,12 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        Lead::class => LeadPolicy::class,
-        User::class => UserPolicy::class,
-        Showroom::class => ShowroomPolicy::class,
-        SaleUser::class => SaleUserPolicy::class,
-        Role::class => RolePolicy::class,
-        Permission::class => PermissionPolicy::class,
+    Lead::class => LeadPolicy::class,
+    User::class => UserPolicy::class,
+    Showroom::class => ShowroomPolicy::class,
+    SaleUser::class => SaleUserPolicy::class,
+    Role::class => RolePolicy::class,
+    Permission::class => PermissionPolicy::class,
     ];
 
     /**

@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Policies;
-
-use App\Models\Lead;
+use App\Models\User;
 use App\Models\Showroom;
 
 class ShowroomPolicy

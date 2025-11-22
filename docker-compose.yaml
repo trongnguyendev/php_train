@@ -20,11 +20,12 @@ services:
     image: mysql:8.0
     container_name: chilux_crm_mysql
     ports:
-      - "3309:3306"
+      - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_ROOT_PASSWORD: secret123
       MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel123
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -36,9 +37,9 @@ services:
     ports:
       - "8081:80"
     environment:
-      PMA_HOST: chilux_crm_mysql
-      PMA_USER: root
-      PMA_PASSWORD:
+  PMA_HOST: mysql
+  PMA_USER: root
+  PMA_PASSWORD: secret123
     depends_on:
       - mysql
     networks:

@@ -1,9 +1,9 @@
-<?php
 
 namespace App\Http\Controllers;
 
 use App\Models\Showroom;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ShowroomController extends Controller
 {

@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+namespace App\Http\Controllers;
+
+namespace App\Http\Controllers;
+
 use App\Models\SaleUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SaleUserController extends Controller
 {
@@ -92,3 +97,4 @@ class SaleUserController extends Controller
         return redirect()->route('sale_users.index')->with('success', 'Xóa tên sale thành công!');
     }
 }
+        return view('sale_users.edit', compact('saleUser'));
