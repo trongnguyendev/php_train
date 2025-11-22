@@ -12,6 +12,7 @@ class SaleUserController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', SaleUser::class);
         $saleUser = SaleUser::all();
         return view('sale_users.index', compact('saleUser'));
     }
@@ -21,6 +22,7 @@ class SaleUserController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', SaleUser::class);
         return view('sale_users.create');
     }
 
@@ -29,6 +31,7 @@ class SaleUserController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', SaleUser::class);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -47,6 +50,7 @@ class SaleUserController extends Controller
      */
     public function show(SaleUser $saleUser)
     {
+        Gate::authorize('view', $saleUser);
         return view('sale_users.show', compact('saleUser'));
     }
 
@@ -55,6 +59,7 @@ class SaleUserController extends Controller
      */
     public function edit(SaleUser $saleUser)
     {
+        Gate::authorize('update', $saleUser);
         return view('sale_users.edit', compact('saleUser'));
     }
 
@@ -63,6 +68,7 @@ class SaleUserController extends Controller
      */
     public function update(Request $request, SaleUser $saleUser)
     {
+        Gate::authorize('update', $saleUser);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -81,6 +87,7 @@ class SaleUserController extends Controller
      */
     public function destroy(SaleUser $saleUser)
     {
+        Gate::authorize('delete', $saleUser);
         $saleUser->delete();
         return redirect()->route('sale_users.index')->with('success', 'Xóa tên sale thành công!');
     }

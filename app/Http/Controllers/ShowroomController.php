@@ -12,6 +12,7 @@ class ShowroomController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', Showroom::class);
         $showroom = Showroom::all();
         return view('showrooms.index', compact('showroom'));
     }
@@ -21,6 +22,7 @@ class ShowroomController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Showroom::class);
         return view('showrooms.create');
     }
 
@@ -29,6 +31,7 @@ class ShowroomController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', Showroom::class);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -47,6 +50,7 @@ class ShowroomController extends Controller
      */
     public function show(Showroom $showroom)
     {
+        Gate::authorize('view', $showroom);
         return view('showrooms.show', compact('showroom'));
     }
 
@@ -55,6 +59,7 @@ class ShowroomController extends Controller
      */
     public function edit(Showroom $showroom)
     {
+        Gate::authorize('update', $showroom);
         return view('showrooms.edit', compact('showroom'));
     }
 
@@ -63,6 +68,7 @@ class ShowroomController extends Controller
      */
     public function update(Request $request, Showroom $showroom)
     {
+        Gate::authorize('update', $showroom);
         $request->validate([
             'name' => 'required|string'
         ], [
@@ -81,6 +87,7 @@ class ShowroomController extends Controller
      */
     public function destroy(Showroom $showroom)
     {
+        Gate::authorize('delete', $showroom);
         $showroom->delete();
         return redirect()->route('showrooms.index')->with('success', 'Xóa Showroom thành công!');
     }
