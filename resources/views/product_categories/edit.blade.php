@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@can('update', $productCategory)
+@can('update', App\Models\ProductCategory::class)
 <div class="container">
     <h1 class="h3 mb-4"><i class="bi bi-pencil text-warning"></i> Chỉnh sửa Loại Showroom</h1>
 
@@ -22,7 +22,7 @@
     </form>
 </div>
 @endcan
-@cannot('update', $productCategory)
+@cannot('update', App\Models\ProductCategory::class)
 <div class="container-fluid py-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">

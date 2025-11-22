@@ -23,7 +23,18 @@ class LeadController extends Controller
     {
         Gate::authorize('viewAny', Lead::class);
         
-        $query = Lead::query();
+        $query = Lead::with([
+            'province',
+            'customerType',
+            'customerSource',
+            'productCategory',
+            'showroom',
+            'firstStatus',
+            'currentStatus',
+            'saleReceive',
+            'saleSupport',
+            'leadTakeCares'
+        ]);
         $queryOnline = Lead::with([
             'province',
             'customerType',
@@ -35,7 +46,8 @@ class LeadController extends Controller
             'saleReceive',
             'saleSupport',
             'leadTakeCares'
-            ]);
+        ]);
+        $customerStatuses = CustomerStatus::all();
 
         if ($request->type_phone) {
         $query->where('phone', 'like', '%' . $request->type_phone . '%');
@@ -47,12 +59,18 @@ class LeadController extends Controller
         $queryOnline->where('first_arrival_date', 'like', '%' . $request->first_arrival_date . '%');
         }
 
+        if ($request->current_status) {
+            $query->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
+            $queryOnline->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
+        }
+
         
         $leads = $query->where('lead_type', 1)->get();
         $leadsOnline = $queryOnline->where('lead_type', 2)->get();
         return view('leads.index', compact(
             'leads',
             'leadsOnline',
+            'customerStatuses'
         ));
     }
 

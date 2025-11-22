@@ -43,7 +43,7 @@ class CustomerTypeController extends Controller
             'name' => $request->name
         ]);
 
-        return redirect()->route('customer_types.index')->with('success', 'Tạo loại khách hàng thành công!');
+        return view('customer_types.index')->with('success', 'Tạo loại khách hàng thành công!');
     }
 
     /**
@@ -88,8 +88,8 @@ class CustomerTypeController extends Controller
      */
     public function destroy(CustomerType $customerType)
     {
-    Gate::authorize('delete', $customerType);
-    $customerType->delete();
-    return redirect()->route('customer_types.index')->with('success', 'Xóa loại khách hàng thành công!');
+        Gate::authorize('delete', $customerType);
+        $customerType->delete();
+        return view('customer_types.index')->with('success', 'Xóa loại khách hàng thành công!');
     }
 }

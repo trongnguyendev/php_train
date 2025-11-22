@@ -69,6 +69,18 @@
             </div>
 
             <div class="col-md-3">
+                <label for="current_status" class="form-label">
+                    <i class="bi bi-calendar me-1"></i>Tình trạng hiện tại
+                </label>
+                <select name="current_status" id="current_status" class="form-select">
+                    <option value="">-- Tất cả --</option>
+                    @foreach($customerStatuses as $status)
+                        <option value="{{ $status->id }}" {{ request('current_status') == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-3">
                 <label class="form-label">&nbsp;</label>
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary">
@@ -436,8 +448,8 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($lead->customerStatuses)
-                                                <small>{{ $lead->customerStatuses->name }}</small>
+                                            @if($lead->firstStatus)
+                                                <small>{{ $lead->firstStatus->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
