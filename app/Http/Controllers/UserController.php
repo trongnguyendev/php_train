@@ -164,6 +164,6 @@ class UserController extends Controller
 
         $user->syncRoles($request->roles ?? []);
 
-        return redirect()->route('users.index')->with('success', 'Gán roles thành công!');
+        return redirect()->route('users.index')->with('success', 'Gán roles thành côngy!');
     }
 }
