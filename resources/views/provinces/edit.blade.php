@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-@can('update', App\Models\Province::class)
 <div class="container">
     <h1 class="h3 mb-4"><i class="bi bi-pencil text-warning"></i> Chỉnh sửa Tỉnh</h1>
 
@@ -21,12 +20,4 @@
         <a href="{{ route('provinces.index') }}" class="btn btn-secondary">Hủy</a>
     </form>
 </div>
-@endcan
-@cannot('update', App\Models\Province::class)
-<div class="container-fluid">
-    <div class="alert alert-danger">
-        <i class="bi bi-exclamation-triangle"></i> Bạn không có quyền chỉnh sửa Tỉnh
-    </div>
-</div>
-@endcannot
 @endsection

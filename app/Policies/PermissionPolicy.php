@@ -26,7 +26,7 @@ class PermissionPolicy
     /**
      * Determine if the user can create permissions.
      */
-    public function create(User $user, Permission $model): bool
+    public function create(User $user): bool
     {
         return $user->hasPermission('permissions.create');
     }

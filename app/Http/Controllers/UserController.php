@@ -143,7 +143,7 @@ class UserController extends Controller
      */
     public function assignRoles(User $user)
     {
-        Gate::authorize('update', $user);
+        Gate::authorize('assignRoles', $user);
         
         $roles = Role::all();
         $user->load('roles');
@@ -155,7 +155,7 @@ class UserController extends Controller
      */
     public function syncRoles(Request $request, User $user)
     {
-        Gate::authorize('update', $user);
+        Gate::authorize('assignRoles', $user);
         
         $request->validate([
             'roles' => 'nullable|array',

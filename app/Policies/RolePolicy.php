@@ -26,7 +26,7 @@ class RolePolicy
     /**
      * Determine if the user can create roles.
      */
-    public function create(User $user, Role $model): bool
+    public function create(User $user): bool
     {
         return $user->hasPermission('roles.create');
     }

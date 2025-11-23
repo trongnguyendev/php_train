@@ -45,5 +45,13 @@ class UserPolicy
     {
         return $user->hasPermission('users.delete');
     }
+
+    /**
+     * Determine if the user can assign roles to another user.
+     */
+    public function assignRoles(User $user, User $model): bool
+    {
+        return $user->hasPermission('users.update');
+    }
 }
 

@@ -29,11 +29,14 @@ class LeadTakeCareController extends Controller
      */
     public function store(Request $request)
     {
-        $leadTakeCare = LeadTakeCare::create();
+        $leadTakeCare = LeadTakeCare::create([
             'lead_id' => $request->lead_id,
             'take_care_plan' => $request->take_care_plan,
             'take_care_date' => $request->take_care_date,
             'take_care_result' => $request->take_care_result
+        ]);
+
+        return redirect()->route('lead_take_cares.index')->with('success', 'Tạo thành công!');
     }
 
     /**

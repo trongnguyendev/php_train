@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-@can('viewAny', App\Models\Province::class)
 <div class="container-fluid">
     <div class="d-flex justify-content-between mb-3">
         <h1 class="h3"><i class="bi bi-building text-primary"></i> Quản lý Tỉnh</h1>
@@ -57,12 +56,4 @@
         </div>
     </div>
 </div>
-@endcan
-@cannot('viewAny', App\Models\Province::class)
-<div class="container-fluid">
-    <div class="alert alert-danger">
-        <i class="bi bi-exclamation-triangle"></i> Bạn không có quyền xem danh sách Tỉnh
-    </div>
-</div>
-@endcannot
 @endsection

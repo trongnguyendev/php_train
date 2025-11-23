@@ -20,7 +20,7 @@
                 <div class="sidebar-header">
                     <h3 class="text-white">
                         <i class="bi bi-rocket-takeoff"></i>
-                        Laravel App
+                        LEAD SYSTEM
                     </h3>
                 </div>
 
@@ -110,39 +110,41 @@
                 </ul>
             </nav>
 
-            <!-- Page Content -->
-            <div id="content">
-                <!-- Top Navigation -->
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <div class="container-fluid">
-                        <button type="button" id="sidebarCollapse" class="btn btn-primary">
-                            <i class="bi bi-list"></i>
-                        </button>
-                        
-                        <div class="ms-auto">
-                            <div class="dropdown">
-                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle"></i>
-                                    {{ auth()->user()->name }}
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" href="{{ route('users.show', auth()->user()) }}"><i class="bi bi-person"></i> Hồ sơ</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <form method="POST" action="{{ route('logout') }}" class="d-inline">
-                                            @csrf
-                                            <button type="submit" class="dropdown-item">
-                                                <i class="bi bi-box-arrow-right"></i> Đăng xuất
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="content-wrapper">
+                <!-- Top Header (Fixed) -->
+                <header class="top-header">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <div class="container-fluid">
+                            <button type="button" id="sidebarCollapse" class="btn btn-sm btn-primary">
+                                <i class="bi bi-list"></i>
+                            </button>
+                            
+                            <div class="ms-auto d-flex align-items-center">
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-person-circle me-2"></i>
+                                        <span>{{ auth()->user()->name }}</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="{{ route('users.show', auth()->user()) }}"><i class="bi bi-person me-2"></i> Hồ sơ</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item">
+                                                    <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </nav>
+                    </nav>
+                </header>
 
-                <!-- Main Content -->
+                <!-- Main Content Area -->
                 <main class="main-content">
                     <!-- Flash Messages -->
                     @if(session('success'))
@@ -198,10 +200,16 @@
      <script>
          document.addEventListener('DOMContentLoaded', function() {
              // Sidebar toggle
-             document.getElementById('sidebarCollapse').addEventListener('click', function() {
-                 document.getElementById('sidebar').classList.toggle('active');
-                 document.getElementById('content').classList.toggle('active');
-             });
+             const sidebarCollapse = document.getElementById('sidebarCollapse');
+             const sidebar = document.getElementById('sidebar');
+             const contentWrapper = document.getElementById('content-wrapper');
+             
+             if (sidebarCollapse && sidebar && contentWrapper) {
+                 sidebarCollapse.addEventListener('click', function() {
+                     sidebar.classList.toggle('active');
+                     contentWrapper.classList.toggle('active');
+                 });
+             }
 
              // Active link highlighting
              const currentPath = window.location.pathname;
