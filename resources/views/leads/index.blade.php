@@ -98,14 +98,26 @@
                     <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Danh Mục Sản Phẩm</span>
                 </label>
                 <div class="dropdown">
-                        <button class="btn dropdown-toggle w-100" type="button" id="dropdownProductCategories" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #0d6efd; color: #fff;">
-                            Chọn danh mục sản phẩm
+                        <button class="btn dropdown-toggle w-100" type="button" id="dropdownProductCategories" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #fff; color: #0d6efd; border: 1px solid #0d6efd; border-radius: 0.375rem;">
+                            <span id="selectedProductNamesFilterBtn">
+                                @php
+                                    $selectedProductNames = collect($productCategories)
+                                        ->whereIn('id', (array)request('productCategories', []))
+                                        ->pluck('name')
+                                        ->toArray();
+                                @endphp
+                                @if(count($selectedProductNames))
+                                    {{ implode(', ', $selectedProductNames) }}
+                                @else
+                                    Chọn danh mục sản phẩm
+                                @endif
+                            </span>
                         </button>
-                        <div class="dropdown-menu w-100 p-2" aria-labelledby="dropdownProductCategories" style="max-height: 300px; overflow-y: auto; background-color: #0d6efd; color: #fff;">
+                        <div class="dropdown-menu w-100 p-2" aria-labelledby="dropdownProductCategories" style="max-height: 300px; overflow-y: auto; background-color: #fff; color: #0d6efd;">
                             @foreach($productCategories as $category)
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="productCategories[]" id="productCategory{{ $category->id }}" value="{{ $category->id }}" {{ in_array($category->id, request('productCategories', [])) ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="productCategory{{ $category->id }}" style="color: #fff;">
+                                    <label class="form-check-label" for="productCategory{{ $category->id }}" style="color: #0d6efd;">
                                         {{ $category->name }}
                                     </label>
                                 </div>
@@ -612,6 +624,34 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Update product category button text when checkboxes change (filter)
+    const productCheckboxesFilter = document.querySelectorAll('input[name="productCategories[]"]');
+    const productNamesFilterBtn = document.getElementById('selectedProductNamesFilterBtn');
+    const productLabelsFilter = {};
+    @foreach($productCategories as $cat)
+        productLabelsFilter[{{ $cat->id }}] = @json($cat->name);
+    @endforeach
+
+    function updateProductNamesFilterBtn() {
+        const checked = Array.from(productCheckboxesFilter).filter(cb => cb.checked).map(cb => productLabelsFilter[cb.value]);
+        if (checked.length) {
+            productNamesFilterBtn.textContent = checked.join(', ');
+        } else {
+            productNamesFilterBtn.textContent = 'Chọn danh mục sản phẩm';
+        }
+    }
+    productCheckboxesFilter.forEach(cb => {
+        cb.addEventListener('change', updateProductNamesFilterBtn);
+    });
+    // Initial update
+    updateProductNamesFilterBtn();
+});
+</script>
+@endpush
 
 @push('scripts')
 <script>
