@@ -181,18 +181,34 @@
                         <!-- Business Information -->
                         <div class="col-md-4">
                             <label class="form-label">
-                                <i class="bi bi-box-seam me-1"></i><span class="text-primary fw-bold">Danh mục sản phẩm</span>
+                                <i class="bi bi-funnel me-1"></i><span class="text-primary fw-bold">Danh mục sản phẩm</span>
                             </label>
-                            <div class="d-flex flex-wrap gap-2">
-                                @foreach($productCategories as $cat)
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="product_category_ids[]" id="product_category_{{ $cat->id }}" value="{{ $cat->id }}"
-                                            {{ (collect(old('product_category_ids'))->contains($cat->id)) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="product_category_{{ $cat->id }}">
-                                            {{ $cat->name }}
-                                        </label>
-                                    </div>
-                                @endforeach
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle w-100" type="button" id="dropdownProductCategoriesCreate" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #fff; color: #0d6efd; border: 1px solid #717375ff; border-radius: 0.375rem;">
+                                    <span id="selectedProductNamesBtn">
+                                        @php
+                                            $selectedProductNames = collect($productCategories)
+                                                ->whereIn('id', (array)old('product_category_ids', []))
+                                                ->pluck('name')
+                                                ->toArray();
+                                        @endphp
+                                        @if(count($selectedProductNames))
+                                            {{ implode(', ', $selectedProductNames) }}
+                                        @else
+                                            Chọn danh mục sản phẩm
+                                        @endif
+                                    </span>
+                                </button>
+                                <div class="dropdown-menu w-100 p-2" aria-labelledby="dropdownProductCategoriesCreate" style="max-height: 300px; overflow-y: auto; background-color: #ffffffff; color: #fff;">
+                                    @foreach($productCategories as $cat)
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="product_category_ids[]" id="product_category_{{ $cat->id }}" value="{{ $cat->id }}" {{ (collect(old('product_category_ids'))->contains($cat->id)) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="product_category_{{ $cat->id }}" style="color: #1215ddff;">
+                                                {{ $cat->name }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                             @error('product_category_ids')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -442,13 +458,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const today = new Date().toISOString().split('T')[0];
         firstArrivalDate.value = today;
     }
-    
+
     // Handle lead type change
     const leadTypeSelect = document.getElementById('lead_type');
     const customerCareCard = document.getElementById('customer-care-card');
-    
+
     function toggleCustomerCare() {
-    console.log('change: ', leadTypeSelect.value);
         if (leadTypeSelect.value == '2') { // Online
             customerCareCard.style.display = 'block';
             customerCareCard.classList.add('fade-in');
@@ -457,12 +472,33 @@ document.addEventListener('DOMContentLoaded', function() {
             customerCareCard.classList.remove('fade-in');
         }
     }
-    
+
     // Initial check
     toggleCustomerCare();
-    
     // Listen for changes
     leadTypeSelect.addEventListener('change', toggleCustomerCare);
+
+    // Update product category button text when checkboxes change
+    const productCheckboxes = document.querySelectorAll('input[name="product_category_ids[]"]');
+    const productNamesBtn = document.getElementById('selectedProductNamesBtn');
+    const productLabels = {};
+    @foreach($productCategories as $cat)
+        productLabels[{{ $cat->id }}] = @json($cat->name);
+    @endforeach
+
+    function updateProductNamesBtn() {
+        const checked = Array.from(productCheckboxes).filter(cb => cb.checked).map(cb => productLabels[cb.value]);
+        if (checked.length) {
+            productNamesBtn.textContent = checked.join(', ');
+        } else {
+            productNamesBtn.textContent = 'Chọn danh mục sản phẩm';
+        }
+    }
+    productCheckboxes.forEach(cb => {
+        cb.addEventListener('change', updateProductNamesBtn);
+    });
+    // Initial update
+    updateProductNamesBtn();
 });
 
 // Auto-hide alerts after 5 seconds
