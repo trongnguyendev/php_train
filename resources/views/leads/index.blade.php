@@ -44,7 +44,7 @@
                 >
             </div>
             
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
                 <label for="lead_type" class="form-label">
                     <i class="bi bi-tag me-1"></i>Loại Lead
                 </label>
@@ -53,16 +53,29 @@
                     <option value="1" {{ request('lead_type') == '1' ? 'selected' : '' }}>Trực tiếp</option>
                     <option value="2" {{ request('lead_type') == '2' ? 'selected' : '' }}>Online</option>
                 </select>
-            </div>
+            </div> -->
 
             <div class="col-md-3">
                 <label for="first_arrival_date" class="form-label">
-                    <i class="bi bi-calendar me-1"></i>Ngày đầu tiên
+                    <i class="bi bi-calendar me-1"></i>Từ Ngày
                 </label>
                 <input 
                     type="date" 
                     name="first_arrival_date" 
-                    id="first_arrival_date"
+                    id="form_date"
+                    class="form-control" 
+                    value="{{ request('first_arrival_date') }}"
+                >
+            </div>
+
+            <div class="col-md-3">
+                <label for="first_arrival_date" class="form-label">
+                    <i class="bi bi-calendar me-1"></i>Đến Ngày
+                </label>
+                <input 
+                    type="date" 
+                    name="first_arrival_date" 
+                    id="todate"
                     class="form-control" 
                     value="{{ request('first_arrival_date') }}"
                 >

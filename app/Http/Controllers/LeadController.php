@@ -54,9 +54,21 @@ class LeadController extends Controller
         $queryOnline->where('phone', 'like', '%' . $request->type_phone . '%');
         }
 
-        if ($request->first_arrival_date) {
-        $query->where('first_arrival_date', 'like', '%' . $request->first_arrival_date . '%');
-        $queryOnline->where('first_arrival_date', 'like', '%' . $request->first_arrival_date . '%');
+        // if ($request->first_arrival_date) {
+        // $query->where('first_arrival_date', 'like', '%' . $request->first_arrival_date . '%');
+        // $queryOnline->where('first_arrival_date', 'like', '%' . $request->first_arrival_date . '%');
+        // }
+
+        if ($request->from_date && $request->to_date) {
+            $query->whereBetween('first_arrival_date', [
+                $request->from_date,
+                $request->to_date
+            ]);
+
+            $queryOnline->whereBetween('first_arrival_date', [
+                $request->from_date,
+                $request->to_date
+            ]);
         }
 
         if ($request->current_status) {
