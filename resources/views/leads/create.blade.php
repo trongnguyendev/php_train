@@ -38,7 +38,7 @@
                     <div class="row g-3">
                         <div class="col-md-4">
                             <label for="lead_type" class="form-label">
-                                <i class="bi bi-diagram-3 me-1"></i>Loại Lead
+                                <i class="bi bi-diagram-3 me-1"></i><span class="text-primary fw-bold">Loại Lead</span>
                             </label>
                             <select name="lead_type" id="lead_type" class="form-select @error('lead_type') is-invalid @enderror">
                                 <option value="1" {{ old('lead_type', '1') == '1' ? 'selected' : '' }}>Trực tiếp</option>
@@ -51,7 +51,7 @@
                         <!-- Basic Information -->
                         <div class="col-md-6">
                             <label for="first_arrival_date" class="form-label">
-                                <i class="bi bi-calendar me-1"></i>Ngày khách đến lần đầu
+                                <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Ngày khách đến lần đầu</span>
                             </label>
                             <input type="date" name="first_arrival_date" id="first_arrival_date" 
                                     class="form-control @error('first_arrival_date') is-invalid @enderror"
@@ -63,7 +63,7 @@
 
                         <div class="col-md-6">
                             <label for="name" class="form-label">
-                                <i class="bi bi-person me-1"></i>Tên khách hàng
+                                <i class="bi bi-person me-1"></i><span class="text-primary fw-bold">Tên khách hàng</span>
                             </label>
                             <input type="text" name="name" id="name" 
                                     class="form-control @error('name') is-invalid @enderror"
@@ -75,7 +75,7 @@
 
                         <div class="col-md-6">
                             <label for="phone" class="form-label">
-                                <i class="bi bi-telephone me-1"></i>Số điện thoại
+                                <i class="bi bi-telephone me-1"></i><span class="text-primary fw-bold">Số điện thoại</span>
                             </label>
                             <input type="text" name="phone" id="phone" 
                                     class="form-control @error('phone') is-invalid @enderror"
@@ -87,7 +87,7 @@
 
                         <div class="col-md-6">
                             <label for="zalo" class="form-label">
-                                <i class="bi bi-chat-dots me-1"></i>Zalo
+                                <i class="bi bi-chat-dots me-1"></i><span class="text-primary fw-bold">Zalo</span>
                             </label>
                             <input type="text" name="zalo" id="zalo" 
                                     class="form-control @error('zalo') is-invalid @enderror"
@@ -99,7 +99,7 @@
 
                         <div class="col-md-4">
                             <label for="province_id" class="form-label">
-                                <i class="bi bi-geo-alt me-1"></i>Tỉnh/Thành phố
+                                <i class="bi bi-geo-alt me-1"></i><span class="text-primary fw-bold">Tỉnh/Thành phố</span>
                             </label>
                             <select name="province_id" id="province_id" 
                                     class="form-select @error('province_id') is-invalid @enderror">
@@ -117,7 +117,7 @@
 
                         <div class="col-md-8">
                             <label for="address" class="form-label">
-                                <i class="bi bi-house me-1"></i>Địa chỉ
+                                <i class="bi bi-house me-1"></i><span class="text-primary fw-bold">Địa chỉ</span>
                             </label>
                             <input type="text" name="address" id="address" 
                                     class="form-control @error('address') is-invalid @enderror"
@@ -130,7 +130,7 @@
                         <!-- Customer Classification -->
                         <div class="col-md-4">
                             <label for="customer_type_id" class="form-label">
-                                <i class="bi bi-tag me-1"></i>Loại khách hàng
+                                <i class="bi bi-tag me-1"></i><span class="text-primary fw-bold">Loại khách hàng</span>
                             </label>
                             <select name="customer_type_id" id="customer_type_id" 
                                     class="form-select @error('customer_type_id') is-invalid @enderror">
@@ -148,7 +148,7 @@
 
                         <div class="col-md-4">
                             <label for="is_new_customer" class="form-label">
-                                <i class="bi bi-person-check me-1"></i>Khách hàng mới?
+                                <i class="bi bi-person-check me-1"></i><span class="text-primary fw-bold">Khách hàng mới?</span>
                             </label>
                             <select name="is_new_customer" id="is_new_customer" 
                                     class="form-select @error('is_new_customer') is-invalid @enderror">
@@ -162,7 +162,7 @@
 
                         <div class="col-md-4">
                             <label for="customer_source_id" class="form-label">
-                                <i class="bi bi-funnel me-1"></i>Nguồn khách hàng
+                                <i class="bi bi-funnel me-1"></i><span class="text-primary fw-bold">Nguồn khách hàng</span>
                             </label>
                             <select name="customer_source_id" id="customer_source_id" 
                                     class="form-select @error('customer_source_id') is-invalid @enderror">
@@ -180,26 +180,28 @@
 
                         <!-- Business Information -->
                         <div class="col-md-4">
-                            <label for="product_category_id" class="form-label">
-                                <i class="bi bi-box-seam me-1"></i>Danh mục sản phẩm
+                            <label class="form-label">
+                                <i class="bi bi-box-seam me-1"></i><span class="text-primary fw-bold">Danh mục sản phẩm</span>
                             </label>
-                            <select name="product_category_id" id="product_category_id" 
-                                    class="form-select @error('product_category_id') is-invalid @enderror">
-                                <option value="">-- Chọn danh mục --</option>
+                            <div class="d-flex flex-wrap gap-2">
                                 @foreach($productCategories as $cat)
-                                    <option value="{{ $cat->id }}" {{ old('product_category_id') == $cat->id ? 'selected' : '' }}>
-                                        {{ $cat->name }}
-                                    </option>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="product_category_ids[]" id="product_category_{{ $cat->id }}" value="{{ $cat->id }}"
+                                            {{ (collect(old('product_category_ids'))->contains($cat->id)) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="product_category_{{ $cat->id }}">
+                                            {{ $cat->name }}
+                                        </label>
+                                    </div>
                                 @endforeach
-                            </select>
-                            @error('product_category_id')
+                            </div>
+                            @error('product_category_ids')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="col-md-4">
                             <label for="showroom_id" class="form-label">
-                                <i class="bi bi-building me-1"></i>Showroom
+                                <i class="bi bi-building me-1"></i><span class="text-primary fw-bold">Showroom</span>
                             </label>
                             <select name="showroom_id" id="showroom_id" 
                                     class="form-select @error('showroom_id') is-invalid @enderror">
@@ -217,7 +219,7 @@
 
                         <div class="col-md-4">
                             <label for="order_value" class="form-label">
-                                <i class="bi bi-currency-dollar me-1"></i>Giá trị đơn hàng
+                                <i class="bi bi-currency-dollar me-1"></i><span class="text-primary fw-bold">Giá trị đơn hàng</span>
                             </label>
                             <input type="number" name="order_value" id="order_value" 
                                     class="form-control @error('order_value') is-invalid @enderror"
@@ -230,7 +232,7 @@
                         <!-- Status Information -->
                         <div class="col-md-4">
                             <label for="first_customer_status_id" class="form-label">
-                                <i class="bi bi-flag me-1"></i>Tình trạng KH ban đầu
+                                <i class="bi bi-flag me-1"></i><span class="text-primary fw-bold">Tình trạng KH ban đầu</span>
                             </label>
                             <select name="first_customer_status_id" id="first_customer_status_id" 
                                     class="form-select @error('first_customer_status_id') is-invalid @enderror">
@@ -248,7 +250,7 @@
 
                         <div class="col-md-4">
                             <label for="current_customer_status_id" class="form-label">
-                                <i class="bi bi-flag-fill me-1"></i>Tình trạng KH hiện tại
+                                <i class="bi bi-flag-fill me-1"></i><span class="text-primary fw-bold">Tình trạng KH hiện tại</span>
                             </label>
                             <select name="current_customer_status_id" id="current_customer_status_id" 
                                     class="form-select @error('current_customer_status_id') is-invalid @enderror">
@@ -265,7 +267,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="support_status_customer_id" class="form-label">
-                                <i class="bi bi-flag-fill me-1"></i>Tình trạng hỗ trợ
+                                <i class="bi bi-flag-fill me-1"></i><span class="text-primary fw-bold">Tình trạng hỗ trợ</span>
                             </label>
                             <select name="support_status_customer_id" id="support_status_customer_id" 
                                     class="form-select @error('support_status_customer_id') is-invalid @enderror">
@@ -285,7 +287,7 @@
                         <!-- Sales Team -->
                         <div class="col-md-4">
                             <label for="sale_receive_customer_info_id" class="form-label">
-                                <i class="bi bi-person-badge me-1"></i>Sale nhận KH
+                                <i class="bi bi-person-badge me-1"></i><span class="text-primary fw-bold">Sale nhận KH</span>
                             </label>
                             <select name="sale_receive_customer_info_id" id="sale_receive_customer_info_id" 
                                     class="form-select @error('sale_receive_customer_info_id') is-invalid @enderror">
@@ -303,7 +305,7 @@
 
                         <div class="col-md-4">
                             <label for="sale_support_id" class="form-label">
-                                <i class="bi bi-headset me-1"></i>Sale hỗ trợ
+                                <i class="bi bi-headset me-1"></i><span class="text-primary fw-bold">Sale hỗ trợ</span>
                             </label>
                             <select name="sale_support_id" id="sale_support_id" 
                                     class="form-select @error('sale_support_id') is-invalid @enderror">
@@ -322,7 +324,7 @@
                         <!-- Notes and Results -->
                         <div class="col-md-6">
                             <label for="note" class="form-label">
-                                <i class="bi bi-sticky me-1"></i>Ghi chú
+                                <i class="bi bi-sticky me-1"></i><span class="text-primary fw-bold">Ghi chú</span>
                             </label>
                             <textarea name="note" id="note" rows="3" 
                                         class="form-control @error('note') is-invalid @enderror"
@@ -334,7 +336,7 @@
 
                         <div class="col-md-6">
                             <label for="exchange_content" class="form-label">
-                                <i class="bi bi-chat-square-text me-1"></i>Nội dung trao đổi
+                                <i class="bi bi-chat-square-text me-1"></i><span class="text-primary fw-bold">Nội dung trao đổi</span>
                             </label>
                             <textarea name="exchange_content" id="exchange_content" rows="3" 
                                         class="form-control @error('exchange_content') is-invalid @enderror"
@@ -346,7 +348,7 @@
 
                         <div class="col-12">
                             <label for="results" class="form-label">
-                                <i class="bi bi-trophy me-1"></i>Kết quả
+                                <i class="bi bi-trophy me-1"></i><span class="text-primary fw-bold">Kết quả</span>
                             </label>
                             <textarea name="results" id="results" rows="5" 
                                         class="form-control @error('results') is-invalid @enderror"

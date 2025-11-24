@@ -32,7 +32,7 @@
         <form action="{{ route('leads.index') }}" method="GET" class="row g-3">
             <div class="col-md-3">
                 <label for="type_phone" class="form-label">
-                    <i class="bi bi-telephone me-1"></i>Số điện thoại
+                    <i class="bi bi-telephone me-1"></i><span class="text-primary fw-bold">Số điện thoại</span>
                 </label>
                 <input 
                     type="text" 
@@ -57,7 +57,7 @@
 
             <div class="col-md-3">
                 <label for="first_arrival_date" class="form-label">
-                    <i class="bi bi-calendar me-1"></i>Từ Ngày
+                    <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Từ Ngày</span>
                 </label>
                 <input 
                     type="date" 
@@ -70,7 +70,7 @@
 
             <div class="col-md-3">
                 <label for="first_arrival_date" class="form-label">
-                    <i class="bi bi-calendar me-1"></i>Đến Ngày
+                    <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Đến Ngày</span>
                 </label>
                 <input 
                     type="date" 
@@ -83,7 +83,7 @@
 
             <div class="col-md-3">
                 <label for="current_status" class="form-label">
-                    <i class="bi bi-calendar me-1"></i>Tình trạng hiện tại
+                    <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Tình trạng hiện tại</span>
                 </label>
                 <select name="current_status" id="current_status" class="form-select">
                     <option value="">-- Tất cả --</option>
@@ -91,6 +91,27 @@
                         <option value="{{ $status->id }}" {{ request('current_status') == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
                     @endforeach
                 </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">
+                    <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Danh Mục Sản Phẩm</span>
+                </label>
+                <div class="dropdown">
+                        <button class="btn dropdown-toggle w-100" type="button" id="dropdownProductCategories" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #0d6efd; color: #fff;">
+                            Chọn danh mục sản phẩm
+                        </button>
+                        <div class="dropdown-menu w-100 p-2" aria-labelledby="dropdownProductCategories" style="max-height: 300px; overflow-y: auto; background-color: #0d6efd; color: #fff;">
+                            @foreach($productCategories as $category)
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="productCategories[]" id="productCategory{{ $category->id }}" value="{{ $category->id }}" {{ in_array($category->id, request('productCategories', [])) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="productCategory{{ $category->id }}" style="color: #fff;">
+                                        {{ $category->name }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                </div>
             </div>
 
             <div class="col-md-3">
@@ -229,16 +250,12 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
+                                                                                php artisan make:migration create_lead_product_category_table --create=lead_product_category
                                         <td>
-                                            @if($lead->productCategory)
-                                                <small>{{ $lead->productCategory->name }}</small>
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($lead->firstStatus)
-                                                <small>{{ $lead->firstStatus->name }}</small>
+                                            @if($lead->productCategories && $lead->productCategories->count())
+                                                @foreach($lead->productCategories as $category)
+                                                    <span class="badge bg-primary">{{ $category->name }}</span>
+                                                @endforeach
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
@@ -454,8 +471,10 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($lead->productCategory)
-                                                <small>{{ $lead->productCategory->name }}</small>
+                                            @if($lead->productCategories && $lead->productCategories->count())
+                                                @foreach($lead->productCategories as $category)
+                                                    <span class="badge bg-primary">{{ $category->name }}</span>
+                                                @endforeach
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif

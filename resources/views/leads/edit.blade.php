@@ -102,16 +102,24 @@
             </div>
 
             <div class="col-md-4 mb-3">
-                <label for="product_category_id" class="form-label">Danh mục sản phẩm</label>
-                <select name="product_category_id" id="product_category_id" class="form-control">
-                    <option value="">-- Chọn Danh mục sản phẩm --</option>
-                    @foreach($productCategories as $productCategorie)
-                        <option value="{{ $productCategorie->id }}" 
-                            {{ $lead->product_category_id == $productCategorie->id ? 'selected' : '' }}>
-                            {{ $productCategorie->name }}
-                        </option>
-                    @endforeach
-                </select>
+                <label class="form-label">
+                    <span class="text-primary fw-bold">Danh mục sản phẩm</span>
+                </label>
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle w-100" type="button" id="dropdownProductCategoriesEdit" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #0d6efd; color: #fff;">
+                        Chọn danh mục sản phẩm
+                    </button>
+                    <div class="dropdown-menu w-100 p-2" aria-labelledby="dropdownProductCategoriesEdit" style="max-height: 300px; overflow-y: auto; background-color: #0d6efd; color: #fff;">
+                        @foreach($productCategories as $category)
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="productCategories[]" id="editProductCategory{{ $category->id }}" value="{{ $category->id }}" {{ $lead->productCategories->contains($category->id) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="editProductCategory{{ $category->id }}" style="color: #fff;">
+                                    {{ $category->name }}
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
 
             <div class="col-md-4 mb-3">

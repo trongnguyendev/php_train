@@ -71,4 +71,9 @@ class Lead extends Model
     public function leadTakeCares() { 
         return $this->hasMany(LeadTakeCare::class, 'lead_id'); 
     }
+
+    public function productCategories()
+    {
+        return $this->belongsToMany(ProductCategory::class, 'lead_product_category', 'lead_id', 'product_category_id');
+    }
 }

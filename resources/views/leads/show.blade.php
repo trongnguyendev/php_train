@@ -2,7 +2,10 @@
 
 @section('content')
 <div class="container">
-    <h1 class="h3 mb-4"><i class="bi bi-building text-info"></i> Chi tiết Loại Showroom</h1>
+    <h1 class="h3 mb-4">
+        <i class="bi bi-building text-info"></i>
+        <span class="text-primary fw-bold">Chi tiết Lead</span>
+    </h1>
     <div class="card shadow-sm">
         <div class="card-body">
             <p><strong>ID:</strong> {{ $cutomerStatus->id }}</p>
