@@ -262,7 +262,7 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
-                                            php artisan make:migration create_lead_product_category_table --create=lead_product_category
+                                            
                                         <td>
                                             @if($lead->productCategories && $lead->productCategories->count())
                                                 @foreach($lead->productCategories as $category)
