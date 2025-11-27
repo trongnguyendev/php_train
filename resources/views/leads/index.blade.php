@@ -262,7 +262,7 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
-                                                                                php artisan make:migration create_lead_product_category_table --create=lead_product_category
+                                            php artisan make:migration create_lead_product_category_table --create=lead_product_category
                                         <td>
                                             @if($lead->productCategories && $lead->productCategories->count())
                                                 @foreach($lead->productCategories as $category)
@@ -274,6 +274,14 @@
                                         </td>
 
                                         <td>
+                                            @if($lead->firstStatus)
+                                                <small>{{ $lead->firstStatus->name }}</small>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+
+                                         <td>
                                             @if($lead->note)
                                                 <small>{{ $lead->note }}</small>
                                             @else
@@ -295,8 +303,8 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($lead->saleSupport)
-                                                <small>{{ $lead->saleSupport->name }}</small>
+                                            @if($lead->currentStatus)
+                                                <small>{{ $lead->currentStatus->name }}</small>
                                             @else
                                                 <small class="text-muted">-</small>
                                             @endif
