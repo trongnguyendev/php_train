@@ -36,7 +36,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
-                        <div class="col-md-4">
+                        <div class="col-md-4" id="order-value-field">
                             <label for="lead_type" class="form-label">
                                 <i class="bi bi-diagram-3 me-1"></i><span class="text-primary fw-bold">Loại Lead</span>
                             </label>
@@ -97,6 +97,18 @@
                             @enderror
                         </div>
 
+                        <div class="col-md-8">
+                            <label for="address" class="form-label">
+                                <i class="bi bi-house me-1"></i><span class="text-primary fw-bold">Địa chỉ</span>
+                            </label>
+                            <input type="text" name="address" id="address" 
+                                    class="form-control @error('address') is-invalid @enderror"
+                                    value="{{ old('address') }}" placeholder="Nhập địa chỉ chi tiết">
+                            @error('address')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="col-md-4">
                             <label for="province_id" class="form-label">
                                 <i class="bi bi-geo-alt me-1"></i><span class="text-primary fw-bold">Tỉnh/Thành phố</span>
@@ -115,17 +127,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-8">
-                            <label for="address" class="form-label">
-                                <i class="bi bi-house me-1"></i><span class="text-primary fw-bold">Địa chỉ</span>
-                            </label>
-                            <input type="text" name="address" id="address" 
-                                    class="form-control @error('address') is-invalid @enderror"
-                                    value="{{ old('address') }}" placeholder="Nhập địa chỉ chi tiết">
-                            @error('address')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                    
 
                         <!-- Customer Classification -->
                         <div class="col-md-4">
@@ -146,7 +148,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4">
+                        <!-- <div class="col-md-4">
                             <label for="is_new_customer" class="form-label">
                                 <i class="bi bi-person-check me-1"></i><span class="text-primary fw-bold">Khách hàng mới?</span>
                             </label>
@@ -158,11 +160,11 @@
                             @error('is_new_customer')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div> -->
 
                         <div class="col-md-4">
                             <label for="customer_source_id" class="form-label">
-                                <i class="bi bi-funnel me-1"></i><span class="text-primary fw-bold">Nguồn khách hàng</span>
+                                <i class="bi bi-funnel me-1"></i><span class="text-primary fw-bold">Nguồn</span>
                             </label>
                             <select name="customer_source_id" id="customer_source_id" 
                                     class="form-select @error('customer_source_id') is-invalid @enderror">
@@ -215,7 +217,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-4" id="showroom-field">
                             <label for="showroom_id" class="form-label">
                                 <i class="bi bi-building me-1"></i><span class="text-primary fw-bold">Showroom</span>
                             </label>
@@ -235,11 +237,11 @@
 
                         <div class="col-md-4">
                             <label for="order_value" class="form-label">
-                                <i class="bi bi-currency-dollar me-1"></i><span class="text-primary fw-bold">Giá trị đơn hàng</span>
+                                <i class="bi bi-currency-dollar me-1"></i><span class="text-primary fw-bold">Giá trị đơn chốt được</span>
                             </label>
                             <input type="number" name="order_value" id="order_value" 
                                     class="form-control @error('order_value') is-invalid @enderror"
-                                    value="{{ old('order_value') }}" placeholder="Nhập giá trị đơn hàng">
+                                    value="{{ old('order_value') }}" placeholder="Nhập giá trị đơn chốt được">
                             @error('order_value')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -281,7 +283,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-4">
+                        <!-- <div class="col-md-4">
                             <label for="support_status_customer_id" class="form-label">
                                 <i class="bi bi-flag-fill me-1"></i><span class="text-primary fw-bold">Tình trạng hỗ trợ</span>
                             </label>
@@ -297,7 +299,7 @@
                             @error('support_status_customer_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div> -->
 
 
                         <!-- Sales Team -->
@@ -319,7 +321,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-4" id="sale-support-field">
                             <label for="sale_support_id" class="form-label">
                                 <i class="bi bi-headset me-1"></i><span class="text-primary fw-bold">Sale hỗ trợ</span>
                             </label>
@@ -340,7 +342,7 @@
                         <!-- Notes and Results -->
                         <div class="col-md-6">
                             <label for="note" class="form-label">
-                                <i class="bi bi-sticky me-1"></i><span class="text-primary fw-bold">Ghi chú</span>
+                                <i class="bi bi-sticky me-1"></i><span class="text-primary fw-bold">Ghi chú sale nhận khách</span>
                             </label>
                             <textarea name="note" id="note" rows="3" 
                                         class="form-control @error('note') is-invalid @enderror"
@@ -352,7 +354,7 @@
 
                         <div class="col-md-6">
                             <label for="exchange_content" class="form-label">
-                                <i class="bi bi-chat-square-text me-1"></i><span class="text-primary fw-bold">Nội dung trao đổi</span>
+                                <i class="bi bi-chat-square-text me-1"></i><span class="text-primary fw-bold">Thông tin trao đổi với Khách hàng</span>
                             </label>
                             <textarea name="exchange_content" id="exchange_content" rows="3" 
                                         class="form-control @error('exchange_content') is-invalid @enderror"
@@ -462,21 +464,30 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle lead type change
     const leadTypeSelect = document.getElementById('lead_type');
     const customerCareCard = document.getElementById('customer-care-card');
+    const showroomField = document.getElementById('showroom-field');
+    const orderValueField = document.getElementById('order-value-field');
+    const saleSupportField = document.getElementById('sale-support-field');
 
-    function toggleCustomerCare() {
+    function toggleCustomerCareShowroomOrderValueSaleSupport() {
         if (leadTypeSelect.value == '2') { // Online
             customerCareCard.style.display = 'block';
             customerCareCard.classList.add('fade-in');
+            showroomField.style.display = 'none';
+            orderValueField.style.display = 'none';
+            saleSupportField.style.display = 'block';
         } else { // Trực tiếp
             customerCareCard.style.display = 'none';
             customerCareCard.classList.remove('fade-in');
+            showroomField.style.display = 'block';
+            orderValueField.style.display = 'block';
+            saleSupportField.style.display = 'none';
         }
     }
 
-    // Initial check
-    toggleCustomerCare();
+    // Initial check (gọi lại sau khi DOM đã render để chắc chắn giá trị đúng)
+    setTimeout(toggleCustomerCareShowroomOrderValueSaleSupport, 50);
     // Listen for changes
-    leadTypeSelect.addEventListener('change', toggleCustomerCare);
+    leadTypeSelect.addEventListener('change', toggleCustomerCareShowroomOrderValueSaleSupport);
 
     // Update product category button text when checkboxes change
     const productCheckboxes = document.querySelectorAll('input[name="product_category_ids[]"]');
