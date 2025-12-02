@@ -228,13 +228,47 @@
                                                 <i class="bi bi-telephone me-1"></i>{{ $lead->phone }}
                                             </a>
                                         </td>
-                                        
+<!--                                         
                                          <td>
                                             <small>{{ $lead->province->name ?? '-' }}</small>
-                                        </td>
+                                        </td> -->
                                         <td>
-                                            <small>{{ $lead->address ?? '-' }}</small>
+                                            <span class="editable-select" data-id="{{ $lead->id }}" data-field="province_id">
+                                                {{ $lead->province->name ?? '-' }}
+                                            </span>
+                                            <select class="form-select d-none inline-select" data-id="{{ $lead->id }}" data-field="province_id">
+                                                <option value="">-- Chọn --</option>
+                                                @foreach($provinces as $province)
+                                                    <option value="{{ $province->id }}" {{ $lead->province_id == $province->id ? 'selected' : '' }}>
+                                                        {{ $province->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </td>
+
+
+                                        <!-- <td>
+                                            <small>{{ $lead->address ?? '-' }}</small>
+                                        </td> -->
+                                    
+                                        <td>
+                                            <span class="editable-text" data-id="{{ $lead->id }}" data-field="address">
+                                                {{ $lead->address ?? '-' }}
+                                            </span>
+                                            <input type="text" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="address" value="{{ $lead->address }}">
+                                        </td>
+<!-- 
+                                         <td>
+                                            <span class="editable-select" data-id="{{ $lead->id }}" data-field="address">
+                                                {{ $lead->address ?? '-' }}
+                                            </span>
+                                            <select class="form-select d-none inline-select" data-id="{{ $lead->id }}" data-field="address">
+                                                 <span class="text-muted">-</span>
+                    
+                                            </select>
+                                        </td> -->
+
+                                        
 
                                         <td>
                                             <a href="tel:{{ $lead->zalo }}" class="text-decoration-none">
@@ -335,19 +369,38 @@
                                         </td>
 
                                         <!-- Chăm Khách 3 lần -->
+
                                             @php
                                                 // Lấy tối đa 3 bản ghi chăm sóc của lead
                                                 $cares = $lead->leadTakeCares->take(3);
                                             @endphp
-                                                @for ($i = 0; $i < 3; $i++)
-                                                    @php
-                                                        $care = $cares[$i] ?? null;
-                                                    @endphp
-
-                                                    <td>{{ $care?->take_care_date ? date('d/m/Y', strtotime($care->take_care_date)) : '-' }}</td>
-                                                    <td>{{ $care?->take_care_plan ?? '-' }}</td>
-                                                    <td>{{ $care?->take_care_result ?? '-' }}</td>
-                                                @endfor
+                                            @for ($i = 0; $i < 3; $i++)
+                                                @php
+                                                    $care = $cares[$i] ?? null;
+                                                    $careId = $care?->id ?? '';
+                                                    $careDate = $care?->take_care_date ?? '';
+                                                    $carePlan = $care?->take_care_plan ?? '';
+                                                    $careResult = $care?->take_care_result ?? '';
+                                                @endphp
+                                                <td>
+                                                    <span class="editable-text" data-id="{{ $careId }}" data-field="take_care_date" data-index="{{ $i }}" data-lead-id="{{ $lead->id }}">
+                                                        {{ $careDate ? date('d/m/Y', strtotime($careDate)) : '-' }}
+                                                    </span>
+                                                <input type="date" class="form-control d-none inline-text" data-id="{{ $careId }}" data-field="take_care_date" data-index="{{ $i }}" data-lead-id="{{ $lead->id }}" value="{{ $careDate ? \Carbon\Carbon::parse($careDate)->format('Y-m-d') : '' }}">
+                                                </td>
+                                                <td>
+                                                    <span class="editable-text" data-id="{{ $careId }}" data-field="take_care_plan" data-index="{{ $i }}" data-lead-id="{{ $lead->id }}">
+                                                        {{ $carePlan !== '' ? $carePlan : '-' }}
+                                                    </span>
+                                                    <input type="text" class="form-control d-none inline-text" data-id="{{ $careId }}" data-field="take_care_plan" data-index="{{ $i }}" data-lead-id="{{ $lead->id }}" value="{{ $carePlan }}">
+                                                </td>
+                                                <td>
+                                                    <span class="editable-text" data-id="{{ $careId }}" data-field="take_care_result" data-index="{{ $i }}" data-lead-id="{{ $lead->id }}">
+                                                        {{ $careResult !== '' ? $careResult : '-' }}
+                                                    </span>
+                                                    <input type="text" class="form-control d-none inline-text" data-id="{{ $careId }}" data-field="take_care_result" data-index="{{ $i }}" data-lead-id="{{ $lead->id }}" value="{{ $careResult }}">
+                                                </td>
+                                            @endfor
                                          <!-- Chăm Khách 3 lần -->
 
                                         <td>
@@ -635,34 +688,6 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Update product category button text when checkboxes change (filter)
-    const productCheckboxesFilter = document.querySelectorAll('input[name="productCategories[]"]');
-    const productNamesFilterBtn = document.getElementById('selectedProductNamesFilterBtn');
-    const productLabelsFilter = {};
-    @foreach($productCategories as $cat)
-        productLabelsFilter[{{ $cat->id }}] = @json($cat->name);
-    @endforeach
-
-    function updateProductNamesFilterBtn() {
-        const checked = Array.from(productCheckboxesFilter).filter(cb => cb.checked).map(cb => productLabelsFilter[cb.value]);
-        if (checked.length) {
-            productNamesFilterBtn.textContent = checked.join(', ');
-        } else {
-            productNamesFilterBtn.textContent = 'Chọn danh mục sản phẩm';
-        }
-    }
-    productCheckboxesFilter.forEach(cb => {
-        cb.addEventListener('change', updateProductNamesFilterBtn);
-    });
-    // Initial update
-    updateProductNamesFilterBtn();
-});
-</script>
-@endpush
-
-@push('scripts')
-<script>
 function confirmDelete(leadId) {
     const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
     const confirmBtn = document.getElementById('confirmDeleteBtn');
@@ -710,5 +735,130 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+
+
+// Inline edit for select fields
+$(document).on('click', '.editable-select', function() {
+    $(this).addClass('d-none');
+    $(this).siblings('.inline-select').removeClass('d-none').focus();
+});
+
+$(document).on('change blur', '.inline-select', function () {
+    let id = $(this).data('id');
+    let field = $(this).data('field');
+    let value = $(this).val();
+    let text = $(this).find("option:selected").text();
+    $.post("/lead/update-inline/" + id, {
+        field: field,
+        value: value,
+        _token: "{{ csrf_token() }}"
+    }, () => {
+        let span = $(this).siblings('.editable-select');
+        span.text(text);
+        span.removeClass('d-none');
+        $(this).addClass('d-none');
+    });
+});
+
+// Inline edit for text fields
+$(document).on('click', '.editable-text', function() {
+    $(this).addClass('d-none');
+    $(this).siblings('.inline-text').removeClass('d-none').focus();
+});
+
+$(document).on('change blur', '.inline-text', function () {
+    let id = $(this).data('id');
+    let field = $(this).data('field');
+    let value = $(this).val();
+    let index = $(this).data('index');
+    let leadId = $(this).data('lead-id');
+    // Nếu là trường của LeadTakeCare thì gửi về route riêng
+    const takeCareFields = ['take_care_date', 'take_care_plan', 'take_care_result'];
+    let url = takeCareFields.includes(field)
+        ? "/lead-take-care/update-inline/" + (id ? id : '')
+        : "/lead/update-inline/" + id;
+    let data = {
+        field: field,
+        value: value,
+        _token: "{{ csrf_token() }}"
+    };
+    if (takeCareFields.includes(field) && !id) {
+        data.lead_id = leadId;
+        data.index = index;
+    }
+    $.post(url, data, (res) => {
+        let span = $(this).siblings('.editable-text');
+        span.text(value);
+        span.removeClass('d-none');
+        $(this).addClass('d-none');
+        // Kiểm tra response trả về
+        console.log('LeadTakeCare inline response:', res);
+        if (res && res.id) {
+            $(this).attr('data-id', res.id);
+            span.attr('data-id', res.id);
+        }
+    });
+});
+
+// ----------------------
+// -- productCategories --
+// ----------------------
+
+// Khi click mở modal
+$('.editable-multi').on('click', function () {
+    let id = $(this).data('id');
+    $('#modalLeadId').val(id);
+
+    $.get("/lead/get-categories/" + id, function (selected) {
+        $('.category-check').prop('checked', false);
+        selected.forEach(id => {
+            $('.category-check[value="' + id + '"]').prop('checked', true);
+        });
+        $('#categoryModal').modal('show');
+    });
+});
+
+// Lưu thay đổi nhiều–nhiều
+$('#saveCategory').on('click', function() {
+    let id = $('#modalLeadId').val();
+    let categories = [];
+
+    $('.category-check:checked').each(function () {
+        categories.push($(this).val());
+    });
+
+    $.post("/lead/update-categories/" + id, {
+        categories: categories,
+        _token: "{{ csrf_token() }}"
+    }, function () {
+        location.reload();
+    });
+});
 </script>
+
 @endpush
+
+<div class="modal fade" id="categoryModal">
+    <div class="modal-dialog">
+        <div class="modal-content p-3">
+            <h5>Chọn Danh Mục Sản Phẩm</h5>
+
+            <input type="hidden" id="modalLeadId">
+
+            <div id="categoryCheckboxList">
+                @foreach($productCategories as $cat)
+                    <div class="form-check">
+                        <input class="form-check-input category-check" 
+                               type="checkbox"
+                               value="{{ $cat->id }}">
+                        <label class="form-check-label">{{ $cat->name }}</label>
+                    </div>
+                @endforeach
+            </div>
+
+            <button class="btn btn-primary mt-3 w-100" id="saveCategory">Lưu</button>
+        </div>
+    </div>
+</div>
+

@@ -42,3 +42,9 @@ Route::resource('permissions', PermissionController::class)->only(['index', 'sho
 // User role assignment routes
 Route::get('users/{user}/assign-roles', [UserController::class, 'assignRoles'])->name('users.assign-roles');
 Route::put('users/{user}/sync-roles', [UserController::class, 'syncRoles'])->name('users.sync-roles');
+
+
+Route::post('/lead/update-inline/{id}', [LeadController::class, 'updateInline']);
+Route::post('/lead-take-care/update-inline/{id?}', [App\Http\Controllers\LeadTakeCareController::class, 'updateInline']);
+Route::get('/lead/get-categories/{id}', [LeadController::class, 'getCategories']);
+Route::post('/lead/update-categories/{id}', [LeadController::class, 'updateCategories']);

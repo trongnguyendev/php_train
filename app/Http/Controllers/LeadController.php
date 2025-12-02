@@ -21,6 +21,8 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
+            $firstStatuses = \App\Models\CustomerStatus::all();
+    {
         Gate::authorize('viewAny', Lead::class);
         
         $query = Lead::with([
@@ -49,6 +51,10 @@ class LeadController extends Controller
         ]);
         $customerStatuses = CustomerStatus::all();
         $productCategories = ProductCategory::all();
+        $customerSources = CustomerSource::all();
+        $customerTypes = CustomerType::all();
+        $firstStatuses = CustomerStatus::all();
+        $provinces = Province::all();
 
         if ($request->type_phone) {
         $query->where('phone', 'like', '%' . $request->type_phone . '%');
@@ -93,8 +99,13 @@ class LeadController extends Controller
             'leads',
             'leadsOnline',
             'customerStatuses',
-            'productCategories'
+            'productCategories',
+            'customerSources',
+            'customerTypes',
+            'firstStatuses',
+            'provinces'
         ));
+        }
     }
 
     /**
@@ -379,4 +390,30 @@ class LeadController extends Controller
         $lead->delete();
         return redirect()->route('leads.index')->with('success', 'Đã xóa Lead và dữ liệu chăm sóc liên quan!');
     }
+
+    public function updateInline(Request $request, $id)
+    {
+        $lead = Lead::findOrFail($id);
+
+        $lead->{$request->field} = $request->value;
+        $lead->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function getCategories($id)
+    {
+        $lead = Lead::findOrFail($id);
+        return $lead->productCategories()->pluck('id');
+    }
+
+    public function updateCategories(Request $request, $id)
+    {
+        $lead = Lead::findOrFail($id);
+        $lead->productCategories()->sync($request->categories);
+        return response()->json(['success' => true]);
+    }
+
+
+
 }

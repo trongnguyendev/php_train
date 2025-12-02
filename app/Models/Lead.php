@@ -7,27 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 class Lead extends Model
 {
     protected $fillable = [
-    'first_arrival_date',
-    'name',
-    'phone',
-    'province_id',
-    'address',
-    'zalo',
-    'customer_type_id',
-    'is_new_customer',
-    'customer_source_id',
-    'product_category_id',
-    'showroom_id',
-    'first_customer_status_id',
-    'note',
-    'sale_receive_customer_info_id',
-    'sale_support_id',
-    'current_customer_status_id',
-    'order_value',
-    'support_status_customer_id',
-    'exchange_content',
-    'results',
-    'lead_type'
+        'first_arrival_date',
+        'name',
+        'phone',
+        'province_id',
+        'address',
+        'zalo',
+        'customer_type_id',
+        'is_new_customer',
+        'customer_source_id',
+        'product_category_id',
+        'showroom_id',
+        'first_status_id', // Đúng với field inline edit
+        'first_customer_status_id', // Giữ lại nếu cần cho quan hệ cũ
+        'note',
+        'sale_receive_customer_info_id',
+        'sale_support_id',
+        'current_customer_status_id',
+        'order_value',
+        'support_status_customer_id',
+        'exchange_content',
+        'results',
+        'lead_type'
     ];
 
 

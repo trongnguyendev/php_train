@@ -7,6 +7,41 @@ use Illuminate\Http\Request;
 
 class LeadTakeCareController extends Controller
 {
+    // Xử lý inline edit cho LeadTakeCare
+    public function updateInline(Request $request, $id = null)
+    {
+        $field = $request->field;
+        $value = $request->value;
+        $leadId = $request->lead_id;
+        $index = $request->index;
+
+        if ($id) {
+            // Update bản ghi đã có
+            $leadTakeCare = LeadTakeCare::findOrFail($id);
+            $leadTakeCare->$field = $value;
+            $leadTakeCare->save();
+        } else {
+            // Lấy danh sách chăm sóc của lead, sắp xếp theo ngày tạo
+            $cares = LeadTakeCare::where('lead_id', $leadId)->orderBy('created_at')->get();
+            if (isset($cares[$index])) {
+                // Nếu đã có bản ghi ở vị trí index thì update
+                $leadTakeCare = $cares[$index];
+                $leadTakeCare->$field = $value;
+                $leadTakeCare->save();
+            } else {
+                // Nếu chưa có thì tạo mới
+                $data = [
+                    'lead_id' => $leadId,
+                    'take_care_plan' => null,
+                    'take_care_date' => null,
+                    'take_care_result' => null
+                ];
+                $data[$field] = $value;
+                $leadTakeCare = LeadTakeCare::create($data);
+            }
+        }
+        return response()->json(['success' => true, 'id' => $leadTakeCare->id]);
+    }
     /**
      * Display a listing of the resource.
      */
