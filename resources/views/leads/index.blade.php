@@ -223,10 +223,17 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             <a href="tel:{{ $lead->phone }}" class="text-decoration-none">
                                                 <i class="bi bi-telephone me-1"></i>{{ $lead->phone }}
                                             </a>
+                                        </td> -->
+
+                                        <td>
+                                            <span class="editable-text" data-id="{{ $lead->id }}" data-field="phone">
+                                                {{ $lead->phone ?? '-' }}
+                                            </span>
+                                            <input type="number" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="phone" value="{{ $lead->phone }}">
                                         </td>
 <!--                                         
                                          <td>
