@@ -868,4 +868,3 @@ $('#saveCategory').on('click', function() {
         </div>
     </div>
 </div>
-

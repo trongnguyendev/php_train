@@ -36,7 +36,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
-                        <div class="col-md-4" id="order-value-field">
+                        <div class="col-md-4">
                             <label for="lead_type" class="form-label">
                                 <i class="bi bi-diagram-3 me-1"></i><span class="text-primary fw-bold">Loại Lead</span>
                             </label>
@@ -50,13 +50,25 @@
                         </div>
                         <!-- Basic Information -->
                         <div class="col-md-6">
-                            <label for="first_arrival_date" class="form-label">
+                            <label for="customer_visit_date" class="form-label">
                                 <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Ngày khách đến lần đầu</span>
                             </label>
-                            <input type="date" name="first_arrival_date" id="first_arrival_date" 
-                                    class="form-control @error('first_arrival_date') is-invalid @enderror"
-                                    value="{{ old('first_arrival_date') }}">
-                            @error('first_arrival_date')
+                            <input type="date" name="customer_visit_date" id="customer_visit_date" 
+                                    class="form-control @error('customer_visit_date') is-invalid @enderror"
+                                    value="{{ old('customer_visit_date') }}">
+                            @error('customer_visit_date')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="first_interaction_date" class="form-label">
+                                <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Ngày tương tác đầu tiên</span>
+                            </label>
+                            <input type="date" name="first_interaction_date" id="first_interaction_date" 
+                                    class="form-control @error('first_interaction_date') is-invalid @enderror"
+                                    value="{{ old('first_interaction_date') }}">
+                            @error('first_interaction_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -162,20 +174,20 @@
                             @enderror
                         </div> -->
 
-                        <div class="col-md-4">
-                            <label for="customer_source_id" class="form-label">
+                        <div class="col-md-4" id="source-field">
+                            <label for="source_id" class="form-label">
                                 <i class="bi bi-funnel me-1"></i><span class="text-primary fw-bold">Nguồn</span>
                             </label>
-                            <select name="customer_source_id" id="customer_source_id" 
-                                    class="form-select @error('customer_source_id') is-invalid @enderror">
+                            <select name="source_id" id="source_id" 
+                                    class="form-select @error('source_id') is-invalid @enderror">
                                 <option value="">-- Chọn nguồn --</option>
                                 @foreach($customerSources as $src)
-                                    <option value="{{ $src->id }}" {{ old('customer_source_id') == $src->id ? 'selected' : '' }}>
+                                    <option value="{{ $src->id }}" {{ old('source_id') == $src->id ? 'selected' : '' }}>
                                         {{ $src->name }}
                                     </option>
                                 @endforeach
                             </select>
-                            @error('customer_source_id')
+                            @error('source_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -204,7 +216,7 @@
                                 <div class="dropdown-menu w-100 p-2" aria-labelledby="dropdownProductCategoriesCreate" style="max-height: 300px; overflow-y: auto; background-color: #ffffffff; color: #fff;">
                                     @foreach($productCategories as $cat)
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="product_category_ids[]" id="product_category_{{ $cat->id }}" value="{{ $cat->id }}" {{ (collect(old('product_category_ids'))->contains($cat->id)) ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="checkbox" name="product_category_ids[]" id="product_category_{{ $cat->id }}" value="{{ $cat->id }}" {{ (collect(old('product_category_ids', []))->contains($cat->id)) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="product_category_{{ $cat->id }}" style="color: #1215ddff;">
                                                 {{ $cat->name }}
                                             </label>
@@ -217,7 +229,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4" id="showroom-field">
+                        <div class="col-md-4" id="showroom-field" style="display: {{ old('lead_type', '1') == '2' ? 'none' : 'block' }};">
                             <label for="showroom_id" class="form-label">
                                 <i class="bi bi-building me-1"></i><span class="text-primary fw-bold">Showroom</span>
                             </label>
@@ -235,7 +247,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-4" id="order-value-field" style="display: {{ old('lead_type', '1') == '2' ? 'none' : 'block' }};">
                             <label for="order_value" class="form-label">
                                 <i class="bi bi-currency-dollar me-1"></i><span class="text-primary fw-bold">Giá trị đơn chốt được</span>
                             </label>
@@ -304,19 +316,19 @@
 
                         <!-- Sales Team -->
                         <div class="col-md-4">
-                            <label for="sale_receive_customer_info_id" class="form-label">
+                            <label for="sale_information_id" class="form-label">
                                 <i class="bi bi-person-badge me-1"></i><span class="text-primary fw-bold">Sale nhận KH</span>
                             </label>
-                            <select name="sale_receive_customer_info_id" id="sale_receive_customer_info_id" 
-                                    class="form-select @error('sale_receive_customer_info_id') is-invalid @enderror">
+                            <select name="sale_information_id" id="sale_information_id" 
+                                    class="form-select @error('sale_information_id') is-invalid @enderror">
                                 <option value="">-- Chọn sale nhận --</option>
-                                @foreach($saleUsers as $s)
-                                    <option value="{{ $s->id }}" {{ old('sale_receive_customer_info_id') == $s->id ? 'selected' : '' }}>
+                                @foreach($saleInformation as $s)
+                                    <option value="{{ $s->id }}" {{ old('sale_information_id') == $s->id ? 'selected' : '' }}>
                                         {{ $s->name }}
                                     </option>
                                 @endforeach
                             </select>
-                            @error('sale_receive_customer_info_id')
+                            @error('sale_information_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -328,7 +340,7 @@
                             <select name="sale_support_id" id="sale_support_id" 
                                     class="form-select @error('sale_support_id') is-invalid @enderror">
                                 <option value="">-- Chọn sale hỗ trợ --</option>
-                                @foreach($saleUsers as $s)
+                                @foreach($saleSupport as $s)
                                     <option value="{{ $s->id }}" {{ old('sale_support_id') == $s->id ? 'selected' : '' }}>
                                         {{ $s->name }}
                                     </option>
@@ -352,14 +364,33 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="exchange_content" class="form-label">
-                                <i class="bi bi-chat-square-text me-1"></i><span class="text-primary fw-bold">Thông tin trao đổi với Khách hàng</span>
+            
+                        <div class="col-md-4" id="support_channel-field" style="display: {{ old('lead_type', '1') == '1' ? 'block' : 'none' }};">
+                                <label for="support_channel_id" class="form-label">
+                                    <i class="bi bi-headset me-1"></i><span class="text-primary fw-bold">KH đã được hỗ trợ trước qua kênh nào?</span>
                             </label>
-                            <textarea name="exchange_content" id="exchange_content" rows="3" 
-                                        class="form-control @error('exchange_content') is-invalid @enderror"
-                                        placeholder="Nhập nội dung trao đổi với khách hàng">{{ old('exchange_content') }}</textarea>
-                            @error('exchange_content')
+                            <select name="support_channel_id" id="support_channel_id" 
+                                    class="form-select @error('support_channel_id') is-invalid @enderror">
+                                <option value="">-- Chọn kênh hỗ trợ --</option>
+                                @foreach($supportChannel as $s)
+                                    <option value="{{ $s->id }}" {{ old('support_channel_id') == $s->id ? 'selected' : '' }}>
+                                        {{ $s->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('support_channel_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6" id="customer_discussion_details-field" style="display: {{ old('lead_type', '1') == '2' ? 'block' : 'none' }};">
+                                <label for="customer_discussion_details" class="form-label">
+                                    <i class="bi bi-sticky me-1"></i><span class="text-primary fw-bold">Thông Tin Trao Đổi</span>
+                            </label>
+                            <textarea name="customer_discussion_details" id="customer_discussion_details" rows="3" 
+                                        class="form-control @error('customer_discussion_details') is-invalid @enderror"
+                                        placeholder="Nhập ghi chú về khách hàng">{{ old('customer_discussion_details') }}</textarea>
+                            @error('customer_discussion_details')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -455,39 +486,46 @@
 <script>
 // Auto-fill current date for first arrival date
 document.addEventListener('DOMContentLoaded', function() {
-    const firstArrivalDate = document.getElementById('first_arrival_date');
-    if (!firstArrivalDate.value) {
-        const today = new Date().toISOString().split('T')[0];
-        firstArrivalDate.value = today;
-    }
-
-    // Handle lead type change
+    // Xử lý ẩn/hiện các trường theo loại Lead
     const leadTypeSelect = document.getElementById('lead_type');
     const customerCareCard = document.getElementById('customer-care-card');
     const showroomField = document.getElementById('showroom-field');
     const orderValueField = document.getElementById('order-value-field');
     const saleSupportField = document.getElementById('sale-support-field');
+    const supportChannelField = document.getElementById('support-channel-field');
+    const sourceField = document.getElementById('source-field');
+    const customerDiscussionDetailsField = document.getElementById('customer-discussion-details-field');
 
-    function toggleCustomerCareShowroomOrderValueSaleSupport() {
-        if (leadTypeSelect.value == '2') { // Online
-            customerCareCard.style.display = 'block';
-            customerCareCard.classList.add('fade-in');
-            showroomField.style.display = 'none';
-            orderValueField.style.display = 'none';
-            saleSupportField.style.display = 'block';
-        } else { // Trực tiếp
-            customerCareCard.style.display = 'none';
-            customerCareCard.classList.remove('fade-in');
-            showroomField.style.display = 'block';
-            orderValueField.style.display = 'block';
-            saleSupportField.style.display = 'none';
+    function toggleLeadFields() {
+        const isOnline = leadTypeSelect.value === '2';
+        if (customerCareCard) {
+            customerCareCard.style.display = isOnline ? 'block' : 'none';
+            customerCareCard.classList.toggle('fade-in', isOnline);
+        }
+        if (showroomField) {
+            showroomField.style.display = isOnline ? 'none' : 'block';
+        }
+        if (orderValueField) {
+            orderValueField.style.display = isOnline ? 'none' : 'block';
+        }
+        if (saleSupportField) {
+            saleSupportField.style.display = isOnline ? 'block' : 'none';
+        }
+        if (supportChannelField) {
+            supportChannelField.style.display = isOnline ? 'none' : 'block';
+        }
+        if (customerDiscussionDetailsField) {
+            customerDiscussionDetailsField.style.display = isOnline ? 'block' : 'none';
+        }
+        if (sourceField) {
+            sourceField.style.display = isOnline ? 'block' : 'none';
         }
     }
 
-    // Initial check (gọi lại sau khi DOM đã render để chắc chắn giá trị đúng)
-    setTimeout(toggleCustomerCareShowroomOrderValueSaleSupport, 50);
-    // Listen for changes
-    leadTypeSelect.addEventListener('change', toggleCustomerCareShowroomOrderValueSaleSupport);
+    // Khởi tạo trạng thái ban đầu
+    toggleLeadFields();
+    // Lắng nghe sự thay đổi
+    leadTypeSelect.addEventListener('change', toggleLeadFields);
 
     // Update product category button text when checkboxes change
     const productCheckboxes = document.querySelectorAll('input[name="product_category_ids[]"]');

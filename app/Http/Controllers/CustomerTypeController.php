@@ -43,7 +43,7 @@ class CustomerTypeController extends Controller
             'name' => $request->name
         ]);
 
-        return view('customer_types.index')->with('success', 'Tạo loại khách hàng thành công!');
+        return redirect()->route('customer_types.index')->with('success', 'Tạo loại khách hàng thành công!');
     }
 
     /**

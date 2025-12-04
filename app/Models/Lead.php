@@ -7,26 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class Lead extends Model
 {
     protected $fillable = [
-        'first_arrival_date',
+        'customer_visit_date',
+        'first_interaction_date',
         'name',
         'phone',
         'province_id',
         'address',
         'zalo',
         'customer_type_id',
-        'is_new_customer',
-        'customer_source_id',
-        'product_category_id',
         'showroom_id',
-        'first_status_id', // Đúng với field inline edit
-        'first_customer_status_id', // Giữ lại nếu cần cho quan hệ cũ
+        'product_categories_id',
+        'first_customer_status_id',
         'note',
-        'sale_receive_customer_info_id',
+        'sale_information_id',
         'sale_support_id',
         'current_customer_status_id',
         'order_value',
-        'support_status_customer_id',
-        'exchange_content',
+        'support_channel_id',
+        'source_id',
+        'customer_discussion_details',
         'results',
         'lead_type'
     ];
@@ -41,7 +40,7 @@ class Lead extends Model
     }
 
     public function customerSource() { 
-        return $this->belongsTo(CustomerSource::class, 'customer_source_id'); 
+        return $this->belongsTo(CustomerSource::class, 'source_id'); 
     }
 
     public function productCategory() { 
@@ -60,14 +59,17 @@ class Lead extends Model
         return $this->belongsTo(CustomerStatus::class, 'current_customer_status_id'); 
     }
 
-    public function saleReceive() { 
-        return $this->belongsTo(SaleUser::class, 'sale_receive_customer_info_id'); 
+    public function saleInformation() { 
+        return $this->belongsTo(SaleUser::class, 'sale_information_id'); 
     }
 
     public function saleSupport() { 
         return $this->belongsTo(SaleUser::class, 'sale_support_id'); 
     }
 
+    public function supportedChannel() { 
+        return $this->belongsTo(SaleUser::class, 'support_channel_id'); 
+    }
 
     public function leadTakeCares() { 
         return $this->hasMany(LeadTakeCare::class, 'lead_id'); 

@@ -79,7 +79,7 @@
                         </a>
                     </li>
 
-                     <!-- Showroom Management -->
+                    <!-- Showroom Management -->
                     <li class="{{ request()->routeIs('showrooms.*') ? 'active' : '' }}">
                         <a href="{{ route('showrooms.index') }}" class="nav-link">
                             <i class="bi bi-building"></i>
@@ -94,6 +94,31 @@
                             <span>Quản lý Tình trạng khách hàng</span>
                         </a>
                     </li>
+
+                    <!-- Province Management -->
+                    <li class="{{ request()->routeIs('provinces.*') ? 'active' : '' }}">
+                        <a href="{{ route('provinces.index') }}" class="nav-link">
+                            <i class="bi bi-geo-alt"></i>
+                            <span>Quản lý Tỉnh/Thành</span>
+                        </a>
+                    </li>
+
+                    <!-- Customer Type Management -->
+                    <li class="{{ request()->routeIs('customer_types.*') ? 'active' : '' }}">
+                        <a href="{{ route('customer_types.index') }}" class="nav-link">
+                            <i class="bi bi-tags"></i>
+                            <span>Quản lý Loại khách hàng</span>
+                        </a>
+                    </li>
+
+                    <!-- Support Channel Management -->
+                    <li class="{{ request()->routeIs('support-channels.*') ? 'active' : '' }}">
+                        <a href="{{ route('support-channels.index') }}" class="nav-link">
+                            <i class="bi bi-headset"></i>
+                            <span>Quản lý Kênh hỗ trợ</span>
+                        </a>
+                    </li>
+
                     
                     <li class="mt-3">
                         <a href="#" class="nav-link">

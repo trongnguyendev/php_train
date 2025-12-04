@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('leads', function (Blueprint $table) {
-            $table->dropColumn('product_category_id');
-        });
+        if (Schema::hasColumn('leads', 'product_category_id')) {
+            Schema::table('leads', function (Blueprint $table) {
+                $table->dropColumn('product_category_id');
+            });
+        }
     }
     public function down()
     {

@@ -10,6 +10,7 @@ use App\Models\CustomerSource;
 use App\Models\ProductCategory;
 use App\Models\Showroom;
 use App\Models\CustomerStatus;
+use App\Models\SupportChannel;
 use App\Models\SaleUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -33,9 +34,10 @@ class LeadController extends Controller
             'showroom',
             'firstStatus',
             'currentStatus',
-            'saleReceive',
+            'saleInformation',
             'saleSupport',
-            'leadTakeCares'
+            'leadTakeCares',
+            'supportedChannel'
         ]);
         $queryOnline = Lead::with([
             'province',
@@ -45,9 +47,10 @@ class LeadController extends Controller
             'showroom',
             'firstStatus',
             'currentStatus',
-            'saleReceive',
+            'saleInformation',
             'saleSupport',
-            'leadTakeCares'
+            'leadTakeCares',
+            'supportedChannel'
         ]);
         $customerStatuses = CustomerStatus::all();
         $productCategories = ProductCategory::all();
@@ -55,6 +58,7 @@ class LeadController extends Controller
         $customerTypes = CustomerType::all();
         $firstStatuses = CustomerStatus::all();
         $provinces = Province::all();
+        $supportChannel = SupportChannel::all();
 
         if ($request->type_phone) {
         $query->where('phone', 'like', '%' . $request->type_phone . '%');
@@ -103,7 +107,8 @@ class LeadController extends Controller
             'customerSources',
             'customerTypes',
             'firstStatuses',
-            'provinces'
+            'provinces',
+            'supportChannel'
         ));
         }
     }
@@ -114,7 +119,6 @@ class LeadController extends Controller
     public function create()
     {
         Gate::authorize('create', Lead::class);
-        
         $lead = Lead::all();
         $leadTakeCares = LeadTakeCare::all();
         $provinces = Province::all();
@@ -123,11 +127,10 @@ class LeadController extends Controller
         $productCategories = ProductCategory::all();
         $showrooms = Showroom::all();
         $customerStatuses = CustomerStatus::all();
-        $saleUsers = SaleUser::all();
-        $supportStatuses = SaleUser::all();
-
-        return view('leads.create', 
-        compact(
+        $saleInformation = SaleUser::all();
+        $saleSupport = SaleUser::all();
+        $supportChannel = SupportChannel::all();
+        return view('leads.create', compact(
             'lead',
             'leadTakeCares',
             'provinces',
@@ -136,8 +139,9 @@ class LeadController extends Controller
             'productCategories',
             'showrooms',
             'customerStatuses',
-            'saleUsers',
-            'supportStatuses'
+            'saleInformation',
+            'saleSupport',
+            'supportChannel'
         ));
     }
 
@@ -149,26 +153,33 @@ class LeadController extends Controller
     {
         Gate::authorize('create', Lead::class);
         
-        $request->validate([
-            'first_arrival_date' => 'required|date',
+        $rules = [
+            'customer_visit_date' => 'required|date',
+            'first_interaction_date' => 'required|date',
             'name' => 'required|string',
             'province_id' => 'required',
             'address' => 'required',
             'customer_type_id' => 'required',
-            'is_new_customer' => 'required',
-            'customer_source_id' => 'required',
+            'source_id' => 'required',
             'product_category_ids' => 'required|array|min:1',
-            'showroom_id' => 'required',
-            'first_customer_status_id' => 'required',
             'note' => 'required',
-            'sale_receive_customer_info_id' => 'required',
-            'sale_support_id' => 'required',
-            'current_customer_status_id' => 'required',
-            'support_status_customer_id' => 'required',
-            'exchange_content' => 'required',
-            'lead_type' => 'required'
-        ], [
-            'first_arrival_date.required' => 'Ngày đầu tiên không được để trống!',
+            'lead_type' => 'required',
+            'sale_support_id' => 'nullable',
+        ];
+
+        // // Nếu là Trực tiếp (1) thì bắt buộc các trường liên quan trực tiếp
+        // if ($request->lead_type == '2' || $request->lead_type == 1) {
+        //     $rules['showroom_id'] = 'required';
+        //     $rules['sale_information_id'] = 'required';
+        //     $rules['sale_support_id'] = 'required';
+        //     $rules['current_customer_status_id'] = 'required';
+        //     $rules['support_status_customer_id'] = 'required';
+        //     $rules['customer_discussion_details'] = 'required';
+        // }
+        // // Nếu là Online (2) thì KHÔNG bắt buộc các trường trên
+
+        $messages = [
+            'first_interaction_date.required' => 'Ngày đầu tiên không được để trống!',
             'name.required' => 'Tên không được để trống!',
             'province_id.required' => 'Tỉnh không được để trống!',
             'address.required' => 'Địa chỉ không được để trống!',
@@ -178,35 +189,61 @@ class LeadController extends Controller
             'product_category_ids.required' => 'Danh mục không được để trống!',
             'product_category_ids.min' => 'Phải chọn ít nhất 1 danh mục!',
             'showroom_id.required' => 'Showroom không được để trống!',
-            'first_customer_status_id.required' => 'Tình trạng đầu tiên không được để trống!',
-            'sale_receive_customer_info_id.required' => 'Sale nhận thông tin không được để trống!',
+            'first_customer_status_id.required' => 'Tình trạng khách hàng không được để trống!',
+            'first_customer_status_id.nullable' => 'Lead online không cần tình trạng khách hàng!',
+            'sale_information_id.required' => 'Sale nhận thông tin không được để trống!',
             'sale_support_id.required' => 'Sale hỗ trợ không được để trống!',
             'current_customer_status_id.required' => 'Tình trạng hiện tại không được để trống!',
-            'exchange_content.required' => 'Không được để trống!'
-        ]);
+            'support_status_customer_id.required' => 'The support status customer id field is required.',
+            'customer_discussion_details.required' => 'Không được để trống!'
+        ];
 
-        $lead = Lead::create([
-            'first_arrival_date' => $request->first_arrival_date,
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'province_id' => $request->province_id,
-            'address' => $request->address,
-            'zalo' => $request->zalo ?? '',
-            'customer_type_id' => $request->customer_type_id,
-            'is_new_customer' => $request->is_new_customer,
-            'customer_source_id' => $request->customer_source_id,
-            'showroom_id' => $request->showroom_id,
-            'first_customer_status_id' => $request->first_customer_status_id,
-            'note' => $request->note,
-            'sale_receive_customer_info_id' => $request->sale_receive_customer_info_id,
-            'sale_support_id' => $request->sale_support_id,
-            'current_customer_status_id' => $request->current_customer_status_id,
-            'order_value' => $request->order_value ?? 0,
-            'support_status_customer_id' => $request->support_status_customer_id,
-            'exchange_content' => $request->exchange_content,
-            'results' => $request->results ?? '',
-            'lead_type' => $request->lead_type
-        ]);
+        $request->validate($rules, $messages);
+
+        if ($request->lead_type == 1) { // Trực tiếp
+            $lead = Lead::create([
+                'customer_visit_date' => $request->customer_visit_date,
+                'first_interaction_date' => $request->first_interaction_date,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'province_id' => $request->province_id,
+                'address' => $request->address,
+                'zalo' => $request->zalo ?? '',
+                'customer_type_id' => $request->customer_type_id,
+                'source_id' => $request->source_id,
+                'showroom_id' => $request->showroom_id,
+                'product_categories_id' => !empty($request->product_category_ids) ? implode(',', $request->product_category_ids) : '',
+                'first_customer_status_id' => $request->first_customer_status_id,
+                'note' => $request->note,
+                'sale_information_id' => $request->sale_information_id,
+                'sale_support_id' => $request->sale_support_id ?? 0,
+                'current_customer_status_id' => $request->current_customer_status_id,
+                'order_value' => $request->order_value ?? 0,
+                'support_channel_id' => $request->support_channel_id ?? null,
+                'lead_type' => $request->lead_type
+            ]);
+        } else { // Online
+            $lead = Lead::create([
+                'customer_visit_date' => $request->customer_visit_date,
+                'first_interaction_date' => $request->first_interaction_date,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'province_id' => $request->province_id,
+                'address' => $request->address,
+                'zalo' => $request->zalo ?? '',
+                'customer_type_id' => $request->customer_type_id,
+                'source_id' => $request->source_id,
+                'product_categories_id' => !empty($request->product_category_ids) ? implode(',', $request->product_category_ids) : '',
+                'first_customer_status_id' => $request->first_customer_status_id,
+                'note' => $request->note,
+                'sale_information_id' => $request->sale_information_id,
+                'sale_support_id' => $request->sale_support_id,
+                'current_customer_status_id' => $request->current_customer_status_id,
+                'customer_discussion_details' => $request->customer_discussion_details,
+                'results' => $request->results ?? '',
+                'lead_type' => $request->lead_type
+            ]);
+        }
         // Lưu nhiều product category cho lead
         if ($request->has('product_category_ids')) {
             $lead->productCategories()->sync($request->product_category_ids);
@@ -266,8 +303,9 @@ class LeadController extends Controller
         $productCategories = ProductCategory::all();
         $showrooms = Showroom::all();
         $customerStatuses = CustomerStatus::all();
-        $saleUsers = SaleUser::all();
-        $supportStatuses = SaleUser::all(); 
+        $saleInformation = SaleUser::all();
+        $saleSupport = SaleUser::all();
+        $supportChannel = SupportChannel::all();
         return view('leads.edit', compact(
             'lead',
             'leadTakeCare',
@@ -277,8 +315,9 @@ class LeadController extends Controller
             'productCategories',
             'showrooms',
             'customerStatuses',
-            'saleUsers',
-            'supportStatuses'
+            'saleInformation',
+            'saleSupport',
+            'supportChannel'
 
         ));
     }
@@ -303,49 +342,54 @@ class LeadController extends Controller
             'first_customer_status_id' => 'required',
             'note' => 'required',
             'sale_receive_customer_info_id' => 'required',
-            'sale_support_id' => 'required',
-            'current_customer_status_id' => 'required',
-            'support_status_customer_id' => 'required',
-            'exchange_content' => 'required',
-            'lead_type' => 'required'
-        ], [
-            'first_arrival_date.required' => 'Ngày đầu tiên không được để trống!',
-            'name.required' => 'Tên không được để trống!',
-            'province_id.required' => 'Tỉnh không được để trống!',
-            'address.required' => 'Địa chỉ không được để trống!',
-            'customer_type_id.required' => 'Loại khách hàng không được để trống!',
-            'is_new_customer.required' => 'Tình trạng khách hàng không được để trống!',
-            'customer_source_id.required' => 'Không được để trống!',
-            'product_category_ids.required' => 'Danh mục không được để trống!',
-            'product_category_ids.min' => 'Phải chọn ít nhất 1 danh mục!',
-            'showroom_id.required' => 'Showroom không được để trống!',
-            'first_customer_status_id.required' => 'Tình trạng đầu tiên không được để trống!',
-            'sale_receive_customer_info_id.required' => 'Sale nhận thông tin không được để trống!',
-            'sale_support_id.required' => 'Sale hỗ trợ không được để trống!',
-            'current_customer_status_id.required' => 'Tình trạng hiện tại không được để trống!',
-            'exchange_content.required' => 'Không được để trống!'
         ]);
 
+        if ($request->lead_type == 1) { // Trực tiếp
+            $lead = Lead::create([
+                'customer_visit_date' => $request->customer_visit_date,
+                'first_interaction_date' => $request->first_interaction_date,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'province_id' => $request->province_id,
+                'address' => $request->address,
+                'zalo' => $request->zalo ?? '',
+                'customer_type_id' => $request->customer_type_id,
+                'source_id' => $request->source_id,
+                'showroom_id' => $request->showroom_id,
+                'product_categories_id' => !empty($request->product_category_ids) ? implode(',', $request->product_category_ids) : '',
+                    'first_customer_status_id' => $request->first_customer_status_id,
+                    'note' => $request->note,
+                    'sale_information_id' => $request->sale_information_id,
+                    'sale_support_id' => $request->sale_support_id ?? 0,
+                    'current_customer_status_id' => $request->current_customer_status_id,
+                    'order_value' => $request->order_value ?? 0,
+                    'support_channel_id' => $request->support_channel_id ?? null,
+                    'customer_discussion_details' => $request->customer_discussion_details ?? '',
+                    'lead_type' => $request->lead_type
+                ]);
+
+        // Chỉ cập nhật bản ghi Lead hiện tại
         $lead->update([
-            'first_arrival_date' => $request->first_arrival_date,
+            'customer_visit_date' => $request->customer_visit_date,
+            'first_interaction_date' => $request->first_interaction_date,
             'name' => $request->name,
             'phone' => $request->phone,
             'province_id' => $request->province_id,
             'address' => $request->address,
-            'zalo' => $request->zalo,
+            'zalo' => $request->zalo ?? '',
             'customer_type_id' => $request->customer_type_id,
-            'is_new_customer' => $request->is_new_customer,
-            'customer_source_id' => $request->customer_source_id,
+            'source_id' => $request->source_id,
             'showroom_id' => $request->showroom_id,
+            'product_categories_id' => !empty($request->product_category_ids) ? implode(',', $request->product_category_ids) : '',
             'first_customer_status_id' => $request->first_customer_status_id,
             'note' => $request->note,
-            'sale_receive_customer_info_id' => $request->sale_receive_customer_info_id,
-            'sale_support_id' => $request->sale_support_id,
+            'sale_information_id' => $request->sale_information_id,
+            'sale_support_id' => $request->sale_support_id ?? 0,
             'current_customer_status_id' => $request->current_customer_status_id,
-            'order_value' => $request->order_value,
-            'support_status_customer_id' => $request->support_status_customer_id,
-            'exchange_content' => $request->exchange_content,
-            'results' => $request->results,
+            'order_value' => $request->order_value ?? 0,
+            'support_channel_id' => $request->support_channel_id ?? null,
+            'customer_discussion_details' => $request->customer_discussion_details ?? '',
+            'results' => $request->results ?? '',
             'lead_type' => $request->lead_type
         ]);
         // Lưu nhiều product category khi cập nhật
@@ -377,6 +421,7 @@ class LeadController extends Controller
         }
 
         return redirect()->route('leads.index')->with('success', 'Cập nhập Lead thành công!');
+    }
     }
 
     /**

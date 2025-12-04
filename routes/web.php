@@ -13,6 +13,8 @@ use App\Http\Controllers\CustomerTypeController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\SupportChannelController;
+
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -36,6 +38,8 @@ Route::resource('customer_types', CustomerTypeController::class);
 Route::resource('provinces', ProvinceController::class);
 
 // Role and Permission routes
+
+Route::resource('support-channels', SupportChannelController::class);
 Route::resource('roles', RoleController::class);
 Route::resource('permissions', PermissionController::class)->only(['index', 'show']);
 

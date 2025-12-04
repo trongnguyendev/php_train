@@ -32,7 +32,7 @@
             
             <div class="col-md-4 mb-3">
                 <label class="form-label"><span class="text-primary fw-bold">Ngày khách đến lần đầu</span></label>
-                <input type="date" name="first_arrival_date" value="{{ $lead->first_arrival_date }}" class="form-control">
+                <input type="date" name="customer_visit_date" value="{{ $lead->customer_visit_date }}" class="form-control">
             </div>
             <div class="col-md-4 mb-3">
                 <label class="form-label"><span class="text-primary fw-bold">Tên khách hàng</span></label>
@@ -67,7 +67,7 @@
                 <input type="text" name="zalo" value="{{ $lead->zalo }}" class="form-control">
             </div>
 
-           <div class="col-md-4 mb-3">
+            <div class="col-md-4 mb-3">
                 <label for="customer_type_id" class="form-label"><span class="text-primary fw-bold">Loại khách hàng</span></label>
                 <select name="customer_type_id" id="customer_type_id" class="form-control">
                     <option value="">-- Chọn Loại khách hàng --</option>
