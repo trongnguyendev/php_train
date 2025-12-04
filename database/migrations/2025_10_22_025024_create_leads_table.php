@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('zalo');
             $table->string('customer_type_id');
             $table->string('showroom_id')->nullable();
-            $table->string('product_categories_id');
+            $table->unsignedBigInteger('product_categories_id')->nullable();
             $table->string('first_customer_status_id');
             $table->longtext('note');
             $table->string('sale_information_id');
