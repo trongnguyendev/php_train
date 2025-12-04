@@ -160,7 +160,6 @@ class LeadController extends Controller
             'province_id' => 'required',
             'address' => 'required',
             'customer_type_id' => 'required',
-            'source_id' => 'required',
             'product_category_ids' => 'required|array|min:1',
             'note' => 'required',
             'lead_type' => 'required',
@@ -175,6 +174,7 @@ class LeadController extends Controller
         //     $rules['current_customer_status_id'] = 'required';
         //     $rules['support_status_customer_id'] = 'required';
         //     $rules['customer_discussion_details'] = 'required';
+        
         // }
         // // Nếu là Online (2) thì KHÔNG bắt buộc các trường trên
 
