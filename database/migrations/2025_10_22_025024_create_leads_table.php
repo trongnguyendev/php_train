@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('current_customer_status_id');
             $table->integer('order_value')->default(0);
             $table->string('support_channel_id')->nullable();
-            $table->string('source_id');
+            $table->string('source_id')->nullable();
             $table->text('customer_discussion_details')->nullable();
             $table->string('results')->default('');
             $table->string('lead_type');
