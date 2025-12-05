@@ -223,15 +223,12 @@
                 <textarea name="customer_discussion_detail" class="form-control" rows="2">{{ $lead->customer_discussion_detail }}</textarea>
             </div>
             @endif
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label"><span class="text-primary fw-bold">Kết quả</span></label>
-                <textarea name="results" class="form-control" rows="2">{{ $lead->results }}</textarea>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="tmdt" id="kq1" value="TMDT">
+                <label class="form-check-label" for="kq1">Chuyển sang TMDT</label>
             </div>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="tmdt" id="kq1" value="TMDT">
-            <label class="form-check-label" for="kq1">Chuyển sang TMDT</label>
+
+
         </div>
 
         <hr class="my-4">
