@@ -177,7 +177,7 @@
                                     <th style="min-width: 300px;">Địa Chỉ</th>
                                     <th style="min-width: 100px;">Zalo Feedback</th>
                                     <th style="min-width: 200px;">Phân Loại Khách Hàng</th>
-                                    <th style="min-width: 100px;">Nguồn</th>
+                                    <th style="min-width: 100px;">Showroom</th>
                                     <th style="min-width: 200px;">Sản Phẩm Cần Tư Vấn</th>
                                     <th style="min-width: 200px;">Tình Trạng Khách Hàng Đầu Tiên</th>
                                     <th style="min-width: 300px;">Note</th>
@@ -290,8 +290,8 @@
                                         </td>
                                     
                                         <td>
-                                            @if($lead->source)
-                                                <small>{{ $lead->source->name }}</small>
+                                            @if($lead->showroom)
+                                                <small>{{ $lead->showroom->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
