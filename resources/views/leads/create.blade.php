@@ -218,7 +218,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4" id="showroom-field" style="display: {{ old('lead_type', '1') == '2' ? 'none' : 'block' }};">
+                        <div class="col-md-4" id="showroom-field" style="display: {{ old('lead_type', '2') == '1' ? 'none' : 'block' }};">
                             <label for="showroom_id" class="form-label">
                                 <i class="bi bi-building me-1"></i><span class="text-primary fw-bold">Showroom</span>
                             </label>
