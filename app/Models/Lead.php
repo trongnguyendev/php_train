@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Lead extends Model
 {
     protected $fillable = [
-        'customer_visit_date',
         'first_interaction_date',
         'name',
         'phone',
@@ -26,7 +25,7 @@ class Lead extends Model
         'support_channel_id',
         'source_id',
         'customer_discussion_details',
-        'results',
+        'tmdt',
         'lead_type'
     ];
 
@@ -39,7 +38,7 @@ class Lead extends Model
         return $this->belongsTo(CustomerType::class, 'customer_type_id'); 
     }
 
-    public function customerSource() { 
+    public function source() { 
         return $this->belongsTo(CustomerSource::class, 'source_id'); 
     }
 
@@ -68,7 +67,7 @@ class Lead extends Model
     }
 
     public function supportedChannel() { 
-        return $this->belongsTo(SaleUser::class, 'support_channel_id'); 
+        return $this->belongsTo(SupportChannel::class, 'support_channel_id'); 
     }
 
     public function leadTakeCares() { 

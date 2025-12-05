@@ -49,17 +49,6 @@
                             @enderror
                         </div>
                         <!-- Basic Information -->
-                        <div class="col-md-6">
-                            <label for="customer_visit_date" class="form-label">
-                                <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Ngày khách đến lần đầu</span>
-                            </label>
-                            <input type="date" name="customer_visit_date" id="customer_visit_date" 
-                                    class="form-control @error('customer_visit_date') is-invalid @enderror"
-                                    value="{{ old('customer_visit_date') }}">
-                            @error('customer_visit_date')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
 
                         <div class="col-md-6">
                             <label for="first_interaction_date" class="form-label">
@@ -144,11 +133,11 @@
                         <!-- Customer Classification -->
                         <div class="col-md-4">
                             <label for="customer_type_id" class="form-label">
-                                <i class="bi bi-tag me-1"></i><span class="text-primary fw-bold">Loại khách hàng</span>
+                                <i class="bi bi-tag me-1"></i><span class="text-primary fw-bold">Phân Loại khách hàng</span>
                             </label>
                             <select name="customer_type_id" id="customer_type_id" 
                                     class="form-select @error('customer_type_id') is-invalid @enderror">
-                                <option value="">-- Chọn loại khách --</option>
+                                <option value="">-- Chọn Phân loại khách hàng --</option>
                                 @foreach($customerTypes as $type)
                                     <option value="{{ $type->id }}" {{ old('customer_type_id') == $type->id ? 'selected' : '' }}>
                                         {{ $type->name }}
@@ -182,7 +171,7 @@
                                     class="form-select @error('source_id') is-invalid @enderror">
                                 <option value="">-- Chọn nguồn --</option>
                                 @foreach($customerSources as $src)
-                                    <option value="{{ $src->id }}" {{ old('source_id') == $src->id ? 'selected' : '' }}>
+                                    <option value="{{ $src->id }}" {{ old('customerSources_id') == $src->id ? 'selected' : '' }}>
                                         {{ $src->name }}
                                     </option>
                                 @endforeach
@@ -365,7 +354,7 @@
                         </div>
 
             
-                        <div class="col-md-4" id="support_channel-field" style="display: {{ old('lead_type', '1') == '1' ? 'block' : 'none' }};">
+                        <div class="col-md-4" id="support-channel-field" style="display: {{ old('lead_type', '1') == '1' ? 'block' : 'none' }};">
                                 <label for="support_channel_id" class="form-label">
                                     <i class="bi bi-headset me-1"></i><span class="text-primary fw-bold">KH đã được hỗ trợ trước qua kênh nào?</span>
                             </label>
@@ -383,7 +372,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6" id="customer_discussion_details-field" style="display: {{ old('lead_type', '1') == '2' ? 'block' : 'none' }};">
+                        <div class="col-md-6" id="customer-discussion-details-field" style="display: {{ old('lead_type', '1') == '2' ? 'block' : 'none' }};">
                                 <label for="customer_discussion_details" class="form-label">
                                     <i class="bi bi-sticky me-1"></i><span class="text-primary fw-bold">Thông Tin Trao Đổi</span>
                             </label>
@@ -395,17 +384,11 @@
                             @enderror
                         </div>
 
-                        <div class="col-12">
-                            <label for="results" class="form-label">
-                                <i class="bi bi-trophy me-1"></i><span class="text-primary fw-bold">Kết quả</span>
-                            </label>
-                            <textarea name="results" id="results" rows="5" 
-                                        class="form-control @error('results') is-invalid @enderror"
-                                        placeholder="Nhập kết quả đạt được">{{ old('results') }}</textarea>
-                            @error('results')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="tmdt" id="kq1" value="TMDT" {{ old('tmdt') == 'TMDT' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="kq1">Chuyển sang TMDT</label>
                         </div>
+
                     </div>
                 </div>
             </div>

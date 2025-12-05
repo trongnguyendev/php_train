@@ -176,7 +176,6 @@
                                     <th style="min-width: 200px;">Tỉnh/Thành</th>
                                     <th style="min-width: 300px;">Địa Chỉ</th>
                                     <th style="min-width: 100px;">Zalo Feedback</th>
-                                    <th style="min-width: 100px;">Khách Hàng Đã Đặt Hàng Chưa?</th>
                                     <th style="min-width: 200px;">Phân Loại Khách Hàng</th>
                                     <th style="min-width: 100px;">Nguồn</th>
                                     <th style="min-width: 200px;">Sản Phẩm Cần Tư Vấn</th>
@@ -186,7 +185,7 @@
                                     <th style="min-width: 100px;">Sale Hỗ Trợ Khách</th>
                                     <th style="min-width: 200px;">Tình Trạng Khách Hiện Tại</th>
                                     <th style="min-width: 200px;">Thông tin trạo đổi với KH</th>
-                                    <th style="min-width: 300px;">Kết Quả</th>
+                                    <th style="min-width: 200px;">Chuyển Sang TMDT</th>
                                     <th style="min-width: 200px;">Ngày Chăm Khách Lần 1</th>
                                     <th style="min-width: 200px;">Kế hoạch lần 1</th>
                                     <th style="min-width: 200px;">Kết quả lần 1</th>
@@ -289,16 +288,10 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
+                                    
                                         <td>
-                                            @if($lead->is_new_customer)
-                                                <span class="badge bg-success">Khách Hàng Mới</span>
-                                            @else
-                                                <span class="badge bg-secondary">Khách Hàng Cũ</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($lead->customerSource)
-                                                <small>{{ $lead->customerSource->name }}</small>
+                                            @if($lead->source)
+                                                <small>{{ $lead->source->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
@@ -330,8 +323,8 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($lead->saleReceive)
-                                                <small>{{ $lead->saleReceive->name }}</small>
+                                            @if($lead->saleInformation)
+                                                <small>{{ $lead->saleInformation->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
@@ -345,9 +338,12 @@
                                         </td>
                                         <td>
                                             @if($lead->currentStatus)
-                                                <small>{{ $lead->currentStatus->name }}</small>
+                                                <small>
+                                                    {{-- Hiển thị tên nếu có, nếu không thì show toàn bộ object để debug --}}
+                                                    {{ isset($lead->currentStatus->name) ? $lead->currentStatus->name : json_encode($lead->currentStatus) }}
+                                                </small>
                                             @else
-                                                <small class="text-muted">-</small>
+                                                <span class="text-muted">-</span>
                                             @endif
                                         </td>
 
@@ -359,20 +355,17 @@
                                             @endif
                                         </td> -->
                                         <td>
-                                            @if($lead->exchange_content)
-                                                <small>{{ $lead->exchange_content }}</small>
+                                            @if($lead->customer_discussion_details)
+                                                <small>{{ $lead->customer_discussion_details }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
 
-                                         </td>
+                                    
+
                                         <td>
-                                            @if($lead->order_value)
-                                                <span class="fw-medium text-success">{{ number_format($lead->order_value) }}đ</span>
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
+                                            <input type="checkbox" disabled {{ $lead->tmdt == 'TMDT' ? 'checked' : '' }} style="accent-color: #28a745;">
                                         </td>
 
                                         <!-- Chăm Khách 3 lần -->
@@ -473,17 +466,17 @@
                                     <th style="min-width: 100px;">Tỉnh/Thành</th>
                                     <th style="min-width: 300px;">Địa Chỉ</th>
                                     <th style="min-width: 100px;">Zalo Feedback</th>
-                                    <th style="min-width: 100px;">Khách Hàng Đã Đặt Hàng Chưa?</th>
                                     <th style="min-width: 100px;">Phân Loại Khách Hàng</th>
-                                    <th style="min-width: 100px;">Nguồn</th>
+                                    <th style="min-width: 100px;">Showroom</th>
                                     <th style="min-width: 100px;">Sản Phẩm Cần Tư Vấn</th>
                                     <th style="min-width: 100px;">Tình Trạng Khách Hàng Đầu Tiên</th>
                                     <th style="min-width: 100px;">Note</th>
                                     <th style="min-width: 100px;">Sale Nhận Thông Tin</th>
                                     <th style="min-width: 100px;">Sale Hỗ Trợ Khách</th>
                                     <th style="min-width: 100px;">Tình Trạng Khách Hiện Tại</th>
-                                    <th style="min-width: 100px;">Thông tin trạo đổi với KH</th>
-                                    <th style="min-width: 100px;">Kết Quả</th>
+                                    <th style="min-width: 100px;">KH đã được hỗ trợ trước qua kênh nào?</th>
+                                    <th style="min-width: 100px;">Giá trị đơn chốt được</th>
+                                    <th style="min-width: 100px;">Chuyển Sang TMDT</th>
                                     <th style="min-width: 100px;">Hành động</th>
                                 </tr>
                             </thead>
@@ -536,16 +529,10 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
+                            
                                         <td>
-                                            @if($lead->is_new_customer)
-                                                <span class="badge bg-success">Khách Hàng Mới</span>
-                                            @else
-                                                <span class="badge bg-secondary">Khách Hàng Cũ</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($lead->customerSource)
-                                                <small>{{ $lead->customerSource->name }}</small>
+                                            @if($lead->showroom)
+                                                <small>{{ $lead->showroom->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
@@ -575,8 +562,8 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($lead->saleReceive)
-                                                <small>{{ $lead->saleReceive->name }}</small>
+                                            @if($lead->saleInformation)
+                                                <small>{{ $lead->saleInformation->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
@@ -588,28 +575,30 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
+                                    
                                         <td>
                                             @if($lead->currentStatus)
                                                 <small>{{ $lead->currentStatus->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
-                                    
+                                        </td>
+                                       
                                         <td>
-                                            @if($lead->exchange_content)
-                                                <small>{{ $lead->exchange_content }}</small>
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
+                                            <small>{{ $lead->supportedChannel ? $lead->supportedChannel->name : '-' }}</small>
                                         </td>
 
-                                         </td>
+                                    
                                         <td>
                                             @if($lead->order_value)
                                                 <span class="fw-medium text-success">{{ number_format($lead->order_value) }}đ</span>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
+                                        </td>
+
+                                        <td>
+                                            <input type="checkbox" disabled {{ $lead->tmdt == 'TMDT' ? 'checked' : '' }}>
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
@@ -664,6 +653,19 @@
         <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
             <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(isset($careOnline) && $careOnline->count())
+        <div class="alert alert-success">
+            <strong>Thông báo:</strong> Có {{ $careOnline->count() }} khách online đến ngày chăm sóc hôm nay!
+            <ul>
+                @foreach($careOnline as $care)
+                    <li>
+                        {{ $care->lead->name ?? 'Khách' }} - {{ $care->take_care_plan }} ({{ $care->take_care_date }})
+                    </li>
+                @endforeach
+            </ul>
         </div>
     @endif
 </div>

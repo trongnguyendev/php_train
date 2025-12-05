@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
-            $table->date('customer_visit_date');
             $table->date('first_interaction_date');
             $table->string('name');
             $table->string('phone');
@@ -32,7 +31,7 @@ return new class extends Migration
             $table->string('support_channel_id')->nullable();
             $table->string('source_id')->nullable();
             $table->text('customer_discussion_details')->nullable();
-            $table->string('results')->default('');
+            $table->string('tmdt')->nullable();
             $table->string('lead_type');
             $table->timestamps();
         });

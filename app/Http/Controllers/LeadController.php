@@ -29,7 +29,7 @@ class LeadController extends Controller
         $query = Lead::with([
             'province',
             'customerType',
-            'customerSource',
+            'source',
             'productCategory',
             'showroom',
             'firstStatus',
@@ -42,7 +42,7 @@ class LeadController extends Controller
         $queryOnline = Lead::with([
             'province',
             'customerType',
-            'customerSource',
+            'source',
             'productCategory',
             'showroom',
             'firstStatus',
@@ -57,6 +57,7 @@ class LeadController extends Controller
         $customerSources = CustomerSource::all();
         $customerTypes = CustomerType::all();
         $firstStatuses = CustomerStatus::all();
+        $currentStatus = CustomerStatus::all();
         $provinces = Province::all();
         $supportChannel = SupportChannel::all();
 
@@ -99,6 +100,14 @@ class LeadController extends Controller
         
         $leads = $query->where('lead_type', 1)->get();
         $leadsOnline = $queryOnline->where('lead_type', 2)->get();
+
+        // Thông báo khách online cần chăm sóc hôm nay
+        $today = now()->toDateString();
+        $careOnline = \App\Models\LeadTakeCare::whereIn('lead_id', $leadsOnline->pluck('id'))
+            ->where('take_care_date', $today)
+            ->with('lead')
+            ->get();
+
         return view('leads.index', compact(
             'leads',
             'leadsOnline',
@@ -108,7 +117,8 @@ class LeadController extends Controller
             'customerTypes',
             'firstStatuses',
             'provinces',
-            'supportChannel'
+            'supportChannel',
+            'careOnline'
         ));
         }
     }
@@ -154,7 +164,6 @@ class LeadController extends Controller
         Gate::authorize('create', Lead::class);
         
         $rules = [
-            'customer_visit_date' => 'required|date',
             'first_interaction_date' => 'required|date',
             'name' => 'required|string',
             'province_id' => 'required',
@@ -174,7 +183,7 @@ class LeadController extends Controller
         //     $rules['current_customer_status_id'] = 'required';
         //     $rules['support_status_customer_id'] = 'required';
         //     $rules['customer_discussion_details'] = 'required';
-        
+
         // }
         // // Nếu là Online (2) thì KHÔNG bắt buộc các trường trên
 
@@ -202,7 +211,6 @@ class LeadController extends Controller
 
         if ($request->lead_type == 1) { // Trực tiếp
             $lead = Lead::create([
-                'customer_visit_date' => $request->customer_visit_date,
                 'first_interaction_date' => $request->first_interaction_date,
                 'name' => $request->name,
                 'phone' => $request->phone,
@@ -220,11 +228,11 @@ class LeadController extends Controller
                 'current_customer_status_id' => $request->current_customer_status_id,
                 'order_value' => $request->order_value ?? 0,
                 'support_channel_id' => $request->support_channel_id ?? null,
+                'tmdt' => $request->tmdt ?? null,
                 'lead_type' => $request->lead_type
             ]);
         } else { // Online
             $lead = Lead::create([
-                'customer_visit_date' => $request->customer_visit_date,
                 'first_interaction_date' => $request->first_interaction_date,
                 'name' => $request->name,
                 'phone' => $request->phone,
@@ -240,7 +248,7 @@ class LeadController extends Controller
                 'sale_support_id' => $request->sale_support_id,
                 'current_customer_status_id' => $request->current_customer_status_id,
                 'customer_discussion_details' => $request->customer_discussion_details,
-                'results' => $request->results ?? '',
+                'tmdt' => $request->tmdt ?? null,
                 'lead_type' => $request->lead_type
             ]);
         }
@@ -250,7 +258,7 @@ class LeadController extends Controller
         }
 
         if ($request->has('take_care_plan')) {
-            foreach ($request->take_care_plan as $index => $plan) {
+            foreach ((array) $request->take_care_plan as $index => $plan) {
                 // Bỏ qua dòng trống (nếu user không nhập)
                 if (empty($plan) && empty($request->take_care_date[$index]) && empty($request->take_care_result[$index])) {
                     continue;
@@ -329,48 +337,20 @@ class LeadController extends Controller
     {
         Gate::authorize('update', $lead);
         
-        $request->validate([
-            'first_arrival_date' => 'required|date',
+        $rules = [
+            'first_interaction_date' => 'required|date',
             'name' => 'required|string',
             'province_id' => 'required',
             'address' => 'required',
             'customer_type_id' => 'required',
-            'is_new_customer' => 'required',
-            'customer_source_id' => 'required',
             'product_category_ids' => 'required|array|min:1',
-            'showroom_id' => 'required',
-            'first_customer_status_id' => 'required',
             'note' => 'required',
-            'sale_receive_customer_info_id' => 'required',
-        ]);
-
-        if ($request->lead_type == 1) { // Trực tiếp
-            $lead = Lead::create([
-                'customer_visit_date' => $request->customer_visit_date,
-                'first_interaction_date' => $request->first_interaction_date,
-                'name' => $request->name,
-                'phone' => $request->phone,
-                'province_id' => $request->province_id,
-                'address' => $request->address,
-                'zalo' => $request->zalo ?? '',
-                'customer_type_id' => $request->customer_type_id,
-                'source_id' => $request->source_id,
-                'showroom_id' => $request->showroom_id,
-                'product_categories_id' => !empty($request->product_category_ids) ? implode(',', $request->product_category_ids) : '',
-                    'first_customer_status_id' => $request->first_customer_status_id,
-                    'note' => $request->note,
-                    'sale_information_id' => $request->sale_information_id,
-                    'sale_support_id' => $request->sale_support_id ?? 0,
-                    'current_customer_status_id' => $request->current_customer_status_id,
-                    'order_value' => $request->order_value ?? 0,
-                    'support_channel_id' => $request->support_channel_id ?? null,
-                    'customer_discussion_details' => $request->customer_discussion_details ?? '',
-                    'lead_type' => $request->lead_type
-                ]);
+            'lead_type' => 'required',
+            'sale_support_id' => 'nullable',
+        ];
 
         // Chỉ cập nhật bản ghi Lead hiện tại
         $lead->update([
-            'customer_visit_date' => $request->customer_visit_date,
             'first_interaction_date' => $request->first_interaction_date,
             'name' => $request->name,
             'phone' => $request->phone,
@@ -380,7 +360,7 @@ class LeadController extends Controller
             'customer_type_id' => $request->customer_type_id,
             'source_id' => $request->source_id,
             'showroom_id' => $request->showroom_id,
-            'product_categories_id' => !empty($request->product_category_ids) ? implode(',', $request->product_category_ids) : '',
+            'product_categories_id' => !empty($request->product_category_ids) ? implode(',', $request->product_category_ids) : null,
             'first_customer_status_id' => $request->first_customer_status_id,
             'note' => $request->note,
             'sale_information_id' => $request->sale_information_id,
@@ -389,7 +369,7 @@ class LeadController extends Controller
             'order_value' => $request->order_value ?? 0,
             'support_channel_id' => $request->support_channel_id ?? null,
             'customer_discussion_details' => $request->customer_discussion_details ?? '',
-            'results' => $request->results ?? '',
+            'tmdt' => $request->tmdt ?? null,
             'lead_type' => $request->lead_type
         ]);
         // Lưu nhiều product category khi cập nhật
@@ -400,7 +380,7 @@ class LeadController extends Controller
         $leadTakeCare = LeadTakeCare::Where('lead_id', $lead->id)->first();
          
         if($leadTakeCare){
-            foreach($request->take_care_plan as $index => $plan) {
+            foreach((array) $request->take_care_plan as $index => $plan) {
                 $leadTakeCare = LeadTakeCare::updateOrCreate(
                     ['lead_id' => $lead->id, 'take_care_date' => $request->take_care_date[$index] ?? null],
                     [
@@ -410,7 +390,7 @@ class LeadController extends Controller
                 );
             }
         } else {
-            foreach($request->take_care_plan as $index => $plan) {
+            foreach((array) $request->take_care_plan as $index => $plan) {
                 LeadTakeCare::create([
                     'lead_id' => $lead->id,
                     'take_care_plan' => $plan,
@@ -421,7 +401,6 @@ class LeadController extends Controller
         }
 
         return redirect()->route('leads.index')->with('success', 'Cập nhập Lead thành công!');
-    }
     }
 
     /**
