@@ -123,7 +123,7 @@
                 </div>
             </div>
 
-            @if($lead->lead_type != 2)
+            @if($lead->lead_type != 1)
             <div class="col-md-4 mb-3">
                 <label for="showroom_id" class="form-label"><span class="text-primary fw-bold">Showroom</span></label>
                 <select name="showroom_id" id="showroom_id" class="form-control">
