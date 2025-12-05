@@ -102,10 +102,17 @@ class LeadController extends Controller
         $leadsOnline = $queryOnline->where('lead_type', 2)->get();
 
         // Thông báo khách online cần chăm sóc hôm nay
-        $today = now()->toDateString();
-        $careOnline = \App\Models\LeadTakeCare::whereIn('lead_id', $leadsOnline->pluck('id'))
-            ->where('take_care_date', $today)
-            ->with('lead')
+        // $today = now()->toDateString();
+        // $careOnline = \App\Models\LeadTakeCare::whereIn('lead_id', $leadsOnline->pluck('id'))
+        //     ->where('take_care_date', $today)
+        //     ->with('lead')
+        //     ->get();
+        // cách 2
+        $today = today()->toDateString();
+
+        $careOnline = LeadTakeCare::with('lead')
+            ->whereIn('lead_id', $leadsOnline->pluck('id'))
+            ->whereDate('take_care_date', $today)
             ->get();
 
         return view('leads.index', compact(

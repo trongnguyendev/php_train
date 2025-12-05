@@ -36,7 +36,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <label for="lead_type" class="form-label">
                                 <i class="bi bi-diagram-3 me-1"></i><span class="text-primary fw-bold">Loại Lead</span>
                             </label>
@@ -50,7 +50,7 @@
                         </div>
                         <!-- Basic Information -->
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="first_interaction_date" class="form-label">
                                 <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Ngày tương tác đầu tiên</span>
                             </label>
@@ -236,7 +236,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4" id="order-value-field" style="display: {{ old('lead_type', '1') == '2' ? 'none' : 'block' }};">
+                        <div class="col-md-6" id="order-value-field" style="display: {{ old('lead_type', '1') == '2' ? 'none' : 'block' }};">
                             <label for="order_value" class="form-label">
                                 <i class="bi bi-currency-dollar me-1"></i><span class="text-primary fw-bold">Giá trị đơn chốt được</span>
                             </label>
@@ -249,7 +249,7 @@
                         </div>
 
                         <!-- Status Information -->
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="first_customer_status_id" class="form-label">
                                 <i class="bi bi-flag me-1"></i><span class="text-primary fw-bold">Tình trạng KH ban đầu</span>
                             </label>
@@ -267,7 +267,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="current_customer_status_id" class="form-label">
                                 <i class="bi bi-flag-fill me-1"></i><span class="text-primary fw-bold">Tình trạng KH hiện tại</span>
                             </label>
@@ -304,7 +304,7 @@
 
 
                         <!-- Sales Team -->
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="sale_information_id" class="form-label">
                                 <i class="bi bi-person-badge me-1"></i><span class="text-primary fw-bold">Sale nhận KH</span>
                             </label>
@@ -322,7 +322,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4" id="sale-support-field">
+                        <div class="col-md-6" id="sale-support-field">
                             <label for="sale_support_id" class="form-label">
                                 <i class="bi bi-headset me-1"></i><span class="text-primary fw-bold">Sale hỗ trợ</span>
                             </label>
@@ -341,20 +341,8 @@
                         </div>
 
                         <!-- Notes and Results -->
-                        <div class="col-md-6">
-                            <label for="note" class="form-label">
-                                <i class="bi bi-sticky me-1"></i><span class="text-primary fw-bold">Ghi chú sale nhận khách</span>
-                            </label>
-                            <textarea name="note" id="note" rows="3" 
-                                        class="form-control @error('note') is-invalid @enderror"
-                                        placeholder="Nhập ghi chú về khách hàng">{{ old('note') }}</textarea>
-                            @error('note')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
 
-            
-                        <div class="col-md-4" id="support-channel-field" style="display: {{ old('lead_type', '1') == '1' ? 'block' : 'none' }};">
+                        <div class="col-md-6" id="support-channel-field" style="display: {{ old('lead_type', '1') == '1' ? 'block' : 'none' }};">
                                 <label for="support_channel_id" class="form-label">
                                     <i class="bi bi-headset me-1"></i><span class="text-primary fw-bold">KH đã được hỗ trợ trước qua kênh nào?</span>
                             </label>
@@ -372,6 +360,21 @@
                             @enderror
                         </div>
 
+                        <div class="col-md-6">
+                            <label for="note" class="form-label">
+                                <i class="bi bi-sticky me-1"></i><span class="text-primary fw-bold">Ghi chú sale nhận khách</span>
+                            </label>
+                            <textarea name="note" id="note" rows="3" 
+                                        class="form-control @error('note') is-invalid @enderror"
+                                        placeholder="Nhập ghi chú về khách hàng">{{ old('note') }}</textarea>
+                            @error('note')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+            
+                    
+
                         <div class="col-md-6" id="customer-discussion-details-field" style="display: {{ old('lead_type', '1') == '2' ? 'block' : 'none' }};">
                                 <label for="customer_discussion_details" class="form-label">
                                     <i class="bi bi-sticky me-1"></i><span class="text-primary fw-bold">Thông Tin Trao Đổi</span>
@@ -384,9 +387,11 @@
                             @enderror
                         </div>
 
-                        <div class="form-check">
+                        <div class="form-check col-md-6">
                             <input class="form-check-input" type="checkbox" name="tmdt" id="kq1" value="TMDT" {{ old('tmdt') == 'TMDT' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="kq1">Chuyển sang TMDT</label>
+                            <label for="kq1" class="form-label">
+                                    <i class="bi bi-sticky me-1"></i><span class="text-primary fw-bold">Chuyển sang TMDT</span>
+                            </label>
                         </div>
 
                     </div>
