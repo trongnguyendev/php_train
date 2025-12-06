@@ -138,6 +138,7 @@
             </div>
             @endif
 
+            @if($lead->lead_type != 1)
             <div class="col-md-4 mb-3">
                 <label for="first_customer_status_id" class="form-label"><span class="text-primary fw-bold">Tình trạng KH ban đầu</span></label>
                 <select name="first_customer_status_id" id="first_customer_status_id" class="form-control">
@@ -150,6 +151,7 @@
                     @endforeach
                 </select>
             </div>
+            @endif
 
             <div class="col-md-8 mb-3">
                 <label class="form-label"><span class="text-primary fw-bold">Ghi chú</span></label>

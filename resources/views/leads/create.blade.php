@@ -249,7 +249,7 @@
                         </div>
 
                         <!-- Status Information -->
-                        <div class="col-md-6">
+                        <div class="col-md-6" id="order-value-field" style="display: {{ old('lead_type', '1') == '2' ? 'none' : 'block' }};">
                             <label for="first_customer_status_id" class="form-label">
                                 <i class="bi bi-flag me-1"></i><span class="text-primary fw-bold">Tình trạng KH ban đầu</span>
                             </label>

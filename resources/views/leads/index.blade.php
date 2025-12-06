@@ -469,7 +469,6 @@
                                     <th style="min-width: 100px;">Phân Loại Khách Hàng</th>
                                     <th style="min-width: 100px;">Showroom</th>
                                     <th style="min-width: 100px;">Sản Phẩm Cần Tư Vấn</th>
-                                    <th style="min-width: 100px;">Tình Trạng Khách Hàng Đầu Tiên</th>
                                     <th style="min-width: 100px;">Note</th>
                                     <th style="min-width: 100px;">Sale Nhận Thông Tin</th>
                                     <th style="min-width: 100px;">Tình Trạng Khách Hiện Tại</th>
@@ -545,13 +544,7 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
-                                        <td>
-                                            @if($lead->firstStatus)
-                                                <small>{{ $lead->firstStatus->name }}</small>
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
-                                        </td>
+                                       
 
                                         <td>
                                             @if($lead->note)
