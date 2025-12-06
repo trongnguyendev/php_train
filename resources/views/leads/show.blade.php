@@ -5,15 +5,22 @@
     <h1 class="h3 mb-4">
         <i class="bi bi-building text-info"></i>
         <span class="text-primary fw-bold">Chi tiết Lead</span>
+        @if($lead->lead_type == 2)
+            <span class="badge bg-info ms-2">Online</span>
+        @elseif($lead->lead_type == 1)
+            <span class="badge bg-warning ms-2">Trực tiếp</span>
+        @endif
     </h1>
     <div class="card shadow-sm">
         <div class="card-body">
             <p><strong>ID:</strong> {{ $lead->id }}</p>
             <p><strong>Tên khách hàng:</strong> {{ $lead->name }}</p>
-            <p><strong>Số điện thoại:</strong> {{ $lead->phone }}</p>
-            <p><strong>Tỉnh/Thành phố:</strong> {{ $lead->province->name ?? '' }}</p>
-            <p><strong>Địa chỉ:</strong> {{ $lead->address }}</p>
-            <p><strong>Zalo:</strong> {{ $lead->zalo }}</p>
+            @if($lead->lead_type == 2)
+                <p><strong>Số điện thoại:</strong> {{ $lead->phone }}</p>
+                <p><strong>Tỉnh/Thành phố:</strong> {{ $lead->province->name ?? '' }}</p>
+                <p><strong>Địa chỉ:</strong> {{ $lead->address }}</p>
+                <p><strong>Zalo:</strong> {{ $lead->zalo }}</p>
+            @endif
             <p><strong>Loại khách hàng:</strong> {{ $lead->customerType->name ?? '' }}</p>
             <p><strong>Nguồn khách hàng:</strong> {{ $lead->customerSource->name ?? '' }}</p>
             <p><strong>Danh mục sản phẩm:</strong> {{ $lead->productCategories->pluck('name')->implode(', ') }}</p>
