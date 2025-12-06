@@ -177,10 +177,9 @@
                                     <th style="min-width: 300px;">Địa Chỉ</th>
                                     <th style="min-width: 100px;">Zalo Feedback</th>
                                     <th style="min-width: 200px;">Phân Loại Khách Hàng</th>
-                                    <th style="min-width: 100px;">Showroom</th>
                                     <th style="min-width: 200px;">Sản Phẩm Cần Tư Vấn</th>
                                     <th style="min-width: 200px;">Tình Trạng Khách Hàng Đầu Tiên</th>
-                                    <th style="min-width: 300px;">Note</th>
+                                    <th style="min-width: 300px;">Ghi chú sale nhận khách</th>
                                     <th style="min-width: 200px;">Sale Nhận Thông Tin</th>
                                     <th style="min-width: 100px;">Sale Hỗ Trợ Khách</th>
                                     <th style="min-width: 200px;">Tình Trạng Khách Hiện Tại</th>
@@ -288,15 +287,6 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
-                                    
-                                        <td>
-                                            @if($lead->showroom)
-                                                <small>{{ $lead->showroom->name }}</small>
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
-                                        </td>
-                                            
                                         <td>
                                             @if($lead->productCategories && $lead->productCategories->count())
                                                 @foreach($lead->productCategories as $category)
@@ -469,7 +459,7 @@
                                     <th style="min-width: 100px;">Phân Loại Khách Hàng</th>
                                     <th style="min-width: 100px;">Showroom</th>
                                     <th style="min-width: 100px;">Sản Phẩm Cần Tư Vấn</th>
-                                    <th style="min-width: 100px;">Note</th>
+                                    <th style="min-width: 100px;">Ghi chú sale nhận khách</th>
                                     <th style="min-width: 100px;">Sale Nhận Thông Tin</th>
                                     <th style="min-width: 100px;">Tình Trạng Khách Hiện Tại</th>
                                     <th style="min-width: 100px;">KH đã được hỗ trợ trước qua kênh nào?</th>

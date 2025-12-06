@@ -409,8 +409,7 @@
                             <i class="bi bi-chat-heart"></i>
                         </div>
                         <div>
-                            <h5 class="mb-1">Thông tin chăm sóc khách hàng</h5>
-                            <p class="text-muted mb-0">Lập kế hoạch chăm sóc khách hàng (3 lần)</p>
+                            <h5 class="mb-1">Kế hoạch chăm sóc khách hàng</h5>
                         </div>
                     </div>
                 </div>

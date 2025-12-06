@@ -237,7 +237,7 @@ class LeadController extends Controller
                 'current_customer_status_id' => $request->current_customer_status_id,
                 'order_value' => $orderValue,
                 'support_channel_id' => $request->support_channel_id ?? null,
-                'tmdt' => $request->tmdt ?? null,
+                'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
                 'lead_type' => $request->lead_type
             ]);
         } else { // Online
@@ -256,7 +256,7 @@ class LeadController extends Controller
                 'sale_support_id' => $request->sale_support_id,
                 'current_customer_status_id' => $request->current_customer_status_id,
                 'customer_discussion_details' => $request->customer_discussion_details,
-                'tmdt' => $request->tmdt ?? null,
+                'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
                 'lead_type' => $request->lead_type
             ]);
         }
@@ -380,7 +380,7 @@ class LeadController extends Controller
             'order_value' => $orderValue,
             'support_channel_id' => $request->support_channel_id ?? null,
             'customer_discussion_details' => $request->customer_discussion_details ?? '',
-            'tmdt' => $request->tmdt ?? null,
+            'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
             'lead_type' => $request->lead_type
         ]);
         // Lưu nhiều product category khi cập nhật

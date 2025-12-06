@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2 class="mb-4 text-warning">✏️ Chỉnh sửa Lead và 3 lần chăm sóc</h2>
+    <h2 class="mb-4 text-warning">✏️ Chỉnh sửa Lead</h2>
 
     {{-- Hiển thị lỗi validate --}}
     @if ($errors->any())
@@ -216,7 +216,7 @@
             </div>
             @endif
 
-            @if($lead->lead_type != 1)
+            @if($lead->lead_type != 2)
             <div class="col-md-4 mb-3">
                 <label for="support_channel_id" class="form-label"><span class="text-primary fw-bold">KH đã được hỗ trợ trước qua kênh nào?</span></label>
                 <select name="support_channel_id" id="support_channel_id" class="form-control">
@@ -238,7 +238,8 @@
             </div>
             @endif
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="tmdt" id="kq1" value="TMDT">
+                <input class="form-check-input" type="checkbox" name="tmdt" id="kq1" value="TMDT"
+                    {{ old('tmdt', $lead->tmdt) == 'TMDT' ? 'checked' : '' }}>
                 <label class="form-check-label" for="kq1">Chuyển sang TMDT</label>
             </div>
 
@@ -252,7 +253,7 @@
         {{-- ========================= --}}
 
         @if($lead->lead_type == 2)
-        <h4 class="text-success mb-3">💬 Thông tin chăm sóc khách hàng (3 lần)</h4>
+        <h4 class="text-success mb-3">💬 Thông tin chăm sóc khách hàng</h4>
 
         @php
             $takeCares = $lead->leadTakeCares->take(3);
