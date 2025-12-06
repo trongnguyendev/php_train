@@ -281,52 +281,108 @@
                                             </a>
                                         </td>
                                         <td>
-                                            @if($lead->customerType)
-                                                <span class="badge bg-info">{{ $lead->customerType->name }}</span>
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($lead->productCategories && $lead->productCategories->count())
-                                                @foreach($lead->productCategories as $category)
-                                                    <span class="badge bg-primary">{{ $category->name }}</span>
+                                            <span class="editable-select" data-id="{{ $lead->id }}" data-field="customer_type_id">
+                                                {{ $lead->customerType ? $lead->customerType->name : '-' }}
+                                            </span>
+                                            <select class="form-select d-none inline-select" data-id="{{ $lead->id }}" data-field="customer_type_id">
+                                                <option value="">-- Chọn --</option>
+                                                @foreach($customerTypes as $type)
+                                                    <option value="{{ $type->id }}" {{ $lead->customer_type_id == $type->id ? 'selected' : '' }}>
+                                                        {{ $type->name }}
+                                                    </option>
                                                 @endforeach
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <span class="editable-multi" data-id="{{ $lead->id }}" style="cursor:pointer;">
+                                                @if($lead->productCategories && $lead->productCategories->count())
+                                                    @foreach($lead->productCategories as $category)
+                                                        <span class="badge bg-primary">{{ $category->name }}</span>
+                                                    @endforeach
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
+                                                <i class="bi bi-pencil ms-1 text-warning"></i>
+                                            </span>
                                         </td>
 
                                         <td>
-                                            @if($lead->firstStatus)
-                                                <small>{{ $lead->firstStatus->name }}</small>
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
-                                        </td>
-
-                                         <td>
-                                            @if($lead->note)
-                                                <small>{{ $lead->note }}</small>
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
+                                            <span class="editable-select" data-id="{{ $lead->id }}" data-field="first_customer_status_id">
+                                                {{ $lead->firstStatus ? $lead->firstStatus->name : '-' }}
+                                            </span>
+                                            <select class="form-select d-none inline-select" data-id="{{ $lead->id }}" data-field="first_customer_status_id">
+                                                <option value="">-- Chọn --</option>
+                                                @foreach($customerStatuses as $status)
+                                                    <option value="{{ $status->id }}" {{ $lead->first_customer_status_id == $status->id ? 'selected' : '' }}>
+                                                        {{ $status->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </td>
                                         <td>
+                                            <span class="editable-text" data-id="{{ $lead->id }}" data-field="note">
+                                                {{ $lead->note ?? '-' }}
+                                            </span>
+                                            <input type="text" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="note" value="{{ $lead->note }}">
+                                        </td>
+                                        
+                                        <td>
+                                            <span class="editable-select" data-id="{{ $lead->id }}" data-field="sale_information_id">
+                                                {{ $lead->saleInformation ? $lead->saleInformation->name : '-' }}
+                                            </span>
+                                            <select class="form-select d-none inline-select" data-id="{{ $lead->id }}" data-field="sale_information_id">
+                                                <option value="">-- Chọn --</option>
+                                                @foreach($saleUsers as $user)
+                                                    <option value="{{ $user->id }}" {{ $lead->sale_information_id == $user->id ? 'selected' : '' }}>
+                                                        {{ $user->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                                    
+
+                                        <!-- <td>
                                             @if($lead->saleInformation)
                                                 <small>{{ $lead->saleInformation->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
+                                        </td> -->
+                                        <td>
+                                            <span class="editable-select" data-id="{{ $lead->id }}" data-field="sale_support_id">
+                                                {{ $lead->saleSupport ? $lead->saleSupport->name : '-' }}
+                                            </span>
+                                            <select class="form-select d-none inline-select" data-id="{{ $lead->id }}" data-field="sale_support_id">
+                                                <option value="">-- Chọn --</option>
+                                                @foreach($saleUsers as $user)
+                                                    <option value="{{ $user->id }}" {{ $lead->sale_support_id == $user->id ? 'selected' : '' }}>
+                                                        {{ $user->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </td>
-                                         <td>
+
+                                         <!-- <td>
                                             @if($lead->saleSupport)
                                                 <small>{{ $lead->saleSupport->name }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
-                                        </td>
+                                        </td> -->
                                         <td>
+                                            <span class="editable-select" data-id="{{ $lead->id }}" data-field="current_customer_status_id">
+                                                {{ $lead->currentStatus ? $lead->currentStatus->name : '-' }}
+                                            </span>
+                                            <select class="form-select d-none inline-select" data-id="{{ $lead->id }}" data-field="current_customer_status_id">
+                                                <option value="">-- Chọn --</option>
+                                                @foreach($customerStatuses as $status)
+                                                    <option value="{{ $status->id }}" {{ $lead->current_customer_status_id == $status->id ? 'selected' : '' }}>
+                                                        {{ $status->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <!-- <td>
                                             @if($lead->currentStatus)
                                                 <small>
                                                     {{-- Hiển thị tên nếu có, nếu không thì show toàn bộ object để debug --}}
@@ -335,7 +391,7 @@
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
-                                        </td>
+                                        </td> -->
 
                                         <!-- <td>
                                             @if($lead->customerStatuses)
@@ -344,12 +400,18 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td> -->
-                                        <td>
+                                        <!-- <td>
                                             @if($lead->customer_discussion_details)
                                                 <small>{{ $lead->customer_discussion_details }}</small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
+                                        </td> -->
+                                        <td>
+                                            <span class="editable-text" data-id="{{ $lead->id }}" data-field="customer_discussion_details">
+                                                {{ $lead->customer_discussion_details ?? '-' }}
+                                            </span>
+                                            <input type="text" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="customer_discussion_details" value="{{ $lead->customer_discussion_details }}">
                                         </td>
 
                                     

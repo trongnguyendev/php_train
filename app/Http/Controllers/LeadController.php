@@ -59,6 +59,7 @@ class LeadController extends Controller
         $currentStatus = CustomerStatus::all();
         $provinces = Province::all();
         $supportChannel = SupportChannel::all();
+        $saleUsers = SaleUser::all();
 
         if ($request->type_phone) {
         $query->where('phone', 'like', '%' . $request->type_phone . '%');
@@ -126,7 +127,8 @@ class LeadController extends Controller
             'firstStatuses',
             'provinces',
             'supportChannel',
-            'careOnline'
+            'careOnline',
+            'saleUsers'
         ));
         }
     }
