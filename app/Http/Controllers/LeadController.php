@@ -22,7 +22,6 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
-            $firstStatuses = \App\Models\CustomerStatus::all();
     {
         Gate::authorize('viewAny', Lead::class);
         
@@ -108,6 +107,8 @@ class LeadController extends Controller
         //     ->with('lead')
         //     ->get();
         // cách 2
+
+        // thông báo chăm khách online hôm nay
         $today = today()->toDateString();
 
         $careOnline = LeadTakeCare::with('lead')
