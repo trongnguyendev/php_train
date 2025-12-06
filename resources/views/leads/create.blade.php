@@ -240,9 +240,9 @@
                             <label for="order_value" class="form-label">
                                 <i class="bi bi-currency-dollar me-1"></i><span class="text-primary fw-bold">Giá trị đơn chốt được</span>
                             </label>
-                            <input type="number" name="order_value" id="order_value" 
-                                    class="form-control @error('order_value') is-invalid @enderror"
-                                    value="{{ old('order_value') }}" placeholder="Nhập giá trị đơn chốt được">
+                            <input type="text" name="order_value" id="order_value" 
+                                class="form-control @error('order_value') is-invalid @enderror"
+                                value="{{ old('order_value') }}" placeholder="Nhập giá trị đơn chốt được">
                             @error('order_value')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -546,5 +546,11 @@ setTimeout(function() {
         bsAlert.close();
     });
 }, 5000);
+
+// tự thêm dấu chấm hàng nghìn cho giá trị đơn chốt được
+document.getElementById('order_value').addEventListener('input', function (e) {
+    let value = this.value.replace(/\D/g, ""); // bỏ ký tự không phải số
+    this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // thêm dấu chấm
+});
 </script>
 @endpush

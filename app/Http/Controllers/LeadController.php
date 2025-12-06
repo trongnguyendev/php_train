@@ -215,6 +215,10 @@ class LeadController extends Controller
         ];
 
         $request->validate($rules, $messages);
+        $orderValue = 0;
+            if ($request->order_value) {
+                $orderValue = (int) str_replace('.', '', $request->order_value);
+            }
 
         if ($request->lead_type == 1) { // Trực tiếp
             $lead = Lead::create([
@@ -232,7 +236,7 @@ class LeadController extends Controller
                 'sale_information_id' => $request->sale_information_id,
                 'sale_support_id' => $request->sale_support_id ?? 0,
                 'current_customer_status_id' => $request->current_customer_status_id,
-                'order_value' => $request->order_value ?? 0,
+                'order_value' => $orderValue,
                 'support_channel_id' => $request->support_channel_id ?? null,
                 'tmdt' => $request->tmdt ?? null,
                 'lead_type' => $request->lead_type
@@ -354,6 +358,11 @@ class LeadController extends Controller
             'sale_support_id' => 'nullable',
         ];
 
+        $orderValue = 0;
+        if ($request->order_value) {
+            $orderValue = (int) str_replace('.', '', $request->order_value);
+        }
+
         // Chỉ cập nhật bản ghi Lead hiện tại
         $lead->update([
             'first_interaction_date' => $request->first_interaction_date,
@@ -370,7 +379,7 @@ class LeadController extends Controller
             'sale_information_id' => $request->sale_information_id,
             'sale_support_id' => $request->sale_support_id ?? 0,
             'current_customer_status_id' => $request->current_customer_status_id,
-            'order_value' => $request->order_value ?? 0,
+            'order_value' => $orderValue,
             'support_channel_id' => $request->support_channel_id ?? null,
             'customer_discussion_details' => $request->customer_discussion_details ?? '',
             'tmdt' => $request->tmdt ?? null,

@@ -78,7 +78,7 @@
                 </select>
             </div>
 
-            @if($lead->lead_type != 2)
+            @if($lead->lead_type != 1)
             <div class="col-md-4 mb-3">
                 <label for="source_id" class="form-label"><span class="text-primary fw-bold">Nguồn khách hàng</span></label>
                 <select name="source_id" id="source_id" class="form-control">
@@ -123,7 +123,7 @@
                 </div>
             </div>
 
-            @if($lead->lead_type != 1)
+            @if($lead->lead_type != 2)
             <div class="col-md-4 mb-3">
                 <label for="showroom_id" class="form-label"><span class="text-primary fw-bold">Showroom</span></label>
                 <select name="showroom_id" id="showroom_id" class="form-control">
@@ -169,6 +169,7 @@
                 </select>
             </div>
 
+            @if($lead->lead_type != 1)
             <div class="col-md-4 mb-3">
                 <label for="sale_support_id" class="form-label"><span class="text-primary fw-bold">Sale hỗ trợ</span></label>
                 <select name="sale_support_id" id="sale_support_id" class="form-control">
@@ -181,6 +182,7 @@
                     @endforeach
                 </select>
             </div>
+            @endif
 
             <div class="col-md-4 mb-3">
                 <label for="current_customer_status_id" class="form-label"><span class="text-primary fw-bold">Tình trạng KH hiện tại</span></label>
@@ -197,12 +199,22 @@
 
             @if($lead->lead_type != 2)
             <div class="col-md-4 mb-3">
-                <label class="form-label"><span class="text-primary fw-bold">Giá trị đơn hàng</span></label>
-                <input type="number" name="order_value" value="{{ $lead->order_value }}" class="form-control">
+                <label class="form-label">
+                    <span class="text-primary fw-bold">Giá trị đơn hàng</span>
+                </label>
+
+                <!-- Input hiển thị có format -->
+                <input type="text" id="order_value_display" 
+                    value="{{ number_format($lead->order_value, 0, ',', '.') }}" 
+                    class="form-control">
+
+                <!-- Hidden input gửi lên server -->
+                <input type="hidden" name="order_value" id="order_value" 
+                    value="{{ $lead->order_value }}">
             </div>
             @endif
 
-            @if($lead->lead_type != 2)
+            @if($lead->lead_type != 1)
             <div class="col-md-4 mb-3">
                 <label for="support_channel_id" class="form-label"><span class="text-primary fw-bold">KH đã được hỗ trợ trước qua kênh nào?</span></label>
                 <select name="support_channel_id" id="support_channel_id" class="form-control">
@@ -299,6 +311,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     // Initial update
     updateProductNamesEditBtn();
+});
+
+const display = document.getElementById('order_value_display');
+const real = document.getElementById('order_value');
+
+function formatNumber(n) {
+    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+// Khi nhập vào input hiển thị
+display.addEventListener('input', function () {
+    this.value = formatNumber(this.value);      // format đẹp
+    real.value = this.value.replace(/\./g, ''); // gửi lên DB dạng số
 });
 </script>
 @endpush

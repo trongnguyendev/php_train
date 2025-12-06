@@ -472,7 +472,6 @@
                                     <th style="min-width: 100px;">Tình Trạng Khách Hàng Đầu Tiên</th>
                                     <th style="min-width: 100px;">Note</th>
                                     <th style="min-width: 100px;">Sale Nhận Thông Tin</th>
-                                    <th style="min-width: 100px;">Sale Hỗ Trợ Khách</th>
                                     <th style="min-width: 100px;">Tình Trạng Khách Hiện Tại</th>
                                     <th style="min-width: 100px;">KH đã được hỗ trợ trước qua kênh nào?</th>
                                     <th style="min-width: 100px;">Giá trị đơn chốt được</th>
@@ -568,13 +567,7 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
-                                         <td>
-                                            @if($lead->saleSupport)
-                                                <small>{{ $lead->saleSupport->name }}</small>
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
-                                        </td>
+                                        
                                     
                                         <td>
                                             @if($lead->currentStatus)
