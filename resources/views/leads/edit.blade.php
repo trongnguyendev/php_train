@@ -234,7 +234,7 @@
             @if($lead->lead_type != 1)
             <div class="col-md-6 mb-3">
                 <label class="form-label"><span class="text-primary fw-bold">Thông tin đã trao đổi với KH</span></label>
-                <textarea name="customer_discussion_detail" class="form-control" rows="2">{{ $lead->customer_discussion_detail }}</textarea>
+                <textarea name="customer_discussion_details" class="form-control" rows="2">{{ $lead->customer_discussion_details }}</textarea>
             </div>
             @endif
             <div class="form-check">

@@ -366,6 +366,7 @@ class LeadController extends Controller
         }
 
         // Chỉ cập nhật bản ghi Lead hiện tại
+        
         $lead->update([
             'first_interaction_date' => $request->first_interaction_date,
             'name' => $request->name,
