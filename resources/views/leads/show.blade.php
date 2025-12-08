@@ -24,11 +24,10 @@
             <p><strong>Phân Loại khách hàng:</strong> {{ $lead->customerType->name ?? '' }}</p>
             <p><strong>Danh mục sản phẩm:</strong> {{ $lead->productCategories->pluck('name')->implode(', ') }}</p>
             <p><strong>Showroom:</strong> {{ $lead->showroom->name ?? '' }}</p>
-            <p><strong>Tình trạng KH ban đầu:</strong> {{ $lead->firstStatus->name ?? '' }}</p>
-            <p><strong>Ghi chú:</strong> {{ $lead->note }}</p>
+            <p><strong>Ghi chú sale nhận khách:</strong> {{ $lead->note }}</p>
             <p><strong>Sale nhận KH:</strong> {{ $lead->saleInformation->name ?? '' }}</p>
             <p><strong>Tình trạng KH hiện tại:</strong> {{ $lead->currentStatus->name ?? '' }}</p>
-            <p><strong>Giá trị đơn hàng:</strong> {{ $lead->order_value }}</p>
+            <p><strong>Giá trị đơn chốt được:</strong> {{ $lead->order_value }}</p>
             <p><strong>Trạng thái hỗ trợ:</strong> {{ $lead->supportStatusCustomer->name ?? '' }}</p>
             <p><strong>KH đã được hỗ trợ trước qua kênh nào?:</strong> {{ $lead->supportedChannel ? $lead->supportedChannel->name : '' }}</p>
             <p><strong>Chuyển sang TMDT:</strong> {{ $lead->tmdt }}</p>
@@ -46,12 +45,13 @@
             <p><strong>Nguồn:</strong> {{ $lead->customerSource->name ?? '' }}</p>
             <p><strong>Danh mục sản phẩm:</strong> {{ $lead->productCategories->pluck('name')->implode(', ') }}</p>
             <p><strong>Tình trạng KH ban đầu:</strong> {{ $lead->firstStatus->name ?? '' }}</p>
-            <p><strong>Ghi chú:</strong> {{ $lead->note }}</p>
+            <p><strong>Ghi chú sale nhận khách:</strong> {{ $lead->note }}</p>
             <p><strong>Sale nhận KH:</strong> {{ $lead->saleInformation->name ?? '' }}</p>
             <p><strong>Sale hỗ trợ:</strong> {{ $lead->saleSupport->name ?? '' }}</p>
             <p><strong>Tình trạng KH hiện tại:</strong> {{ $lead->currentStatus->name ?? '' }}</p>
             <p><strong>Trạng thái hỗ trợ:</strong> {{ $lead->supportStatusCustomer->name ?? '' }}</p>
             <p><strong>Thông tin trao đổi với KH:</strong> {{ $lead->customer_discussion_details->name ?? '' }}</p>
+            <p><strong>Chuyển sang TMDT:</strong> {{ $lead->tmdt }}</p>
             <hr>
             <h5>Thông tin chăm sóc khách hàng</h5>
             @foreach($lead->leadTakeCares->take(3) as $care)
