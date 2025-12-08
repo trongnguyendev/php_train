@@ -177,6 +177,7 @@
                                     <th style="min-width: 300px;">Địa Chỉ</th>
                                     <th style="min-width: 100px;">Zalo Feedback</th>
                                     <th style="min-width: 200px;">Phân Loại Khách Hàng</th>
+                                    <th style="min-width: 200px;">Nguồn</th>
                                     <th style="min-width: 200px;">Sản Phẩm Cần Tư Vấn</th>
                                     <th style="min-width: 200px;">Tình Trạng Khách Hàng Đầu Tiên</th>
                                     <th style="min-width: 300px;">Ghi chú sale nhận khách</th>
@@ -289,6 +290,19 @@
                                                 @foreach($customerTypes as $type)
                                                     <option value="{{ $type->id }}" {{ $lead->customer_type_id == $type->id ? 'selected' : '' }}>
                                                         {{ $type->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <span class="editable-select" data-id="{{ $lead->id }}" data-field="source_id">
+                                                {{ $lead->customerSource ? $lead->customerSource->name : '-' }}
+                                            </span>
+                                            <select class="form-select d-none inline-select" data-id="{{ $lead->id }}" data-field="source_id">
+                                                <option value="">-- Chọn --</option>
+                                                @foreach($customerSources as $source)
+                                                    <option value="{{ $source->id }}" {{ $lead->source_id == $source->id ? 'selected' : '' }}>
+                                                        {{ $source->name }}
                                                     </option>
                                                 @endforeach
                                             </select>

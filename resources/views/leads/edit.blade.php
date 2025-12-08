@@ -154,7 +154,7 @@
             @endif
 
             <div class="col-md-8 mb-3">
-                <label class="form-label"><span class="text-primary fw-bold">Ghi chú</span></label>
+                <label class="form-label"><span class="text-primary fw-bold">Ghi chú sale nhận khách</span></label>
                 <textarea name="note" class="form-control" rows="2">{{ $lead->note }}</textarea>
             </div>
 

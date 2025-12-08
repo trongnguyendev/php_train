@@ -249,7 +249,7 @@
                         </div>
 
                         <!-- Status Information -->
-                        <div class="col-md-6" id="order-value-field" style="display: {{ old('lead_type', '1') == '2' ? 'none' : 'block' }};">
+                        <div class="col-md-6" id="first_customer_status_id-field" style="display: {{ old('lead_type', '1') == '2' ? 'none' : 'block' }};">
                             <label for="first_customer_status_id" class="form-label">
                                 <i class="bi bi-flag me-1"></i><span class="text-primary fw-bold">Tình trạng KH ban đầu</span>
                             </label>
@@ -478,6 +478,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const customerCareCard = document.getElementById('customer-care-card');
     const showroomField = document.getElementById('showroom-field');
     const orderValueField = document.getElementById('order-value-field');
+    const firstCustomerStatusField = document.getElementById('first_customer_status_id-field');
     const saleSupportField = document.getElementById('sale-support-field');
     const supportChannelField = document.getElementById('support-channel-field');
     const sourceField = document.getElementById('source-field');
@@ -497,6 +498,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (saleSupportField) {
             saleSupportField.style.display = isOnline ? 'block' : 'none';
+        }
+        if (firstCustomerStatusField) {
+            firstCustomerStatusField.style.display = isOnline ? 'block' : 'none';
         }
         if (supportChannelField) {
             supportChannelField.style.display = isOnline ? 'none' : 'block';
