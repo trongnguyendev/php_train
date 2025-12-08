@@ -30,7 +30,7 @@
             <p><strong>Tình trạng KH hiện tại:</strong> {{ $lead->currentStatus->name ?? '' }}</p>
             <p><strong>Giá trị đơn hàng:</strong> {{ $lead->order_value }}</p>
             <p><strong>Trạng thái hỗ trợ:</strong> {{ $lead->supportStatusCustomer->name ?? '' }}</p>
-            <p><strong>KH đã được hỗ trợ trước qua kênh nào?:</strong> {{ $lead->supportedChannel ?? '' }}</p>
+            <p><strong>KH đã được hỗ trợ trước qua kênh nào?:</strong> {{ $lead->supportedChannel ? $lead->supportedChannel->name : '' }}</p>
             <p><strong>Chuyển sang TMDT:</strong> {{ $lead->tmdt }}</p>
             @endif
             
