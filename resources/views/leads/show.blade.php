@@ -42,7 +42,7 @@
             <p><strong>Địa chỉ:</strong> {{ $lead->address }}</p>
             <p><strong>Zalo:</strong> {{ $lead->zalo }}</p>
             <p><strong>Phân Loại khách hàng:</strong> {{ $lead->customerType->name ?? '' }}</p>
-            <p><strong>Nguồn:</strong> {{ $lead->customerSources->name ?? '' }}</p>
+            <p><strong>Nguồn:</strong> {{ $lead->customerSource->name ?? '' }}</p>
             <p><strong>Danh mục sản phẩm:</strong> {{ $lead->productCategories->pluck('name')->implode(', ') }}</p>
             <p><strong>Tình trạng KH ban đầu:</strong> {{ $lead->firstStatus->name ?? '' }}</p>
             <p><strong>Ghi chú sale nhận khách:</strong> {{ $lead->note }}</p>
