@@ -51,7 +51,7 @@
             <p><strong>Sale hỗ trợ:</strong> {{ $lead->saleSupport->name ?? '' }}</p>
             <p><strong>Tình trạng KH hiện tại:</strong> {{ $lead->currentStatus->name ?? '' }}</p>
             <p><strong>Trạng thái hỗ trợ:</strong> {{ $lead->supportStatusCustomer->name ?? '' }}</p>
-            <p><strong>Thông tin trao đổi với KH:</strong> {{ $lead->customer_discussion_details ?? '' }}</p>
+            <p><strong>Thông tin trao đổi với KH:</strong> {{ $lead->customer_discussion_details->name ?? '' }}</p>
             <hr>
             <h5>Thông tin chăm sóc khách hàng</h5>
             @foreach($lead->leadTakeCares->take(3) as $care)
