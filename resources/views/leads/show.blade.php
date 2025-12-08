@@ -13,6 +13,7 @@
     </h1>
     <div class="card shadow-sm">
         <div class="card-body">
+            @if($lead->lead_type == 1)
             <p><strong>ID:</strong> {{ $lead->id }}</p>
             <p><strong>Ngày tương tác đầu tiên:</strong> {{ $lead->first_interaction_date }}</p>
             <p><strong>Tên khách hàng:</strong> {{ $lead->name }}</p>
@@ -31,6 +32,7 @@
             <p><strong>Trạng thái hỗ trợ:</strong> {{ $lead->supportStatusCustomer->name ?? '' }}</p>
             <p><strong>Nội dung trao đổi:</strong> {{ $lead->supportedChannel }}</p>
             <p><strong>Chuyển sang TMDT:</strong> {{ $lead->tmdt }}</p>
+            @endif
             
             @if($lead->lead_type == 2)
             <p><strong>ID:</strong> {{ $lead->id }}</p>
