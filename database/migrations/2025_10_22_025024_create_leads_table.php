@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('zalo');
             $table->string('customer_type_id');
             $table->string('showroom_id')->nullable();
-            $table->string('first_customer_status_id');
+            $table->string('first_customer_status_id')->nullable();
             $table->longtext('note');
             $table->string('sale_information_id');
             $table->string('sale_support_id')->nullable();
