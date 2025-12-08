@@ -28,7 +28,7 @@ class LeadController extends Controller
         $query = Lead::with([
             'province',
             'customerType',
-            'source',
+            'customerSource',
             'productCategory',
             'showroom',
             'firstStatus',
@@ -41,7 +41,7 @@ class LeadController extends Controller
         $queryOnline = Lead::with([
             'province',
             'customerType',
-            'source',
+            'customerSource',
             'productCategory',
             'showroom',
             'firstStatus',
