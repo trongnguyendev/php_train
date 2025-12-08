@@ -38,7 +38,7 @@ class Lead extends Model
         return $this->belongsTo(CustomerType::class, 'customer_type_id'); 
     }
 
-    public function source() { 
+    public function customerSource() { 
         return $this->belongsTo(CustomerSource::class, 'source_id'); 
     }
 

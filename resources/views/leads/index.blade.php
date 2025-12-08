@@ -296,7 +296,7 @@
                                         </td>
                                         <td>
                                             <span class="editable-select" data-id="{{ $lead->id }}" data-field="source_id">
-                                                {{ $lead->customerSources ? $lead->customerSources->name : '-' }}
+                                                {{ $lead->customerSource ? $lead->customerSource->name : '-' }}
                                             </span>
                                             <select class="form-select d-none inline-select" data-id="{{ $lead->id }}" data-field="source_id">
                                                 <option value="">-- Chọn --</option>
