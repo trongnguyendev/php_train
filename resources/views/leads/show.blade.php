@@ -27,8 +27,7 @@
             <p><strong>Ghi chú sale nhận khách:</strong> {{ $lead->note }}</p>
             <p><strong>Sale nhận KH:</strong> {{ $lead->saleInformation->name ?? '' }}</p>
             <p><strong>Tình trạng KH hiện tại:</strong> {{ $lead->currentStatus->name ?? '' }}</p>
-            <p><strong>Giá trị đơn chốt được:</strong> {{ $lead->order_value }}</p>
-            <p><strong>Trạng thái hỗ trợ:</strong> {{ $lead->supportStatusCustomer->name ?? '' }}</p>
+            <p><strong>Giá trị đơn chốt được:</strong> {{ number_format($lead->order_value) }}</p>
             <p><strong>KH đã được hỗ trợ trước qua kênh nào?:</strong> {{ $lead->supportedChannel ? $lead->supportedChannel->name : '' }}</p>
             <p><strong>Chuyển sang TMDT:</strong> {{ $lead->tmdt }}</p>
             @endif
@@ -49,7 +48,7 @@
             <p><strong>Sale nhận KH:</strong> {{ $lead->saleInformation->name ?? '' }}</p>
             <p><strong>Sale hỗ trợ:</strong> {{ $lead->saleSupport->name ?? '' }}</p>
             <p><strong>Tình trạng KH hiện tại:</strong> {{ $lead->currentStatus->name ?? '' }}</p>
-            <p><strong>Thông tin trao đổi với KH:</strong> {{ $lead->customer_discussion_details->name ?? '' }}</p>
+            <p><strong>Thông tin trao đổi với KH:</strong> {{ $lead->customer_discussion_details ?? '' }}</p>
             <p><strong>Chuyển sang TMDT:</strong> {{ $lead->tmdt }}</p>
             <hr>
             <h5>Thông tin chăm sóc khách hàng</h5>
