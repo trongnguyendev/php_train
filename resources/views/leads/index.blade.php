@@ -205,7 +205,7 @@
                                             <span class="badge bg-info">#{{ $lead->id }}</span>
                                         </td>
                                         <td>
-                                            <small class="text-muted">{{ \Carbon\Carbon::parse($lead->first_arrival_date)->format('d/m/Y') }}</small>
+                                            <small class="text-muted">{{ \Carbon\Carbon::parse($lead->first_interaction_date)->format('d/m/Y') }}</small>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
