@@ -14,6 +14,7 @@ use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SupportChannelController;
+use App\Http\Controllers\ReportDailyController;
 
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -52,3 +53,5 @@ Route::post('/lead/update-inline/{id}', [LeadController::class, 'updateInline'])
 Route::post('/lead-take-care/update-inline/{id?}', [App\Http\Controllers\LeadTakeCareController::class, 'updateInline']);
 Route::get('/lead/get-categories/{id}', [LeadController::class, 'getCategories']);
 Route::post('/lead/update-categories/{id}', [LeadController::class, 'updateCategories']);
+Route::match(['get','post'], '/report_daily', [ReportDailyController::class, 'exportDaily'])
+    ->name('report_daily.index');

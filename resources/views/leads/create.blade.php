@@ -236,7 +236,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6" id="order-value-field" style="display: {{ old('lead_type', '1') == '2' ? 'none' : 'block' }};">
+                        <div class="col-md-6" id="order-value-field">
                             <label for="order_value" class="form-label">
                                 <i class="bi bi-currency-dollar me-1"></i><span class="text-primary fw-bold">Giá trị đơn chốt được</span>
                             </label>
@@ -492,9 +492,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (showroomField) {
             showroomField.style.display = isOnline ? 'none' : 'block';
-        }
-        if (orderValueField) {
-            orderValueField.style.display = isOnline ? 'none' : 'block';
         }
         if (saleSupportField) {
             saleSupportField.style.display = isOnline ? 'block' : 'none';

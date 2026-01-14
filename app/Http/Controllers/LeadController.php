@@ -257,6 +257,7 @@ class LeadController extends Controller
                 'note' => $request->note,
                 'sale_information_id' => $request->sale_information_id,
                 'sale_support_id' => $request->sale_support_id,
+                'order_value' => $orderValue,
                 'current_customer_status_id' => $request->current_customer_status_id,
                 'customer_discussion_details' => $request->customer_discussion_details,
                 'tmdt' => $request->has('tmdt') ? $request->tmdt : null,

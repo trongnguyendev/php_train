@@ -170,7 +170,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th style="min-width: 60px;">ID</th>
-                                    <th style="min-width: 120px;">Ngày</th>
+                                    <th style="min-width: 120px;">Ngày tương tác đầu tiên</th>
                                     <th style="min-width: 200px;">Tên KH</th>
                                     <th style="min-width: 120px;">Điện thoại</th>
                                     <th style="min-width: 200px;">Tỉnh/Thành</th>
@@ -184,6 +184,7 @@
                                     <th style="min-width: 200px;">Sale Nhận Thông Tin</th>
                                     <th style="min-width: 100px;">Sale Hỗ Trợ Khách</th>
                                     <th style="min-width: 200px;">Tình Trạng Khách Hiện Tại</th>
+                                    <th style="min-width: 100px;">Giá trị đơn chốt được</th>
                                     <th style="min-width: 200px;">Thông tin trạo đổi với KH</th>
                                     <th style="min-width: 200px;">Chuyển Sang TMDT</th>
                                     <th style="min-width: 200px;">Ngày Chăm Khách Lần 1</th>
@@ -338,8 +339,7 @@
                                                 {{ $lead->note ?? '-' }}
                                             </span>
                                             <input type="text" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="note" value="{{ $lead->note }}">
-                                        </td>
-                                        
+                                        </td>            
                                         <td>
                                             <span class="editable-select" data-id="{{ $lead->id }}" data-field="sale_information_id">
                                                 {{ $lead->saleInformation ? $lead->saleInformation->name : '-' }}
@@ -395,6 +395,13 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                        </td>
+
+                                         <td>
+                                            <span class="editable-text" data-id="{{ $lead->id }}" data-field="order_value">
+                                                {{ number_format($lead->order_value) ?? '-' }}
+                                            </span>
+                                            <input type="text" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="order_value" value="{{ $lead->order_value }}">
                                         </td>
                                         <!-- <td>
                                             @if($lead->currentStatus)

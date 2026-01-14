@@ -31,7 +31,7 @@
             </div>
             
             <div class="col-md-4 mb-3">
-                <label class="form-label"><span class="text-primary fw-bold">Ngày khách đến lần đầu</span></label>
+                <label class="form-label"><span class="text-primary fw-bold">Ngày tương tác đầu tiên</span></label>
                 <input type="date" name="first_interaction_date" value="{{ $lead->first_interaction_date }}" class="form-control">
             </div>
             <div class="col-md-4 mb-3">
@@ -199,7 +199,7 @@
                 </select>
             </div>
 
-            @if($lead->lead_type != 2)
+            
             <div class="col-md-4 mb-3">
                 <label class="form-label">
                     <span class="text-primary fw-bold">Giá trị đơn hàng</span>
@@ -214,7 +214,7 @@
                 <input type="hidden" name="order_value" id="order_value" 
                     value="{{ $lead->order_value }}">
             </div>
-            @endif
+           
 
             @if($lead->lead_type != 2)
             <div class="col-md-4 mb-3">
