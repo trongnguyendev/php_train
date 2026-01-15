@@ -55,3 +55,5 @@ Route::get('/lead/get-categories/{id}', [LeadController::class, 'getCategories']
 Route::post('/lead/update-categories/{id}', [LeadController::class, 'updateCategories']);
 Route::match(['get','post'], '/report_daily', [ReportDailyController::class, 'exportDaily'])
     ->name('report_daily.index');
+Route::match(['get','post'], '/report_month', [ReportDailyController::class, 'exportCurrentMonth'])
+    ->name('report_month.index');
