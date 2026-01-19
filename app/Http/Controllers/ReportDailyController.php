@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use DB;
 use Auth;
+use App\Models\Showroom;
 
 class ReportDailyController extends Controller
 {
@@ -104,5 +105,44 @@ class ReportDailyController extends Controller
         ]);
     }
 
+    public function reportShowroom(Request $request)
+    {   
+        $showrooms = Showroom::all();
+        $date = $request->input('date');
+        $today = $date
+            ? Carbon::parse($date)->toDateString()
+            : Carbon::today()->toDateString();
+
+        // Lấy tổng khách từng showroom
+        $showroomStats = DB::table('leads')
+            ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
+            ->whereDate('first_interaction_date', $today)
+            ->select(
+                'showroom_id',
+                DB::raw('SUM(CASE WHEN lead_type = 1 THEN 1 ELSE 0 END) as total_customers'),
+                DB::raw('SUM(CASE WHEN sale_information_id = sale_support_id AND lead_type = 2 THEN 1 ELSE 0 END) as online_customers')
+            )
+            ->groupBy('showroom_id')
+            ->get();
+
+        $khNew = DB::table('leads')
+            ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
+            ->whereDate('first_interaction_date', $today)
+            ->select(
+                'showroom_id',
+                DB::raw('SUM(CASE WHEN lead_type = 1 AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as total_customers'),
+                DB::raw('SUM(CASE WHEN sale_information_id = sale_support_id AND lead_type = 2 AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as online_customers')
+            )
+            ->groupBy('showroom_id')
+            ->get();
+
+
+        return view('report_showroom.index', [
+            'showrooms' => $showrooms,
+            'showroomStats' => $showroomStats,
+            'today' => $today,
+            'khNew' => $khNew,
+        ]);
+    }
  
 }
