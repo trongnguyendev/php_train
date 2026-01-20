@@ -10,8 +10,12 @@
     @endif
 
     <form method="GET" action="">
-        <label>Chọn tháng:</label>
-        <input type="month" id="month" name="month" value="{{ $month ?? '' }}">
+        <label style="font-weight: bold;">Từ Ngày:</label>
+        <input type="month" id="month-to" name="month-to" value="{{ $month_to ?? '' }}">
+
+        <label style="font-weight: bold;">Đến Ngày:</label>
+        <input type="month" id="month-from" name="month-from" value="{{ $month_from ?? '' }}">
+        
         <button type="submit" class="btn btn-primary btn-sm">Lọc</button>
     </form>
   

@@ -10,19 +10,19 @@
     @endif
 
     <form method="GET" action="">
-        <label>Chọn ngày:</label>
+        <label class="form-btn btn-primary btn-sm" style = "font-weight: bold; color: white; padding: 5px 10px; border-radius: 5px;">Chọn ngày:</label>
         <input type="date" id="date" name="date" value="{{ isset($date) ? $date : '' }}">
         <button type="submit" class="btn btn-primary btn-sm">Lọc</button>
     </form>
   
 
 <div class="card">
-    <div class="card-header">Báo cáo khách theo ngày: {{ isset($date) ? \Carbon\Carbon::parse($date)->format('d/m/Y') : '' }}</div>
+    <div class="card-header" style = "background-color: #f8f9fa; font-weight: bold; color: black;">Báo cáo khách theo ngày: {{ isset($date) ? \Carbon\Carbon::parse($date)->format('d/m/Y') : '' }}</div>
     <div class="card-body">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Tên Sale</th>
+                    <th class="text-end">Tên Sale</th>
                     <th class="text-end">Tổng số khách hàng</th>
                     <th class="text-end">Tổng số khách hàng mới</th>
                     <th class="text-end">Tổng số khách hàng cũ</th>
@@ -52,7 +52,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="2" class="text-center">Chưa có dữ liệu</td>
+                        <td colspan="11" class="text-center">Chưa có dữ liệu</td>
                     </tr>
                 @endforelse
             </tbody>
