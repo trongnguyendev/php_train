@@ -188,6 +188,24 @@
     color: #495057;
 }
 
+/* Custom showroom table styles */
+.table-report {
+    border: 2px solid #667eea;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+}
+.table-report th, .table-report td {
+    border: 1px solid #e2e8f0;
+    padding: 8px 12px;
+    background: #f8fafc;
+}
+.table-report th {
+    background: #667eea;
+    color: #fff;
+}
+.table-report tr:hover td {
+    background: #e0e7ff;
+}
+
 /* Form styles */
 .form-control:focus {
     border-color: #667eea;

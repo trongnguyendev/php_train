@@ -20,211 +20,61 @@
     </form>
   
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-          
-            <div class="card-body">
-                
-                <table class="table table-hover">
+
+            <div class = "row">
+                <div class= "col">
+                    <table class="table table-hover table-report" style="margin-left:auto; margin-right:auto;">
                         <thead>
-                            <th></th>
-                            @foreach($showrooms as $showroom)
-                                <th>{{ $showroom->name }}</th>
-                            @endforeach
+                            <tr>
+                                <th>SHOWROOM</th>
+                                @foreach ($showrooms as $showroom)
+                                    <th class="text-center">{{ $showroom->name }}</th>
+                                @endforeach
+                            </tr>
                         </thead>
+
                         <tbody>
+                            @foreach ($metrics as $label => $field)
                             <tr>
-                                <th style = "font-weight: bold;"> SL KHÁCH HÀNG ĐẾN SR</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $stats = isset($showroomStats) && $showroomStats ? $showroomStats->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $stats ? $stats->total_customers : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
-                            <tr>
-                                <th style = "font-weight: bold;"> SL KHÁCH HÀNG MỚI</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $khNewStats = isset($khNew) && $khNew ? $khNew->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $khNewStats ? $khNewStats->total_customers : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
-                            <tr>
-                                <th style = "font-weight: bold;"> SL KHÁCH HÀNG CŨ</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $khOldStats = isset($khOld) && $khOld ? $khOld->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $khOldStats ? $khOldStats->total_customers : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
+                                <td class="fw-bold">{{ $label }}</td>
 
-                            <tr>
-                                <th style = "font-weight: bold;"> SL KHÁCH  HÀNG TN  MỚI</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $stats = isset($customer_potential_new) && $customer_potential_new ? $customer_potential_new->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $stats ? $stats->total_customers : 0 }}
-                                        </th>
-                                    
-                                    @endforeach
+                                @foreach ($showrooms as $showroom)
+                                    <td class="text-center">
+                                        {{ data_get($data, $showroom->id.'.'.$field, 0) }}
+                                    </td>
+                                @endforeach
                             </tr>
-
-                            <tr>
-                                <th style = "font-weight: bold;"> SL KHÁCH  HÀNG TN  CŨ</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $stats = isset($customer_potential_old) && $customer_potential_old ? $customer_potential_old->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $stats ? $stats->total_customers : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
-
-                             <tr>
-                                <th style = "font-weight: bold;"> SL KHÁCH HÀNG TN</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $total = isset($total_customer_potential) && $total_customer_potential ? $total_customer_potential->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $total ? $total->total_customers : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
-
-                            <tr>
-                                <th style = "font-weight: bold;"> SL KH QUAN TÂM</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $total = isset($customer_care) && $customer_care ? $customer_care->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $total ? $total->total_customers : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
-
-                            <tr>
-                                <th style = "font-weight: bold;"> SL KH THAM KHẢO</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $total = isset($customer_reference) && $customer_reference ? $customer_reference->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $total ? $total->total_customers : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
-                            <!-- hết nhu cầu -->
-                            <tr>
-                                <th style = "font-weight: bold;"> SL KHÁCH HÀNG HẾT NHU CẦU</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $total = isset($customer_outOfNeed) && $customer_outOfNeed ? $customer_outOfNeed->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $total ? $total->total_customers : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
-
-                            <!-- khách cũ chốt liền -->
-
-                             <tr>
-                                <th style = "font-weight: bold;"> SL KHÁCH HÀNG CŨ CHỐT LIỀN</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $total = isset($customer_closingSale) && $customer_closingSale ? $customer_closingSale->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $total ? $total->total_customers : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
-
-                            <!-- khách mới chốt liền -->
-
-                            <tr>
-                                <th style = "font-weight: bold;"> SL KHÁCH HÀNG MỚI CHỐT LIỀN</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $total = isset($customer_newClosingSale) && $customer_newClosingSale ? $customer_newClosingSale->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $total ? $total->total_customers : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
-
-                            <!-- khách chốt liền -->
-
-                            <tr>
-                                <th style = "font-weight: bold;"> SL KHÁCH HÀNG CHỐT LIỀN</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $total = isset($total_customer_closingSale) && $total_customer_closingSale ? $total_customer_closingSale->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $total ? $total->total_customers : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
-                            <!-- TỔNG DOANH SỐ KHÁCH MỚI CHỐT LIỀN -->
-                            <tr>
-                                <th style = "font-weight: bold;"> TỔNG DOANH SỐ KHÁCH MỚI CHỐT LIỀN</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $total = isset($total_Sale_New) && $total_Sale_New ? $total_Sale_New->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $total ? $total->total_value : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
-                             <!-- TỔNG DOANH SỐ KHÁCH CŨ CHỐT LIỀN -->
-                            <tr>
-                                <th style = "font-weight: bold;"> TỔNG DOANH SỐ KHÁCH CŨ CHỐT LIỀN</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $total = isset($total_Sale_Old) && $total_Sale_Old ? $total_Sale_Old->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $total ? $total->total_value : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
-
-                             <!-- TỔNG DOANH SỐ KHÁCH CŨ CHỐT LIỀN -->
-                            <tr>
-                                <th style = "font-weight: bold;"> TỔNG DOANH SỐ CHỐT LIỀN</th>
-                                    @foreach($showrooms as $showroom)
-                                        @php
-                                            $total = isset($total_Sale_Month) && $total_Sale_Month ? $total_Sale_Month->firstWhere('showroom_id', $showroom->id) : null;
-                                        @endphp
-                                        <th style = "font-weight: bold; color: blue;">
-                                            {{ $total ? $total->total_value_month : 0 }}
-                                        </th>
-                                    @endforeach
-                            </tr>
-
+                            @endforeach
                         </tbody>
-                </table>
+                    </table>
+                </div>  
+                <div class= "col">
+                    <table class="table table-hover table-report" style="margin-left:auto; margin-right:auto;">
+                        <thead>
+                            <tr>
+                                <th>SHOWROOM</th>
+                                @foreach ($showrooms as $showroom)
+                                    <th class="text-center">{{ $showroom->name }}</th>
+                                @endforeach
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach ($metrics as $label => $field)
+                            <tr>
+                                <td class="fw-bold">{{ $label }}</td>
+
+                                @foreach ($showrooms as $showroom)
+                                    <td class="text-center">
+                                        {{ data_get($data_last, $showroom->id.'.'.$field, 0) }}
+                                    </td>
+                                @endforeach
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
+        
 </div>
 @endsection

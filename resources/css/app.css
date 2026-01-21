@@ -927,3 +927,23 @@ body {
         transform: translateX(0);
     }
 }
+
+
+/* table showroom */
+.table-report {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.table-report th,
+.table-report td {
+    white-space: nowrap;
+    padding: 8px 10px;
+    text-align: center;
+}
+
+.table-report th:first-child,
+.table-report td:first-child {
+    text-align: left;
+    font-weight: 600;
+}
