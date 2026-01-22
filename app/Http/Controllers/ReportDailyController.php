@@ -140,6 +140,12 @@ class ReportDailyController extends Controller
                 // Khách mới / cũ
                 DB::raw('SUM(lead_type = 1 AND customer_types.name = "Khách Hàng Mới") as new_customers'),
                 DB::raw('SUM(lead_type = 1 AND customer_types.name = "Khách Hàng Cũ") as old_customers'),
+                DB::raw('
+                    SUM(
+                        (lead_type = 1 AND customer_types.name = "Khách Hàng Mới")
+                        + (lead_type = 1 AND customer_types.name = "Khách Hàng Cũ")
+                    ) as total_customers
+                '),
 
                 // Online
                 DB::raw('SUM(lead_type = 2 AND sale_information_id = sale_support_id) as online_customers'),

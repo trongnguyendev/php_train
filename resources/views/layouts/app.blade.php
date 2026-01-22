@@ -25,6 +25,26 @@
                 </div>
 
                 <ul class="list-unstyled components">
+                    
+                    <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
+                        <a href="{{ route('report_daily.index') }}" class="nav-link">
+                            <i class="bi bi-people-fill"></i>
+                            <span> Báo Cáo Ngày</span>
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
+                        <a href="{{ route('report_month.index') }}" class="nav-link">
+                            <i class="bi bi-people-fill"></i>
+                            <span> Báo Cáo Tháng</span>
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
+                        <a href="{{ route('report_showroom.index') }}" class="nav-link">
+                            <i class="bi bi-people-fill"></i>
+                            <span> Báo Cáo Showroom</span>
+                        </a>
+                    </li>
+
                     <!-- User Management -->
                     <li class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
                         <a href="{{ route('users.index') }}" class="nav-link">
