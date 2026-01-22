@@ -75,6 +75,7 @@ class ReportDailyController extends Controller
                 ->join('sale_users', 'sale_users.id', '=', 'leads.sale_information_id')
                 ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
                 ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
+                
                 ->whereBetween('leads.first_interaction_date', [$start, $end])
                 ->select(
                     'sale_users.id',
@@ -113,66 +114,66 @@ class ReportDailyController extends Controller
             'SL KHÁCH HÀNG ĐẾN SR' => 'total_customers',
             'SL KHÁCH HÀNG MỚI'   => 'new_customers',
             'SL KHÁCH HÀNG CŨ'    => 'old_customers',
-            'KH TIỀM NĂNG'        => 'potential',
-            'KH QUAN TÂM'         => 'care',
-            'KH THAM KHẢO'        => 'reference',
-            'KH HẾT NHU CẦU'      => 'out_of_need',
+            'KH TIỀM NĂNG'        => 'total_potential',
+            'KH QUAN TÂM'         => 'total_care',
+            'KH THAM KHẢO'        => 'total_reference',
+            'KH HẾT NHU CẦU'      => 'total_no_need',
             'KH ĐÃ CHỐT MỚI'      => 'new_closed',
             'KH ĐÃ CHỐT CŨ'       => 'old_closed',
             'DOANH SỐ MỚI'        => 'sale_new',
             'DOANH SỐ CŨ'         => 'sale_old',
+            'TỔNG DOANH SỐ'       => 'total_sale_closed',
         ];
 
         $month = $request->input('month') ?? Carbon::now()->format('Y-m');
         $last_month = $request->input('last-month') ?? Carbon::now()->subMonth()->format('Y-m');
 
-        $showroomMonth = function($starMonth,$endMonth){
-            return DB::table('leads')
+        // Khách trực tiếp (offline)
+        $data_offline = DB::table('leads')
             ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
             ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
-        
-            ->whereBetween('first_interaction_date', [$starMonth, $endMonth])
+            ->join('showrooms', 'showrooms.id', '=', 'leads.showroom_id')
+            ->whereBetween('first_interaction_date', [$month.'-01', $month.'-31'])
+            ->where('lead_type', 1)
             ->select('showroom_id',
-
-                // Tổng khách
-                DB::raw('SUM(lead_type = 1) as total_customers'),
-
-                // Khách mới / cũ
-                DB::raw('SUM(lead_type = 1 AND customer_types.name = "Khách Hàng Mới") as new_customers'),
-                DB::raw('SUM(lead_type = 1 AND customer_types.name = "Khách Hàng Cũ") as old_customers'),
-                DB::raw('
-                    SUM(
-                        (lead_type = 1 AND customer_types.name = "Khách Hàng Mới")
-                        + (lead_type = 1 AND customer_types.name = "Khách Hàng Cũ")
-                    ) as total_customers
-                '),
-
-                // Online
-                DB::raw('SUM(lead_type = 2 AND sale_information_id = sale_support_id) as online_customers'),
-
-                // Tiềm năng
-                DB::raw('SUM(lead_type = 1 AND customer_statuses.name = "Tiềm Năng") as potential'),
-
-                // Quan tâm / Tham khảo / Hết nhu cầu
-                DB::raw('SUM(lead_type = 1 AND customer_statuses.name = "Quan Tâm") as care'),
-                DB::raw('SUM(lead_type = 1 AND customer_statuses.name = "Tham Khảo") as reference'),
-                DB::raw('SUM(lead_type = 1 AND customer_statuses.name = "Hết Nhu Cầu") as out_of_need'),
-
-                // Chốt
-                DB::raw('SUM(lead_type = 1 AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới") as new_closed'),
-                DB::raw('SUM(lead_type = 1 AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ") as old_closed'),
-
-                // Doanh số
-                DB::raw('SUM(CASE WHEN lead_type = 1 AND customer_types.name = "Khách Hàng Mới" THEN order_value ELSE 0 END) as sale_new'),
-                DB::raw('SUM(CASE WHEN lead_type = 1 AND customer_types.name = "Khách Hàng Cũ" THEN order_value ELSE 0 END) as sale_old')
+                DB::raw('SUM(CASE WHEN lead_type = 1 THEN 1 ELSE 0 END) as total_customers'),
+                DB::raw('SUM(CASE WHEN lead_type = 1 AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_customers'),
+                DB::raw('SUM(CASE WHEN lead_type = 1 AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_customers'),
+                // ... thêm các trường khác nếu cần ...
             )
             ->groupBy('showroom_id')
             ->get();
-        };
-        $data = $showroomMonth($month.'-01',$month.'-31');
-        $data_last = $showroomMonth($last_month.'-01',$last_month.'-31');
-        
-        return view('report_showroom.index', compact('showrooms', 'metrics', 'data', 'data_last', 'month', 'last_month'));
+
+        // Khách online
+        $data_online = DB::table('leads')
+            ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
+            ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
+            ->join('customer_sources', 'customer_sources.id', '=', 'leads.source_id')
+            // KHÔNG join showroom
+            ->whereBetween('first_interaction_date', [$month.'-01', $month.'-31'])
+            ->where('lead_type', 2)
+            ->select('source_id',
+                DB::raw('SUM(CASE WHEN lead_type = 2 THEN 1 ELSE 0 END) as total_customers'),
+                DB::raw('SUM(CASE WHEN lead_type = 2 AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_customers'),
+                DB::raw('SUM(CASE WHEN lead_type = 2 AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_customers'),
+                // ... thêm các trường khác nếu cần ...
+            )
+            ->groupBy('source_id')
+            ->get();
+
+        // Tính tổng new_customers và old_customers của cả offline và online
+        $total_new_customers = 0;
+        $total_old_customers = 0;
+        foreach ($data_offline as $item) {
+            $total_new_customers += $item->new_customers;
+            $total_old_customers += $item->old_customers;
+        }
+        foreach ($data_online as $item) {
+            $total_new_customers += $item->new_customers;
+            $total_old_customers += $item->old_customers;
+        }
+
+        return view('report_showroom.index', compact('showrooms', 'metrics', 'data_offline', 'data_online', 'month', 'last_month', 'total_new_customers', 'total_old_customers'));
     }
 
  
