@@ -180,6 +180,8 @@ class ReportDailyController extends Controller
                 DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Hết Nhu Cầu" THEN 1 ELSE 0 END) as total_no_need'),
                 DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_closed'),
                 DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_closed'),
+                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN COALESCE(order_value, 0) ELSE 0 END) as total_new_closed'),
+                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN COALESCE(order_value, 0) ELSE 0 END) as total_old_closed'),
                 DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt"  THEN COALESCE(order_value, 0) ELSE 0 END) as total'),
                 // ... thêm các trường khác nếu cần ...
             )
@@ -244,8 +246,26 @@ class ReportDailyController extends Controller
                 }
             }
         }
-        // Duyệt online (nếu có showroom_id mapping thì cộng vào showroom tương ứng)
-        // Nếu không có showroom_id thì chỉ cộng tổng toàn hệ thống, không cộng vào $totals_current
+        // Mapping source_id online về showroom_id dựa trên tên showroom và tên nguồn
+        // Chuẩn hóa tên để so khớp chính xác hơn
+        function normalizeName($name) {
+            $name = mb_strtolower($name, 'UTF-8');
+            $name = str_replace(['showroom', 'xem tt'], '', $name);
+            $name = preg_replace('/\s+/', ' ', $name);
+            return trim($name);
+        }
+        $sourceIdToShowroomId = [];
+        $sources = DB::table('customer_sources')->pluck('name', 'id');
+        foreach ($showrooms as $showroom) {
+            $showroomNorm = normalizeName($showroom->name);
+            foreach ($sources as $source_id => $source_name) {
+                $sourceNorm = normalizeName($source_name);
+                // Nếu phần tên showroom nằm trong tên nguồn online (ví dụ: "quận 1" trong "xem tt quận 1")
+                if ($showroomNorm && strpos($sourceNorm, $showroomNorm) !== false) {
+                    $sourceIdToShowroomId[$source_id] = $showroom->id;
+                }
+            }
+        }
         foreach ($data_online as $item) {
             $sr_total_customers += $item->total_customers;
             $sr_new_customers += $item->new_customers;
@@ -258,7 +278,27 @@ class ReportDailyController extends Controller
             $sr_new_closed += $item->new_closed;
             $sr_old_closed += $item->old_closed;
             $sr_total += $item->total;
-            // Nếu có $item->showroom_id thì cộng vào $totals_current[$item->showroom_id][$key] như trên
+            // Nếu source_id online map được showroom_id thì cộng vào showroom tương ứng
+            if (isset($sourceIdToShowroomId[$item->source_id])) {
+                $showroom_id = $sourceIdToShowroomId[$item->source_id];
+                foreach ($metrics as $label => $key) {
+                    switch ($key) {
+                        case 'sr_total_customers': $totals_current[$showroom_id][$key] += $item->total_customers; break;
+                        case 'sr_new_customers': $totals_current[$showroom_id][$key] += $item->new_customers; break;
+                        case 'sr_old_customers': $totals_current[$showroom_id][$key] += $item->old_customers; break;
+                        case 'sr_new_potential': $totals_current[$showroom_id][$key] += $item->new_potential; break;
+                        case 'sr_old_potential': $totals_current[$showroom_id][$key] += $item->old_potential; break;
+                        case 'sr_total_care': $totals_current[$showroom_id][$key] += $item->total_care; break;
+                        case 'sr_total_reference': $totals_current[$showroom_id][$key] += $item->total_reference; break;
+                        case 'sr_total_no_need': $totals_current[$showroom_id][$key] += $item->total_no_need; break;
+                        case 'sr_new_closed': $totals_current[$showroom_id][$key] += $item->new_closed; break;
+                        case 'sr_old_closed': $totals_current[$showroom_id][$key] += $item->old_closed; break;
+                        case 'sr_total_new_closed': $totals_current[$showroom_id][$key] += $item->total_new_closed; break;
+                        case 'sr_total_old_closed': $totals_current[$showroom_id][$key] += $item->total_old_closed; break;
+                        case 'sr_total': $totals_current[$showroom_id][$key] += $item->total; break;
+                    }
+                }
+            }
         }
         $totals_sum = [
             'sr_total_customers' => $sr_total_customers,
@@ -320,6 +360,8 @@ class ReportDailyController extends Controller
                 DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Hết Nhu Cầu" THEN 1 ELSE 0 END) as total_no_need'),
                 DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_closed'),
                 DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_closed'),
+                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN COALESCE(order_value, 0) ELSE 0 END) as total_new_closed'),
+                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN COALESCE(order_value, 0) ELSE 0 END) as total_old_closed'),
                 DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt"  THEN COALESCE(order_value, 0) ELSE 0 END) as total'),
             )
             ->groupBy('source_id')
@@ -347,6 +389,29 @@ class ReportDailyController extends Controller
                     case 'sr_total_new_closed': $totals_prev[$item->showroom_id][$key] += $item->total_new_closed; break;
                     case 'sr_total_old_closed': $totals_prev[$item->showroom_id][$key] += $item->total_old_closed; break;
                     case 'sr_total': $totals_prev[$item->showroom_id][$key] += $item->total; break;
+                }
+            }
+        }
+        // Mapping source_id online về showroom_id cho dữ liệu tháng trước
+        foreach ($data_online_prev as $item) {
+            if (isset($sourceIdToShowroomId[$item->source_id])) {
+                $showroom_id = $sourceIdToShowroomId[$item->source_id];
+                foreach ($metrics as $label => $key) {
+                    switch ($key) {
+                        case 'sr_total_customers': $totals_prev[$showroom_id][$key] += $item->total_customers; break;
+                        case 'sr_new_customers': $totals_prev[$showroom_id][$key] += $item->new_customers; break;
+                        case 'sr_old_customers': $totals_prev[$showroom_id][$key] += $item->old_customers; break;
+                        case 'sr_new_potential': $totals_prev[$showroom_id][$key] += $item->new_potential; break;
+                        case 'sr_old_potential': $totals_prev[$showroom_id][$key] += $item->old_potential; break;
+                        case 'sr_total_care': $totals_prev[$showroom_id][$key] += $item->total_care; break;
+                        case 'sr_total_reference': $totals_prev[$showroom_id][$key] += $item->total_reference; break;
+                        case 'sr_total_no_need': $totals_prev[$showroom_id][$key] += $item->total_no_need; break;
+                        case 'sr_new_closed': $totals_prev[$showroom_id][$key] += $item->new_closed; break;
+                        case 'sr_old_closed': $totals_prev[$showroom_id][$key] += $item->old_closed; break;
+                        case 'sr_total_new_closed': $totals_prev[$showroom_id][$key] += $item->total_new_closed; break;
+                        case 'sr_total_old_closed': $totals_prev[$showroom_id][$key] += $item->total_old_closed; break;
+                        case 'sr_total': $totals_prev[$showroom_id][$key] += $item->total; break;
+                    }
                 }
             }
         }
