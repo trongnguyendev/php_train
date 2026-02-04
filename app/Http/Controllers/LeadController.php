@@ -173,51 +173,60 @@ class LeadController extends Controller
     {
         Gate::authorize('create', Lead::class);
         
-        $rules = [
-            'first_interaction_date' => 'required|date',
-            'name' => 'required|string',
-            'province_id' => 'required',
-            'address' => 'required',
-            'customer_type_id' => 'required',
-            'product_category_ids' => 'required|array|min:1',
-            'note' => 'required',
-            'lead_type' => 'required',
-            'sale_support_id' => 'nullable',
-        ];
-
-        // // Nếu là Trực tiếp (1) thì bắt buộc các trường liên quan trực tiếp
-        // if ($request->lead_type == '2' || $request->lead_type == 1) {
-        //     $rules['showroom_id'] = 'required';
-        //     $rules['sale_information_id'] = 'required';
-        //     $rules['sale_support_id'] = 'required';
-        //     $rules['current_customer_status_id'] = 'required';
-        //     $rules['support_status_customer_id'] = 'required';
-        //     $rules['customer_discussion_details'] = 'required';
-
-        // }
-        // // Nếu là Online (2) thì KHÔNG bắt buộc các trường trên
-
-        $messages = [
-            'first_interaction_date.required' => 'Ngày đầu tiên không được để trống!',
-            'name.required' => 'Tên không được để trống!',
-            'province_id.required' => 'Tỉnh không được để trống!',
-            'address.required' => 'Địa chỉ không được để trống!',
-            'customer_type_id.required' => 'Loại khách hàng không được để trống!',
-            'is_new_customer.required' => 'Tình trạng khách hàng không được để trống!',
-            'customer_source_id.required' => 'Không được để trống!',
-            'product_category_ids.required' => 'Danh mục không được để trống!',
-            'product_category_ids.min' => 'Phải chọn ít nhất 1 danh mục!',
-            'showroom_id.required' => 'Showroom không được để trống!',
-            'first_customer_status_id.required' => 'Tình trạng khách hàng không được để trống!',
-            'first_customer_status_id.nullable' => 'Lead online không cần tình trạng khách hàng!',
-            'sale_information_id.required' => 'Sale nhận thông tin không được để trống!',
-            'sale_support_id.required' => 'Sale hỗ trợ không được để trống!',
-            'current_customer_status_id.required' => 'Tình trạng hiện tại không được để trống!',
-            'support_status_customer_id.required' => 'The support status customer id field is required.',
-            'customer_discussion_details.required' => 'Không được để trống!'
-        ];
-
-        $request->validate($rules, $messages);
+        // $rules = [
+        //     'first_interaction_date' => 'required|date',
+        //     'name' => 'required|string',
+        //     'customer_type_id' => 'required',
+        //     'product_category_ids' => 'required|array|min:1',
+        //     'first_customer_status_id' =>'required_if:lead_type,2',
+        //     'current_customer_status_id' => 'required',
+        //     'sale_information_id' => 'required',
+        //     'sale_support_id' => 'nullable',
+        //     'customer_discussion_details' => 'required_if:lead_type,2',
+        //     'lead_type' => 'required',
+        // ];
+        if ($request->lead_type == 1) {
+            $rules =  [
+                'product_category_ids' => 'required|array|min:1',
+                'showroom_id' => 'required_if:lead_type,1',
+                'first_interaction_date' => 'required|date',
+                'name' => 'required|string',
+                'current_customer_status_id' => 'required',
+                'sale_information_id' => 'required',
+            ];[
+                'showroom_id.required_if' => 'Vui lòng chọn Showroom khi Lead là Trực tiếp.',
+                'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
+                'first_interaction_date.required' => 'Vui lòng nhập Ngày tương tác đầu tiên.',
+                'name.required' => 'Vui lòng nhập Tên khách hàng.',
+                'current_customer_status_id.required' => 'Vui lòng chọn Trạng thái khách hàng hiện tại.',
+                'sale_information_id.required' => 'Vui lòng chọn Nhân viên kinh doanh phụ trách.',
+                
+            ];
+        }
+        if ($request->lead_type == 2) {
+            $rules =  [
+                'first_interaction_date' => 'required|date',
+                'name' => 'required|string',
+                'customer_type_id' => 'required',
+                'product_category_ids' => 'required|array|min:1',
+                'first_customer_status_id' =>'required_if:lead_type,2',
+                'current_customer_status_id' => 'required',
+                'sale_information_id' => 'required',
+                'sale_support_id' => 'nullable',
+                'customer_discussion_details' => 'required_if:lead_type,2',
+                'lead_type' => 'required',
+            ];[
+                'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
+                'first_interaction_date.required' => 'Vui lòng nhập Ngày tương tác đầu tiên.',
+                'name.required' => 'Vui lòng nhập Tên khách hàng.',
+                'customer_type_id.required' => 'Vui lòng chọn Loại khách hàng.',
+                'first_customer_status_id.required_if' => 'Vui lòng chọn Trạng thái khách hàng ban đầu khi Lead là Online.',
+                'current_customer_status_id.required' => 'Vui lòng chọn Trạng thái khách hàng hiện tại.',
+                'sale_information_id.required' => 'Vui lòng chọn Nhân viên kinh doanh phụ trách.',
+                'customer_discussion_details.required_if' => 'Vui lòng nhập Chi tiết trao đổi với khách hàng khi Lead là Online.',
+            ];
+        }
+        $request->validate($rules);
         $orderValue = 0;
             if ($request->order_value) {
                 $orderValue = (int) str_replace('.', '', $request->order_value);
@@ -227,7 +236,7 @@ class LeadController extends Controller
             $lead = Lead::create([
                 'first_interaction_date' => $request->first_interaction_date,
                 'name' => $request->name,
-                'phone' => $request->phone,
+                'phone' => $request->phone ?? 0,
                 'province_id' => $request->province_id,
                 'address' => $request->address,
                 'zalo' => $request->zalo ?? '',
@@ -247,8 +256,8 @@ class LeadController extends Controller
             $lead = Lead::create([
                 'first_interaction_date' => $request->first_interaction_date,
                 'name' => $request->name,
-                'phone' => $request->phone,
-                'province_id' => $request->province_id,
+                'phone' => $request->phone ?? 0,
+                'province_id' => $request->province_id ?? null,
                 'address' => $request->address,
                 'zalo' => $request->zalo ?? '',
                 'customer_type_id' => $request->customer_type_id,
@@ -352,8 +361,8 @@ class LeadController extends Controller
         $rules = [
             'first_interaction_date' => 'required|date',
             'name' => 'required|string',
-            'province_id' => 'required',
-            'address' => 'required',
+            // 'province_id' => 'required',
+            // 'address' => 'required',
             'customer_type_id' => 'required',
             'product_category_ids' => 'required|array|min:1',
             'note' => 'required',

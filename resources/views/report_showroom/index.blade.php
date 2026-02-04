@@ -9,21 +9,55 @@
     </div>
     @endif
 
-    <form method="GET" action="">
-        <label style="font-weight: bold;">Tháng Hiện Tại:</label>
-        <input type="month" id="month" name="month" value="{{ $month ?? '' }}">
+    <form method="GET" action="" style="display:flex;gap:12px;align-items:end;flex-wrap:wrap">
 
-        <label style="font-weight: bold;">Tháng Trước Đó:</label>
-        <input type="month" id="last-month" name="last-month" value="{{ $last_month ?? '' }}">
+    {{-- Khoảng ngày 1 --}}
+    <div>
+        <label style="font-weight: bold;">Từ ngày (1)</label>
+        <input type="date"
+               name="from_date_1"
+               value="{{ request('from_date_1') }}"
+               class="form-control form-control-sm">
+    </div>
 
-        <button type="submit" class="btn btn-primary btn-sm">Lọc</button>
-    </form>
-  
+    <div>
+        <label style="font-weight: bold;">Đến ngày (1)</label>
+        <input type="date"
+               name="to_date_1"
+               value="{{ request('to_date_1') }}"
+               class="form-control form-control-sm">
+    </div>
+
+    {{-- Khoảng ngày 2 --}}
+    <div>
+        <label style="font-weight: bold;">Từ ngày (2)</label>
+        <input type="date"
+               name="from_date_2"
+               value="{{ request('from_date_2') }}"
+               class="form-control form-control-sm">
+    </div>
+
+    <div>
+        <label style="font-weight: bold;">Đến ngày (2)</label>
+        <input type="date"
+               name="to_date_2"
+               value="{{ request('to_date_2') }}"
+               class="form-control form-control-sm">
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-primary btn-sm">
+            Lọc
+        </button>
+    </div>
+
+</form>
+
 
 
             <div class = "row">
                     <div class="col">
-                        <div class="fw-bold text-center my-2">BẢNG THÁNG {{ $month }}</div>
+                        <div class="fw-bold text-center my-2"></div>
                         <table class="table table-hover table-report" style="margin-left:auto; margin-right:auto;">
                             <thead>
                                 <tr>
@@ -51,7 +85,7 @@
                         
                     </div>
                     <div class="col">
-                         <div class="fw-bold text-center my-2">BẢNG THÁNG {{ $last_month }}</div>
+                         <div class="fw-bold text-center my-2"></div>
                         <table class="table table-hover table-report" style="margin-left:auto; margin-right:auto;">
                             <thead>
                                 <tr>

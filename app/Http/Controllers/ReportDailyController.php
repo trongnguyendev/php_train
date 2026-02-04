@@ -24,6 +24,7 @@ class ReportDailyController extends Controller
             ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
             ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
             ->whereDate('leads.first_interaction_date', $today)
+            ->where('lead_type', 1)
             ->select(
                 'sale_users.id',
                 'sale_users.name as sale_name',
@@ -78,7 +79,7 @@ class ReportDailyController extends Controller
                 ->join('sale_users', 'sale_users.id', '=', 'leads.sale_information_id')
                 ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
                 ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
-                
+                ->where('lead_type', 1)
                 ->whereBetween('leads.first_interaction_date', [$start, $end])
                 ->select(
                     'sale_users.id',
@@ -131,15 +132,34 @@ class ReportDailyController extends Controller
             'TỔNG DOANH SỐ THÁNG'          => 'sr_total',
         ];
 
-        $month = $request->input('month') ?? Carbon::now()->format('Y-m');
-        $last_month = $request->input('last-month') ?? Carbon::now()->subMonth()->format('Y-m');
+        // $month = $request->input('month') ?? Carbon::now()->format('Y-m');
+        // $last_month = $request->input('last-month') ?? Carbon::now()->subMonth()->format('Y-m');
+
+        // Khoảng ngày 1
+$fromDate1 = $request->input('from_date_1')
+    ? Carbon::parse($request->input('from_date_1'))->startOfDay()
+    : Carbon::now()->startOfMonth();
+
+$toDate1 = $request->input('to_date_1')
+    ? Carbon::parse($request->input('to_date_1'))->endOfDay()
+    : Carbon::now()->endOfMonth();
+
+// Khoảng ngày 2 (so sánh)
+$fromDate2 = $request->input('from_date_2')
+    ? Carbon::parse($request->input('from_date_2'))->startOfDay()
+    : Carbon::now()->subMonth()->startOfMonth();
+
+$toDate2 = $request->input('to_date_2')
+    ? Carbon::parse($request->input('to_date_2'))->endOfDay()
+    : Carbon::now()->subMonth()->endOfMonth();
 
         // Khách trực tiếp (offline)
         $data_offline = DB::table('leads')
             ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
             ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
             ->join('showrooms', 'showrooms.id', '=', 'leads.showroom_id')
-            ->whereBetween('first_interaction_date', [$month.'-01', $month.'-31'])
+            // ->whereBetween('first_interaction_date', [$month.'-01', $month.'-31'])
+            ->whereBetween('first_interaction_date', [$fromDate1, $toDate1])
             ->where('lead_type', 1)
             ->select('showroom_id',
                 DB::raw('SUM(CASE WHEN lead_type = 1 THEN 1 ELSE 0 END) as total_customers'),
@@ -167,7 +187,8 @@ class ReportDailyController extends Controller
             ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
             ->join('customer_sources', 'customer_sources.id', '=', 'leads.source_id')
             // KHÔNG join showroom
-            ->whereBetween('first_interaction_date', [$month.'-01', $month.'-31'])
+            // ->whereBetween('first_interaction_date', [$month.'-01', $month.'-31'])
+            ->whereBetween('first_interaction_date', [$fromDate1, $toDate1])
             ->where('lead_type', 2)
             ->select('source_id',
                 DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id THEN 1 ELSE 0 END) as total_customers'),
@@ -323,7 +344,8 @@ class ReportDailyController extends Controller
             ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
             ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
             ->join('showrooms', 'showrooms.id', '=', 'leads.showroom_id')
-            ->whereBetween('first_interaction_date', [$last_month.'-01', $last_month.'-31'])
+            // ->whereBetween('first_interaction_date', [$last_month.'-01', $last_month.'-31'])
+            ->whereBetween('first_interaction_date', [$fromDate2, $toDate2])
             ->where('lead_type', 1)
             ->select('showroom_id',
                 DB::raw('SUM(CASE WHEN lead_type = 1 THEN 1 ELSE 0 END) as total_customers'),
@@ -347,7 +369,8 @@ class ReportDailyController extends Controller
             ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
             ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
             ->join('customer_sources', 'customer_sources.id', '=', 'leads.source_id')
-            ->whereBetween('first_interaction_date', [$last_month.'-01', $last_month.'-31'])
+            // ->whereBetween('first_interaction_date', [$last_month.'-01', $last_month.'-31'])
+            ->whereBetween('first_interaction_date', [$fromDate2, $toDate2])
             ->where('lead_type', 2)
             ->select('source_id',
                 DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id THEN 1 ELSE 0 END) as total_customers'),
@@ -417,7 +440,7 @@ class ReportDailyController extends Controller
         }
         // Nếu có mapping showroom_id cho online thì cộng vào $totals_prev tương ứng
 
-        return view('report_showroom.index', compact('showrooms', 'metrics', 'data_offline', 'data_online', 'month', 'last_month', 'totals_current', 'totals_prev'));
+        return view('report_showroom.index', compact('showrooms', 'metrics', 'data_offline', 'data_online', 'totals_current', 'totals_prev'));
     }
 
  
