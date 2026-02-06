@@ -72,12 +72,12 @@ class LeadController extends Controller
         // }
 
         if ($request->from_date && $request->to_date) {
-            $query->whereBetween('first_arrival_date', [
+            $query->whereBetween('first_interaction_date', [
                 $request->from_date,
                 $request->to_date
             ]);
 
-            $queryOnline->whereBetween('first_arrival_date', [
+            $queryOnline->whereBetween('first_interaction_date', [
                 $request->from_date,
                 $request->to_date
             ]);
