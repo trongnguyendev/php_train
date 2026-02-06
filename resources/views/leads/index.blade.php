@@ -56,28 +56,28 @@
             </div> -->
 
             <div class="col-md-3">
-                <label for="first_arrival_date" class="form-label">
+                <label for="form_date" class="form-label">
                     <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Từ Ngày</span>
                 </label>
                 <input 
                     type="date" 
-                    name="first_arrival_date" 
+                    name="form_date" 
                     id="form_date"
                     class="form-control" 
-                    value="{{ request('first_arrival_date') }}"
+                    value="{{ request('form_date') }}"
                 >
             </div>
 
             <div class="col-md-3">
-                <label for="first_arrival_date" class="form-label">
+                <label for="to_date" class="form-label">
                     <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Đến Ngày</span>
                 </label>
                 <input 
                     type="date" 
-                    name="first_arrival_date" 
-                    id="todate"
+                    name="to_date" 
+                    id="to_date"
                     class="form-control" 
-                    value="{{ request('first_arrival_date') }}"
+                    value="{{ request('to_date') }}"
                 >
             </div>
 
@@ -89,6 +89,17 @@
                     <option value="">-- Tất cả --</option>
                     @foreach($customerStatuses as $status)
                         <option value="{{ $status->id }}" {{ request('current_status') == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="sale_user" class="form-label">
+                    <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Sale hỗ trợ</span>
+                </label>
+                <select name="sale_user" id="sale_user" class="form-select">
+                    <option value="">-- Tất cả --</option>
+                    @foreach($saleUsers as $status)
+                        <option value="{{ $status->id }}" {{ request('sale_user') == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
                     @endforeach
                 </select>
             </div>

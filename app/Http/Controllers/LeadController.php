@@ -87,6 +87,10 @@ class LeadController extends Controller
             $query->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
             $queryOnline->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
         }
+        if ($request->sale_user) {
+            $query->where('sale_support_id', 'like', '%' . $request->sale_user . '%');
+            $queryOnline->where('sale_support_id', 'like', '%' . $request->sale_user . '%');
+        }
 
         if ($request->productCategories) {
             $query->whereHas('productCategories', function($q) use ($request) {
