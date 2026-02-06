@@ -225,6 +225,7 @@ $toDate2 = $request->input('to_date_2')
         $sr_old_closed = 0;
         $sr_total_new_closed = 0;
         $sr_total_old_closed = 0;
+        $sr_total_sale_closed = 0;
         $sr_total = 0;
         // Tổng theo showroom
         $totals_current = [];
@@ -248,6 +249,7 @@ $toDate2 = $request->input('to_date_2')
             $sr_old_closed += $item->old_closed;
             $sr_total_new_closed += $item->total_new_closed;
             $sr_total_old_closed += $item->total_old_closed;
+            $sr_total_sale_closed += $item->sr_total_sale_closed;
             $sr_total += $item->total;
             // Gán cho showroom
             foreach ($metrics as $label => $key) {
@@ -266,6 +268,7 @@ $toDate2 = $request->input('to_date_2')
                     case 'sr_old_closed': $totals_current[$item->showroom_id][$key] += $item->old_closed; break;
                     case 'sr_total_new_closed': $totals_current[$item->showroom_id][$key] += $item->total_new_closed; break;
                     case 'sr_total_old_closed': $totals_current[$item->showroom_id][$key] += $item->total_old_closed; break;
+                    case 'sr_total_sale_closed': $totals_current[$item->showroom_id][$key] += $item->total_new_closed + $item->total_old_closed; break;
                     case 'sr_total': $totals_current[$item->showroom_id][$key] += $item->total; break;
                     // ... các trường khác nếu có ...
                 }
@@ -302,6 +305,7 @@ $toDate2 = $request->input('to_date_2')
             $sr_total_no_need += $item->total_no_need;
             $sr_new_closed += $item->new_closed;
             $sr_old_closed += $item->old_closed;
+            $sr_total_sale_closed += $item->sr_total_sale_closed;
             $sr_total += $item->total;
             // Nếu source_id online map được showroom_id thì cộng vào showroom tương ứng
             if (isset($sourceIdToShowroomId[$item->source_id])) {
@@ -322,6 +326,7 @@ $toDate2 = $request->input('to_date_2')
                         case 'sr_old_closed': $totals_current[$showroom_id][$key] += $item->old_closed; break;
                         case 'sr_total_new_closed': $totals_current[$showroom_id][$key] += $item->total_new_closed; break;
                         case 'sr_total_old_closed': $totals_current[$showroom_id][$key] += $item->total_old_closed; break;
+                        case 'sr_total_sale_closed': $totals_current[$showroom_id][$key] += $item->total_new_closed + $item->total_old_closed; break;
                         case 'sr_total': $totals_current[$showroom_id][$key] += $item->total; break;
                     }
                 }
@@ -418,6 +423,7 @@ $toDate2 = $request->input('to_date_2')
                     case 'sr_old_closed': $totals_prev[$item->showroom_id][$key] += $item->old_closed; break;
                     case 'sr_total_new_closed': $totals_prev[$item->showroom_id][$key] += $item->total_new_closed; break;
                     case 'sr_total_old_closed': $totals_prev[$item->showroom_id][$key] += $item->total_old_closed; break;
+                    case 'sr_total_sale_closed': $totals_prev[$item->showroom_id][$key] += $item->total_new_closed + $item->total_old_closed; break;
                     case 'sr_total': $totals_prev[$item->showroom_id][$key] += $item->total; break;
                 }
             }
@@ -441,6 +447,7 @@ $toDate2 = $request->input('to_date_2')
                         case 'sr_old_closed': $totals_prev[$showroom_id][$key] += $item->old_closed; break;
                         case 'sr_total_new_closed': $totals_prev[$showroom_id][$key] += $item->total_new_closed; break;
                         case 'sr_total_old_closed': $totals_prev[$showroom_id][$key] += $item->total_old_closed; break;
+                        case 'sr_total_sale_closed': $totals_prev[$showroom_id][$key] += $item->total_new_closed + $item->total_old_closed; break;
                         case 'sr_total': $totals_prev[$showroom_id][$key] += $item->total; break;
                     }
                 }
