@@ -209,8 +209,6 @@ class LeadController extends Controller
         }
         if ($request->lead_type == 2) {
             $rules =  [
-                'first_interaction_date' => 'required|date',
-                'name' => 'required|string',
                 'customer_type_id' => 'required',
                 'product_category_ids' => 'required|array|min:1',
                 'first_customer_status_id' =>'required_if:lead_type,2',
@@ -221,8 +219,6 @@ class LeadController extends Controller
                 'lead_type' => 'required',
             ];[
                 'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
-                'first_interaction_date.required' => 'Vui lòng nhập Ngày tương tác đầu tiên.',
-                'name.required' => 'Vui lòng nhập Tên khách hàng.',
                 'customer_type_id.required' => 'Vui lòng chọn Loại khách hàng.',
                 'first_customer_status_id.required_if' => 'Vui lòng chọn Trạng thái khách hàng ban đầu khi Lead là Online.',
                 'current_customer_status_id.required' => 'Vui lòng chọn Trạng thái khách hàng hiện tại.',
