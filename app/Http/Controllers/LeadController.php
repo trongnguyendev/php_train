@@ -210,23 +210,29 @@ class LeadController extends Controller
         if ($request->lead_type == 2) {
             $rules =  [
                 'customer_type_id' => 'required',
+                'name' => 'required|string',
+                'first_interaction_date' => 'required|date',
                 'product_category_ids' => 'required|array|min:1',
                 'first_customer_status_id' =>'required_if:lead_type,2',
                 'current_customer_status_id' => 'required',
                 'sale_information_id' => 'required',
                 'sale_support_id' => 'required',
+                'product_category_ids' => 'required|array|min:1',
                 'customer_discussion_details' => 'required',
                 'source_id' => 'required',
                 'lead_type' => 'required',
             ];[
                 'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
+                'first_interaction_date.required' => 'Vui lòng nhập Ngày tương tác đầu tiên.',
+                'name.required' => 'Vui lòng nhập Tên khách hàng.',
+                'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
                 'customer_type_id.required' => 'Vui lòng chọn Loại khách hàng.',
-                'first_customer_status_id.required_if' => 'Vui lòng chọn Trạng thái khách hàng ban đầu khi Lead là Online.',
+                'first_customer_status_id.required_if' => 'Vui lòng chọn Trạng thái khách hàng ban đầu.',
                 'current_customer_status_id.required' => 'Vui lòng chọn Trạng thái khách hàng hiện tại.',
                 'sale_information_id.required' => 'Vui lòng chọn Sale Nhận Thôn Tin.',
                 'sale_support_id.required' => 'Vui lòng chọn Sale Hỗ Trợ.',
                 'source_id.required' => 'Vui lòng chọn Nguồn khách hàng.',
-                'customer_discussion_details.required_if' => 'Vui lòng nhập Chi tiết trao đổi với khách hàng khi Lead là Online.',
+                'customer_discussion_details.required' => 'Vui lòng nhập Chi tiết trao đổi với khách hàng.',
             ];
         }
         $request->validate($rules);
