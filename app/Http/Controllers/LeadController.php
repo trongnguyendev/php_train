@@ -197,7 +197,7 @@ class LeadController extends Controller
                 'name' => 'required|string',
                 'current_customer_status_id' => 'required',
                 'sale_information_id' => 'required',
-            ];[
+            ];$messages = [
                 'showroom_id.required_if' => 'Vui lòng chọn Showroom khi Lead là Trực tiếp.',
                 'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
                 'first_interaction_date.required' => 'Vui lòng nhập Ngày tương tác đầu tiên.',
@@ -221,7 +221,7 @@ class LeadController extends Controller
                 'customer_discussion_details' => 'required',
                 'source_id' => 'required',
                 'lead_type' => 'required',
-            ];[
+            ];$messages = [
                 'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
                 'first_interaction_date.required' => 'Vui lòng nhập Ngày tương tác đầu tiên.',
                 'name.required' => 'Vui lòng nhập Tên khách hàng.',
