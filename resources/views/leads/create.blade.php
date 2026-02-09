@@ -187,7 +187,9 @@
                                 <i class="bi bi-funnel me-1"></i><span class="text-primary fw-bold">Danh mục sản phẩm</span>
                             </label>
                             <div class="dropdown">
-                                <button class="btn dropdown-toggle w-100" type="button" id="dropdownProductCategoriesCreate" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #fff; color: #0d6efd; border: 1px solid #717375ff; border-radius: 0.375rem;">
+                                <button class="btn dropdown-toggle w-100 @error('product_category_ids') is-invalid border-danger @enderror"
+                                    type="button" id="dropdownProductCategoriesCreate" data-bs-toggle="dropdown" aria-expanded="false"
+                                    style="background-color: #fff; color: #0d6efd; border: 1px solid #717375ff; border-radius: 0.375rem;">
                                     <span id="selectedProductNamesBtn">
                                         @php
                                             $selectedProductNames = collect($productCategories)
@@ -214,7 +216,7 @@
                                 </div>
                             </div>
                             @error('product_category_ids')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
 
