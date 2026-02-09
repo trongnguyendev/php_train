@@ -191,12 +191,14 @@ class LeadController extends Controller
         // ];
         if ($request->lead_type == 1) {
             $rules =  [
-                'product_category_ids' => 'required|array|min:1',
-                'showroom_id' => 'required_if:lead_type,1',
+                'customer_type_id' => 'required',
                 'first_interaction_date' => 'required|date',
                 'name' => 'required|string',
+                'product_category_ids' => 'required|array|min:1',
+                'showroom_id' => 'required_if:lead_type,1',
                 'current_customer_status_id' => 'required',
                 'sale_information_id' => 'required',
+                'note' => 'required',
             ];$messages = [
                 'showroom_id.required_if' => 'Vui lòng chọn Showroom khi Lead là Trực tiếp.',
                 'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
@@ -204,6 +206,8 @@ class LeadController extends Controller
                 'name.required' => 'Vui lòng nhập Tên khách hàng.',
                 'current_customer_status_id.required' => 'Vui lòng chọn Trạng thái khách hàng hiện tại.',
                 'sale_information_id.required' => 'Vui lòng chọn Nhân viên kinh doanh phụ trách.',
+                'note.required' => 'Vui lòng nhập Ghi chú về khách hàng.',
+                'customer_type_id.required' => 'Vui lòng chọn Loại khách hàng.',
                 
             ];
         }
