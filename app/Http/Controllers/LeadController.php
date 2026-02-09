@@ -235,7 +235,7 @@ class LeadController extends Controller
                 'customer_discussion_details.required' => 'Vui lòng nhập Chi tiết trao đổi với khách hàng.',
             ];
         }
-        $request->validate($rules);
+        $request->validate($rules, $messages);
         $orderValue = 0;
             if ($request->order_value) {
                 $orderValue = (int) str_replace('.', '', $request->order_value);
