@@ -216,6 +216,7 @@ class LeadController extends Controller
                 'sale_information_id' => 'required',
                 'sale_support_id' => 'nullable',
                 'customer_discussion_details' => 'required_if:lead_type,2',
+                'source_id' => 'required',
                 'lead_type' => 'required',
             ];[
                 'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
@@ -223,6 +224,8 @@ class LeadController extends Controller
                 'first_customer_status_id.required_if' => 'Vui lòng chọn Trạng thái khách hàng ban đầu khi Lead là Online.',
                 'current_customer_status_id.required' => 'Vui lòng chọn Trạng thái khách hàng hiện tại.',
                 'sale_information_id.required' => 'Vui lòng chọn Nhân viên kinh doanh phụ trách.',
+                'sale_support_id.nullable' => 'Vui lòng chọn Nhân viên hỗ trợ kinh doanh.',
+                'source_id.required' => 'Vui lòng chọn Nguồn khách hàng.',
                 'customer_discussion_details.required_if' => 'Vui lòng nhập Chi tiết trao đổi với khách hàng khi Lead là Online.',
             ];
         }
