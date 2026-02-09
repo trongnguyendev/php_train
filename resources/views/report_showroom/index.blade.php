@@ -70,17 +70,29 @@
                             </thead>
                             <tbody>
                                 @foreach ($metrics as $label => $key)
-                                <tr>
-                                    <td class="fw-bold">{{ $label }}</td>
-                                    @php $sum = 0; @endphp
-                                    @foreach ($showrooms as $showroom)
-                                        <td class="text-center">{{ $totals_current[$showroom->id][$key] ?? 0 }}</td>
-                                        @php $sum += $totals_current[$showroom->id][$key] ?? 0; @endphp
-                                    @endforeach
-                                    <td class="text-center fw-bold">{{ $sum }}</td>
-                                </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ $label }}</td>
+
+                                        @php $sum = 0; @endphp
+
+                                        @foreach ($showrooms as $showroom)
+                                            @php
+                                                $value = $totals_current[$showroom->id][$key] ?? 0;
+                                                $sum += $value;
+                                            @endphp
+
+                                            <td class="text-center">
+                                                {{ number_format($value, 0, ',', '.') }}
+                                            </td>
+                                        @endforeach
+
+                                        <td class="text-center fw-bold">
+                                            {{ number_format($sum, 0, ',', '.') }}
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
+
                         </table>
                         
                     </div>
@@ -98,17 +110,29 @@
                             </thead>
                             <tbody>
                                 @foreach ($metrics as $label => $key)
-                                <tr>
-                                    <td class="fw-bold">{{ $label }}</td>
-                                    @php $sum = 0; @endphp
-                                    @foreach ($showrooms as $showroom)
-                                        <td class="text-center">{{ $totals_prev[$showroom->id][$key] ?? 0 }}</td>
-                                        @php $sum += $totals_prev[$showroom->id][$key] ?? 0; @endphp
-                                    @endforeach
-                                    <td class="text-center fw-bold">{{ $sum }}</td>
-                                </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ $label }}</td>
+
+                                        @php $sum = 0; @endphp
+
+                                        @foreach ($showrooms as $showroom)
+                                            @php
+                                                $value = $totals_prev[$showroom->id][$key] ?? 0;
+                                                $sum += $value;
+                                            @endphp
+
+                                            <td class="text-center">
+                                                {{ number_format($value, 0, ',', '.') }}
+                                            </td>
+                                        @endforeach
+
+                                        <td class="text-center fw-bold">
+                                            {{ number_format($sum, 0, ',', '.') }}
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
+
                         </table>
                        
                     </div>

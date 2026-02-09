@@ -9,21 +9,54 @@
     </div>
     @endif
 
-    <form method="GET" action="">
-        <label style="font-weight: bold;">Từ Ngày:</label>
-        <input type="month" id="month-to" name="month-to" value="{{ $month_to ?? '' }}">
+  <form method="GET" action="" style="display:flex;gap:12px;align-items:end;flex-wrap:wrap">
 
-        <label style="font-weight: bold;">Đến Ngày:</label>
-        <input type="month" id="month-from" name="month-from" value="{{ $month_from ?? '' }}">
-        
-        <button type="submit" class="btn btn-primary btn-sm">Lọc</button>
-    </form>
+    {{-- Khoảng ngày 1 --}}
+    <div>
+        <label style="font-weight: bold;">Từ ngày (1)</label>
+        <input type="date"
+               name="from_date_1"
+               value="{{ request('from_date_1') }}"
+               class="form-control form-control-sm">
+    </div>
+
+    <div>
+        <label style="font-weight: bold;">Đến ngày (1)</label>
+        <input type="date"
+               name="to_date_1"
+               value="{{ request('to_date_1') }}"
+               class="form-control form-control-sm">
+    </div>
+
+    {{-- Khoảng ngày 2 --}}
+    <div>
+        <label style="font-weight: bold;">Từ ngày (2)</label>
+        <input type="date"
+               name="from_date_2"
+               value="{{ request('from_date_2') }}"
+               class="form-control form-control-sm">
+    </div>
+
+    <div>
+        <label style="font-weight: bold;">Đến ngày (2)</label>
+        <input type="date"
+               name="to_date_2"
+               value="{{ request('to_date_2') }}"
+               class="form-control form-control-sm">
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-primary btn-sm">
+            Lọc
+        </button>
+    </div>
+
+</form>
   
 
 <div class="row">
     <div class="col-md-6">
         <div class="card">
-            <div class="card-header bg-primary text-white">Báo cáo tháng {{ $month ? \Carbon\Carbon::parse($month.'-01')->format('m/Y') : '' }}</div>
             <div class="card-body">
                 <table class="table table-hover">
                     <thead>
@@ -68,7 +101,6 @@
     </div>
     <div class="col-md-6">
         <div class="card">
-            <div class="card-header bg-secondary text-white">Báo cáo tháng trước ({{ $prev_month ? \Carbon\Carbon::parse($prev_month.'-01')->format('m/Y') : '' }})</div>
             <div class="card-body">
                 <table class="table table-hover">
                     <thead>

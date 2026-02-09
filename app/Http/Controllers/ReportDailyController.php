@@ -60,27 +60,55 @@ class ReportDailyController extends Controller
 
     public function exportCurrentMonth(Request $request)
     {
-        $request->validate([
-            'month-to' => 'nullable|date_format:Y-m',
-            'month-from' => 'nullable|date_format:Y-m',
-        ]);
+        // $request->validate([
+        //     'month-to' => 'nullable|date_format:Y-m',
+        //     'month-from' => 'nullable|date_format:Y-m',
+        // ]);
 
-        // Lấy tháng hiện tại hoặc tháng được chọn
-        $monthCurrent = $request->input('month-to') ? Carbon::parse($request->input('month-to')) : Carbon::now();
-        $monthOld = $request->input('month-from') ? Carbon::parse($request->input('month-from')) : (clone $monthCurrent)->subMonth();
+        // // Lấy tháng hiện tại hoặc tháng được chọn
+        // $monthCurrent = $request->input('month-to') ? Carbon::parse($request->input('month-to')) : Carbon::now();
+        // $monthOld = $request->input('month-from') ? Carbon::parse($request->input('month-from')) : (clone $monthCurrent)->subMonth();
         
 
-        // Hàm truy vấn dữ liệu theo tháng
-        $getDataByMonth = function($month) {
-            $start = $month->copy()->startOfMonth()->toDateString();
-            $end = $month->copy()->endOfMonth()->toDateString();
-            
+        // // Hàm truy vấn dữ liệu theo tháng
+        // $getDataByMonth = function($month) {
+        //     $start = $month->copy()->startOfMonth()->toDateString();
+        //     $end = $month->copy()->endOfMonth()->toDateString();
+        $request->validate([
+        'from_date_1' => 'nullable|date',
+        'to_date_1'   => 'nullable|date',
+        'from_date_2' => 'nullable|date',
+        'to_date_2'   => 'nullable|date',
+    ]);
+
+        // Khoảng 1 (mặc định: tháng hiện tại)
+        $fromDate1 = $request->input('from_date_1')
+            ? Carbon::parse($request->input('from_date_1'))->startOfDay()
+            : Carbon::now()->startOfMonth();
+
+        $toDate1 = $request->input('to_date_1')
+            ? Carbon::parse($request->input('to_date_1'))->endOfDay()
+            : Carbon::now()->endOfMonth();
+
+        // Khoảng 2 (mặc định: tháng trước)
+        $fromDate2 = $request->input('from_date_2')
+            ? Carbon::parse($request->input('from_date_2'))->startOfDay()
+            : Carbon::now()->subMonth()->startOfMonth();
+
+        $toDate2 = $request->input('to_date_2')
+            ? Carbon::parse($request->input('to_date_2'))->endOfDay()
+            : Carbon::now()->subMonth()->endOfMonth();
+
+
+            // Hàm query theo khoảng ngày
+        $getDataByRange = function ($from, $to) {
+
             return DB::table('leads')
                 ->join('sale_users', 'sale_users.id', '=', 'leads.sale_information_id')
                 ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
                 ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
                 ->where('lead_type', 1)
-                ->whereBetween('leads.first_interaction_date', [$start, $end])
+                ->whereBetween('leads.first_interaction_date', [$from, $to])
                 ->select(
                     'sale_users.id',
                     'sale_users.name as sale_name',
@@ -99,16 +127,20 @@ class ReportDailyController extends Controller
                 ->get();
         };
 
-        $data = $getDataByMonth($monthCurrent);
-        $data_prev = $getDataByMonth($monthOld);
+        
+            // Lấy dữ liệu
+            $data = $getDataByRange($fromDate1, $toDate1);
+            $data_prev = $getDataByRange($fromDate2, $toDate2);
 
 
-        return view('report_month.index', [
-            'data' => $data,
-            'data_prev' => $data_prev,
-            'month' => $monthCurrent->format('Y-m'),
-            'prev_month' => $monthOld->format('Y-m'),
-        ]);
+         return view('report_month.index', [
+        'data' => $data,
+        'data_prev' => $data_prev,
+        'from_date_1' => $fromDate1->toDateString(),
+        'to_date_1' => $toDate1->toDateString(),
+        'from_date_2' => $fromDate2->toDateString(),
+        'to_date_2' => $toDate2->toDateString(),
+    ]);
     }
 
    public function reportShowroom(Request $request)
