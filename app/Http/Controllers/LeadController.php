@@ -92,9 +92,9 @@ class LeadController extends Controller
             $queryOnline->where('sale_support_id', 'like', '%' . $request->sale_user . '%');
         }
 
-        if ($request->sale_user) {
-            $query->where('sale_information_id', 'like', '%' . $request->sale_user . '%');
-            $queryOnline->where('sale_information_id', 'like', '%' . $request->sale_user . '%');
+        if ($request->sale_information) {
+            $query->where('sale_information_id', 'like', '%' . $request->sale_information . '%');
+            $queryOnline->where('sale_information_id', 'like', '%' . $request->sale_information . '%');
         }
 
         if ($request->productCategories) {
