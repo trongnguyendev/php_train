@@ -36,7 +36,11 @@ class AdminUserSeeder extends Seeder
                   ->orWhere('slug', 'like', 'customer_types.%')
                   ->orWhere('slug', 'like', 'product_categories.%')
                   ->orWhere('slug', 'like', 'customer_sources.%')
-                  ->orWhere('slug', 'like', 'permissions.%');
+                  ->orWhere('slug', 'like', 'permissions.%')
+                  ->orWhere('slug', 'like', 'report_daily.%')
+                  ->orWhere('slug', 'like', 'report_month.%')
+                  ->orWhere('slug', 'like', 'report_showroom.%');
+                  
         })->get();
 
         // Gán các permissions này cho role admin

@@ -11,11 +11,15 @@ use Carbon\Carbon;
 use DB;
 use Auth;
 use App\Models\Showroom;
+use Illuminate\Support\Facades\Gate;
+
 
 class ReportDailyController extends Controller
 {
     public function exportDaily(Request $request)
     {
+      
+        abort_unless(auth()->user()->hasPermission('report_daily.view'), 403);
         $date = $request->input('date');
         $today = $date ? Carbon::parse($date)->toDateString() : Carbon::today()->toDateString();
 
@@ -60,6 +64,7 @@ class ReportDailyController extends Controller
 
     public function exportCurrentMonth(Request $request)
     {
+        abort_unless(auth()->user()->hasPermission('report_month.view'), 403);
         // $request->validate([
         //     'month-to' => 'nullable|date_format:Y-m',
         //     'month-from' => 'nullable|date_format:Y-m',
@@ -145,6 +150,7 @@ class ReportDailyController extends Controller
 
    public function reportShowroom(Request $request)
     {
+        abort_unless(auth()->user()->hasPermission('report_showroom.view'), 403);
         $showrooms = Showroom::all();
         $metrics = [
             'SL KHÁCH HÀNG ĐẾN SR' => 'sr_total_customers',

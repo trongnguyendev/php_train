@@ -24,6 +24,11 @@ class PermissionSeeder extends Seeder
             'customer_sources' => 'Customer Sources',
             'roles' => 'Roles',
             'permissions' => 'Permissions',
+            'report_daily' => 'ReportDaily',
+            'report_month' => 'ReportMonth',
+            'report_showroom' => 'ReportShowroom',
+            
+
         ];
 
         $actions = [
