@@ -11,7 +11,6 @@ class Lead extends Model
     protected $fillable = [
         'first_interaction_date',
         'name',
-        'phone',
         'province_id',
         'address',
         'zalo',

@@ -30,7 +30,7 @@
     <!-- Filter Section -->
     <div class="card-body border-bottom bg-light">
         <form action="{{ route('leads.index') }}" method="GET" class="row g-3">
-            <!-- <div class="col-md-3">
+            <div class="col-md-3">
                 <label for="type_phone" class="form-label">
                     <i class="bi bi-telephone me-1"></i><span class="text-primary fw-bold">Số điện thoại</span>
                 </label>
@@ -42,53 +42,8 @@
                     placeholder="Nhập số điện thoại..." 
                     value="{{ request('type_phone') }}"
                 >
-            </div> -->
-            <div class="col-md-6">
-                <label class="form-label">
-                    <i class="bi bi-telephone me-1"></i>
-                    <span class="text-primary fw-bold">Số điện thoại</span>
-                </label>
-
-                <div class="d-flex align-items-start gap-2 flex-wrap">
-                    <button type="button" id="add-phone-filter" class="btn btn-outline-primary btn-sm">
-                        + Thêm
-                    </button>
-
-                    <div id="phone-wrapper-filter" class="d-flex gap-2 flex-wrap">
-                        @php
-                            $phones = request('type_phone', []);
-                            if (!is_array($phones)) {
-                                $phones = [$phones];
-                            }
-                        @endphp
-
-                        @foreach($phones as $phone)
-                            <div class="phone-item d-flex align-items-center gap-1">
-                                <input 
-                                    type="text" 
-                                    name="type_phone[]" 
-                                    value="{{ $phone }}" 
-                                    class="form-control" 
-                                    placeholder="Nhập số điện thoại..."
-                                >
-                                <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
-                            </div>
-                        @endforeach
-
-                        @if(empty($phones))
-                            <div class="phone-item d-flex align-items-center gap-1">
-                                <input 
-                                    type="text" 
-                                    name="type_phone[]" 
-                                    class="form-control" 
-                                    placeholder="Nhập số điện thoại..."
-                                >
-                                <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
-                            </div>
-                        @endif
-                    </div>
-                </div>
             </div>
+            
             
             <!-- <div class="col-md-3">
                 <label for="lead_type" class="form-label">
@@ -292,19 +247,19 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <!-- <td>
-                                            <a href="tel:{{ $lead->phone }}" class="text-decoration-none">
-                                                <i class="bi bi-telephone me-1"></i>{{ $lead->phone }}
-                                            </a>
-                                        </td> -->
-
                                         <td>
+                                            <a href="tel:{{ $lead->phone }}" class="text-decoration-none">
+                                                <i class="bi bi-telephone me-1"></i>{{ $lead->phones->pluck('phone')->implode(', ') ?? '-' }}
+                                            </a>
+                                        </td>
+
+                                        <!-- <td>
                                             <span class="editable-text" data-id="{{ $lead->id }}" data-field="phone">
                                                 {{ $lead->phone ?? '-' }}
                                             </span>
                                             <input type="number" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="phone" value="{{ $lead->phone }}">
                                         </td>
-<!--                                         
+<!--                                          -->
                                          <td>
                                             <small>{{ $lead->province->name ?? '-' }}</small>
                                         </td> -->
@@ -971,27 +926,6 @@ $('#saveCategory').on('click', function() {
     }, function () {
         location.reload();
     });
-});
-
-// hiển thị thêm số điện thoại trong form tạo lead
-document.getElementById('add-phone-filter').addEventListener('click', function () {
-    let wrapper = document.getElementById('phone-wrapper-filter');
-
-    let div = document.createElement('div');
-    div.classList.add('phone-item', 'd-flex', 'align-items-center', 'gap-1');
-
-    div.innerHTML = `
-        <input type="text" name="type_phone[]" class="form-control" placeholder="Nhập số điện thoại...">
-        <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
-    `;
-
-    wrapper.appendChild(div);
-});
-
-document.addEventListener('click', function (e) {
-    if (e.target.classList.contains('remove-phone')) {
-        e.target.closest('.phone-item').remove();
-    }
 });
 
 </script>
