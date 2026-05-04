@@ -30,7 +30,7 @@
     <!-- Filter Section -->
     <div class="card-body border-bottom bg-light">
         <form action="{{ route('leads.index') }}" method="GET" class="row g-3">
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
                 <label for="type_phone" class="form-label">
                     <i class="bi bi-telephone me-1"></i><span class="text-primary fw-bold">Số điện thoại</span>
                 </label>
@@ -42,6 +42,52 @@
                     placeholder="Nhập số điện thoại..." 
                     value="{{ request('type_phone') }}"
                 >
+            </div> -->
+            <div class="col-md-6">
+                <label class="form-label">
+                    <i class="bi bi-telephone me-1"></i>
+                    <span class="text-primary fw-bold">Số điện thoại</span>
+                </label>
+
+                <div class="d-flex align-items-start gap-2 flex-wrap">
+                    <button type="button" id="add-phone-filter" class="btn btn-outline-primary btn-sm">
+                        + Thêm
+                    </button>
+
+                    <div id="phone-wrapper-filter" class="d-flex gap-2 flex-wrap">
+                        @php
+                            $phones = request('type_phone', []);
+                            if (!is_array($phones)) {
+                                $phones = [$phones];
+                            }
+                        @endphp
+
+                        @foreach($phones as $phone)
+                            <div class="phone-item d-flex align-items-center gap-1">
+                                <input 
+                                    type="text" 
+                                    name="type_phone[]" 
+                                    value="{{ $phone }}" 
+                                    class="form-control" 
+                                    placeholder="Nhập số điện thoại..."
+                                >
+                                <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
+                            </div>
+                        @endforeach
+
+                        @if(empty($phones))
+                            <div class="phone-item d-flex align-items-center gap-1">
+                                <input 
+                                    type="text" 
+                                    name="type_phone[]" 
+                                    class="form-control" 
+                                    placeholder="Nhập số điện thoại..."
+                                >
+                                <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
+                            </div>
+                        @endif
+                    </div>
+                </div>
             </div>
             
             <!-- <div class="col-md-3">
@@ -555,7 +601,7 @@
                         <table class="table table-hover mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th style="min-width: 60px;">ID</th>
+                                    <th style="min-width: 60px;">Mã Khách Hàng</th>
                                     <th style="min-width: 120px;">Ngày</th>
                                     <th style="min-width: 200px;">Tên KH</th>
                                     <th style="min-width: 120px;">Điện thoại</th>
@@ -578,7 +624,7 @@
                                 @foreach ($leads as $lead)
                                     <tr>
                                         <td>
-                                            <span class="badge bg-info">#{{ $lead->id }}</span>
+                                            <span class="badge bg-info">{{ $lead->customer_code }}</span>
                                         </td>
                                         <td>
                                             <small class="text-muted">{{ \Carbon\Carbon::parse($lead->first_interaction_date)->format('d/m/Y') }}</small>
@@ -600,7 +646,7 @@
                                         </td>
                                         <td>
                                             <a href="tel:{{ $lead->phone }}" class="text-decoration-none">
-                                                <i class="bi bi-telephone me-1"></i>{{ $lead->phone }}
+                                                <i class="bi bi-telephone me-1"></i>{{ $lead->phones->pluck('phone')->implode(', ') ?? '-' }}
                                             </a>
                                         </td>
                                         
@@ -926,6 +972,28 @@ $('#saveCategory').on('click', function() {
         location.reload();
     });
 });
+
+// hiển thị thêm số điện thoại trong form tạo lead
+document.getElementById('add-phone-filter').addEventListener('click', function () {
+    let wrapper = document.getElementById('phone-wrapper-filter');
+
+    let div = document.createElement('div');
+    div.classList.add('phone-item', 'd-flex', 'align-items-center', 'gap-1');
+
+    div.innerHTML = `
+        <input type="text" name="type_phone[]" class="form-control" placeholder="Nhập số điện thoại...">
+        <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
+    `;
+
+    wrapper.appendChild(div);
+});
+
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-phone')) {
+        e.target.closest('.phone-item').remove();
+    }
+});
+
 </script>
 
 @endpush

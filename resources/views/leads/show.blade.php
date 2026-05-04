@@ -14,10 +14,13 @@
     <div class="card shadow-sm">
         <div class="card-body">
             @if($lead->lead_type == 1)
-            <p><strong>ID:</strong> {{ $lead->id }}</p>
+            <p><strong>Mã Khách Hàng:</strong> {{ $lead->customer_code }}</p>
             <p><strong>Ngày tương tác đầu tiên:</strong> {{ $lead->first_interaction_date }}</p>
             <p><strong>Tên khách hàng:</strong> {{ $lead->name }}</p>
-            <p><strong>Số điện thoại:</strong> {{ $lead->phone }}</p>
+            <p>
+                <strong>Số điện thoại:</strong> 
+                {{ is_array($phones) ? implode(', ', $phones) : $lead->phones->pluck('phone')->implode(', ') ?? '-' }}
+            </p>
             <p><strong>Tỉnh/Thành phố:</strong> {{ $lead->province->name ?? '' }}</p>
             <p><strong>Địa chỉ:</strong> {{ $lead->address }}</p>
             <p><strong>Zalo:</strong> {{ $lead->zalo }}</p>
@@ -36,7 +39,10 @@
             <p><strong>ID:</strong> {{ $lead->id }}</p>
             <p><strong>Ngày tương tác đầu tiên:</strong> {{ $lead->first_interaction_date }}</p>
             <p><strong>Tên khách hàng:</strong> {{ $lead->name }}</p>
-            <p><strong>Số điện thoại:</strong> {{ $lead->phone }}</p>
+            <p>
+                <strong>Số điện thoại:</strong> 
+                {{ is_array($phones) ? implode(', ', $phones) : $lead->phones->pluck('phone')->implode(', ') ?? '-' }}
+            </p>
             <p><strong>Tỉnh/Thành phố:</strong> {{ $lead->province->name ?? '' }}</p>
             <p><strong>Địa chỉ:</strong> {{ $lead->address }}</p>
             <p><strong>Zalo:</strong> {{ $lead->zalo }}</p>

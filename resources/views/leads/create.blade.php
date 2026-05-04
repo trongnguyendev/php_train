@@ -49,6 +49,10 @@
                             @enderror
                         </div>
                         <!-- Basic Information -->
+                         <div class="col-md-3">
+                            <label class="text-primary fw-bold">Mã khách hàng</label>
+                            <input type="text" class="form-control" value="{{ $previewCode }}" readonly>
+                        </div>
 
                         <div class="col-md-4">
                             <label for="first_interaction_date" class="form-label">
@@ -62,7 +66,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="name" class="form-label">
                                 <i class="bi bi-person me-1"></i><span class="text-primary fw-bold">Tên khách hàng</span>
                             </label>
@@ -74,7 +78,23 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
+                       <div class="d-flex align-items-start gap-2 flex-wrap">
+                            <button type="button" id="add-phone" class="btn btn-outline-primary">
+                                + Thêm số điện thoại
+                            </button>
+
+                            <div id="phone-wrapper" class="d-flex gap-2 flex-wrap">
+                                <div class="phone-item d-flex align-items-center gap-1">
+                                    <input type="text" name="phone[]" class="form-control" placeholder="Nhập số điện thoại">
+                                    <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
+                                </div>
+                            </div>
+                        </div>
+                       
+
+                
+
+                        <!-- <div class="col-md-6">
                             <label for="phone" class="form-label">
                                 <i class="bi bi-telephone me-1"></i><span class="text-primary fw-bold">Số điện thoại</span>
                             </label>
@@ -84,7 +104,7 @@
                             @error('phone')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div> -->
 
                         <div class="col-md-6">
                             <label for="zalo" class="form-label">
@@ -554,5 +574,26 @@ document.getElementById('order_value').addEventListener('input', function (e) {
     let value = this.value.replace(/\D/g, ""); // bỏ ký tự không phải số
     this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // thêm dấu chấm
 });
+
+document.getElementById('add-phone').addEventListener('click', function () {
+    let wrapper = document.getElementById('phone-wrapper');
+
+    let div = document.createElement('div');
+    div.classList.add('phone-item', 'd-flex', 'align-items-center', 'gap-1');
+
+    div.innerHTML = `
+        <input type="text" name="phone[]" class="form-control" placeholder="Nhập số điện thoại">
+        <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
+    `;
+
+    wrapper.appendChild(div);
+});
+
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-phone')) {
+        e.target.closest('.phone-item').remove();
+    }
+});
+
 </script>
 @endpush

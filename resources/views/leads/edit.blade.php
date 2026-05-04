@@ -29,6 +29,11 @@
                 <input type="hidden" name="lead_type" value="{{ $lead->lead_type }}">
                 <div class="form-text">@if($lead->lead_type == 1) Trực tiếp @else Online @endif</div>
             </div>
+            <div class="col-md-3">
+                <label class="text-primary fw-bold">Mã khách hàng</label>
+                <input type="text" class="form-control" value="{{ $lead->customer_code }}" readonly>
+            </div>
+
             
             <div class="col-md-4 mb-3">
                 <label class="form-label"><span class="text-primary fw-bold">Ngày tương tác đầu tiên</span></label>
@@ -38,9 +43,46 @@
                 <label class="form-label"><span class="text-primary fw-bold">Tên khách hàng</span></label>
                 <input type="text" name="name" value="{{ $lead->name }}" class="form-control">
             </div>
-            <div class="col-md-4 mb-3">
+            <!-- <div class="col-md-4 mb-3">
                 <label class="form-label"><span class="text-primary fw-bold">Số điện thoại</span></label>
                 <input type="text" name="phone" value="{{ $lead->phone }}" class="form-control">
+            </div> -->
+
+            <div class="col-md-12 mb-3">
+                <label class="form-label">
+                    <span class="text-primary fw-bold">Số điện thoại</span>
+                </label>
+
+                <div class="d-flex align-items-start gap-2 flex-wrap">
+                    <button type="button" id="add-phone" class="btn btn-outline-primary">
+                        + Thêm
+                    </button>
+
+                    <div id="phone-wrapper" class="d-flex gap-2 flex-wrap">
+                        @php
+                            $phones = is_array($lead->phone) 
+                                ? $lead->phone 
+                                : json_decode($lead->phone, true);
+                        @endphp
+
+                        @if(!empty($phones))
+                            @foreach($phones as $phone)
+                                <div class="phone-item d-flex align-items-center gap-1">
+                                    <input type="text" name="phone[]" 
+                                        value="{{ $phone }}" 
+                                        class="form-control" 
+                                        placeholder="Nhập số điện thoại">
+                                    <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="phone-item d-flex align-items-center gap-1">
+                                <input type="text" name="phone[]" class="form-control" placeholder="Nhập số điện thoại">
+                                <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
+                            </div>
+                        @endif
+                    </div>
+                </div>
             </div>
             <div class="col-md-4 mb-3">
                 <label for="province_id" class="form-label"><span class="text-primary fw-bold">Tỉnh / Thành phố</span></label>
@@ -328,5 +370,26 @@ display.addEventListener('input', function () {
     this.value = formatNumber(this.value);      // format đẹp
     real.value = this.value.replace(/\./g, ''); // gửi lên DB dạng số
 });
+//  Hiển thị nhiều sdt.
+document.getElementById('add-phone').addEventListener('click', function () {
+    let wrapper = document.getElementById('phone-wrapper');
+
+    let div = document.createElement('div');
+    div.classList.add('phone-item', 'd-flex', 'align-items-center', 'gap-1');
+
+    div.innerHTML = `
+        <input type="text" name="phone[]" class="form-control" placeholder="Nhập số điện thoại">
+        <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
+    `;
+
+    wrapper.appendChild(div);
+});
+
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-phone')) {
+        e.target.closest('.phone-item').remove();
+    }
+});
+
 </script>
 @endpush

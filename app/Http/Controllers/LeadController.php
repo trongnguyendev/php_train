@@ -14,6 +14,7 @@ use App\Models\SupportChannel;
 use App\Models\SaleUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Models\Phone;
 
 class LeadController extends Controller
 {
@@ -147,6 +148,16 @@ class LeadController extends Controller
      */
     public function create()
     {
+     
+        $today = now()->format('dmY');
+
+        $count = \App\Models\Lead::whereDate('created_at', now())->count();
+
+        $number = $count + 1;
+
+        $previewCode = 'C' . $today . '-' . str_pad($number, 3, '0', STR_PAD_LEFT);
+
+
         Gate::authorize('create', Lead::class);
         $lead = Lead::all();
         $leadTakeCares = LeadTakeCare::all();
@@ -159,6 +170,7 @@ class LeadController extends Controller
         $saleInformation = SaleUser::all();
         $saleSupport = SaleUser::all();
         $supportChannel = SupportChannel::all();
+        
         return view('leads.create', compact(
             'lead',
             'leadTakeCares',
@@ -170,7 +182,8 @@ class LeadController extends Controller
             'customerStatuses',
             'saleInformation',
             'saleSupport',
-            'supportChannel'
+            'supportChannel',
+            'previewCode'
         ));
     }
 
@@ -182,18 +195,6 @@ class LeadController extends Controller
     {
         Gate::authorize('create', Lead::class);
         
-        // $rules = [
-        //     'first_interaction_date' => 'required|date',
-        //     'name' => 'required|string',
-        //     'customer_type_id' => 'required',
-        //     'product_category_ids' => 'required|array|min:1',
-        //     'first_customer_status_id' =>'required_if:lead_type,2',
-        //     'current_customer_status_id' => 'required',
-        //     'sale_information_id' => 'required',
-        //     'sale_support_id' => 'nullable',
-        //     'customer_discussion_details' => 'required_if:lead_type,2',
-        //     'lead_type' => 'required',
-        // ];
         if ($request->lead_type == 1) {
             $rules =  [
                 'customer_type_id' => 'required',
@@ -249,12 +250,14 @@ class LeadController extends Controller
             if ($request->order_value) {
                 $orderValue = (int) str_replace('.', '', $request->order_value);
             }
+            
 
         if ($request->lead_type == 1) { // Trực tiếp
+        
             $lead = Lead::create([
                 'first_interaction_date' => $request->first_interaction_date,
                 'name' => $request->name,
-                'phone' => $request->phone ?? 0,
+                // 'phone' => $request->phone ?? 0,
                 'province_id' => $request->province_id,
                 'address' => $request->address,
                 'zalo' => $request->zalo ?? '',
@@ -270,6 +273,14 @@ class LeadController extends Controller
                 'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
                 'lead_type' => $request->lead_type
             ]);
+            $phones = array_filter($request->phone);
+            $phones = array_unique($phones);
+
+            foreach ($phones as $phone) {
+                $lead->phones()->create([
+                    'phone' => $phone
+                ]);
+            }
         } else { // Online
             $lead = Lead::create([
                 'first_interaction_date' => $request->first_interaction_date,
@@ -290,6 +301,14 @@ class LeadController extends Controller
                 'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
                 'lead_type' => $request->lead_type
             ]);
+            $phones = array_filter($request->phone);
+            $phones = array_unique($phones);
+
+            foreach ($phones as $phone) {
+                $lead->phones()->create([
+                    'phone' => $phone
+                ]);
+            }
         }
         // Lưu nhiều product category cho lead
         if ($request->has('product_category_ids')) {
@@ -331,9 +350,9 @@ class LeadController extends Controller
     public function show(Lead $lead)
     {
         Gate::authorize('view', $lead);
-        
+        $phones = $lead->phones;
         $leadTakeCare = $lead->leadTakeCare;
-        return view('leads.show', compact('lead', 'leadTakeCare'));
+        return view('leads.show', compact('lead', 'leadTakeCare','phones'));
     }
 
     /**
@@ -353,6 +372,7 @@ class LeadController extends Controller
         $saleInformation = SaleUser::all();
         $saleSupport = SaleUser::all();
         $supportChannel = SupportChannel::all();
+        $phones = $lead->phones;
         return view('leads.edit', compact(
             'lead',
             'leadTakeCare',
@@ -398,7 +418,7 @@ class LeadController extends Controller
         $lead->update([
             'first_interaction_date' => $request->first_interaction_date,
             'name' => $request->name,
-            'phone' => $request->phone,
+            
             'province_id' => $request->province_id,
             'address' => $request->address,
             'zalo' => $request->zalo ?? '',
@@ -415,6 +435,16 @@ class LeadController extends Controller
             'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
             'lead_type' => $request->lead_type
         ]);
+        $lead->phones()->delete();
+
+        $phones = collect($request->phone ?? [])
+            ->filter()
+            ->unique()
+            ->map(fn($p) => ['phone' => $p])
+            ->toArray();
+
+        $lead->phones()->createMany($phones);
+
         // Lưu nhiều product category khi cập nhật
         if ($request->has('product_category_ids')) {
             $lead->productCategories()->sync($request->product_category_ids);
@@ -452,6 +482,9 @@ class LeadController extends Controller
     public function destroy(Lead $lead)
     {
         Gate::authorize('delete', $lead);
+
+         // Xóa phone
+        $lead->phones()->delete();
         
         LeadTakeCare::where('lead_id', $lead->id)->delete();
         $lead->delete();

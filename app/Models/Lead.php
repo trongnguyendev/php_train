@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class Lead extends Model
 {
@@ -77,5 +79,25 @@ class Lead extends Model
     public function productCategories()
     {
         return $this->belongsToMany(ProductCategory::class, 'lead_product_category', 'lead_id', 'product_category_id');
+    }
+    public function phones()
+    {
+        return $this->hasMany(Phone::class);
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($lead) {
+
+            $today = Carbon::now()->format('dmY');
+
+            $count = DB::table('leads')
+                ->whereDate('created_at', Carbon::today())
+                ->count();
+
+            $number = $count + 1;
+
+            $lead->customer_code = 'C' . $today . '-' . str_pad($number, 3, '0', STR_PAD_LEFT);
+        });
     }
 }
