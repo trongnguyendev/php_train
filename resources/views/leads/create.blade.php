@@ -90,21 +90,7 @@
                                 </div>
                             </div>
                         </div>
-                       
-
-                
-
-                        <!-- <div class="col-md-6">
-                            <label for="phone" class="form-label">
-                                <i class="bi bi-telephone me-1"></i><span class="text-primary fw-bold">Số điện thoại</span>
-                            </label>
-                            <input type="text" name="phone" id="phone" 
-                                    class="form-control @error('phone') is-invalid @enderror"
-                                    value="{{ old('phone') }}" placeholder="Nhập số điện thoại">
-                            @error('phone')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div> -->
+            
 
                         <div class="col-md-6">
                             <label for="zalo" class="form-label">

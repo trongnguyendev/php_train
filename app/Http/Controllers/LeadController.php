@@ -273,9 +273,18 @@ class LeadController extends Controller
                 'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
                 'lead_type' => $request->lead_type
             ]);
-            $phones = array_filter($request->phone);
+            $phones = $request->phone ?? [];
+
+            // Ép về array nếu là string
+            if (!is_array($phones)) {
+                $phones = [$phones];
+            }
+
+            // Lọc và loại trùng
+            $phones = array_filter($phones);
             $phones = array_unique($phones);
 
+            // Lưu
             foreach ($phones as $phone) {
                 $lead->phones()->create([
                     'phone' => $phone
@@ -301,14 +310,23 @@ class LeadController extends Controller
                 'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
                 'lead_type' => $request->lead_type
             ]);
-            $phones = array_filter($request->phone);
-            $phones = array_unique($phones);
+            $phones = $request->phone ?? [];
 
-            foreach ($phones as $phone) {
-                $lead->phones()->create([
-                    'phone' => $phone
-                ]);
-            }
+                // Ép về array nếu là string
+                if (!is_array($phones)) {
+                    $phones = [$phones];
+                }
+
+                // Lọc và loại trùng
+                $phones = array_filter($phones);
+                $phones = array_unique($phones);
+
+                // Lưu
+                foreach ($phones as $phone) {
+                    $lead->phones()->create([
+                        'phone' => $phone
+                    ]);
+                }
         }
         // Lưu nhiều product category cho lead
         if ($request->has('product_category_ids')) {
