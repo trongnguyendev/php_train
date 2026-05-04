@@ -149,7 +149,7 @@ class LeadController extends Controller
     public function create()
     {
      
-        $today = now()->format('dmY');
+        $today = now()->format('dmy');
 
         $count = \App\Models\Lead::whereDate('created_at', now())->count();
 

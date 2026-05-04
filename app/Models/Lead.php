@@ -88,7 +88,7 @@ class Lead extends Model
     {
         static::creating(function ($lead) {
 
-            $today = Carbon::now()->format('dmY');
+            $today = Carbon::now()->format('dmy');
 
             $count = DB::table('leads')
                 ->whereDate('created_at', Carbon::today())
