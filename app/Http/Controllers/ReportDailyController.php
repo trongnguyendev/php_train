@@ -496,5 +496,33 @@ $toDate2 = $request->input('to_date_2')
         return view('report_showroom.index', compact('showrooms', 'metrics', 'data_offline', 'data_online', 'totals_current', 'totals_prev'));
     }
 
+    public function Potential(Request $request)
+    {
+        // Kiểm tra quyền hạn
+        // abort_unless(auth()->user()->hasPermission('potential.view'), 403);
+
+        // Truy vấn dữ liệu join 3 bảng
+        $data = DB::table('leads')
+            ->join('phones', 'phones.lead_id', '=', 'leads.id')
+            ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
+            ->select(
+                'leads.id', // Nên lấy ID để groupBy chính xác
+                'leads.name as customer_name',          // Lấy tên khách hàng
+                
+                'customer_statuses.name as status_name', // Lấy tên trạng thái
+                // Gộp tất cả SĐT của khách hàng này lại
+                DB::raw('GROUP_CONCAT(phones.phone SEPARATOR ", ") as all_phones')
+            )->groupBy('leads.id', 'leads.name', 'customer_statuses.name')
+            ->get();
+        
+            // Phân nhóm dữ liệu bằng Collection của Laravel
+            $potentials = $data->where('status_name', 'Tiềm Năng');
+            $interested = $data->where('status_name', 'Quan Tâm');
+            $reference = $data->where('status_name', 'Tham Khảo');
+            $out_of_need = $data->where('status_name', 'Hết Nhu Cầu');
+            $closed = $data->where('status_name', 'Đã Chốt');
+
+        return view('potential.index', compact('potentials', 'interested', 'reference', 'out_of_need', 'closed'));
+    }
  
 }

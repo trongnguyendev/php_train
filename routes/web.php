@@ -59,3 +59,6 @@ Route::match(['get','post'], '/report_month', [ReportDailyController::class, 'ex
     ->name('report_month.index');
 Route::match(['get','post'], '/report_showroom', [ReportDailyController::class, 'reportShowroom'])
     ->name('report_showroom.index');
+
+Route::match(['get','post'], '/potential', [ReportDailyController::class, 'Potential'])
+    ->name('potential.index');

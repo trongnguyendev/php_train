@@ -59,23 +59,21 @@
                     </button>
 
                     <div id="phone-wrapper" class="d-flex gap-2 flex-wrap">
-                        @php
-                            $phones = is_array($lead->phone) 
-                                ? $lead->phone 
-                                : json_decode($lead->phone, true);
-                        @endphp
-
-                        @if(!empty($phones))
+                        {{-- Kiểm tra nếu biến $phones từ Controller có dữ liệu --}}
+                       
+                        @if($phones->isNotEmpty())
                             @foreach($phones as $phone)
                                 <div class="phone-item d-flex align-items-center gap-1">
                                     <input type="text" name="phone[]" 
-                                        value="{{ $phone }}" 
+                                        {{-- Chú ý: $phone ở đây là một Model, bạn phải trỏ đến cột chứa số --}}
+                                        value="{{ $phone->phone}}" 
                                         class="form-control" 
                                         placeholder="Nhập số điện thoại">
                                     <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
                                 </div>
                             @endforeach
                         @else
+                            {{-- Nếu chưa có số nào thì hiện 1 ô trống để nhập --}}
                             <div class="phone-item d-flex align-items-center gap-1">
                                 <input type="text" name="phone[]" class="form-control" placeholder="Nhập số điện thoại">
                                 <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>

@@ -390,7 +390,7 @@ class LeadController extends Controller
         $saleInformation = SaleUser::all();
         $saleSupport = SaleUser::all();
         $supportChannel = SupportChannel::all();
-        $phones = $lead->phones;
+        $phones = Phone::where('phones.lead_id', $lead->id)->get();
         return view('leads.edit', compact(
             'lead',
             'leadTakeCare',
@@ -402,7 +402,9 @@ class LeadController extends Controller
             'customerStatuses',
             'saleInformation',
             'saleSupport',
-            'supportChannel'
+            'supportChannel',
+            'phones',
+
 
         ));
     }
