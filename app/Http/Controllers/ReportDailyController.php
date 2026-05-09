@@ -499,7 +499,7 @@ $toDate2 = $request->input('to_date_2')
     public function Potential(Request $request)
     {
         // Kiểm tra quyền hạn
-        // abort_unless(auth()->user()->hasPermission('potential.view'), 403);
+        abort_unless(auth()->user()->hasPermission('potential.view'), 403);
 
         // Truy vấn dữ liệu join 3 bảng
         $data = DB::table('leads')

@@ -14,6 +14,7 @@ use App\Policies\CustomerStatusPolicy;
 use App\Policies\CustomerTypePolicy;
 use App\Policies\RolePolicy;
 use App\Policies\PermissionPolicy;
+use App\Policies\PotentialPolicy;
 use App\Models\Role;
 use App\Models\Permission;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -37,6 +38,7 @@ class AuthServiceProvider extends ServiceProvider
     CustomerType::class => CustomerTypePolicy::class,
     Role::class => RolePolicy::class,
     Permission::class => PermissionPolicy::class,
+    Potential::class => PotentialPolicy::class,
     ];
 
     /**
