@@ -45,6 +45,13 @@
                         </a>
                     </li>
 
+                    <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
+                        <a href="{{ route('potential.index') }}" class="nav-link">
+                            <i class="bi bi-people-fill"></i>
+                            <span> Tiềm Năng</span>
+                        </a>
+                    </li>
+
                     <!-- User Management -->
                     <li class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
                         <a href="{{ route('users.index') }}" class="nav-link">
