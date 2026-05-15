@@ -248,21 +248,22 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <a href="tel:{{ $lead->phone }}" class="text-decoration-none">
-                                                <i class="bi bi-telephone me-1"></i>{{ $lead->phones->pluck('phone')->implode(', ') ?? '-' }}
-                                            </a>
+                                            @if($lead->phones->isNotEmpty())
+                                                @php
+                                                    $allPhones = $lead->phones->pluck('phone')->implode(', ');
+                                                    $firstPhone = $lead->phones->first()->phone;
+                                                @endphp
+                                                
+                                                <a href="tel:{{ $firstPhone }}" 
+                                                class="text-decoration-none"
+                                                onclick="copyAndStop(event, this, '{{ $allPhones }}')">
+                                                    <i class="bi bi-telephone me-1"></i>{{ $allPhones }}
+                                                </a>
+                                            @else
+                                                -
+                                            @endif
                                         </td>
 
-                                        <!-- <td>
-                                            <span class="editable-text" data-id="{{ $lead->id }}" data-field="phone">
-                                                {{ $lead->phone ?? '-' }}
-                                            </span>
-                                            <input type="number" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="phone" value="{{ $lead->phone }}">
-                                        </td>
-<!--                                          -->
-                                         <td>
-                                            <small>{{ $lead->province->name ?? '-' }}</small>
-                                        </td> -->
                                         <td>
                                             <span class="editable-select" data-id="{{ $lead->id }}" data-field="province_id">
                                                 {{ $lead->province->name ?? '-' }}
@@ -599,10 +600,22 @@
                                                 </div>
                                             </div>
                                         </td>
+                                       
                                         <td>
-                                            <a href="tel:{{ $lead->phone }}" class="text-decoration-none">
-                                                <i class="bi bi-telephone me-1"></i>{{ $lead->phones->pluck('phone')->implode(', ') ?? '-' }}
-                                            </a>
+                                            @if($lead->phones->isNotEmpty())
+                                                @php
+                                                    $allPhones = $lead->phones->pluck('phone')->implode(', ');
+                                                    $firstPhone = $lead->phones->first()->phone;
+                                                @endphp
+                                                
+                                                <a href="tel:{{ $firstPhone }}" 
+                                                class="text-decoration-none"
+                                                onclick="copyAndStop(event, this, '{{ $allPhones }}')">
+                                                    <i class="bi bi-telephone me-1"></i>{{ $allPhones }}
+                                                </a>
+                                            @else
+                                                -
+                                            @endif
                                         </td>
                                         
                                          <td>
@@ -928,6 +941,26 @@ $('#saveCategory').on('click', function() {
     });
 });
 
+// copy sdt
+
+function copyAndStop(event, element, text) {
+    // Dòng này cực kỳ quan trọng để chặn trình duyệt mở ứng dụng gọi điện
+    event.preventDefault(); 
+
+    navigator.clipboard.writeText(text).then(() => {
+        const originalHTML = element.innerHTML;
+        element.innerHTML = '<i class="bi bi-check-lg me-1"></i> Đã sao chép';
+        element.style.color = '#28a745'; // Đổi sang màu xanh lá báo hiệu thành công
+
+        setTimeout(() => {
+            element.innerHTML = originalHTML;
+            element.style.color = ''; // Trả về màu mặc định
+        }, 1500);
+    }).catch(err => {
+        // Nếu trình duyệt lỗi không copy được, lúc đó mới cho phép gọi điện
+        window.location.href = element.href;
+    });
+}
 </script>
 
 @endpush
