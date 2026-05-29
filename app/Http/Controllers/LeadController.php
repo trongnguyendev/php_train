@@ -155,7 +155,7 @@ class LeadController extends Controller
 
         $number = $count + 1;
 
-        $previewCode = 'C' . $today . '_' . str_pad($number, 3, '0', STR_PAD_LEFT);
+        $previewCode = 'C' . $today . str_pad($number, 3, '0', STR_PAD_LEFT);
 
 
         Gate::authorize('create', Lead::class);
