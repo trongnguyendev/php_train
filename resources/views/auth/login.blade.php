@@ -115,10 +115,10 @@
                             <h6 class="text-muted mb-3">Tài khoản demo:</h6>
                             <div class="small text-muted">
                                 <div class="mb-1">
-                                    <strong>Email:</strong> admin@example.com
+                                    <strong>Email:</strong> test@test.com
                                 </div>
                                 <div class="mb-2">
-                                    <strong>Mật khẩu:</strong> password123
+                                    <strong>Mật khẩu:</strong> test123
                                 </div>
                                 <div class="text-center">
                                     <span class="text-muted">Hoặc tạo tài khoản mới trong trang quản lý user</span>
