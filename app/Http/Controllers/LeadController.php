@@ -429,6 +429,17 @@ class LeadController extends Controller
     public function update(Request $request, Lead $lead)
     {
         Gate::authorize('update', $lead);
+        $rules = [
+            'phone' => 'required|array|min:1', 
+            'phone.*' => [
+                'required',
+                'string',
+                'regex:/^(03|05|07|08|09)[0-9]{8}$/' 
+            ],
+        ]; $messages = [
+            'phone.*.required' => 'Vui lòng không để trống ô số điện thoại.',
+            'phone.*.regex'    => 'Số điện thoại :value không đúng định dạng (phải có 10 số và bắt đầu bằng 03,05,07,08,09).',
+        ];  
         
         $rules = [
             'first_interaction_date' => 'required|date',
