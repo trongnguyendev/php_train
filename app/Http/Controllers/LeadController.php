@@ -91,15 +91,20 @@ class LeadController extends Controller
             }
            
 
+            // --- BỘ LỌC TÌM KIẾM SỐ ĐIỆN THOẠI QUA BẢNG KHÁC ---
             if ($request->type_phone) {
-            $query->where('phone', 'like', '%' . $request->type_phone . '%');
-            $queryOnline->where('phone', 'like', '%' . $request->type_phone . '%');
-            }
+                
+                // 1. Lọc cho danh sách Lead Trực tiếp (Type 1)
+                // Thay 'phones' bằng tên hàm quan hệ thực tế trong Model Lead của bạn (ví dụ: 'phones' hoặc 'phone')
+                $query->whereHas('phones', function($q) use ($request) {
+                    $q->where('phone', 'like', '%' . $request->type_phone . '%');
+                });
 
-            // if ($request->first_arrival_date) {
-            // $query->where('first_arrival_date', 'like', '%' . $request->first_arrival_date . '%');
-            // $queryOnline->where('first_arrival_date', 'like', '%' . $request->first_arrival_date . '%');
-            // }
+                // 2. Lọc cho danh sách Lead Online (Type 2)
+                $queryOnline->whereHas('phones', function($q) use ($request) {
+                    $q->where('phone', 'like', '%' . $request->type_phone . '%');
+                });
+            }
 
             if ($request->form_date && $request->to_date) {
                 $query->whereBetween('first_interaction_date', [
