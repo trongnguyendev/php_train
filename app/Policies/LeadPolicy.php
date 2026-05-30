@@ -14,7 +14,7 @@ class LeadPolicy
     private function isBoss(User $user): bool
     {
         // Kiểm tra xem trong các Role của User này có cái nào mang slug là 'admin' hoặc 'manager' không
-        return $user->roles()->whereIn('slug', ['admin', 'manager'])->exists();
+        return $user->roles()->whereIn('slug', ['admin', 'manager', 'supporter'])->exists();
     }
     /**
      * Determine if the user can view any leads.

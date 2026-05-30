@@ -24,11 +24,17 @@
         {{-- ========================= --}}
         <h4 class="text-primary mt-3">📋 Thông tin Lead</h4>
         <div class="row">
-            <div class="col-md-4 mb-3">
-                <label class="form-label"><span class="text-primary fw-bold">Loại Lead</span></label>
+            @if(auth()->user()->roles()->whereIn('slug', ['admin', 'manager','supporter'])->exists())
+                <div class="col-md-4 mb-3">
+                    <label class="form-label"><span class="text-primary fw-bold">Loại Lead</span></label>
+                    <select name="lead_type" class="form-select fw-bold">
+                        <option value="1" {{ $lead->lead_type == 1 ? 'selected' : '' }}>Trực tiếp</option>
+                        <option value="2" {{ $lead->lead_type == 2 ? 'selected' : '' }}>Online</option>
+                    </select>
+                </div>
+            @else
                 <input type="hidden" name="lead_type" value="{{ $lead->lead_type }}">
-                <div class="form-text">@if($lead->lead_type == 1) Trực tiếp @else Online @endif</div>
-            </div>
+            @endif
             <div class="col-md-3">
                 <label class="text-primary fw-bold">Mã khách hàng</label>
                 <input type="text" class="form-control" value="{{ $lead->customer_code }}" readonly>
@@ -211,20 +217,37 @@
                 </select>
             </div>
 
-            @if($lead->lead_type != 1)
-            <div class="col-md-4 mb-3">
-                <label for="sale_support_id" class="form-label"><span class="text-primary fw-bold">Sale hỗ trợ</span></label>
-                <select name="sale_support_id" id="sale_support_id" class="form-control">
-                    <option value="">-- Chọn Sale hỗ trợ --</option>
-                    @foreach($saleSupport as $saleUser)
-                        <option value="{{ $saleUser->id }}" 
-                            {{ $lead->sale_support_id == $saleUser->id ? 'selected' : '' }}>
-                            {{ $saleUser->name }}
-                        </option>
-                    @endforeach
-                </select>
+            
+           <div class="col-md-4 mb-3">
+                <label for="sale_support_id" class="form-label">
+                    <span class="text-primary fw-bold">Sale hỗ trợ</span>
+                </label>
+
+                @if(auth()->user()->roles()->whereIn('slug', ['admin', 'manager','supporter'])->exists())
+                    <select name="sale_support_id" id="sale_support_id" class="form-control fw-bold">
+                        <option value="">-- Chọn Sale hỗ trợ --</option>
+                        @foreach($saleSupport as $saleUser)
+                            <option value="{{ $saleUser->id }}" 
+                                {{ $lead->sale_support_id == $saleUser->id ? 'selected' : '' }}>
+                                {{ $saleUser->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                @else
+                    <select class="form-control fw-bold" disabled>
+                        <option value="">-- Chưa có Sale hỗ trợ --</option>
+                        @foreach($saleSupport as $saleUser)
+                            <option value="{{ $saleUser->id }}" 
+                                {{ $lead->sale_support_id == $saleUser->id ? 'selected' : '' }}>
+                                {{ $saleUser->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    
+                    <input type="hidden" name="sale_support_id" value="{{ $lead->sale_support_id }}">
+                @endif
             </div>
-            @endif
+            
 
             <div class="col-md-4 mb-3">
                 <label for="current_customer_status_id" class="form-label"><span class="text-primary fw-bold">Tình trạng KH hiện tại</span></label>

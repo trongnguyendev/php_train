@@ -67,7 +67,7 @@ class LeadController extends Controller
             $user = auth()->user(); 
 
             // 🔥 CHECK QUYỀN BẢNG TRUNG GIAN: Nếu user có role là 'admin' hoặc 'manager'
-            if ($user->roles()->whereIn('slug', ['admin', 'manager'])->exists()) {
+            if ($user->roles()->whereIn('slug', ['admin', 'manager', 'supporter'])->exists()) {
                 
                 // Quản lý & Admin: Load toàn bộ nhân viên để sếp lựa chọn lọc
                 $saleUsers = User::all();
