@@ -65,8 +65,6 @@ class LeadController extends Controller
 
                     // 2. 🔥 PHÂN QUYỀN HIỂN THỊ DANH SÁCH NHÂN VIÊN (Dropdown)
            // 1. Khởi tạo Query ban đầu
-            $query = Lead::with($relations);
-            $queryOnline = Lead::with($relations);
 
             // 2. 🔥 PHÂN QUYỀN CHUẨN THEO USER_ID: Ép điều kiện lọc vào Query chính
             $user = auth()->user(); 
