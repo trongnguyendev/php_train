@@ -39,6 +39,7 @@ class AuthServiceProvider extends ServiceProvider
     Role::class => RolePolicy::class,
     Permission::class => PermissionPolicy::class,
     Potential::class => PotentialPolicy::class,
+    SupportChannel::class => SupportChannelPolicy::class,
     ];
 
     /**
@@ -46,6 +47,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        
         // Register Gates
         Gate::define('manage-users', function (User $user) {
             return $user->hasPermission('users.manage');

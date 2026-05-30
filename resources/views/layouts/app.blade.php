@@ -25,134 +25,157 @@
                 </div>
 
                 <ul class="list-unstyled components">
-                    
-                    <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
-                        <a href="{{ route('report_daily.index') }}" class="nav-link">
-                            <i class="bi bi-people-fill"></i>
-                            <span> Báo Cáo Ngày</span>
-                        </a>
-                    </li>
-                    <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
-                        <a href="{{ route('report_month.index') }}" class="nav-link">
-                            <i class="bi bi-people-fill"></i>
-                            <span> Báo Cáo Tháng</span>
-                        </a>
-                    </li>
-                    <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
-                        <a href="{{ route('report_showroom.index') }}" class="nav-link">
-                            <i class="bi bi-people-fill"></i>
-                            <span> Báo Cáo Showroom</span>
-                        </a>
-                    </li>
+                    @if(auth()->user()->hasPermission('report_daily.view'))
+                        <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
+                            <a href="{{ route('report_daily.index') }}" class="nav-link">
+                                <i class="bi bi-people-fill"></i>
+                                <span> Báo Cáo Ngày</span>
+                            </a>
+                        </li>
+                    @endif
 
-                    <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
-                        <a href="{{ route('potential.index') }}" class="nav-link">
-                            <i class="bi bi-people-fill"></i>
-                            <span> Tiềm Năng</span>
-                        </a>
-                    </li>
+                    @if(auth()->user()->hasPermission('report_month.view'))
+                        <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
+                            <a href="{{ route('report_month.index') }}" class="nav-link">
+                                <i class="bi bi-people-fill"></i>
+                                <span> Báo Cáo Tháng</span>
+                            </a>
+                        </li>
+                    @endif
 
-                    <!-- User Management -->
-                    <li class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
-                        <a href="{{ route('users.index') }}" class="nav-link">
-                            <i class="bi bi-people-fill"></i>
-                            <span>Quản lý Users</span>
-                        </a>
-                    </li>
+                    @if(auth()->user()->hasPermission('report_showroom.view'))
+                        <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
+                            <a href="{{ route('report_showroom.index') }}" class="nav-link">
+                                <i class="bi bi-people-fill"></i>
+                                <span> Báo Cáo Showroom</span>
+                            </a>
+                        </li>
+                    @endif
 
-                    <!-- Role and Permission Section -->
-                    <li class="{{ request()->routeIs('roles.*') ? 'active' : '' }}">
-                        <a href="{{ route('roles.index') }}" class="nav-link">
-                            <i class="bi bi-shield-check"></i>
-                            <span>Quản lý Roles</span>
-                        </a>
-                    </li>
-                    <li class="{{ request()->routeIs('permissions.*') ? 'active' : '' }}">
-                        <a href="{{ route('permissions.index') }}" class="nav-link">
-                            <i class="bi bi-key"></i>
-                            <span>Quản lý Permissions</span>
-                        </a>
-                    </li>
+                    @if(auth()->user()->hasPermission('potential.view'))
+                        <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
+                            <a href="{{ route('potential.index') }}" class="nav-link">
+                                <i class="bi bi-people-fill"></i>
+                                <span> Tiềm Năng</span>
+                            </a>
+                        </li>
+                    @endif
 
-                    <!-- Lead Management -->
-                    <li class="{{ request()->routeIs('leads.*') ? 'active' : '' }}">
-                        <a href="{{ route('leads.index') }}" class="nav-link">
-                            <i class="bi bi-people-fill"></i>
-                            <span>Quản lý Lead</span>
-                        </a>
-                    </li>
+                    @if(auth()->user()->hasPermission('users.view-any'))
+                        <li class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
+                            <a href="{{ route('users.index') }}" class="nav-link">
+                                <i class="bi bi-people-fill"></i>
+                                <span>Quản lý Users</span>
+                            </a>
+                        </li>
+                    @endif
 
-                    <!-- Customer Source Management -->
-                    <li class="{{ request()->routeIs('customer_sources.*') ? 'active' : '' }}">
-                        <a href="{{ route('customer_sources.index') }}" class="nav-link">
-                            <i class="bi bi-building"></i>
-                            <span>Quản lý Nguồn khách hàng</span>
-                        </a>
-                    </li>
+                    @if(auth()->user()->hasPermission('roles.view-any'))
+                        <li class="{{ request()->routeIs('roles.*') ? 'active' : '' }}">
+                            <a href="{{ route('roles.index') }}" class="nav-link">
+                                <i class="bi bi-shield-check"></i>
+                                <span>Quản lý Roles</span>
+                            </a>
+                        </li>
+                    @endif
 
-                    <!-- Product category Management -->
-                    <li class="{{ request()->routeIs('product_categories.*') ? 'active' : '' }}">
-                        <a href="{{ route('product_categories.index') }}" class="nav-link">
-                            <i class="bi bi-building"></i>
-                            <span>Quản lý Danh mục sản phẩm</span>
-                        </a>
-                    </li>
+                    @if(auth()->user()->hasPermission('permissions.view-any'))
+                        <li class="{{ request()->routeIs('permissions.*') ? 'active' : '' }}">
+                            <a href="{{ route('permissions.index') }}" class="nav-link">
+                                <i class="bi bi-key"></i>
+                                <span>Quản lý Permissions</span>
+                            </a>
+                        </li>
+                    @endif
 
-                     <!-- Sale user Management -->
-                    <li class="{{ request()->routeIs('sale_users.*') ? 'active' : '' }}">
-                        <a href="{{ route('sale_users.index') }}" class="nav-link">
-                            <i class="bi bi-people-fill"></i>
-                            <span>Quản lý Sale user</span>
-                        </a>
-                    </li>
+                    @if(auth()->user()->hasPermission('leads.view-any'))
+                        <li class="{{ request()->routeIs('leads.*') ? 'active' : '' }}">
+                            <a href="{{ route('leads.index') }}" class="nav-link">
+                                <i class="bi bi-people-fill"></i>
+                                <span>Quản lý Lead</span>
+                            </a>
+                        </li>
+                    @endif
 
-                    <!-- Showroom Management -->
-                    <li class="{{ request()->routeIs('showrooms.*') ? 'active' : '' }}">
-                        <a href="{{ route('showrooms.index') }}" class="nav-link">
-                            <i class="bi bi-building"></i>
-                            <span>Quản lý Showroom</span>
-                        </a>
-                    </li>
+                    @if(auth()->user()->hasPermission('customer_sources.view-any'))
+                        <li class="{{ request()->routeIs('customer_sources.*') ? 'active' : '' }}">
+                            <a href="{{ route('customer_sources.index') }}" class="nav-link">
+                                <i class="bi bi-building"></i>
+                                <span>Quản lý Nguồn khách hàng</span>
+                            </a>
+                        </li>
+                    @endif
 
-                    <!-- Customer status Management -->
-                    <li class="{{ request()->routeIs('customer_status.*') ? 'active' : '' }}">
-                        <a href="{{ route('customer_status.index') }}" class="nav-link">
-                            <i class="bi bi-building"></i>
-                            <span>Quản lý Tình trạng khách hàng</span>
-                        </a>
-                    </li>
+                    @if(auth()->user()->hasPermission('product_categories.view-any'))
+                        <li class="{{ request()->routeIs('product_categories.*') ? 'active' : '' }}">
+                            <a href="{{ route('product_categories.index') }}" class="nav-link">
+                                <i class="bi bi-building"></i>
+                                <span>Quản lý Danh mục sản phẩm</span>
+                            </a>
+                        </li>
+                    @endif
 
-                    <!-- Province Management -->
-                    <li class="{{ request()->routeIs('provinces.*') ? 'active' : '' }}">
-                        <a href="{{ route('provinces.index') }}" class="nav-link">
-                            <i class="bi bi-geo-alt"></i>
-                            <span>Quản lý Tỉnh/Thành</span>
-                        </a>
-                    </li>
+                    @if(auth()->user()->hasPermission('sale_users.view-any'))
+                        <li class="{{ request()->routeIs('sale_users.*') ? 'active' : '' }}">
+                            <a href="{{ route('sale_users.index') }}" class="nav-link">
+                                <i class="bi bi-people-fill"></i>
+                                <span>Quản lý Sale user</span>
+                            </a>
+                        </li>
+                    @endif
 
-                    <!-- Customer Type Management -->
-                    <li class="{{ request()->routeIs('customer_types.*') ? 'active' : '' }}">
-                        <a href="{{ route('customer_types.index') }}" class="nav-link">
-                            <i class="bi bi-tags"></i>
-                            <span>Quản lý Loại khách hàng</span>
-                        </a>
-                    </li>
+                    @if(auth()->user()->hasPermission('showrooms.view-any'))
+                        <li class="{{ request()->routeIs('showrooms.*') ? 'active' : '' }}">
+                            <a href="{{ route('showrooms.index') }}" class="nav-link">
+                                <i class="bi bi-building"></i>
+                                <span>Quản lý Showroom</span>
+                            </a>
+                        </li>
+                    @endif
 
-                    <!-- Support Channel Management -->
-                    <li class="{{ request()->routeIs('support-channels.*') ? 'active' : '' }}">
-                        <a href="{{ route('support-channels.index') }}" class="nav-link">
-                            <i class="bi bi-headset"></i>
-                            <span>Quản lý Kênh hỗ trợ</span>
-                        </a>
-                    </li>
+                    @if(auth()->user()->hasPermission('customer_statuses.view-any'))
+                        <li class="{{ request()->routeIs('customer_status.*') ? 'active' : '' }}">
+                            <a href="{{ route('customer_status.index') }}" class="nav-link">
+                                <i class="bi bi-building"></i>
+                                <span>Quản lý Tình trạng khách hàng</span>
+                            </a>
+                        </li>
+                    @endif
 
-                    
+                    @if(auth()->user()->hasPermission('provinces.view-any'))
+                        <li class="{{ request()->routeIs('provinces.*') ? 'active' : '' }}">
+                            <a href="{{ route('provinces.index') }}" class="nav-link">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>Quản lý Tỉnh/Thành</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    @if(auth()->user()->hasPermission('customer_types.view-any'))
+                        <li class="{{ request()->routeIs('customer_types.*') ? 'active' : '' }}">
+                            <a href="{{ route('customer_types.index') }}" class="nav-link">
+                                <i class="bi bi-tags"></i>
+                                <span>Quản lý Loại khách hàng</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    @if(auth()->user()->hasPermission('support-channels.view-any'))
+                        <li class="{{ request()->routeIs('support-channels.*') ? 'active' : '' }}">
+                            <a href="{{ route('support-channels.index') }}" class="nav-link">
+                                <i class="bi bi-headset"></i>
+                                <span>Quản lý Kênh hỗ trợ</span>
+                            </a>
+                        </li>
+                    @endif
+
                     <li class="mt-3">
                         <a href="#" class="nav-link">
                             <i class="bi bi-gear-fill"></i>
                             <span>Cài đặt</span>
                         </a>
                     </li>
+
                     <li>
                         <a href="#" class="nav-link">
                             <i class="bi bi-question-circle-fill"></i>
