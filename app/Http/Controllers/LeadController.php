@@ -84,25 +84,6 @@ class LeadController extends Controller
                 ]);
             }
 
-            // 2. 🔥 ĐOẠN XỬ LÝ PHÂN QUYỀN HIỂN THỊ DỮ LIỆU
-                $user = auth()->user(); // Lấy thông tin user đang đăng nhập
-
-                // Nếu KHÔNG PHẢI là admin và KHÔNG PHẢI là manager -> Ép điều kiện lọc theo chính User đó
-                if ($user->role !== 'admin' && $user->role !== 'manager') {
-                    
-                    // Lọc cho Lead Trực tiếp (Type 1): Chỉ lấy lead do user này phụ trách hoặc hỗ trợ
-                    $query->where(function($q) use ($user) {
-                        $q->where('sale_information_id', $user->id)
-                        ->orWhere('sale_support_id', $user->id);
-                    });
-
-                    // Lọc cho Lead Online (Type 2): Tương tự, chỉ lấy lead của chính họ
-                    $queryOnline->where(function($q) use ($user) {
-                        $q->where('sale_information_id', $user->id)
-                        ->orWhere('sale_support_id', $user->id);
-                    });
-                }
-
             if ($request->current_status) {
                 $query->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
                 $queryOnline->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
