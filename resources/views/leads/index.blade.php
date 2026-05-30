@@ -359,12 +359,28 @@
                                                 @endforeach
                                             </select>
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             <span class="editable-text" data-id="{{ $lead->id }}" data-field="note">
                                                 {{ $lead->note ?? '-' }}
                                             </span>
                                             <input type="text" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="note" value="{{ $lead->note }}">
-                                        </td>            
+                                        </td>   -->
+                                        
+                                        <td>
+                                            @if($lead->note)
+                                                <small class="d-inline-block text-truncate" 
+                                                    style="max-width: 150px;" 
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="top" 
+                                                    title="{{ $lead->note }}">
+                                                    {{ $lead->note }}
+                                                </small>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+
+
                                         <td>
                                             <span class="editable-select" data-id="{{ $lead->id }}" data-field="sale_information_id">
                                                 {{ $lead->saleInformation ? $lead->saleInformation->name : '-' }}
