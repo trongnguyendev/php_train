@@ -28,7 +28,7 @@ class ReportDailyController extends Controller
             ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
             ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
             ->whereDate('leads.first_interaction_date', $today)
-            ->where('lead_type', 1)
+            
             ->select(
                 'sale_users.id',
                 'sale_users.name as sale_name',
@@ -112,7 +112,7 @@ class ReportDailyController extends Controller
                 ->join('sale_users', 'sale_users.id', '=', 'leads.sale_information_id')
                 ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
                 ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
-                ->where('lead_type', 1)
+               
                 ->whereBetween('leads.first_interaction_date', [$from, $to])
                 ->select(
                     'sale_users.id',
