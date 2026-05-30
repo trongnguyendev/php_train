@@ -206,6 +206,21 @@
     background: #e0e7ff;
 }
 
+/* Ensure horizontal scrolling for wide tables rendered in layout */
+.main-content {
+    overflow-x: auto;
+}
+
+.table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive table {
+    white-space: nowrap;
+    min-width: max-content;
+}
+
 /* Form styles */
 .form-control:focus {
     border-color: #667eea;
