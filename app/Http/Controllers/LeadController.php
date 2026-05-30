@@ -195,20 +195,14 @@ class LeadController extends Controller
     {
         Gate::authorize('create', Lead::class);
 
-        $rules = [
-            'phone' => 'required|array|min:1', 
-            'phone.*' => [
-                'required',
-                'string',
-                'regex:/^(03|05|07|08|09)[0-9]{8}$/' 
-            ],
-        ]; $messages = [
-            'phone.*.required' => 'Vui lòng không để trống ô số điện thoại.',
-            'phone.*.regex'    => 'Số điện thoại :value không đúng định dạng (phải có 10 số và bắt đầu bằng 03,05,07,08,09).',
-        ];
-        
         if ($request->lead_type == 1) {
             $rules =  [
+                'phone' => 'required|array|min:1', 
+                    'phone.*' => [
+                        'required',
+                        'string',
+                        'regex:/^(03|05|07|08|09)[0-9]{8}$/'
+                    ],
                 'customer_type_id' => 'required',
                 'first_interaction_date' => 'required|date',
                 'name' => 'required|string',
@@ -218,6 +212,8 @@ class LeadController extends Controller
                 'sale_information_id' => 'required',
                 'note' => 'required',
             ];$messages = [
+                'phone.*.required' => 'Vui lòng không để trống ô số điện thoại.',
+                'phone.*.regex'    => 'Số điện thoại :value không đúng định dạng (phải có 10 số và bắt đầu bằng 03,05,07,08,09).',
                 'showroom_id.required_if' => 'Vui lòng chọn Showroom khi Lead là Trực tiếp.',
                 'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
                 'first_interaction_date.required' => 'Vui lòng nhập Ngày tương tác đầu tiên.',
@@ -231,6 +227,12 @@ class LeadController extends Controller
         }
         if ($request->lead_type == 2) {
             $rules =  [
+                'phone' => 'required|array|min:1', 
+                    'phone.*' => [
+                        'required',
+                        'string',
+                        'regex:/^(03|05|07|08|09)[0-9]{8}$/'
+                    ],
                 'customer_type_id' => 'required',
                 'name' => 'required|string',
                 'first_interaction_date' => 'required|date',
@@ -243,6 +245,8 @@ class LeadController extends Controller
                 'source_id' => 'required',
                 'lead_type' => 'required',
             ];$messages = [
+                'phone.*.required' => 'Vui lòng không để trống ô số điện thoại.',
+                'phone.*.regex'    => 'Số điện thoại :value không đúng định dạng (phải có 10 số và bắt đầu bằng 03,05,07,08,09).',
                 'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
                 'first_interaction_date.required' => 'Vui lòng nhập Ngày tương tác đầu tiên.',
                 'name.required' => 'Vui lòng nhập Tên khách hàng.',
@@ -436,21 +440,23 @@ class LeadController extends Controller
                 'string',
                 'regex:/^(03|05|07|08|09)[0-9]{8}$/' 
             ],
-        ]; $messages = [
-            'phone.*.required' => 'Vui lòng không để trống ô số điện thoại.',
-            'phone.*.regex'    => 'Số điện thoại :value không đúng định dạng (phải có 10 số và bắt đầu bằng 03,05,07,08,09).',
-        ];  
-        
-        $rules = [
             'first_interaction_date' => 'required|date',
             'name' => 'required|string',
-            // 'province_id' => 'required',
-            // 'address' => 'required',
             'customer_type_id' => 'required',
             'product_category_ids' => 'required|array|min:1',
             'note' => 'required',
             'lead_type' => 'required',
             'sale_support_id' => 'nullable',
+        ]; 
+        
+        $messages = [
+            'phone.*.required' => 'Vui lòng không để trống ô số điện thoại.',
+            'phone.*.regex'    => 'Số điện thoại :value không đúng định dạng (phải có 10 số và bắt đầu bằng 03,05,07,08,09).',
+            'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
+            'first_interaction_date.required' => 'Vui lòng nhập Ngày tương tác đầu tiên.',
+            'name.required' => 'Vui lòng nhập Tên khách hàng.',
+            'note.required' => 'Vui lòng nhập Ghi chú về khách hàng.',
+            'customer_type_id.required' => 'Vui lòng chọn Loại khách hàng.',
         ];
 
         $orderValue = 0;
