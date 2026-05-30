@@ -443,7 +443,7 @@ class LeadController extends Controller
             'first_interaction_date' => 'required|date',
             'name' => 'required|string',
             'customer_type_id' => 'required',
-            'product_category_ids' => 'required|array|min:1',
+            'productCategories' => 'required|array|min:1',
             'note' => 'required',
             'lead_type' => 'required',
             'sale_support_id' => 'nullable',
@@ -452,7 +452,7 @@ class LeadController extends Controller
         $messages = [
             'phone.*.required' => 'Vui lòng không để trống ô số điện thoại.',
             'phone.*.regex'    => 'Số điện thoại :value không đúng định dạng (phải có 10 số và bắt đầu bằng 03,05,07,08,09).',
-            'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
+            'productCategories.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
             'first_interaction_date.required' => 'Vui lòng nhập Ngày tương tác đầu tiên.',
             'name.required' => 'Vui lòng nhập Tên khách hàng.',
             'note.required' => 'Vui lòng nhập Ghi chú về khách hàng.',
