@@ -156,7 +156,7 @@ class LeadController extends Controller
         $number = $count + 1;
 
         $previewCode = 'C' . $today . str_pad($number, 3, '0', STR_PAD_LEFT);
-
+        
 
         Gate::authorize('create', Lead::class);
         $lead = Lead::all();
@@ -194,6 +194,18 @@ class LeadController extends Controller
     public function store(Request $request)
     {
         Gate::authorize('create', Lead::class);
+
+        $rules = [
+            'phone' => 'required|array|min:1', 
+            'phone.*' => [
+                'required',
+                'string',
+                'regex:/^(03|05|07|08|09)[0-9]{8}$/' 
+            ],
+        ]; $messages = [
+            'phone.*.required' => 'Vui lòng không để trống ô số điện thoại.',
+            'phone.*.regex'    => 'Số điện thoại :value không đúng định dạng (phải có 10 số và bắt đầu bằng 03,05,07,08,09).',
+        ];
         
         if ($request->lead_type == 1) {
             $rules =  [
@@ -222,7 +234,6 @@ class LeadController extends Controller
                 'customer_type_id' => 'required',
                 'name' => 'required|string',
                 'first_interaction_date' => 'required|date',
-                'product_category_ids' => 'required|array|min:1',
                 'first_customer_status_id' =>'required_if:lead_type,2',
                 'current_customer_status_id' => 'required',
                 'sale_information_id' => 'required',
@@ -273,6 +284,8 @@ class LeadController extends Controller
                 'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
                 'lead_type' => $request->lead_type
             ]);
+
+            
             $phones = $request->phone ?? [];
 
             // Ép về array nếu là string
@@ -310,6 +323,7 @@ class LeadController extends Controller
                 'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
                 'lead_type' => $request->lead_type
             ]);
+
             $phones = $request->phone ?? [];
 
                 // Ép về array nếu là string
