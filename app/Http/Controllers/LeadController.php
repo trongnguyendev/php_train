@@ -197,9 +197,10 @@ class LeadController extends Controller
 
         if ($request->lead_type == 1) {
             $rules =  [
-                'phone' => 'required|array|min:1', 
+                'phone' => 'nullable|array',
+                'phone.*' => 'array|min:1', 
                     'phone.*' => [
-                        'required',
+                        
                         'string',
                         'size:10',
                         'regex:/^(03|05|07|08|09)[0-9]{8}$/'
@@ -228,7 +229,7 @@ class LeadController extends Controller
         }
         if ($request->lead_type == 2) {
             $rules =  [
-                'phone' => 'required|array|min:1', 
+                'phone' => 'nullable|array', 
                     'phone.*' => [
                         'required',
                         'string',
@@ -249,7 +250,6 @@ class LeadController extends Controller
             ];$messages = [
                 'phone.*.required' => 'Vui lòng không để trống ô số điện thoại.',
                 'phone.*.regex'    => 'Số điện thoại :value không đúng định dạng (phải có 10 số và bắt đầu bằng 03,05,07,08,09).',
-                'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
                 'first_interaction_date.required' => 'Vui lòng nhập Ngày tương tác đầu tiên.',
                 'name.required' => 'Vui lòng nhập Tên khách hàng.',
                 'product_category_ids.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
@@ -436,7 +436,7 @@ class LeadController extends Controller
     {
         Gate::authorize('update', $lead);
         $rules = [
-            'phone' => 'required|array|min:1', 
+            'phone' => 'nullable|array', 
             'phone.*' => [
                 'required',
                 'string',
