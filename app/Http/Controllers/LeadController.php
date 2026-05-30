@@ -66,14 +66,14 @@ class LeadController extends Controller
             // --- ĐOẠN PHÂN QUYỀN TRONG CONTROLLER ---
             $user = auth()->user(); 
 
-            // Dùng trường slug để check: Nếu role là admin hoặc manager thì xem được TẤT CẢ
-            if ($user->role && in_array($user->role->slug, ['admin', 'manager'])) {
+            // 🔥 CHECK QUYỀN BẢNG TRUNG GIAN: Nếu user có role là 'admin' hoặc 'manager'
+            if ($user->roles()->whereIn('slug', ['admin', 'manager'])->exists()) {
                 
                 // Quản lý & Admin: Load toàn bộ nhân viên để sếp lựa chọn lọc
                 $saleUsers = User::all();
 
             } else {
-                // Nếu là nhân viên thường (Staff, Sale...)
+                // Nếu là nhân viên thường (Staff, Sale...) không có quyền sếp
                 
                 // Ô lọc nhân viên chỉ hiển thị chính họ
                 $saleUsers = User::where('id', $user->id)->get();
