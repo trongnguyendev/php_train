@@ -142,8 +142,9 @@ class LeadController extends Controller
             }
 
             
-            $leads = $query->where('lead_type', 1)->get();
-            $leadsOnline = $queryOnline->where('lead_type', 2)->get();
+            // Paginate results to improve performance (30 rows per page)
+            $leads = $query->where('lead_type', 1)->latest()->paginate(30, ['*'], 'direct_page');
+            $leadsOnline = $queryOnline->where('lead_type', 2)->latest()->paginate(30, ['*'], 'online_page');
 
             // Thông báo khách online cần chăm sóc hôm nay
             // $today = now()->toDateString();
@@ -156,8 +157,11 @@ class LeadController extends Controller
             // thông báo chăm khách online hôm nay
             $today = today()->toDateString();
 
+            // get IDs from current page of online leads to compute today's care notifications
+            $onlineLeadIds = $leadsOnline->pluck('id')->toArray();
+
             $careOnline = LeadTakeCare::with('lead')
-                ->whereIn('lead_id', $leadsOnline->pluck('id'))
+                ->whereIn('lead_id', $onlineLeadIds)
                 ->whereDate('take_care_date', $today)
                 ->get();
 

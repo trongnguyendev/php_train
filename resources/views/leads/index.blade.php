@@ -170,13 +170,13 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="online-tab" data-bs-toggle="tab" data-bs-target="#online-pane" type="button" role="tab" aria-controls="online-pane" aria-selected="true">
                     <i class="bi bi-globe me-2"></i>Lead Online
-                    <span class="badge bg-info ms-2">{{ $leadsOnline->count() }}</span>
+                    <span class="badge bg-info ms-2">{{ $leadsOnline->total() }}</span>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="direct-tab" data-bs-toggle="tab" data-bs-target="#direct-pane" type="button" role="tab" aria-controls="direct-pane" aria-selected="false">
                     <i class="bi bi-telephone me-2"></i>Lead Trực tiếp
-                    <span class="badge bg-warning ms-2">{{ $leads->count() }}</span>
+                    <span class="badge bg-warning ms-2">{{ $leads->total() }}</span>
                 </button>
             </li>
         </ul>
@@ -551,6 +551,11 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="p-3">
+                        {{ $leadsOnline->appends(request()->query())->links() }}
+                    </div>
+
                 @else
                     <div class="text-center py-5">
                         <i class="bi bi-globe display-1 text-muted"></i>
@@ -759,6 +764,11 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="p-3">
+                        {{ $leads->appends(request()->query())->links() }}
+                    </div>
+
                 @else
                     <div class="text-center py-5">
                         <i class="bi bi-telephone display-1 text-muted"></i>
