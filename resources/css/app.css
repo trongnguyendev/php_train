@@ -947,3 +947,19 @@ body {
     text-align: left;
     font-weight: 600;
 }
+
+/* Ensure horizontal scrolling for wide tables */
+.main-content {
+    /* allow horizontal scroll when content is wider than viewport */
+    overflow-x: auto;
+}
+
+.table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive table {
+    white-space: nowrap;
+    min-width: max-content;
+}

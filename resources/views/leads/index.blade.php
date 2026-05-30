@@ -289,7 +289,7 @@
                                             </span>
                                             <input type="text" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="address" value="{{ $lead->address }}">
                                         </td>
-<!-- 
+                                        <!-- 
                                          <td>
                                             <span class="editable-select" data-id="{{ $lead->id }}" data-field="address">
                                                 {{ $lead->address ?? '-' }}
