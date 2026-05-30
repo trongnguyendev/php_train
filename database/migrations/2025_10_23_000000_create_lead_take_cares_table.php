@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('lead_take_cares', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('lead_id');
-            $table->string('take_care_plan')->nullable();
+            $table->longText('take_care_plan')->nullable();
             $table->date('take_care_date')->nullable();
             $table->text('take_care_result')->nullable();
             $table->timestamps();
