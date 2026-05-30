@@ -12,6 +12,10 @@ class LeadPolicy
      */
     public function viewAny(User $user): bool
     {
+            // 🔥 NOTE QUAN TRỌNG: Nếu là admin hoặc manager thì cho qua cửa index luôn không cần check permission tĩnh
+            if ($user->role === 'admin' || $user->role === 'manager') {
+                return true;
+            }
         return $user->hasPermission('leads.view-any');
     }
 
@@ -19,7 +23,10 @@ class LeadPolicy
      * Determine if the user can view the lead.
      */
     public function view(User $user, Lead $lead): bool
-    {
+    {         // 🔥 NOTE QUAN TRỌNG: Nếu là admin hoặc manager thì cho qua cửa show luôn không cần check permission tĩnh
+         if ($user->role === 'admin' || $user->role === 'manager') {
+            return true;
+        }
         return $user->hasPermission('leads.view');
     }
 

@@ -23,7 +23,7 @@ class LeadController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
+    
         {
             Gate::authorize('viewAny', Lead::class);
             
@@ -167,7 +167,7 @@ class LeadController extends Controller
                 'saleUsers'
             ));
         }
-    }
+    
 
     /**
      * Show the form for creating a new resource.
