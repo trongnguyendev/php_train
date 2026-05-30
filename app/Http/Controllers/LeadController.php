@@ -23,123 +23,123 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
-    {
-        Gate::authorize('viewAny', Lead::class);
-        
-        $query = Lead::with([
-            'province',
-            'customerType',
-            'customerSource',
-            'productCategory',
-            'showroom',
-            'firstStatus',
-            'currentStatus',
-            'saleInformation',
-            'saleSupport',
-            'leadTakeCares',
-            'supportedChannel'
-        ]);
-        $queryOnline = Lead::with([
-            'province',
-            'customerType',
-            'customerSource',
-            'productCategory',
-            'showroom',
-            'firstStatus',
-            'currentStatus',
-            'saleInformation',
-            'saleSupport',
-            'leadTakeCares',
-            'supportedChannel'
-        ]);
-        $customerStatuses = CustomerStatus::all();
-        $productCategories = ProductCategory::all();
-        $customerSources = CustomerSource::all();
-        $customerTypes = CustomerType::all();
-        $firstStatuses = CustomerStatus::all();
-        $currentStatus = CustomerStatus::all();
-        $provinces = Province::all();
-        $supportChannel = SupportChannel::all();
-        $saleUsers = SaleUser::all();
-
-        if ($request->type_phone) {
-        $query->where('phone', 'like', '%' . $request->type_phone . '%');
-        $queryOnline->where('phone', 'like', '%' . $request->type_phone . '%');
-        }
-
-        // if ($request->first_arrival_date) {
-        // $query->where('first_arrival_date', 'like', '%' . $request->first_arrival_date . '%');
-        // $queryOnline->where('first_arrival_date', 'like', '%' . $request->first_arrival_date . '%');
-        // }
-
-        if ($request->form_date && $request->to_date) {
-            $query->whereBetween('first_interaction_date', [
-                $request->form_date,
-                $request->to_date
+        {
+            Gate::authorize('viewAny', Lead::class);
+            
+            $query = Lead::with([
+                'province',
+                'customerType',
+                'customerSource',
+                'productCategory',
+                'showroom',
+                'firstStatus',
+                'currentStatus',
+                'saleInformation',
+                'saleSupport',
+                'leadTakeCares',
+                'supportedChannel'
             ]);
-
-            $queryOnline->whereBetween('first_interaction_date', [
-                $request->form_date,
-                $request->to_date
+            $queryOnline = Lead::with([
+                'province',
+                'customerType',
+                'customerSource',
+                'productCategory',
+                'showroom',
+                'firstStatus',
+                'currentStatus',
+                'saleInformation',
+                'saleSupport',
+                'leadTakeCares',
+                'supportedChannel'
             ]);
-        }
+            $customerStatuses = CustomerStatus::all();
+            $productCategories = ProductCategory::all();
+            $customerSources = CustomerSource::all();
+            $customerTypes = CustomerType::all();
+            $firstStatuses = CustomerStatus::all();
+            $currentStatus = CustomerStatus::all();
+            $provinces = Province::all();
+            $supportChannel = SupportChannel::all();
+            $saleUsers = SaleUser::all();
 
-        if ($request->current_status) {
-            $query->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
-            $queryOnline->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
-        }
-        if ($request->sale_user) {
-            $query->where('sale_support_id', 'like', '%' . $request->sale_user . '%');
-            $queryOnline->where('sale_support_id', 'like', '%' . $request->sale_user . '%');
-        }
+            if ($request->type_phone) {
+            $query->where('phone', 'like', '%' . $request->type_phone . '%');
+            $queryOnline->where('phone', 'like', '%' . $request->type_phone . '%');
+            }
 
-        if ($request->sale_information) {
-            $query->where('sale_information_id', 'like', '%' . $request->sale_information . '%');
-            $queryOnline->where('sale_information_id', 'like', '%' . $request->sale_information . '%');
-        }
+            // if ($request->first_arrival_date) {
+            // $query->where('first_arrival_date', 'like', '%' . $request->first_arrival_date . '%');
+            // $queryOnline->where('first_arrival_date', 'like', '%' . $request->first_arrival_date . '%');
+            // }
 
-        if ($request->productCategories) {
-            $query->whereHas('productCategories', function($q) use ($request) {
-                $q->whereIn('product_category_id', $request->productCategories);
-            });
-            $queryOnline->whereHas('productCategories', function($q) use ($request) {
-                $q->whereIn('product_category_id', $request->productCategories);
-            });
-        }
+            if ($request->form_date && $request->to_date) {
+                $query->whereBetween('first_interaction_date', [
+                    $request->form_date,
+                    $request->to_date
+                ]);
 
-        
-        $leads = $query->where('lead_type', 1)->get();
-        $leadsOnline = $queryOnline->where('lead_type', 2)->get();
+                $queryOnline->whereBetween('first_interaction_date', [
+                    $request->form_date,
+                    $request->to_date
+                ]);
+            }
 
-        // Thông báo khách online cần chăm sóc hôm nay
-        // $today = now()->toDateString();
-        // $careOnline = \App\Models\LeadTakeCare::whereIn('lead_id', $leadsOnline->pluck('id'))
-        //     ->where('take_care_date', $today)
-        //     ->with('lead')
-        //     ->get();
-        // cách 2
+            if ($request->current_status) {
+                $query->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
+                $queryOnline->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
+            }
+            if ($request->sale_user) {
+                $query->where('sale_support_id', 'like', '%' . $request->sale_user . '%');
+                $queryOnline->where('sale_support_id', 'like', '%' . $request->sale_user . '%');
+            }
 
-        // thông báo chăm khách online hôm nay
-        $today = today()->toDateString();
+            if ($request->sale_information) {
+                $query->where('sale_information_id', 'like', '%' . $request->sale_information . '%');
+                $queryOnline->where('sale_information_id', 'like', '%' . $request->sale_information . '%');
+            }
 
-        $careOnline = LeadTakeCare::with('lead')
-            ->whereIn('lead_id', $leadsOnline->pluck('id'))
-            ->whereDate('take_care_date', $today)
-            ->get();
+            if ($request->productCategories) {
+                $query->whereHas('productCategories', function($q) use ($request) {
+                    $q->whereIn('product_category_id', $request->productCategories);
+                });
+                $queryOnline->whereHas('productCategories', function($q) use ($request) {
+                    $q->whereIn('product_category_id', $request->productCategories);
+                });
+            }
 
-        return view('leads.index', compact(
-            'leads',
-            'leadsOnline',
-            'customerStatuses',
-            'productCategories',
-            'customerSources',
-            'customerTypes',
-            'firstStatuses',
-            'provinces',
-            'supportChannel',
-            'careOnline',
-            'saleUsers'
-        ));
+            
+            $leads = $query->where('lead_type', 1)->get();
+            $leadsOnline = $queryOnline->where('lead_type', 2)->get();
+
+            // Thông báo khách online cần chăm sóc hôm nay
+            // $today = now()->toDateString();
+            // $careOnline = \App\Models\LeadTakeCare::whereIn('lead_id', $leadsOnline->pluck('id'))
+            //     ->where('take_care_date', $today)
+            //     ->with('lead')
+            //     ->get();
+            // cách 2
+
+            // thông báo chăm khách online hôm nay
+            $today = today()->toDateString();
+
+            $careOnline = LeadTakeCare::with('lead')
+                ->whereIn('lead_id', $leadsOnline->pluck('id'))
+                ->whereDate('take_care_date', $today)
+                ->get();
+
+            return view('leads.index', compact(
+                'leads',
+                'leadsOnline',
+                'customerStatuses',
+                'productCategories',
+                'customerSources',
+                'customerTypes',
+                'firstStatuses',
+                'provinces',
+                'supportChannel',
+                'careOnline',
+                'saleUsers'
+            ));
         }
     }
 

@@ -10,9 +10,25 @@ class LeadPolicy
     /**
      * Determine if the user can view any leads.
      */
-    public function viewAny(User $user): bool
+    // public function viewAny(User $user): bool
+    // {
+    //     return $user->hasPermission('leads.view-any');
+    // }
+
+        /**
+     * Determine if the user can view the lead.
+     * (Quyền xem chi tiết một Lead cụ thể)
+     */
+    public function viewAny(User $user, Lead $lead): bool
     {
-        return $user->hasPermission('leads.view-any');
+        // 1. Nếu là Quản lý/Admin -> Cho phép xem hết không cần check chủ sở hữu
+        if ($user->role === 'manager' || $user->role === 'admin' || $user->hasPermission('leads.view-all')) {
+            return true;
+        }
+
+        // 2. Nếu là nhân viên thông thường -> Phải có quyền xem cơ bản AND phải là người phụ trách Lead đó
+        return $user->hasPermission('leads.view-any') 
+            && ($user->id === $lead->sale_information_id || $user->id === $lead->sale_support_id);
     }
 
     /**
