@@ -63,6 +63,20 @@ class LeadController extends Controller
             $supportChannel = SupportChannel::all();
             $saleUsers = User::all();
 
+                    // 2. 🔥 PHÂN QUYỀN HIỂN THỊ DANH SÁCH NHÂN VIÊN (Dropdown)
+            $user = auth()->user(); // Lấy user đang đăng nhập
+
+            if ($user->role === 'manager' || $user->role === 'admin') {
+                // Nếu là sếp/quản lý: Lấy toàn bộ danh sách tài khoản để phân bổ Lead
+                $saleInformation = User::all();
+                $saleSupport = User::all();
+            } else {
+                // Nếu là nhân viên thường: Chỉ nhìn thấy duy nhất bản thân họ trong danh sách chọn
+                // Cách này ép trên View họ không thể chọn hoặc gán Lead sang tên người khác
+                $saleInformation = User::where('id', $user->id)->get();
+                $saleSupport = User::where('id', $user->id)->get();
+            }
+
             if ($request->type_phone) {
             $query->where('phone', 'like', '%' . $request->type_phone . '%');
             $queryOnline->where('phone', 'like', '%' . $request->type_phone . '%');
