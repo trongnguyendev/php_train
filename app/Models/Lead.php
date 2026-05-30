@@ -60,11 +60,11 @@ class Lead extends Model
     }
 
     public function saleInformation() { 
-        return $this->belongsTo(SaleUser::class, 'sale_information_id'); 
+        return $this->belongsTo(User::class, 'sale_information_id'); 
     }
 
     public function saleSupport() { 
-        return $this->belongsTo(SaleUser::class, 'sale_support_id'); 
+        return $this->belongsTo(User::class, 'sale_support_id'); 
     }
 
     public function supportedChannel() { 

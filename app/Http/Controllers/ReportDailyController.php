@@ -24,14 +24,14 @@ class ReportDailyController extends Controller
         $today = $date ? Carbon::parse($date)->toDateString() : Carbon::today()->toDateString();
 
         $data = DB::table('leads')
-            ->join('sale_users', 'sale_users.id', '=', 'leads.sale_information_id')
+            ->join('users', 'users.id', '=', 'leads.sale_information_id')
             ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
             ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
             ->whereDate('leads.first_interaction_date', $today)
             
             ->select(
-                'sale_users.id',
-                'sale_users.name as sale_name',
+                'users.id',
+                'users.name as sale_name',
                 \DB::raw('COUNT(leads.id) as total_customers'),
                 \DB::raw('SUM(CASE WHEN leads.customer_type_id = customer_types.id AND customer_types.name = "Khách Hàng Mới"
                 THEN 1 ELSE 0 END) as total_new_customers'),
@@ -56,7 +56,7 @@ class ReportDailyController extends Controller
                 THEN 1 ELSE 0 END) as total_old_locked'),
                 \DB::raw('SUM(leads.order_value) as total_value')
             )
-            ->groupBy('sale_users.id', 'sale_users.name')
+            ->groupBy('users.id', 'users.name')
             ->get();
 
         return view('report_daily.index', compact('data', 'today'));
@@ -109,14 +109,14 @@ class ReportDailyController extends Controller
         $getDataByRange = function ($from, $to) {
 
             return DB::table('leads')
-                ->join('sale_users', 'sale_users.id', '=', 'leads.sale_information_id')
+                ->join('users', 'users.id', '=', 'leads.sale_information_id')
                 ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
                 ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
                
                 ->whereBetween('leads.first_interaction_date', [$from, $to])
                 ->select(
-                    'sale_users.id',
-                    'sale_users.name as sale_name',
+                    'users.id',
+                    'users.name as sale_name',
                     DB::raw('COUNT(leads.id) as total_customers'),
                     DB::raw('SUM(CASE WHEN customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as total_new_customers'),
                     DB::raw('SUM(CASE WHEN customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as total_old_customers'),
@@ -128,7 +128,7 @@ class ReportDailyController extends Controller
                     DB::raw('SUM(CASE WHEN customer_types.name = "Khách Hàng Cũ" AND customer_statuses.name = "Đã Chốt" THEN 1 ELSE 0 END) as total_old_locked'),
                     DB::raw('SUM(leads.order_value) as total_value')
                 )
-                ->groupBy('sale_users.id', 'sale_users.name')
+                ->groupBy('users.id', 'users.name')
                 ->get();
         };
 

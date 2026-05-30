@@ -12,6 +12,7 @@ use App\Models\Showroom;
 use App\Models\CustomerStatus;
 use App\Models\SupportChannel;
 use App\Models\SaleUser;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Phone;
@@ -60,7 +61,7 @@ class LeadController extends Controller
             $currentStatus = CustomerStatus::all();
             $provinces = Province::all();
             $supportChannel = SupportChannel::all();
-            $saleUsers = SaleUser::all();
+            $saleUsers = User::all();
 
             if ($request->type_phone) {
             $query->where('phone', 'like', '%' . $request->type_phone . '%');
@@ -167,8 +168,8 @@ class LeadController extends Controller
         $productCategories = ProductCategory::all();
         $showrooms = Showroom::all();
         $customerStatuses = CustomerStatus::all();
-        $saleInformation = SaleUser::all();
-        $saleSupport = SaleUser::all();
+        $saleInformation = User::all();
+        $saleSupport = User::all();
         $supportChannel = SupportChannel::all();
         
         return view('leads.create', compact(
@@ -407,8 +408,8 @@ class LeadController extends Controller
         $productCategories = ProductCategory::all();
         $showrooms = Showroom::all();
         $customerStatuses = CustomerStatus::all();
-        $saleInformation = SaleUser::all();
-        $saleSupport = SaleUser::all();
+        $saleInformation = User::all();
+        $saleSupport = User::all();
         $supportChannel = SupportChannel::all();
         $phones = Phone::where('phones.lead_id', $lead->id)->get();
         return view('leads.edit', compact(
