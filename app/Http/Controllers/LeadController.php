@@ -64,17 +64,30 @@ class LeadController extends Controller
             $saleUsers = User::all();
 
                     // 2. 🔥 PHÂN QUYỀN HIỂN THỊ DANH SÁCH NHÂN VIÊN (Dropdown)
-            $user = auth()->user(); // Lấy user đang đăng nhập
+           // 1. Khởi tạo Query ban đầu
+            $query = Lead::with($relations);
+            $queryOnline = Lead::with($relations);
+
+            // 2. 🔥 PHÂN QUYỀN CHUẨN THEO USER_ID: Ép điều kiện lọc vào Query chính
+            $user = auth()->user(); 
 
             if ($user->role === 'manager' || $user->role === 'admin') {
-                // Nếu là sếp/quản lý: Lấy toàn bộ danh sách tài khoản để phân bổ Lead
-                $saleInformation = User::all();
-                $saleSupport = User::all();
+                // Quản lý/Admin: Thấy hết danh sách nhân viên để chọn lọc trên giao diện
+                $saleUsers = User::all();
             } else {
-                // Nếu là nhân viên thường: Chỉ nhìn thấy duy nhất bản thân họ trong danh sách chọn
-                // Cách này ép trên View họ không thể chọn hoặc gán Lead sang tên người khác
-                $saleInformation = User::where('id', $user->id)->get();
-                $saleSupport = User::where('id', $user->id)->get();
+                // Nhân viên thường: Ô lọc nhân viên chỉ thấy chính họ
+                $saleUsers = User::where('id', $user->id)->get();
+
+                // 🔥 ÉP ĐIỀU KIỆN LỌC: Đối chiếu user_id trực tiếp, không cần JOIN bảng
+                $query->where(function($q) use ($user) {
+                    $q->where('sale_information_id', $user->id)
+                    ->orWhere('sale_support_id', $user->id);
+                });
+
+                $queryOnline->where(function($q) use ($user) {
+                    $q->where('sale_information_id', $user->id)
+                    ->orWhere('sale_support_id', $user->id);
+                });
             }
 
             if ($request->type_phone) {
