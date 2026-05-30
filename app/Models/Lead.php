@@ -84,19 +84,34 @@ class Lead extends Model
         return $this->hasMany(Phone::class);
     }
 
+
     protected static function booted()
     {
         static::creating(function ($lead) {
+            // Sử dụng Database Transaction và Lock để chống trùng lặp tuyệt đối
+            DB::transaction(function () use ($lead) {
+                $today = Carbon::now()->format('dmy'); // Định dạng: 300526
+                $prefix = 'C' . $today; // C300526
 
-            $today = Carbon::now()->format('dmy');
+                // Tìm mã lớn nhất trong ngày hôm nay và khóa dòng đó lại để xử lý
+                $lastLead = DB::table('leads')
+                    ->where('customer_code', 'like', $prefix . '%')
+                    ->orderBy('customer_code', 'desc')
+                    ->lockForUpdate() 
+                    ->first();
 
-            $count = DB::table('leads')
-                ->whereDate('created_at', Carbon::today())
-                ->count();
+                if ($lastLead) {
+                    // Cắt 3 số cuối của mã lớn nhất hiện tại và chuyển thành số nguyên
+                    $lastNumber = (int) substr($lastLead->customer_code, -3);
+                    $number = $lastNumber + 1;
+                } else {
+                    // Nếu chưa có lead nào trong ngày
+                    $number = 1;
+                }
 
-            $number = $count + 1;
-
-            $lead->customer_code = 'C' . $today . str_pad($number, 3, '0', STR_PAD_LEFT);
+                // Gán mã hoàn chỉnh vào model
+                $lead->customer_code = $prefix . str_pad($number, 3, '0', STR_PAD_LEFT);
+            });
         });
     }
 }
