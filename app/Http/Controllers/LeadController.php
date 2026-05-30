@@ -458,6 +458,7 @@ class LeadController extends Controller
             'note.required' => 'Vui lòng nhập Ghi chú về khách hàng.',
             'customer_type_id.required' => 'Vui lòng chọn Loại khách hàng.',
         ];
+        $request->validate($rules, $messages);
 
         $orderValue = 0;
         if ($request->order_value) {
