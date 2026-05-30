@@ -551,6 +551,16 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="d-flex justify-content-between align-items-center p-3">
+                        <div class="text-muted">
+                            Hiển thị {{ $leadsOnline->firstItem() ?: 0 }} - {{ $leadsOnline->lastItem() ?: 0 }} trên {{ $leadsOnline->total() }} kết quả
+                        </div>
+                        <div>
+                            {!! $leadsOnline->appends(request()->query())->links('pagination::bootstrap-5') !!}
+                        </div>
+                    </div>
+
                 @else
                     <div class="text-center py-5">
                         <i class="bi bi-globe display-1 text-muted"></i>
@@ -759,6 +769,16 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="d-flex justify-content-between align-items-center p-3">
+                        <div class="text-muted">
+                            Hiển thị {{ $leads->firstItem() ?: 0 }} - {{ $leads->lastItem() ?: 0 }} trên {{ $leads->total() }} kết quả
+                        </div>
+                        <div>
+                            {!! $leads->appends(request()->query())->links('pagination::bootstrap-5') !!}
+                        </div>
+                    </div>
+
                 @else
                     <div class="text-center py-5">
                         <i class="bi bi-telephone display-1 text-muted"></i>
