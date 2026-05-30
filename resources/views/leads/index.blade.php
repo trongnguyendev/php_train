@@ -656,9 +656,22 @@
                                         </td>
                                        
 
-                                        <td>
+                                        <!-- <td>
                                             @if($lead->note)
                                                 <small>{{ $lead->note }}</small>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td> -->
+                                        <td>
+                                            @if($lead->note)
+                                                <small class="d-inline-block text-truncate" 
+                                                    style="max-width: 150px;" 
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="top" 
+                                                    title="{{ $lead->note }}">
+                                                    {{ $lead->note }}
+                                                </small>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
@@ -961,6 +974,13 @@ function copyAndStop(event, element, text) {
         window.location.href = element.href;
     });
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+});
 </script>
 
 @endpush
