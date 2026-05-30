@@ -201,6 +201,7 @@ class LeadController extends Controller
                     'phone.*' => [
                         'required',
                         'string',
+                        'size:10',
                         'regex:/^(03|05|07|08|09)[0-9]{8}$/'
                     ],
                 'customer_type_id' => 'required',
@@ -231,6 +232,7 @@ class LeadController extends Controller
                     'phone.*' => [
                         'required',
                         'string',
+                        'size:10',
                         'regex:/^(03|05|07|08|09)[0-9]{8}$/'
                     ],
                 'customer_type_id' => 'required',
@@ -438,6 +440,7 @@ class LeadController extends Controller
             'phone.*' => [
                 'required',
                 'string',
+                'size:10',
                 'regex:/^(03|05|07|08|09)[0-9]{8}$/' 
             ],
             'first_interaction_date' => 'required|date',
