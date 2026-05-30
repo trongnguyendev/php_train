@@ -193,7 +193,7 @@
                         <table class="table table-hover mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th style="min-width: 60px;">ID</th>
+                                    <th style="min-width: 60px;">Mã Khách Hàng</th>
                                     <th style="min-width: 120px;">Ngày tương tác đầu tiên</th>
                                     <th style="min-width: 200px;">Tên KH</th>
                                     <th style="min-width: 120px;">Điện thoại</th>
@@ -227,7 +227,7 @@
                                 @foreach ($leadsOnline as $lead)
                                     <tr>
                                         <td>
-                                            <span class="badge bg-info">#{{ $lead->id }}</span>
+                                            <span class="badge bg-info">{{ $lead->customer_code }}</span>
                                         </td>
                                         <td>
                                             <small class="text-muted">{{ \Carbon\Carbon::parse($lead->first_interaction_date)->format('d/m/Y') }}</small>

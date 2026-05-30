@@ -96,7 +96,7 @@ class Lead extends Model
 
             $number = $count + 1;
 
-            $lead->customer_code = 'C' . $today . '-' . str_pad($number, 3, '0', STR_PAD_LEFT);
+            $lead->customer_code = 'C' . $today . str_pad($number, 3, '0', STR_PAD_LEFT);
         });
     }
 }
