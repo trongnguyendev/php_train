@@ -371,7 +371,7 @@
                                                 <small class="d-inline-block text-truncate" 
                                                     style="max-width: 150px; cursor: pointer;" 
                                                     data-bs-toggle="tooltip" 
-                                                    data-bs-placement="top" 
+                                                    data-bs-placement="right" 
                                                     title="{{ $lead->note }}">
                                                     {{ $lead->note }}
                                                 </small>
@@ -684,7 +684,7 @@
                                                 <small class="d-inline-block text-truncate" 
                                                     style="max-width: 150px; cursor: pointer;" 
                                                     data-bs-toggle="tooltip" 
-                                                    data-bs-placement="top" 
+                                                    data-bs-placement="right" 
                                                     title="{{ $lead->note }}">
                                                     {{ $lead->note }}
                                                 </small>
