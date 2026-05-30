@@ -991,17 +991,11 @@ function copyAndStop(event, element, text) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Kích hoạt Tooltip tự động cho cả các phần tử sinh ra sau này bằng AJAX
-    document.body.addEventListener('mouseover', function(event) {
-        var target = event.target.closest('[data-bs-toggle="tooltip"]');
-        if (target && !target.classList.contains('tooltip-initialized')) {
-            new bootstrap.Tooltip(target);
-            target.classList.add('tooltip-initialized');
-            // Kích hoạt ngay lập tức cho lần di chuột đầu tiên
-            var tooltipInstance = bootstrap.Tooltip.getInstance(target);
-            if (tooltipInstance) tooltipInstance.show();
-        }
+$(document).ready(function() {
+    // Tự động kích hoạt Tooltip khi di chuột vào phần tử (Kể cả phần tử mới sinh ra do AJAX)
+    $('body').tooltip({
+        selector: '[data-bs-toggle="tooltip"]',
+        trigger: 'hover'
     });
 });
 </script>
