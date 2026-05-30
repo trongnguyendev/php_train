@@ -992,10 +992,23 @@ function copyAndStop(event, element, text) {
 }
 
 $(document).ready(function() {
-    // Tự động kích hoạt Tooltip khi di chuột vào phần tử (Kể cả phần tử mới sinh ra do AJAX)
+    // Cấu hình trigger là 'manual' để tự kiểm soát bằng code
     $('body').tooltip({
         selector: '[data-bs-toggle="tooltip"]',
-        trigger: 'hover'
+        trigger: 'manual' 
+    });
+
+    // Lắng nghe sự kiện nhấp đúp chuột (dblclick) trên toàn bộ trang
+    $('body').on('dblclick', '[data-bs-toggle="tooltip"]', function() {
+        // Toggle (Bật/Tắt) tooltip khi double click
+        $(this).tooltip('toggle');
+    });
+
+    // Tự động ẩn tooltip nếu người dùng click ra ngoài khu vực ghi chú
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('[data-bs-toggle="tooltip"]').length) {
+            $('[data-bs-toggle="tooltip"]').tooltip('hide');
+        }
     });
 });
 </script>
