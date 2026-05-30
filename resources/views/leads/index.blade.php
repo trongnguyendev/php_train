@@ -369,7 +369,7 @@
                                         <td>
                                             @if($lead->note)
                                                 <small class="d-inline-block text-truncate" 
-                                                    style="max-width: 150px;" 
+                                                    style="max-width: 150px; cursor: pointer;" 
                                                     data-bs-toggle="tooltip" 
                                                     data-bs-placement="top" 
                                                     title="{{ $lead->note }}">
@@ -682,7 +682,7 @@
                                         <td>
                                             @if($lead->note)
                                                 <small class="d-inline-block text-truncate" 
-                                                    style="max-width: 150px;" 
+                                                    style="max-width: 150px; cursor: pointer;" 
                                                     data-bs-toggle="tooltip" 
                                                     data-bs-placement="top" 
                                                     title="{{ $lead->note }}">
