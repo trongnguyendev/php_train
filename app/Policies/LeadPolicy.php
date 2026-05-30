@@ -13,9 +13,9 @@ class LeadPolicy
     public function viewAny(User $user): bool
     {
             // 🔥 NOTE QUAN TRỌNG: Nếu là admin hoặc manager thì cho qua cửa index luôn không cần check permission tĩnh
-            if ($user->role === 'admin' || $user->role === 'manager') {
-                return true;
-            }
+        if ($user->role && in_array($user->role->slug, ['admin', 'manager'])) {
+            return true;
+        }
         return $user->hasPermission('leads.view-any');
     }
 
@@ -24,7 +24,7 @@ class LeadPolicy
      */
     public function view(User $user, Lead $lead): bool
     {         // 🔥 NOTE QUAN TRỌNG: Nếu là admin hoặc manager thì cho qua cửa show luôn không cần check permission tĩnh
-         if ($user->role === 'admin' || $user->role === 'manager') {
+        if ($user->role && in_array($user->role->slug, ['admin', 'manager'])) {
             return true;
         }
         return $user->hasPermission('leads.view');
@@ -35,6 +35,9 @@ class LeadPolicy
      */
     public function create(User $user): bool
     {
+        if ($user->role && in_array($user->role->slug, ['admin', 'manager'])) {
+            return true;
+        }   
         return $user->hasPermission('leads.create');
     }
 
@@ -43,6 +46,9 @@ class LeadPolicy
      */
     public function update(User $user, Lead $lead): bool
     {
+        if ($user->role && in_array($user->role->slug, ['admin', 'manager'])) {
+            return true;
+        }
         return $user->hasPermission('leads.update');
     }
 
@@ -51,6 +57,9 @@ class LeadPolicy
      */
     public function delete(User $user, Lead $lead): bool
     {
+        if ($user->role && in_array($user->role->slug, ['admin', 'manager'])) {
+            return true;
+        }
         return $user->hasPermission('leads.delete');
     }
 }
