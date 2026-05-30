@@ -992,10 +992,17 @@ function copyAndStop(event, element, text) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+    // Kích hoạt Tooltip tự động cho cả các phần tử sinh ra sau này bằng AJAX
+    document.body.addEventListener('mouseover', function(event) {
+        var target = event.target.closest('[data-bs-toggle="tooltip"]');
+        if (target && !target.classList.contains('tooltip-initialized')) {
+            new bootstrap.Tooltip(target);
+            target.classList.add('tooltip-initialized');
+            // Kích hoạt ngay lập tức cho lần di chuột đầu tiên
+            var tooltipInstance = bootstrap.Tooltip.getInstance(target);
+            if (tooltipInstance) tooltipInstance.show();
+        }
+    });
 });
 </script>
 
