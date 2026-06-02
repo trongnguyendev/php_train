@@ -206,6 +206,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th style="min-width: 60px;">Mã Khách Hàng</th>
+                                    <th style="min-width: 60px;">Mã Đơn Hàng</th>
                                     <th style="min-width: 120px;">Ngày tương tác đầu tiên</th>
                                     <th style="min-width: 200px;">Tên KH</th>
                                     <th style="min-width: 120px;">Điện thoại</th>
@@ -239,11 +240,20 @@
                                 @foreach ($leadsOnline as $lead)
                                     <tr>
                                         <td>
-                                            <span class="badge bg-info">{{ $lead->customer_code }}</span>
+                                            <span class="badge bg-info">{{ $lead->customerCode->customer_code ?? 'N/A' }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success">
+                                                {{ $lead->order_code }}
+                                            </span>
+                                        </td>
+                                         <td>
+                                            <span class="badge bg-info">{{ $lead->order_code }}</span>
                                         </td>
                                         <td>
                                             <small class="text-muted">{{ \Carbon\Carbon::parse($lead->first_interaction_date)->format('d/m/Y') }}</small>
                                         </td>
+                                        
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="avatar-sm bg-info-light rounded-circle d-flex align-items-center justify-content-center me-2">
@@ -596,6 +606,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th style="min-width: 60px;">Mã Khách Hàng</th>
+                                    <th style="min-width: 60px;">Mã Đơn Hàng</th>
                                     <th style="min-width: 120px;">Ngày</th>
                                     <th style="min-width: 200px;">Tên KH</th>
                                     <th style="min-width: 120px;">Điện thoại</th>
@@ -618,7 +629,10 @@
                                 @foreach ($leads as $lead)
                                     <tr>
                                         <td>
-                                            <span class="badge bg-info">{{ $lead->customer_code }}</span>
+                                            <span class="badge bg-info">{{ $lead->customerCode->customer_code ?? 'N/A' }}</span>
+                                        </td>
+                                         <td>
+                                            <span class="badge bg-info">{{ $lead->order_code }}</span>
                                         </td>
                                         <td>
                                             <small class="text-muted">{{ \Carbon\Carbon::parse($lead->first_interaction_date)->format('d/m/Y') }}</small>
@@ -759,6 +773,9 @@
                                                     title="Chỉnh sửa">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
+                                                <a href="{{ route('leads.create', ['customer_id' => $lead->customer_id]) }}" class="btn btn-sm btn-primary">
+                                                    + Thêm đơn mới cho khách này
+                                                </a>
                                                 <button type="button" 
                                                         class="btn btn-sm btn-outline-danger" 
                                                         title="Xóa"
@@ -766,6 +783,7 @@
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </div>
+                                            
                                             
                                             <!-- Hidden Delete Form -->
                                             <form id="delete-form-{{ $lead->id }}" 

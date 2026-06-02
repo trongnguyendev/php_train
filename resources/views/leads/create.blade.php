@@ -36,7 +36,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <label for="lead_type" class="form-label">
                                 <i class="bi bi-diagram-3 me-1"></i><span class="text-primary fw-bold">Loại Lead</span>
                             </label>
@@ -49,12 +49,22 @@
                             @enderror
                         </div>
                         <!-- Basic Information -->
-                         <div class="col-md-3">
-                            <label class="text-primary fw-bold">Mã khách hàng</label>
-                            <input type="text" class="form-control" value="{{ $previewCode }}" readonly>
-                        </div>
+                        <div class="col-md-4">
+                           <label class="text-primary fw-bold">Mã khách hàng</label>
+                            
+                            <input type="text" class="form-control" value="{{ $previewCustomerCode }}" readonly>
+                            
+                            @if(request()->filled('customer_id'))
+                                <input type="hidden" name="customer_id" value="{{ request('customer_id') }}">
+                            @endif
+                        </div>`
 
                         <div class="col-md-4">
+                            <label class="text-primary fw-bold">Mã đơn hàng</label>
+                            <input type="text" class="form-control" value="{{ $previewOrderCode }}" readonly>
+                        </div>
+
+                        <div class="col-md-6">
                             <label for="first_interaction_date" class="form-label">
                                 <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Ngày tương tác đầu tiên</span>
                             </label>
@@ -66,7 +76,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <label for="name" class="form-label">
                                 <i class="bi bi-person me-1"></i><span class="text-primary fw-bold">Tên khách hàng</span>
                             </label>
@@ -92,7 +102,7 @@
                         </div>
             
 
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="zalo" class="form-label">
                                 <i class="bi bi-chat-dots me-1"></i><span class="text-primary fw-bold">Zalo</span>
                             </label>

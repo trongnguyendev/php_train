@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container-fluid px-4"> 
     <h1 class="h3 mb-4">
         <i class="bi bi-building text-info"></i>
         <span class="text-primary fw-bold">Chi tiết Lead</span>
@@ -11,10 +11,12 @@
             <span class="badge bg-warning ms-2">Trực tiếp</span>
         @endif
     </h1>
-    <div class="card shadow-sm">
+    
+    <div class="card shadow-sm mb-4">
         <div class="card-body">
             @if($lead->lead_type == 1)
-            <p><strong>Mã Khách Hàng:</strong> {{ $lead->customer_code }}</p>
+            <p><strong>Mã Khách Hàng:</strong> {{ $lead->customerCode->customer_code ?? 'N/A' }}</p>
+            <p><strong>Mã đơn hàng:</strong> {{ $lead->order_code }}</p>
             <p><strong>Ngày tương tác đầu tiên:</strong> {{ $lead->first_interaction_date }}</p>
             <p><strong>Tên khách hàng:</strong> {{ $lead->name }}</p>
             <p>
@@ -36,7 +38,8 @@
             @endif
             
             @if($lead->lead_type == 2)
-            <p><strong>ID:</strong> {{ $lead->id }}</p>
+            <p><strong>Mã Khách Hàng:</strong> {{ $lead->customerCode->customer_code ?? 'N/A' }}</p>
+            <p><strong>Mã đơn hàng:</strong> {{ $lead->order_code }}</p>
             <p><strong>Ngày tương tác đầu tiên:</strong> {{ $lead->first_interaction_date }}</p>
             <p><strong>Tên khách hàng:</strong> {{ $lead->name }}</p>
             <p>
@@ -67,9 +70,113 @@
                 </div>
             @endforeach
             @endif
-
         </div>
     </div>
-    <a href="{{ route('leads.index') }}" class="btn btn-secondary mt-3">Quay lại</a>
+
+    @if($lead->customerCode)
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white fw-bold py-3">
+            <i class="bi bi-list-stars text-warning me-1"></i> 
+            Danh sách tất cả đơn hàng của khách hàng này (Mã khách: {{ $lead->customerCode->customer_code }})
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped mb-0 text-nowrap align-middle small">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center">Hành động</th>
+                            <th class="text-center">Chỉnh sửa</th> <th>Mã Đơn Hàng</th>
+                            <th>Loại Lead</th>
+                            <th>Ngày tương tác đầu tiên</th>
+                            <th>Tên khách hàng</th>
+                            <th>Số điện thoại</th>
+                            <th>Tỉnh/Thành phố</th>
+                            <th>Địa chỉ</th>
+                            <th>Zalo</th>
+                            <th>Phân loại KH</th>
+                            <th>Danh mục sản phẩm</th>
+                            <th>Showroom / Nguồn</th>
+                            <th>Tình trạng KH đầu / Kênh hỗ trợ</th>
+                            <th>Ghi chú sale</th>
+                            <th>Sale nhận KH</th>
+                            <th>Sale hỗ trợ</th>
+                            <th>Tình trạng hiện tại</th>
+                            <th>Giá trị đơn</th>
+                            <th>Chuyển TMDT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($lead->customerCode->leads as $allOrder)
+                            <tr class="{{ $allOrder->id == $lead->id ? 'table-warning fw-bold' : '' }}">
+                                <td class="text-center">
+                                    @if($allOrder->id != $lead->id)
+                                        <a href="{{ route('leads.show', $allOrder->id) }}" class="btn btn-sm btn-primary py-0 px-2">
+                                            Xem
+                                        </a>
+                                    @else
+                                        <span class="badge bg-dark text-white">Đang xem</span>
+                                    @endif
+                                </td>
+
+                                <td class="text-center">
+                                    <a href="{{ route('leads.edit', $allOrder->id) }}" class="btn btn-sm btn-warning py-0 px-2">
+                                        <i class="bi bi-pencil-square"></i> Sửa
+                                    </a>
+                                </td>
+
+                                <td>{{ $allOrder->order_code }}</td>
+                                <td>
+                                    @if($allOrder->lead_type == 2)
+                                        <span class="badge bg-info text-dark">Online</span>
+                                    @else
+                                        <span class="badge bg-warning text-dark">Trực tiếp</span>
+                                    @endif
+                                </td>
+                                <td>{{ $allOrder->first_interaction_date }}</td>
+                                <td>{{ $allOrder->name }}</td>
+                                <td>{{ $allOrder->phones->pluck('phone')->implode(', ') ?: '-' }}</td>
+                                <td>{{ $allOrder->province->name ?? '-' }}</td>
+                                <td>{{ $allOrder->address ?? '-' }}</td>
+                                <td>{{ $allOrder->zalo ?? '-' }}</td>
+                                <td>{{ $allOrder->customerType->name ?? '-' }}</td>
+                                <td>{{ $allOrder->productCategories->pluck('name')->implode(', ') ?: '-' }}</td>
+                                <td>
+                                    @if($allOrder->lead_type == 1)
+                                        {{ $allOrder->showroom->name ?? '-' }} (SR)
+                                    @else
+                                        {{ $allOrder->customerSource->name ?? '-' }} (Nguồn)
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($allOrder->lead_type == 1)
+                                        {{ $allOrder->supportedChannel->name ?? '-' }}
+                                    @else
+                                        {{ $allOrder->firstStatus->name ?? '-' }}
+                                    @endif
+                                </td>
+                                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">{{ $allOrder->note ?? '-' }}</td>
+                                <td>{{ $allOrder->saleInformation->name ?? '-' }}</td>
+                                <td>{{ $allOrder->saleSupport->name ?? '-' }}</td>
+                                <td>{{ $allOrder->currentStatus->name ?? '-' }}</td>
+                                <td class="text-danger fw-bold">{{ number_format($allOrder->order_value) }} đ</td>
+                                <td>{{ $allOrder->tmdt ?? '-' }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="20" class="text-center text-muted p-3">Không có đơn hàng nào khác.</td> </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    <div class="mt-2 mb-4">
+        <a href="{{ route('leads.index') }}" class="btn btn-secondary">Quay lại danh sách</a>
+        <a href="{{ route('leads.edit', $lead->id) }}" class="btn btn-warning ms-1">
+            <i class="bi bi-pencil-square"></i> Sửa đơn hiện tại
+        </a>
+    </div>
 </div>
 @endsection

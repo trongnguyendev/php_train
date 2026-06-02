@@ -37,7 +37,11 @@
             @endif
             <div class="col-md-3">
                 <label class="text-primary fw-bold">Mã khách hàng</label>
-                <input type="text" class="form-control" value="{{ $lead->customer_code }}" readonly>
+                <input type="text" class="form-control" value="{{ $lead->customerCode->customer_code ?? 'N/A' }}" readonly>
+            </div>
+            <div class="col-md-3">
+                <label class="text-primary fw-bold">Mã đơn hàng</label>
+                <input type="text" class="form-control" value="{{ $lead->order_code }}" readonly>
             </div>
 
             

@@ -9,6 +9,8 @@ use Carbon\Carbon;
 class Lead extends Model
 {
     protected $fillable = [
+        'customer_id', // 1. THÊM TRƯỜNG NÀY ĐỂ LƯU ID KHÁCH HÀNG TỪ BẢNG CUSTOMER_CODES
+        'order_code',  // 2. ĐỔI TỪ customer_code THÀNH order_code
         'first_interaction_date',
         'name',
         'province_id',
@@ -29,7 +31,14 @@ class Lead extends Model
         'tmdt',
         'lead_type'
     ];
-
+    
+    /**
+     * 3. THÊM MỐI QUAN HỆ: Một Đơn hàng (Lead) sẽ thuộc về một Mã khách hàng nhất định
+     */
+    public function customerCode() 
+    { 
+        return $this->belongsTo(CustomerCode::class, 'customer_id'); 
+    }
 
     public function province() { 
         return $this->belongsTo(Province::class, 'province_id'); 
@@ -85,33 +94,32 @@ class Lead extends Model
     }
 
 
+    /**
+     * 4. SỬA LOGIC TỰ SINH MÃ: Chuyển từ sinh mã khách hàng sang sinh MÃ ĐƠN HÀNG (order_code)
+     */
+    // Trong app/Models/Lead.php
     protected static function booted()
     {
         static::creating(function ($lead) {
-            // Sử dụng Database Transaction và Lock để chống trùng lặp tuyệt đối
             DB::transaction(function () use ($lead) {
-                $today = Carbon::now()->format('dmy'); // Định dạng: 300526
-                $prefix = 'C' . $today; // C300526
-
-                // Tìm mã lớn nhất trong ngày hôm nay và khóa dòng đó lại để xử lý
-                $lastLead = DB::table('leads')
-                    ->where('customer_code', 'like', $prefix . '%')
-                    ->orderBy('customer_code', 'desc')
-                    ->lockForUpdate() 
-                    ->first();
-
-                if ($lastLead) {
-                    // Cắt 3 số cuối của mã lớn nhất hiện tại và chuyển thành số nguyên
-                    $lastNumber = (int) substr($lastLead->customer_code, -3);
-                    $number = $lastNumber + 1;
-                } else {
-                    // Nếu chưa có lead nào trong ngày
-                    $number = 1;
+                
+                // 1. Tìm thông tin mã khách hàng từ customer_id
+                $customer = DB::table('customer_codes')->where('id', $lead->customer_id)->first();
+                
+                if ($customer) {
+                    // 2. Đếm số đơn hiện tại của khách hàng này
+                    $orderCount = DB::table('leads')
+                        ->where('customer_id', $lead->customer_id)
+                        ->count();
+                    
+                    // 3. Đơn tiếp theo tăng lên 1
+                    $nextNumber = $orderCount + 1;
+                    
+                    // Gán mã đơn theo cấu trúc: MãKhách-SốĐơn (Ví dụ: C020626001002)
+                    $lead->order_code = $customer->customer_code . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
                 }
-
-                // Gán mã hoàn chỉnh vào model
-                $lead->customer_code = $prefix . str_pad($number, 3, '0', STR_PAD_LEFT);
             });
         });
     }
 }
+
