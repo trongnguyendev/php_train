@@ -210,15 +210,25 @@
                                         @endif
                                     </span>
                                 </button>
-                                <div class="dropdown-menu w-100 p-2" aria-labelledby="dropdownProductCategoriesCreate" style="max-height: 300px; overflow-y: auto; background-color: #ffffffff; color: #fff;">
-                                    @foreach($productCategories as $cat)
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="product_category_ids[]" id="product_category_{{ $cat->id }}" value="{{ $cat->id }}" {{ (collect(old('product_category_ids', []))->contains($cat->id)) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="product_category_{{ $cat->id }}" style="color: #1215ddff;">
-                                                {{ $cat->name }}
-                                            </label>
-                                        </div>
-                                    @endforeach
+                                
+                                <div class="dropdown-menu w-100 p-2" aria-labelledby="dropdownProductCategoriesCreate" style="max-height: 300px; overflow-y: auto; background-color: #ffffffff;">
+                                    
+                                    <div class="mb-2 position-sticky top-0 bg-white z-index-1">
+                                        <input type="text" id="searchCategoryInput" class="form-control form-control-sm" placeholder="Nhập tên danh mục để tìm...">
+                                    </div>
+                                    <hr class="dropdown-divider">
+
+                                    <div id="categoryList">
+                                        @foreach($productCategories as $cat)
+                                            <div class="form-check category-item">
+                                                <input class="form-check-input" type="checkbox" name="product_category_ids[]" id="product_category_{{ $cat->id }}" value="{{ $cat->id }}" {{ (collect(old('product_category_ids', []))->contains($cat->id)) ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100" for="product_category_{{ $cat->id }}" style="color: #1215ddff; cursor: pointer;">
+                                                    {{ $cat->name }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    
                                 </div>
                             </div>
                             @error('product_category_ids')

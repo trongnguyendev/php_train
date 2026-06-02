@@ -116,7 +116,19 @@
                     @endforeach
                 </select>
             </div>
-
+            <!-- tìm bằng tên khách hàng -->
+            <div class="col-md-3">
+                <label for="customer_name" class="form-label">
+                    <i class="bi bi-person me-1"></i><span class="text-primary fw-bold">Tên Khách Hàng</span>
+                </label>
+                <input type="text" 
+                    name="customer_name" 
+                    id="customer_name" 
+                    class="form-control" 
+                    placeholder="Nhập tên khách hàng cần tìm..." 
+                    value="{{ request('customer_name') }}">
+            </div>
+             <!-- tìm bằng tên khách hàng -->
             <div class="col-md-3">
                 <label class="form-label">
                     <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Danh Mục Sản Phẩm</span>

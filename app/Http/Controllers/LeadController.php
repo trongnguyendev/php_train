@@ -126,6 +126,14 @@ class LeadController extends Controller
                 $query->where('sale_support_id', 'like', '%' . $request->sale_user . '%');
                 $queryOnline->where('sale_support_id', 'like', '%' . $request->sale_user . '%');
             }
+                // tên khách hàng
+            if ($request->customer_name) {
+                // Chuẩn hóa từ khóa về chữ thường
+                $searchTerm = mb_strtolower($request->customer_name, 'UTF-8'); 
+
+                $query->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
+                $queryOnline->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
+            }
 
             if ($request->sale_information) {
                 $query->where('sale_information_id', 'like', '%' . $request->sale_information . '%');
