@@ -547,8 +547,8 @@ class LeadController extends Controller
         $lead->phones()->createMany($phones);
 
         // Lưu nhiều product category khi cập nhật
-        if ($request->has('product_category_ids')) {
-            $lead->productCategories()->sync($request->product_category_ids);
+        if ($request->has('productCategories')) {
+            $lead->productCategories()->sync($request->productCategories);
         }
 
         $leadTakeCare = LeadTakeCare::Where('lead_id', $lead->id)->first();

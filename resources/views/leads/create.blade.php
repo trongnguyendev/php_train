@@ -591,5 +591,51 @@ document.addEventListener('click', function (e) {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('searchCategoryInput');
+    const categoryItems = document.querySelectorAll('.category-item');
+    const selectedBtnText = document.getElementById('selectedProductNamesBtn');
+
+    // 1. Chức năng TÌM KIẾM danh mục
+    searchInput.addEventListener('input', function () {
+        const keyword = this.value.toLowerCase().trim();
+
+        categoryItems.forEach(item => {
+            // Lấy tên danh mục chuyển về chữ thường để so sánh
+            const categoryName = item.querySelector('.form-check-label').textContent.toLowerCase();
+            
+            if (categoryName.includes(keyword)) {
+                item.style.setProperty('display', 'block', 'important'); // Hiện nếu khớp
+            } else {
+                item.style.setProperty('display', 'none', 'important');  // Ẩn nếu không khớp
+            }
+        });
+    });
+
+    // 2. Chức năng CẬP NHẬT tên đã chọn lên nút bấm khi click chọn
+    const checkboxes = document.querySelectorAll('input[name="product_category_ids[]"]');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            let selectedNames = [];
+            
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    // Lấy text của label đi kèm với checkbox đó
+                    const label = document.querySelector(`label[for="${cb.id}"]`);
+                    if (label) selectedNames.push(label.textContent.trim());
+                }
+            });
+
+            // Hiển thị ra nút bấm
+            if (selectedNames.length > 0) {
+                selectedBtnText.textContent = selectedNames.join(', ');
+            } else {
+                selectedBtnText.textContent = 'Chọn danh mục sản phẩm';
+            }
+        });
+    });
+});
+
 </script>
 @endpush
