@@ -247,9 +247,7 @@
                                                 {{ $lead->order_code }}
                                             </span>
                                         </td>
-                                         <td>
-                                            <span class="badge bg-info">{{ $lead->order_code }}</span>
-                                        </td>
+                                    
                                         <td>
                                             <small class="text-muted">{{ \Carbon\Carbon::parse($lead->first_interaction_date)->format('d/m/Y') }}</small>
                                         </td>
@@ -551,6 +549,9 @@
                                                     title="Chỉnh sửa">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
+                                                 <a href="{{ route('leads.create', ['customer_id' => $lead->customer_id]) }}" class="btn btn-sm btn-primary">
+                                                    + Thêm đơn mới
+                                                </a>
                                                 <button type="button" 
                                                         class="btn btn-sm btn-outline-danger" 
                                                         title="Xóa"
@@ -774,7 +775,7 @@
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
                                                 <a href="{{ route('leads.create', ['customer_id' => $lead->customer_id]) }}" class="btn btn-sm btn-primary">
-                                                    + Thêm đơn mới cho khách này
+                                                    + Thêm đơn mới
                                                 </a>
                                                 <button type="button" 
                                                         class="btn btn-sm btn-outline-danger" 

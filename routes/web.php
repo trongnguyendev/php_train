@@ -64,4 +64,53 @@ Route::match(['get','post'], '/potential', [ReportDailyController::class, 'Poten
     ->name('potential.index');
 
 
+    use App\Models\Lead;
+use App\Models\CustomerCode;
+use Illuminate\Support\Facades\DB;
+
+Route::get('/migrate-customer-data', function () {
+    // 1. Lấy toàn bộ các đơn hàng (leads) đang có giá trị customer_code chữ cũ
+    $leads = DB::table('leads')->get();
     
+    $count = 0;
+    
+    DB::beginTransaction();
+    try {
+        foreach ($leads as $lead) {
+            // Nếu đơn hàng này có mã chữ cũ (ví dụ: C020626001)
+            if (!empty($lead->customer_code)) {
+                
+                // 2. Kiểm tra xem mã chữ này đã tồn tại bên bảng customer_codes chưa
+                // Nếu chưa có thì tạo mới, nếu có rồi (khách cũ tạo đơn thứ 2) thì lấy lại bản ghi đó
+                $customer = CustomerCode::firstOrCreate([
+                    'customer_code' => $lead->customer_code
+                ]);
+
+                // 3. Tính toán mã đơn hàng (order_code) mới dựa trên mã khách
+                // Đếm xem khách hàng này đã có bao nhiêu đơn được xử lý trước đó trong vòng lặp rồi
+                $orderCount = DB::table('leads')
+                    ->where('customer_id', $customer->id)
+                    ->count();
+                
+                // Tạo đuôi tăng dần theo khách (Ví dụ: C020626001-01 hoặc C020626001001 tùy bạn muốn nối dấu gạch hay không)
+                $newOrderCode = $customer->customer_code . str_pad($orderCount + 1, 2, '0', STR_PAD_LEFT);
+
+                // 4. Cập nhật lại vào bảng leads (Gán ID mới và đổi order_code)
+                DB::table('leads')
+                    ->where('id', $lead->id)
+                    ->update([
+                        'customer_id' => $customer->id,
+                        'order_code'  => $newOrderCode
+                    ]);
+
+                $count++;
+            }
+        }
+        
+        DB::commit();
+        return "Đã chuyển đổi thành công cấu trúc cho " . $count . " đơn hàng cũ!";
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return "Gặp lỗi trong quá trình chuyển đổi: " . $e->getMessage();
+    }
+});
