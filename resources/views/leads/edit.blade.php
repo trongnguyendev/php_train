@@ -28,8 +28,8 @@
                 <div class="col-md-4 mb-3">
                     <label class="form-label"><span class="text-primary fw-bold">Loại Lead</span></label>
                     <select name="lead_type" class="form-select fw-bold">
-                        <option value="1" {{ $lead->lead_type == 1 ? 'selected' : '' }}>Trực tiếp</option>
-                        <option value="2" {{ $lead->lead_type == 2 ? 'selected' : '' }}>Online</option>
+                        <option value="1" {{ old('lead_type', $lead->lead_type) == 1 ? 'selected' : '' }}>Trực tiếp</option>
+                        <option value="2" {{ old('lead_type', $lead->lead_type) == 2 ? 'selected' : '' }}>Online</option>
                     </select>
                 </div>
             @else
@@ -47,16 +47,12 @@
             
             <div class="col-md-4 mb-3">
                 <label class="form-label"><span class="text-primary fw-bold">Ngày tương tác đầu tiên</span></label>
-                <input type="date" name="first_interaction_date" value="{{ $lead->first_interaction_date }}" class="form-control">
+                <input type="date" name="first_interaction_date" value="{{ old('first_interaction_date', $lead->first_interaction_date) }}" class="form-control">
             </div>
             <div class="col-md-4 mb-3">
                 <label class="form-label"><span class="text-primary fw-bold">Tên khách hàng</span></label>
-                <input type="text" name="name" value="{{ $lead->name }}" class="form-control">
+                <input type="text" name="name" value="{{ old('name', $lead->name) }}" class="form-control">
             </div>
-            <!-- <div class="col-md-4 mb-3">
-                <label class="form-label"><span class="text-primary fw-bold">Số điện thoại</span></label>
-                <input type="text" name="phone" value="{{ $lead->phone }}" class="form-control">
-            </div> -->
 
             <div class="col-md-12 mb-3">
                 <label class="form-label">
@@ -69,21 +65,22 @@
                     </button>
 
                     <div id="phone-wrapper" class="d-flex gap-2 flex-wrap">
-                        {{-- Kiểm tra nếu biến $phones từ Controller có dữ liệu --}}
-                       
-                        @if($phones->isNotEmpty())
+                        {{-- Ưu tiên lấy mảng số điện thoại vừa gửi lỗi từ old('phone') trước --}}
+                        @if(is_array(old('phone')))
+                            @foreach(old('phone') as $oldPhone)
+                                <div class="phone-item d-flex align-items-center gap-1">
+                                    <input type="text" name="phone[]" value="{{ $oldPhone }}" class="form-control" placeholder="Nhập số điện thoại">
+                                    <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
+                                </div>
+                            @endforeach
+                        @elseif($phones->isNotEmpty())
                             @foreach($phones as $phone)
                                 <div class="phone-item d-flex align-items-center gap-1">
-                                    <input type="text" name="phone[]" 
-                                        {{-- Chú ý: $phone ở đây là một Model, bạn phải trỏ đến cột chứa số --}}
-                                        value="{{ $phone->phone}}" 
-                                        class="form-control" 
-                                        placeholder="Nhập số điện thoại">
+                                    <input type="text" name="phone[]" value="{{ $phone->phone }}" class="form-control" placeholder="Nhập số điện thoại">
                                     <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
                                 </div>
                             @endforeach
                         @else
-                            {{-- Nếu chưa có số nào thì hiện 1 ô trống để nhập --}}
                             <div class="phone-item d-flex align-items-center gap-1">
                                 <input type="text" name="phone[]" class="form-control" placeholder="Nhập số điện thoại">
                                 <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
@@ -98,7 +95,7 @@
                     <option value="">-- Chọn Tỉnh / Thành --</option>
                     @foreach($provinces as $province)
                         <option value="{{ $province->id }}" 
-                            {{ $lead->province_id == $province->id ? 'selected' : '' }}>
+                            {{ old('province_id', $lead->province_id) == $province->id ? 'selected' : '' }}>
                             {{ $province->name }}
                         </option>
                     @endforeach
@@ -107,12 +104,12 @@
 
             <div class="col-md-8 mb-3">
                 <label class="form-label"><span class="text-primary fw-bold">Địa chỉ</span></label>
-                <input type="text" name="address" value="{{ $lead->address }}" class="form-control">
+                <input type="text" name="address" value="{{ old('address', $lead->address) }}" class="form-control">
             </div>
 
             <div class="col-md-4 mb-3">
                 <label class="form-label"><span class="text-primary fw-bold">Zalo</span></label>
-                <input type="text" name="zalo" value="{{ $lead->zalo }}" class="form-control">
+                <input type="text" name="zalo" value="{{ old('zalo', $lead->zalo) }}" class="form-control">
             </div>
 
             <div class="col-md-4 mb-3">
@@ -121,7 +118,7 @@
                     <option value="">-- Chọn Phân loại khách hàng --</option>
                     @foreach($customerTypes as $customerType)
                         <option value="{{ $customerType->id }}" 
-                            {{ $lead->customer_type_id == $customerType->id ? 'selected' : '' }}>
+                            {{ old('customer_type_id', $lead->customer_type_id) == $customerType->id ? 'selected' : '' }}>
                             {{ $customerType->name }}
                         </option>
                     @endforeach
@@ -135,7 +132,7 @@
                     <option value="">-- Chọn Nguồn khách hàng --</option>
                     @foreach($customerSources as $customerSource)
                         <option value="{{ $customerSource->id }}" 
-                            {{ $lead->source_id == $customerSource->id ? 'selected' : '' }}>
+                            {{ old('source_id', $lead->source_id) == $customerSource->id ? 'selected' : '' }}>
                             {{ $customerSource->name }}
                         </option>
                     @endforeach
@@ -150,20 +147,14 @@
                 <div class="dropdown">
                     <button class="btn dropdown-toggle w-100" type="button" id="dropdownProductCategoriesEdit" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #fff; color: #0d6efd; border: 1px solid #0d6efd; border-radius: 0.375rem;">
                         <span id="selectedProductNamesEditBtn">
-                            @php
-                                $selectedProductNames = $lead->productCategories->pluck('name')->toArray();
-                            @endphp
-                            @if(count($selectedProductNames))
-                                {{ implode(', ', $selectedProductNames) }}
-                            @else
-                                Chọn danh mục sản phẩm
-                            @endif
+                            Chọn danh mục sản phẩm
                         </span>
                     </button>
                     <div class="dropdown-menu w-100 p-2" aria-labelledby="dropdownProductCategoriesEdit" style="max-height: 300px; overflow-y: auto; background-color: #fff; color: #0d6efd;">
                         @foreach($productCategories as $category)
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="productCategories[]" id="editProductCategory{{ $category->id }}" value="{{ $category->id }}" {{ $lead->productCategories->contains($category->id) ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" name="productCategories[]" id="editProductCategory{{ $category->id }}" value="{{ $category->id }}" 
+                                    {{ in_array($category->id, old('productCategories', $lead->productCategories->pluck('id')->toArray())) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="editProductCategory{{ $category->id }}" style="color: #0d6efd;">
                                     {{ $category->name }}
                                 </label>
@@ -180,7 +171,7 @@
                     <option value="">-- Chọn Showroom --</option>
                     @foreach($showrooms as $showroom)
                         <option value="{{ $showroom->id }}" 
-                            {{ $lead->showroom_id == $showroom->id ? 'selected' : '' }}>
+                            {{ old('showroom_id', $lead->showroom_id) == $showroom->id ? 'selected' : '' }}>
                             {{ $showroom->name }}
                         </option>
                     @endforeach
@@ -195,7 +186,7 @@
                     <option value="">-- Chọn Tình trạng KH ban đầu --</option>
                     @foreach($customerStatuses as $customerStatuse)
                         <option value="{{ $customerStatuse->id }}" 
-                            {{ $lead->first_customer_status_id == $customerStatuse->id ? 'selected' : '' }}>
+                            {{ old('first_customer_status_id', $lead->first_customer_status_id) == $customerStatuse->id ? 'selected' : '' }}>
                             {{ $customerStatuse->name }}
                         </option>
                     @endforeach
@@ -205,7 +196,7 @@
 
             <div class="col-md-8 mb-3">
                 <label class="form-label"><span class="text-primary fw-bold">Ghi chú sale nhận khách</span></label>
-                <textarea name="note" class="form-control" rows="2">{{ $lead->note }}</textarea>
+                <textarea name="note" class="form-control" rows="2">{{ old('note', $lead->note) }}</textarea>
             </div>
 
             <div class="col-md-4 mb-3">
@@ -214,7 +205,7 @@
                     <option value="">-- Chọn Sale nhận KH --</option>
                     @foreach($saleInformation as $saleUser)
                         <option value="{{ $saleUser->id }}" 
-                            {{ $lead->sale_information_id == $saleUser->id ? 'selected' : '' }}>
+                            {{ old('sale_information_id', $lead->sale_information_id) == $saleUser->id ? 'selected' : '' }}>
                             {{ $saleUser->name }}
                         </option>
                     @endforeach
@@ -232,7 +223,7 @@
                         <option value="">-- Chọn Sale hỗ trợ --</option>
                         @foreach($saleSupport as $saleUser)
                             <option value="{{ $saleUser->id }}" 
-                                {{ $lead->sale_support_id == $saleUser->id ? 'selected' : '' }}>
+                                {{ old('sale_support_id', $lead->sale_support_id) == $saleUser->id ? 'selected' : '' }}>
                                 {{ $saleUser->name }}
                             </option>
                         @endforeach
@@ -242,13 +233,13 @@
                         <option value="">-- Chưa có Sale hỗ trợ --</option>
                         @foreach($saleSupport as $saleUser)
                             <option value="{{ $saleUser->id }}" 
-                                {{ $lead->sale_support_id == $saleUser->id ? 'selected' : '' }}>
+                                {{ old('sale_support_id', $lead->sale_support_id) == $saleUser->id ? 'selected' : '' }}>
                                 {{ $saleUser->name }}
                             </option>
                         @endforeach
                     </select>
                     
-                    <input type="hidden" name="sale_support_id" value="{{ $lead->sale_support_id }}">
+                    <input type="hidden" name="sale_support_id" value="{{ old('sale_support_id', $lead->sale_support_id) }}">
                 @endif
             </div>
             
@@ -259,7 +250,7 @@
                     <option value="">-- Chọn Tình trạng KH hiện tại--</option>
                     @foreach($customerStatuses as $customerStatuse)
                         <option value="{{ $customerStatuse->id }}" 
-                            {{ $lead->current_customer_status_id == $customerStatuse->id ? 'selected' : '' }}>
+                            {{ old('current_customer_status_id', $lead->current_customer_status_id) == $customerStatuse->id ? 'selected' : '' }}>
                             {{ $customerStatuse->name }}
                         </option>
                     @endforeach
@@ -272,14 +263,12 @@
                     <span class="text-primary fw-bold">Giá trị đơn hàng</span>
                 </label>
 
-                <!-- Input hiển thị có format -->
                 <input type="text" id="order_value_display" 
-                    value="{{ number_format($lead->order_value, 0, ',', '.') }}" 
+                    value="{{ number_format(old('order_value', $lead->order_value), 0, ',', '.') }}" 
                     class="form-control">
 
-                <!-- Hidden input gửi lên server -->
                 <input type="hidden" name="order_value" id="order_value" 
-                    value="{{ $lead->order_value }}">
+                    value="{{ old('order_value', $lead->order_value) }}">
             </div>
            
 
@@ -290,7 +279,7 @@
                     <option value="">-- Chọn Nguồn khách hàng --</option>
                     @foreach($supportChannel as $Channel)
                         <option value="{{ $Channel->id }}" 
-                            {{ $lead->support_channel_id == $Channel->id ? 'selected' : '' }}>
+                            {{ old('support_channel_id', $lead->support_channel_id) == $Channel->id ? 'selected' : '' }}>
                             {{ $Channel->name }}
                         </option>
                     @endforeach
@@ -301,7 +290,7 @@
             @if($lead->lead_type != 1)
             <div class="col-md-6 mb-3">
                 <label class="form-label"><span class="text-primary fw-bold">Thông tin đã trao đổi với KH</span></label>
-                <textarea name="customer_discussion_details" class="form-control" rows="2">{{ $lead->customer_discussion_details }}</textarea>
+                <textarea name="customer_discussion_details" class="form-control" rows="2">{{ old('customer_discussion_details', $lead->customer_discussion_details) }}</textarea>
             </div>
             @endif
             <div class="form-check">
@@ -329,21 +318,26 @@
         @for ($i = 0; $i < 3; $i++)
             @php
                 $care = $takeCares[$i] ?? null;
+                // Xử lý ngày hiển thị cũ khi lỗi validation của mảng
+                $oldDateValue = old('take_care_date.' . $i);
+                if (!$oldDateValue && $care?->take_care_date) {
+                    $oldDateValue = date('Y-m-d', strtotime($care->take_care_date));
+                }
             @endphp
             <div class="border rounded p-3 mb-3">
                 <h6 class="text-secondary">🗓️ Lần chăm sóc {{ $i + 1 }}</h6>
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label class="form-label"><span class="text-primary fw-bold">Kế hoạch chăm sóc</span></label>
-                        <input type="text" name="take_care_plan[]" value="{{ $care->take_care_plan ?? '' }}" class="form-control">
+                        <input type="text" name="take_care_plan[]" value="{{ old('take_care_plan.' . $i, $care->take_care_plan ?? '') }}" class="form-control">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label"><span class="text-primary fw-bold">Ngày chăm sóc</span></label>
-                        <input type="date" name="take_care_date[]" value="{{ $care?->take_care_date ? date('Y-m-d', strtotime($care?->take_care_date)) : '' }}" class="form-control">
+                        <input type="date" name="take_care_date[]" value="{{ $oldDateValue }}" class="form-control">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label"><span class="text-primary fw-bold">Kết quả chăm sóc</span></label>
-                        <input type="text" name="take_care_result[]" value="{{ $care->take_care_result ?? '' }}" class="form-control">
+                        <input type="text" name="take_care_result[]" value="{{ old('take_care_result.' . $i, $care->take_care_result ?? '') }}" class="form-control">
                     </div>
                 </div>
             </div>
@@ -360,7 +354,6 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Update product category button text when checkboxes change (edit)
     const productCheckboxesEdit = document.querySelectorAll('input[name="productCategories[]"]');
     const productNamesEditBtn = document.getElementById('selectedProductNamesEditBtn');
     const productLabelsEdit = {};
@@ -379,7 +372,6 @@ document.addEventListener('DOMContentLoaded', function() {
     productCheckboxesEdit.forEach(cb => {
         cb.addEventListener('change', updateProductNamesEditBtn);
     });
-    // Initial update
     updateProductNamesEditBtn();
 });
 
@@ -390,23 +382,19 @@ function formatNumber(n) {
     return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-// Khi nhập vào input hiển thị
 display.addEventListener('input', function () {
-    this.value = formatNumber(this.value);      // format đẹp
-    real.value = this.value.replace(/\./g, ''); // gửi lên DB dạng số
+    this.value = formatNumber(this.value);
+    real.value = this.value.replace(/\./g, '');
 });
-//  Hiển thị nhiều sdt.
+
 document.getElementById('add-phone').addEventListener('click', function () {
     let wrapper = document.getElementById('phone-wrapper');
-
     let div = document.createElement('div');
     div.classList.add('phone-item', 'd-flex', 'align-items-center', 'gap-1');
-
     div.innerHTML = `
         <input type="text" name="phone[]" class="form-control" placeholder="Nhập số điện thoại">
         <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
     `;
-
     wrapper.appendChild(div);
 });
 
@@ -415,6 +403,5 @@ document.addEventListener('click', function (e) {
         e.target.closest('.phone-item').remove();
     }
 });
-
 </script>
 @endpush
