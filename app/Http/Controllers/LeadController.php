@@ -443,7 +443,7 @@ public function store(Request $request)
         ]);
 
         // Tạo Lead mới (Hệ thống sẽ chạy qua hàm booted tự sinh mã đơn hàng 'order_code')
-        $lead = Lead::create($leadData);
+        $lead = Lead::create($lead->toArray());
 
         $phones = $request->phone ?? [];
 
