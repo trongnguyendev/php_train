@@ -178,8 +178,56 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div> -->
+                            <div class="col-md-4" id="source-field">
+                                <label class="form-label">
+                                    <i class="bi bi-funnel me-1"></i><span class="text-primary fw-bold">Nguồn</span>
+                                </label>
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle w-100 @error('source_id') is-invalid border-danger @enderror"
+                                        type="button" id="dropdownCustomerSources" data-bs-toggle="dropdown" aria-expanded="false"
+                                        style="background-color: #fff; color: #0d6efd; border: 1px solid #717375ff; border-radius: 0.375rem;">
+                                        <span id="selectedSourceNameBtn">
+                                            @php
+                                                // Lấy ra tên của nguồn đã được chọn trước đó (nếu có validation lỗi)
+                                                $selectedSource = collect($customerSources)->firstWhere('id', old('source_id'));
+                                            @endphp
+                                            @if($selectedSource)
+                                                {{ $selectedSource->name }}
+                                            @else
+                                                -- Chọn nguồn --
+                                            @endif
+                                        </span>
+                                    </button>
+                                    
+                                    <div class="dropdown-menu w-100 p-2" aria-labelledby="dropdownCustomerSources" style="max-height: 300px; overflow-y: auto; background-color: #ffffff;">
+                                        
+                                        <div class="mb-2 position-sticky top-0 bg-white z-index-1">
+                                            <input type="text" id="searchSourceInput" class="form-control form-control-sm" placeholder="Nhập tên nguồn để tìm...">
+                                        </div>
+                                        <hr class="dropdown-divider">
 
-                        <div class="col-md-4" id="source-field">
+                                        <div id="sourceList">
+                                            @foreach($customerSources as $src)
+                                                <div class="form-check source-item mb-1">
+                                                    <input class="form-check-input source-radio" type="radio" name="source_id" 
+                                                        id="source_{{ $src->id }}" value="{{ $src->id }}" 
+                                                        data-name="{{ $src->name }}"
+                                                        {{ old('source_id') == $src->id ? 'checked' : '' }}>
+                                                    <label class="form-check-label w-100" for="source_{{ $src->id }}" style="color: #1215ddff; cursor: pointer;">
+                                                        {{ $src->name }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                @error('source_id')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                        <!-- <div class="col-md-4" id="source-field">
                             <label for="source_id" class="form-label">
                                 <i class="bi bi-funnel me-1"></i><span class="text-primary fw-bold">Nguồn</span>
                             </label>
@@ -195,7 +243,7 @@
                             @error('source_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div> -->
 
                         <!-- Business Information -->
                         <div class="col-md-4">
@@ -602,50 +650,88 @@ document.addEventListener('click', function (e) {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    const searchInput = document.getElementById('searchCategoryInput');
-    const categoryItems = document.querySelectorAll('.category-item');
-    const selectedBtnText = document.getElementById('selectedProductNamesBtn');
-
-    // 1. Chức năng TÌM KIẾM danh mục
-    searchInput.addEventListener('input', function () {
-        const keyword = this.value.toLowerCase().trim();
-
-        categoryItems.forEach(item => {
-            // Lấy tên danh mục chuyển về chữ thường để so sánh
-            const categoryName = item.querySelector('.form-check-label').textContent.toLowerCase();
-            
-            if (categoryName.includes(keyword)) {
-                item.style.setProperty('display', 'block', 'important'); // Hiện nếu khớp
-            } else {
-                item.style.setProperty('display', 'none', 'important');  // Ẩn nếu không khớp
-            }
-        });
-    });
-
-    // 2. Chức năng CẬP NHẬT tên đã chọn lên nút bấm khi click chọn
-    const checkboxes = document.querySelectorAll('input[name="product_category_ids[]"]');
     
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function () {
-            let selectedNames = [];
-            
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    // Lấy text của label đi kèm với checkbox đó
-                    const label = document.querySelector(`label[for="${cb.id}"]`);
-                    if (label) selectedNames.push(label.textContent.trim());
+    /**
+     * Hàm dùng chung để tạo bộ Dropdown tìm kiếm và cập nhật tên
+     * @param {string} searchInputId - ID của ô input tìm kiếm
+     * @param {string} itemClass - Class của từng wrapper bao quanh item (ví dụ: .category-item)
+     * @param {string} inputNameSelector - Selector để tìm checkbox/radio (ví dụ: 'input[name="source_id"]')
+     * @param {string} btnTextId - ID của thẻ hiển thị chữ trên nút bấm
+     * @param {string} defaultText - Chữ hiển thị mặc định khi chưa chọn gì
+     */
+    function initSearchableDropdown(searchInputId, itemClass, inputNameSelector, btnTextId, defaultText) {
+        const searchInput = document.getElementById(searchInputId);
+        const listItems = document.querySelectorAll(itemClass);
+        const selectedBtnText = document.getElementById(btnTextId);
+        const inputs = document.querySelectorAll(inputNameSelector);
+
+        if (!searchInput || !selectedBtnText) return; // Bảo vệ nếu element không tồn tại trên trang
+
+        // 1. Logic Tìm Kiếm Gõ Nhanh
+        searchInput.addEventListener('input', function () {
+            const keyword = this.value.toLowerCase().trim();
+            listItems.forEach(item => {
+                const labelText = item.querySelector('.form-check-label').textContent.toLowerCase();
+                if (labelText.includes(keyword)) {
+                    item.style.setProperty('display', 'block', 'important');
+                } else {
+                    item.style.setProperty('display', 'none', 'important');
                 }
             });
-
-            // Hiển thị ra nút bấm
-            if (selectedNames.length > 0) {
-                selectedBtnText.textContent = selectedNames.join(', ');
-            } else {
-                selectedBtnText.textContent = 'Chọn danh mục sản phẩm';
-            }
         });
-    });
+
+        // 2. Logic Cập Nhật Chữ Lên Nút Bấm
+        inputs.forEach(input => {
+            input.addEventListener('change', function () {
+                let selectedNames = [];
+                
+                inputs.forEach(inpt => {
+                    if (inpt.checked) {
+                        // Ưu tiên lấy từ thuộc tính data-name (nếu có), nếu không có thì lấy text của label
+                        const dataName = inpt.getAttribute('data-name');
+                        if (dataName) {
+                            selectedNames.push(dataName.trim());
+                        } else {
+                            const label = document.querySelector(`label[for="${inpt.id}"]`);
+                            if (label) selectedNames.push(label.textContent.trim());
+                        }
+                    }
+                });
+
+                // Hiển thị kết quả ra nút bấm
+                if (selectedNames.length > 0) {
+                    selectedBtnText.textContent = selectedNames.join(', ');
+                } else {
+                    selectedBtnText.textContent = defaultText;
+                }
+            });
+        });
+    }
+
+    // ==========================================
+    // KÍCH HOẠT CHO TỪNG BỘ DROPDOWN
+    // ==========================================
+
+    // 1. Áp dụng cho: Danh mục sản phẩm (Checkbox chọn nhiều)
+    initSearchableDropdown(
+        'searchCategoryInput', 
+        '.category-item', 
+        'input[name="product_category_ids[]"]', 
+        'selectedProductNamesBtn', 
+        'Chọn danh mục sản phẩm'
+    );
+
+    // 2. Áp dụng cho: Nguồn khách hàng (Radio chọn một)
+    initSearchableDropdown(
+        'searchSourceInput', 
+        '.source-item', 
+        'input[name="source_id"]', 
+        'selectedSourceNameBtn', 
+        '-- Chọn nguồn --'
+    );
+
 });
+
 
 </script>
 @endpush
