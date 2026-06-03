@@ -87,10 +87,10 @@ public function index(Request $request)
                 ->orWhere('sale_support_id', $user->id);
             });
 
-            $queryOnline->where(function($q) use ($user) {
-                $q->where('sale_information_id', $user->id)
-                ->orWhere('sale_support_id', $user->id);
-            });
+            // $queryOnline->where(function($q) use ($user) {
+            //     $q->where('sale_information_id', $user->id)
+            //     ->orWhere('sale_support_id', $user->id);
+            // });
         }
         
 
