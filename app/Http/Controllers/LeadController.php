@@ -39,7 +39,8 @@ public function index(Request $request)
             'saleInformation',
             'saleSupport',
             'leadTakeCares',
-            'supportedChannel'
+            'supportedChannel',
+            'creator' // 4. THÊM QUAN HỆ NGƯỜI TẠO ĐỂ LẤY TÊN HIỂN THỊ RA INDEX
         ]);
         $queryOnline = Lead::with([
             'province',
@@ -52,7 +53,8 @@ public function index(Request $request)
             'saleInformation',
             'saleSupport',
             'leadTakeCares',
-            'supportedChannel'
+            'supportedChannel',
+            'creator' // 4. THÊM QUAN HỆ NGƯỜI TẠO ĐỂ LẤY TÊN HIỂN THỊ RA INDEX
         ]);
         $customerStatuses = CustomerStatus::all();
         $productCategories = ProductCategory::all();
@@ -64,6 +66,7 @@ public function index(Request $request)
         $supportChannel = SupportChannel::all();
         $saleUsers = User::all();
         $customerCode = Lead::with('customerCode')->orderBy('id', 'desc')->get();
+        
        
 
         // --- ĐOẠN PHÂN QUYỀN TRONG CONTROLLER ---
