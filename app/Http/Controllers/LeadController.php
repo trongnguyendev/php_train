@@ -442,8 +442,7 @@ public function store(Request $request)
             'lead_type' => $request->lead_type
         ]);
 
-        // Tạo Lead mới (Hệ thống sẽ chạy qua hàm booted tự sinh mã đơn hàng 'order_code')
-        $lead = Lead::create($lead->toArray());
+    
 
         $phones = $request->phone ?? [];
 
