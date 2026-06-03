@@ -41,6 +41,15 @@ class Lead extends Model
         return $this->belongsTo(CustomerCode::class, 'customer_id'); 
     }
 
+    * Định nghĩa mối quan hệ: Một Lead thuộc về một Người tạo (User)
+     */
+    public function creator(): BelongsTo
+    {
+        // 'created_by' là tên cột bạn vừa tạo ở bảng leads
+        // 'id' là khóa chính bên bảng users
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
     public function province() { 
         return $this->belongsTo(Province::class, 'province_id'); 
     }
