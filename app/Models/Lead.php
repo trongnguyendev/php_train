@@ -42,10 +42,8 @@ class Lead extends Model
     }
 
     
-    public function creator(): BelongsTo
+    public function creator()
     {
-        // 'created_by' là tên cột bạn vừa tạo ở bảng leads
-        // 'id' là khóa chính bên bảng users
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
