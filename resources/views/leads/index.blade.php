@@ -233,6 +233,7 @@
                                     <th style="min-width: 200px;">Ngày Chăm Khách Lần 3</th>
                                     <th style="min-width: 200px;">Kế hoạch lần 3</th>
                                     <th style="min-width: 200px;">Kết quả lần 3</th>
+                                    <th style="min-width: 200px;">Người Tạo</th>
                                     <th style="min-width: 200px;">Hành động</th>
                                 </tr>
                             </thead>
@@ -536,6 +537,11 @@
                                                 </td>
                                             @endfor
                                          <!-- Chăm Khách 3 lần -->
+                                                <td>
+                                                    @if($lead->creator)
+                                                        <small>{{ $lead->creator->name }}</small>
+                                                    @endif
+                                                </td>
 
                                         <td>
                                             <div class="btn-group" role="group">
@@ -623,6 +629,7 @@
                                     <th style="min-width: 100px;">KH đã được hỗ trợ trước qua kênh nào?</th>
                                     <th style="min-width: 100px;">Giá trị đơn chốt được</th>
                                     <th style="min-width: 100px;">Chuyển Sang TMDT</th>
+                                    <th style="min-width: 200px;">Người Tạo</th>
                                     <th style="min-width: 100px;">Hành động</th>
                                 </tr>
                             </thead>
@@ -763,6 +770,11 @@
                                             <input type="checkbox" disabled {{ $lead->tmdt == 'TMDT' ? 'checked' : '' }}>
                                         </td>
                                         <td>
+                                            @if($lead->creator)
+                                                <small>{{ $lead->creator->name }}</small>
+                                            @endif
+                                        </td>
+                                        <td>
                                             <div class="btn-group" role="group">
                                                 <a href="{{ route('leads.show', $lead->id) }}" 
                                                     class="btn btn-sm btn-outline-info" 
@@ -845,7 +857,6 @@
         </div>
     @endif
 </div>
-
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">

@@ -29,7 +29,8 @@ class Lead extends Model
         'source_id',
         'customer_discussion_details',
         'tmdt',
-        'lead_type'
+        'lead_type',
+        'created_by', // 3. THÊM TRƯỜNG NÀY ĐỂ LƯU ID NGƯỜI TẠO
     ];
     
     /**

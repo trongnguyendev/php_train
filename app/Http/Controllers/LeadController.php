@@ -377,6 +377,8 @@ public function store(Request $request)
         $newCustomer = CustomerCode::create();
         $customerId = $newCustomer->id;
     }
+    // Lấy ID của User đang đăng nhập hệ thống
+    $currentUserId = auth()->id();
         
 
     if ($request->lead_type == 1) { // Trực tiếp
@@ -399,7 +401,9 @@ public function store(Request $request)
             'order_value' => $orderValue,
             'support_channel_id' => $request->support_channel_id ?? null,
             'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
-            'lead_type' => $request->lead_type
+            'lead_type' => $request->lead_type,
+            // THÊM DÒNG NÀY: Lưu ID người tạo
+            'created_by' => $currentUserId,
         ]);
 
         
@@ -439,7 +443,9 @@ public function store(Request $request)
             'current_customer_status_id' => $request->current_customer_status_id,
             'customer_discussion_details' => $request->customer_discussion_details,
             'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
-            'lead_type' => $request->lead_type
+            'lead_type' => $request->lead_type,
+            // THÊM DÒNG NÀY: Lưu ID người tạo
+            'created_by' => $currentUserId,
         ]);
 
     
