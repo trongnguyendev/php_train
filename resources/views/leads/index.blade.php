@@ -106,7 +106,7 @@
             </div>
 
             <div class="col-md-3">
-                <label for="sale_user" class="form-label">
+                <label for="sale_information" class="form-label">
                     <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Sale nhận thông tin</span>
                 </label>
                 <select name="sale_information" id="sale_information" class="form-select">

@@ -128,10 +128,6 @@ public function index(Request $request)
             $query->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
             $queryOnline->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
         }
-        if ($request->sale_user) {
-            $query->where('sale_support_id', 'like', '%' . $request->sale_user . '%');
-            $queryOnline->where('sale_support_id', 'like', '%' . $request->sale_user . '%');
-        }
             // tên khách hàng
         if ($request->customer_name) {
             // Chuẩn hóa từ khóa về chữ thường
@@ -141,9 +137,13 @@ public function index(Request $request)
             $queryOnline->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
         }
 
+        if ($request->sale_user) {
+            $query->where('sale_support_id', $request->sale_user);
+            $queryOnline->where('sale_support_id', $request->sale_user);
+        }
         if ($request->sale_information) {
-            $query->where('sale_information_id', 'like', '%' . $request->sale_information . '%');
-            $queryOnline->where('sale_information_id', 'like', '%' . $request->sale_information . '%');
+            $query->where('sale_information_id', $request->sale_information);
+            $queryOnline->where('sale_information_id', $request->sale_information);
         }
 
         if ($request->productCategories) {
@@ -641,28 +641,23 @@ public function update(Request $request, Lead $lead)
         $lead->productCategories()->sync($request->productCategories);
     }
 
-    $leadTakeCare = LeadTakeCare::Where('lead_id', $lead->id)->first();
-        
-    if($leadTakeCare){
-        foreach((array) $request->take_care_plan as $index => $plan) {
-            $leadTakeCare = LeadTakeCare::updateOrCreate(
-                ['lead_id' => $lead->id, 'take_care_date' => $request->take_care_date[$index] ?? null],
-                [
-                    'take_care_plan' => $plan,
-                    'take_care_result' => $request->take_care_result[$index] ?? null,
-                ]
-            );
-        }
-    } else {
-        foreach((array) $request->take_care_plan as $index => $plan) {
+    $leadTakeCare = LeadTakeCare::where('lead_id', $lead->id)->delete();
+
+        foreach ((array) $request->take_care_plan as $index => $plan) {
+
+            $date = $request->take_care_date[$index] ?? null;
+
+            if (!$date && !$plan) {
+                continue;
+            }
+
             LeadTakeCare::create([
                 'lead_id' => $lead->id,
                 'take_care_plan' => $plan,
-                'take_care_date' => $request->take_care_date[$index] ?? null,
+                'take_care_date' => $date,
                 'take_care_result' => $request->take_care_result[$index] ?? null,
             ]);
         }
-    }
 
     return redirect()->route('leads.index')->with('success', 'Cập nhập Lead thành công!');
 }

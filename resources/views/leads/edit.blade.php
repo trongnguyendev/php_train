@@ -333,7 +333,10 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label"><span class="text-primary fw-bold">Ngày chăm sóc</span></label>
-                        <input type="date" name="take_care_date[]" value="{{ $oldDateValue }}" class="form-control">
+                        <input type="date"
+       name="take_care_date[]"
+       value="{{ old('take_care_date.' . $i, isset($care->take_care_date) ? \Carbon\Carbon::parse($care->take_care_date)->format('Y-m-d') : '') }}"
+       class="form-control">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label"><span class="text-primary fw-bold">Kết quả chăm sóc</span></label>
