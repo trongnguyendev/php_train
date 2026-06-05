@@ -165,87 +165,57 @@
                             @enderror
                         </div>
 
-                        <!-- <div class="col-md-4">
-                            <label for="is_new_customer" class="form-label">
-                                <i class="bi bi-person-check me-1"></i><span class="text-primary fw-bold">Khách hàng mới?</span>
-                            </label>
-                            <select name="is_new_customer" id="is_new_customer" 
-                                    class="form-select @error('is_new_customer') is-invalid @enderror">
-                                <option value="1" {{ old('is_new_customer', '1') == '1' ? 'selected' : '' }}>Có</option>
-                                <option value="0" {{ old('is_new_customer') == '0' ? 'selected' : '' }}>Không</option>
-                            </select>
-                            @error('is_new_customer')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div> -->
-                            <div class="col-md-4" id="source-field">
-                                <label class="form-label">
-                                    <i class="bi bi-funnel me-1"></i><span class="text-primary fw-bold">Nguồn</span>
-                                </label>
-                                <div class="dropdown">
-                                    <button class="btn dropdown-toggle w-100 @error('source_id') is-invalid border-danger @enderror"
-                                        type="button" id="dropdownCustomerSources" data-bs-toggle="dropdown" aria-expanded="false"
-                                        style="background-color: #fff; color: #0d6efd; border: 1px solid #717375ff; border-radius: 0.375rem;">
-                                        <span id="selectedSourceNameBtn">
-                                            @php
-                                                // Lấy ra tên của nguồn đã được chọn trước đó (nếu có validation lỗi)
-                                                $selectedSource = collect($customerSources)->firstWhere('id', old('source_id'));
-                                            @endphp
-                                            @if($selectedSource)
-                                                {{ $selectedSource->name }}
-                                            @else
-                                                -- Chọn nguồn --
-                                            @endif
-                                        </span>
-                                    </button>
-                                    
-                                    <div class="dropdown-menu w-100 p-2" aria-labelledby="dropdownCustomerSources" style="max-height: 300px; overflow-y: auto; background-color: #ffffff;">
-                                        
-                                        <div class="mb-2 position-sticky top-0 bg-white z-index-1">
-                                            <input type="text" id="searchSourceInput" class="form-control form-control-sm" placeholder="Nhập tên nguồn để tìm...">
-                                        </div>
-                                        <hr class="dropdown-divider">
-
-                                        <div id="sourceList">
-                                            @foreach($customerSources as $src)
-                                                <div class="form-check source-item mb-1">
-                                                    <input class="form-check-input source-radio" type="radio" name="source_id" 
-                                                        id="source_{{ $src->id }}" value="{{ $src->id }}" 
-                                                        data-name="{{ $src->name }}"
-                                                        {{ old('source_id') == $src->id ? 'checked' : '' }}>
-                                                    <label class="form-check-label w-100" for="source_{{ $src->id }}" style="color: #1215ddff; cursor: pointer;">
-                                                        {{ $src->name }}
-                                                    </label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                                @error('source_id')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                        <!-- <div class="col-md-4" id="source-field">
-                            <label for="source_id" class="form-label">
+                       <!-- Nguồn -->
+                        <div class="col-md-4" id="source-field">
+                            <label class="form-label">
                                 <i class="bi bi-funnel me-1"></i><span class="text-primary fw-bold">Nguồn</span>
                             </label>
-                            <select name="source_id" id="source_id" 
-                                    class="form-select @error('source_id') is-invalid @enderror">
-                                <option value="">-- Chọn nguồn --</option>
-                                @foreach($customerSources as $src)
-                                    <option value="{{ $src->id }}" {{ old('customerSources_id') == $src->id ? 'selected' : '' }}>
-                                        {{ $src->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('source_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div> -->
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle w-100 @error('source_id') is-invalid border-danger @enderror"
+                                    type="button" id="dropdownCustomerSources" data-bs-toggle="dropdown" aria-expanded="false"
+                                    style="background-color: #fff; color: #0d6efd; border: 1px solid #717375ff; border-radius: 0.375rem;">
+                                    <span id="selectedSourceNameBtn">
+                                        @php
+                                            // Lấy ra tên của nguồn đã được chọn trước đó (nếu có validation lỗi)
+                                            $selectedSource = collect($customerSources)->firstWhere('id', old('source_id'));
+                                        @endphp
+                                        @if($selectedSource)
+                                            {{ $selectedSource->name }}
+                                        @else
+                                            -- Chọn nguồn --
+                                        @endif
+                                    </span>
+                                </button>
+                                
+                                <div class="dropdown-menu w-100 p-2" aria-labelledby="dropdownCustomerSources" style="max-height: 300px; overflow-y: auto; background-color: #ffffff;">
+                                    
+                                    <div class="mb-2 position-sticky top-0 bg-white z-index-1">
+                                        <input type="text" id="searchSourceInput" class="form-control form-control-sm" placeholder="Nhập tên nguồn để tìm...">
+                                    </div>
+                                    <hr class="dropdown-divider">
 
-                        <!-- Business Information -->
+                                    <div id="sourceList">
+                                        @foreach($customerSources as $src)
+                                            <div class="form-check source-item mb-1">
+                                                <input class="form-check-input source-radio" type="radio" name="source_id" 
+                                                    id="source_{{ $src->id }}" value="{{ $src->id }}" 
+                                                    data-name="{{ $src->name }}"
+                                                    {{ old('source_id') == $src->id ? 'checked' : '' }}>
+                                                <label class="form-check-label w-100" for="source_{{ $src->id }}" style="color: #1215ddff; cursor: pointer;">
+                                                    {{ $src->name }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            @error('source_id')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Danh Mục Sản Phẩm -->
                         <div class="col-md-4">
                             <label class="form-label">
                                 <i class="bi bi-funnel me-1"></i><span class="text-primary fw-bold">Danh mục sản phẩm</span>
@@ -360,63 +330,152 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <!-- <div class="col-md-4">
-                            <label for="support_status_customer_id" class="form-label">
-                                <i class="bi bi-flag-fill me-1"></i><span class="text-primary fw-bold">Tình trạng hỗ trợ</span>
-                            </label>
-                            <select name="support_status_customer_id" id="support_status_customer_id" 
-                                    class="form-select @error('support_status_customer_id') is-invalid @enderror">
-                                <option value="">-- Chọn tình trạng --</option>
-                                @foreach($customerStatuses as $st)
-                                    <option value="{{ $st->id }}" {{ old('support_status_customer_id') == $st->id ? 'selected' : '' }}>
-                                        {{ $st->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('support_status_customer_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div> -->
+                        <!-- sale Nhận Thông tin -->
+                        <div class="col-md-6" id="sale-field">
 
-
-                        <!-- Sales Team -->
-                        <div class="col-md-6">
-                            <label for="sale_information_id" class="form-label">
-                                <i class="bi bi-person-badge me-1"></i><span class="text-primary fw-bold">Sale nhận KH</span>
+                            <label class="form-label">
+                                <i class="bi bi-person-badge me-1"></i>
+                                <span class="text-primary fw-bold">Sale nhận KH</span>
                             </label>
-                            <select name="sale_information_id" id="sale_information_id" 
-                                    class="form-select @error('sale_information_id') is-invalid @enderror">
-                                <option value="">-- Chọn sale nhận --</option>
-                                @foreach($saleInformation as $s)
-                                    <option value="{{ $s->id }}" {{ old('sale_information_id') == $s->id ? 'selected' : '' }}>
-                                        {{ $s->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle w-100 @error('sale_information_id') is-invalid border-danger @enderror"
+                                    type="button"
+                                    id="dropdownSaleInformation"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                    style="background-color:#fff; color:#0d6efd; border:1px solid #717375ff; border-radius:0.375rem;">
+
+                                    <span id="selectedSaleText">
+                                        @php
+                                            $selectedSale = collect($saleInformation)->firstWhere('id', old('sale_information_id'));
+                                        @endphp
+
+                                        @if($selectedSale)
+                                            {{ $selectedSale->name }}
+                                        @else
+                                            -- Chọn sale --
+                                        @endif
+                                    </span>
+                                </button>
+
+                                <div class="dropdown-menu w-100 p-2"
+                                    aria-labelledby="dropdownSaleInformation"
+                                    style="max-height:300px; overflow-y:auto; background-color:#fff;">
+
+                                    <!-- SEARCH -->
+                                    <div class="mb-2 position-sticky top-0 bg-white z-index-1">
+                                        <input type="text"
+                                            id="searchSaleInput"
+                                            class="form-control form-control-sm"
+                                            placeholder="Nhập tên sale để tìm...">
+                                    </div>
+
+                                    <hr class="dropdown-divider">
+
+                                    <!-- LIST -->
+                                    <div id="saleList">
+
+                                        @foreach($saleInformation as $s)
+                                            <div class="form-check sale-item mb-1">
+
+                                                <input class="form-check-input sale-radio"
+                                                    type="radio"
+                                                    name="sale_information_id"
+                                                    id="sale_{{ $s->id }}"
+                                                    value="{{ $s->id }}"
+                                                    data-name="{{ $s->name }}"
+                                                    {{ old('sale_information_id') == $s->id ? 'checked' : '' }}>
+
+                                                <label class="form-check-label w-100"
+                                                    for="sale_{{ $s->id }}"
+                                                    style="color:#1215ddff; cursor:pointer;">
+                                                    {{ $s->name }}
+                                                </label>
+
+                                            </div>
+                                        @endforeach
+
+                                    </div>
+
+                                </div>
+                            </div>
+
                             @error('sale_information_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
-
+                    
+                        <!-- sale hỗ trợ -->
                         <div class="col-md-6" id="sale-support-field">
-                            <label for="sale_support_id" class="form-label">
-                                <i class="bi bi-headset me-1"></i><span class="text-primary fw-bold">Sale hỗ trợ</span>
+                            <label class="form-label">
+                                <i class="bi bi-headset me-1"></i>
+                                <span class="text-primary fw-bold">Sale hỗ trợ</span>
                             </label>
-                            <select name="sale_support_id" id="sale_support_id" 
-                                    class="form-select @error('sale_support_id') is-invalid @enderror">
-                                <option value="">-- Chọn sale hỗ trợ --</option>
-                                @foreach($saleSupport as $s)
-                                    <option value="{{ $s->id }}" {{ old('sale_support_id') == $s->id ? 'selected' : '' }}>
-                                        {{ $s->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle w-100"
+                                    type="button"
+                                    id="dropdownSaleSupport"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                    style="background-color:#fff; color:#0d6efd; border:1px solid #717375ff; border-radius:0.375rem;">
+
+                                    <span id="selectedSaleSupportText">
+                                        @php
+                                            $selectedSaleSupport = collect($saleSupport)->firstWhere('id', old('sale_support_id'));
+                                        @endphp
+
+                                        @if($selectedSaleSupport)
+                                            {{ $selectedSaleSupport->name }}
+                                        @else
+                                            Chọn sale hỗ trợ
+                                        @endif
+                                    </span>
+                                </button>
+
+                                <div class="dropdown-menu w-100 p-2"
+                                    aria-labelledby="dropdownSaleSupport"
+                                    style="max-height:300px; overflow-y:auto; background-color:#fff;">
+
+                                    <!-- SEARCH -->
+                                    <div class="mb-2 position-sticky top-0 bg-white">
+                                        <input type="text"
+                                            id="searchSaleSupportInput"
+                                            class="form-control form-control-sm"
+                                            placeholder="Nhập tên sale để tìm...">
+                                    </div>
+
+                                    <hr class="dropdown-divider">
+
+                                    <!-- LIST -->
+                                    <div id="saleSupportList">
+                                        @foreach($saleSupport as $s)
+                                            <div class="form-check sale-support-item mb-1">
+                                                <input class="form-check-input sale-support-radio"
+                                                    type="radio"
+                                                    name="sale_support_id"
+                                                    id="sale_support_{{ $s->id }}"
+                                                    value="{{ $s->id }}"
+                                                    data-name="{{ $s->name }}"
+                                                    {{ old('sale_support_id') == $s->id ? 'checked' : '' }}>
+
+                                                <label class="form-check-label w-100"
+                                                    for="sale_support_{{ $s->id }}"
+                                                    style="color:#1215ddff; cursor:pointer;">
+                                                    {{ $s->name }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+                                </div>
+                            </div>
+
                             @error('sale_support_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        <!-- Notes and Results -->
 
                         <div class="col-md-6" id="support-channel-field" style="display: {{ old('lead_type', '1') == '1' ? 'block' : 'none' }};">
                                 <label for="support_channel_id" class="form-label">
@@ -650,88 +709,116 @@ document.addEventListener('click', function (e) {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    
-    /**
-     * Hàm dùng chung để tạo bộ Dropdown tìm kiếm và cập nhật tên
-     * @param {string} searchInputId - ID của ô input tìm kiếm
-     * @param {string} itemClass - Class của từng wrapper bao quanh item (ví dụ: .category-item)
-     * @param {string} inputNameSelector - Selector để tìm checkbox/radio (ví dụ: 'input[name="source_id"]')
-     * @param {string} btnTextId - ID của thẻ hiển thị chữ trên nút bấm
-     * @param {string} defaultText - Chữ hiển thị mặc định khi chưa chọn gì
-     */
-    function initSearchableDropdown(searchInputId, itemClass, inputNameSelector, btnTextId, defaultText) {
-        const searchInput = document.getElementById(searchInputId);
-        const listItems = document.querySelectorAll(itemClass);
-        const selectedBtnText = document.getElementById(btnTextId);
-        const inputs = document.querySelectorAll(inputNameSelector);
 
-        if (!searchInput || !selectedBtnText) return; // Bảo vệ nếu element không tồn tại trên trang
+    function initSmartDropdown(config) {
 
-        // 1. Logic Tìm Kiếm Gõ Nhanh
+        const {
+            searchId,
+            itemClass,
+            inputName,
+            textId,
+            defaultText,
+            multiple = false
+        } = config;
+
+        const searchInput = document.getElementById(searchId);
+        const textEl = document.getElementById(textId);
+
+        if (!searchInput || !textEl) return;
+
+        const getItems = () => document.querySelectorAll(itemClass);
+        const getInputs = () => document.querySelectorAll(`input[name="${inputName}"]`);
+
+        // ================= SEARCH (OPTIMIZED) =================
         searchInput.addEventListener('input', function () {
             const keyword = this.value.toLowerCase().trim();
-            listItems.forEach(item => {
-                const labelText = item.querySelector('.form-check-label').textContent.toLowerCase();
-                if (labelText.includes(keyword)) {
-                    item.style.setProperty('display', 'block', 'important');
-                } else {
-                    item.style.setProperty('display', 'none', 'important');
-                }
+
+            getItems().forEach(item => {
+
+                const labelEl = item.querySelector('.form-check-label');
+                const label = (labelEl?.textContent || '').toLowerCase();
+
+                item.style.display = label.includes(keyword) ? '' : 'none';
             });
         });
 
-        // 2. Logic Cập Nhật Chữ Lên Nút Bấm
-        inputs.forEach(input => {
-            input.addEventListener('change', function () {
-                let selectedNames = [];
-                
-                inputs.forEach(inpt => {
-                    if (inpt.checked) {
-                        // Ưu tiên lấy từ thuộc tính data-name (nếu có), nếu không có thì lấy text của label
-                        const dataName = inpt.getAttribute('data-name');
-                        if (dataName) {
-                            selectedNames.push(dataName.trim());
-                        } else {
-                            const label = document.querySelector(`label[for="${inpt.id}"]`);
-                            if (label) selectedNames.push(label.textContent.trim());
-                        }
+        // ================= UPDATE TEXT =================
+        const updateText = () => {
+
+            const inputs = getInputs();
+            let selectedNames = [];
+
+            inputs.forEach(input => {
+                if (input.checked) {
+
+                    const label =
+                        input.dataset.name ||
+                        document.querySelector(`label[for="${input.id}"]`)?.textContent ||
+                        '';
+
+                    if (label.trim()) {
+                        selectedNames.push(label.trim());
                     }
-                });
-
-                // Hiển thị kết quả ra nút bấm
-                if (selectedNames.length > 0) {
-                    selectedBtnText.textContent = selectedNames.join(', ');
-                } else {
-                    selectedBtnText.textContent = defaultText;
                 }
             });
+
+            textEl.innerText =
+                selectedNames.length
+                    ? (multiple ? selectedNames.join(', ') : selectedNames[0])
+                    : defaultText;
+        };
+
+        // ================= EVENT DELEGATION (SAFE) =================
+        document.addEventListener('change', function (e) {
+            if (e.target.matches(`input[name="${inputName}"]`)) {
+                updateText();
+            }
         });
+
+        // ================= INIT =================
+        updateText();
     }
 
-    // ==========================================
-    // KÍCH HOẠT CHO TỪNG BỘ DROPDOWN
-    // ==========================================
+    // =====================================================
+    // 🔥 INIT ALL DROPDOWNS
+    // =====================================================
 
-    // 1. Áp dụng cho: Danh mục sản phẩm (Checkbox chọn nhiều)
-    initSearchableDropdown(
-        'searchCategoryInput', 
-        '.category-item', 
-        'input[name="product_category_ids[]"]', 
-        'selectedProductNamesBtn', 
-        'Chọn danh mục sản phẩm'
-    );
+    initSmartDropdown({
+        searchId: 'searchCategoryInput',
+        itemClass: '.category-item',
+        inputName: 'product_category_ids[]',
+        textId: 'selectedProductNamesBtn',
+        defaultText: 'Chọn danh mục sản phẩm',
+        multiple: true
+    });
 
-    // 2. Áp dụng cho: Nguồn khách hàng (Radio chọn một)
-    initSearchableDropdown(
-        'searchSourceInput', 
-        '.source-item', 
-        'input[name="source_id"]', 
-        'selectedSourceNameBtn', 
-        '-- Chọn nguồn --'
-    );
+    initSmartDropdown({
+        searchId: 'searchSaleInput',
+        itemClass: '.sale-item',
+        inputName: 'sale_information_id',
+        textId: 'selectedSaleText',
+        defaultText: '-- Chọn sale --',
+        multiple: false
+    });
+
+    initSmartDropdown({
+        searchId: 'searchSaleSupportInput',
+        itemClass: '.sale-support-item',
+        inputName: 'sale_support_id',
+        textId: 'selectedSaleSupportText',
+        defaultText: 'Chọn sale hỗ trợ',
+        multiple: false
+    });
+
+    initSmartDropdown({
+        searchId: 'searchSourceInput',
+        itemClass: '.source-item',
+        inputName: 'source_id',
+        textId: 'selectedSourceNameBtn',
+        defaultText: '-- Chọn nguồn --',
+        multiple: false
+    });
 
 });
-
-
 </script>
 @endpush
