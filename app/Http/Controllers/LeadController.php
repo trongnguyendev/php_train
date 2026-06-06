@@ -125,8 +125,8 @@ public function index(Request $request)
         }
 
         if ($request->current_status) {
-            $query->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
-            $queryOnline->where('current_customer_status_id', 'like', '%' . $request->current_status . '%');
+            $query->where('current_customer_status_id', $request->current_status);
+            $queryOnline->where('current_customer_status_id', $request->current_status);
         }
             // tên khách hàng
         if ($request->customer_name) {
@@ -146,7 +146,7 @@ public function index(Request $request)
             $queryOnline->where('sale_information_id', $request->sale_information);
         }
 
-        if ($request->productCategories) {
+        if ($request->g) {
             $query->whereHas('productCategories', function($q) use ($request) {
                 $q->whereIn('product_category_id', $request->productCategories);
             });
