@@ -545,12 +545,12 @@
 
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('leads.show', $lead->id) }}" 
+                                                <a href="{{ route('leads.show', $lead->id) . '?' . http_build_query(request()->query()) }}" 
                                                     class="btn btn-sm btn-outline-info" 
                                                     title="Xem chi tiết">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
-                                                <a href="{{ route('leads.edit', $lead->id) }}" 
+                                                <a href="{{ route('leads.edit', $lead->id) . '?' . http_build_query(request()->query()) }}"
                                                     class="btn btn-sm btn-outline-warning" 
                                                     title="Chỉnh sửa">
                                                     <i class="bi bi-pencil"></i>
@@ -776,12 +776,12 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('leads.show', $lead->id) }}" 
+                                                <a href="{{ route('leads.show', $lead->id) . '?' . http_build_query(request()->query()) }}"
                                                     class="btn btn-sm btn-outline-info" 
                                                     title="Xem chi tiết">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
-                                                <a href="{{ route('leads.edit', $lead->id) }}" 
+                                                 <a href="{{ route('leads.edit', $lead->id) . '?' . http_build_query(request()->query()) }}"
                                                     class="btn btn-sm btn-outline-warning" 
                                                     title="Chỉnh sửa">
                                                     <i class="bi bi-pencil"></i>

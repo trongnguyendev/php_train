@@ -15,7 +15,7 @@
         </div>
     @endif
 
-    <form action="{{ route('leads.update', $lead->id) }}" method="POST">
+    <form action="{{ route('leads.update', $lead->id) . '?' . http_build_query(request()->query()) }}" method="POST">
         @csrf
         @method('PUT')
 

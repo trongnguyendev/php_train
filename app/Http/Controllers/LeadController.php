@@ -523,7 +523,7 @@ public function show(Lead $lead)
             ->orderBy('created_at', 'desc')
             ->get();
     }
-    return view('leads.show', compact('lead', 'leadTakeCare','phones', 'otherLeads'));
+    return view('leads.show', compact('lead', 'phones', 'leadTakeCare', 'otherLeads'));
 }
 
 /**
@@ -659,7 +659,7 @@ public function update(Request $request, Lead $lead)
             ]);
         }
 
-    return redirect()->route('leads.index')->with('success', 'Cập nhập Lead thành công!');
+    return redirect()->route('leads.index', request()->query())->with('success', 'Cập nhập Lead thành công!');
 }
 
 /**

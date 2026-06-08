@@ -173,10 +173,10 @@
     @endif
 
     <div class="mt-2 mb-4">
-        <a href="{{ route('leads.index') }}" class="btn btn-secondary">Quay lại danh sách</a>
-        <a href="{{ route('leads.edit', $lead->id) }}" class="btn btn-warning ms-1">
-            <i class="bi bi-pencil-square"></i> Sửa đơn hiện tại
-        </a>
+        
+        <a href="{{ route('leads.index', request()->query()) }}">← Quay lại danh sách</a>
+        <a href="{{ route('leads.edit', $lead->id) . '?' . http_build_query(request()->query()) }}" class="btn btn-warning ms-1"><i class="bi bi-pencil-square"></i> Sửa đơn hiện tại</a>
+        
     </div>
 </div>
 @endsection
