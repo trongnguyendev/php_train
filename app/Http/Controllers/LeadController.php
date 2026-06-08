@@ -136,6 +136,18 @@ public function index(Request $request)
             $query->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
             $queryOnline->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
         }
+        // tìm kiếm theo mã khách hàng
+        if ($request->filled('customer_code')) {
+
+            $searchTerm = $request->customer_code;
+
+            $applySearch = function ($q) use ($searchTerm) {
+                $q->where('customer_code', 'LIKE', "%{$searchTerm}%");
+            };
+
+            $query->whereHas('customerCode', $applySearch);
+            $queryOnline->whereHas('customerCode', $applySearch);
+        }
 
         if ($request->sale_user) {
             $query->where('sale_support_id', $request->sale_user);

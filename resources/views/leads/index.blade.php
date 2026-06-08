@@ -43,6 +43,17 @@
                     value="{{ request('type_phone') }}"
                 >
             </div>
+            <div class="col-md-3">
+                <label for="customer_code" class="form-label">
+                    <i class="bi bi-person me-1"></i><span class="text-primary fw-bold">Mã Khách Hàng</span>
+                </label>
+                <input type="text" 
+                    name="customer_code" 
+                    id="customer_code" 
+                    class="form-control" 
+                    placeholder="Nhập mã khách hàng cần tìm..." 
+                    value="{{ request('customer_code') }}">
+            </div>
             
             
             <!-- <div class="col-md-3">
@@ -56,7 +67,7 @@
                 </select>
             </div> -->
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label for="form_date" class="form-label">
                     <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Từ Ngày</span>
                 </label>
@@ -69,7 +80,7 @@
                 >
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label for="to_date" class="form-label">
                     <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Đến Ngày</span>
                 </label>
@@ -82,7 +93,7 @@
                 >
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label for="current_status" class="form-label">
                     <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Tình trạng hiện tại</span>
                 </label>
