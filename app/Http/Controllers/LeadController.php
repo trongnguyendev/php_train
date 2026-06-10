@@ -316,13 +316,10 @@ public function store(Request $request)
     if ($request->lead_type == 1) {
         $rules =  [
             'phone' => 'nullable|array',
-            'phone.*' => 'array|min:1', 
-                'phone.*' => [
-                    
-                    'string',
-                    'size:10',
-                    'regex:/^(03|05|07|08|09)[0-9]{8}$/'
-                ],
+            'phone.*' => [
+                'string',
+                'regex:/^(0[0-9]{9}|\+[1-9]\d{7,14})$/'
+            ],
             'customer_type_id' => 'required',
             'first_interaction_date' => 'required|date',
             'name' => 'required|string',
@@ -348,12 +345,10 @@ public function store(Request $request)
     if ($request->lead_type == 2) {
         $rules =  [
             'phone' => 'nullable|array', 
-                'phone.*' => [
-                    'required',
-                    'string',
-                    'size:10',
-                    'regex:/^(03|05|07|08|09)[0-9]{8}$/'
-                ],
+            'phone.*' => [
+                'string',
+                'regex:/^(0[0-9]{9}|\+[1-9]\d{7,14})$/'
+            ],
             'customer_type_id' => 'required',
             'name' => 'required|string',
             'first_interaction_date' => 'required|date',
