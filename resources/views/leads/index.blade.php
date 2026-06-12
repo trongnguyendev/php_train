@@ -250,7 +250,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($leadsOnline as $lead)
-                                    <tr>
+                                    <tr class="{{ session('highlight_lead') == $lead->id ? 'table-warning' : '' }}">
                                         <td>
                                             <span class="badge bg-info">{{ $lead->customerCode->customer_code ?? 'N/A' }}</span>
                                         </td>

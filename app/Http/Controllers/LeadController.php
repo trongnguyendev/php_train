@@ -603,6 +603,8 @@ public function update(Request $request, Lead $lead)
         'customer_type_id.required' => 'Vui lòng chọn Loại khách hàng.',
     ];
     $request->validate($rules, $messages);
+    // Check để coi lead tô màu từ trực tiếp sang online 
+    $oldLeadType = $lead->lead_type;
 
     $orderValue = 0;
     if ($request->order_value) {
@@ -666,7 +668,16 @@ public function update(Request $request, Lead $lead)
             ]);
         }
 
-    return redirect()->route('leads.index', request()->query())->with('success', 'Cập nhập Lead thành công!');
+        $redirect = redirect()
+            ->route('leads.index', request()->query())
+            ->with('success', 'Cập nhập Lead thành công!');
+
+        if ($oldLeadType == 1 && $request->lead_type == 2) {
+            $redirect->with('highlight_lead', $lead->id);
+        }
+
+        return $redirect;
+    // return redirect()->route('leads.index', request()->query())->with('success', 'Cập nhập Lead thành công!');
 }
 
 /**
