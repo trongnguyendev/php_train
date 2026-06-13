@@ -111,7 +111,7 @@
                 </label>
                 <select name="customer_source" id="customer_source" class="form-select">
                     <option value="">Tất cả nguồn</option>
-                    <option value="null">Chưa có nguồn</option
+                    <option value="null">Chưa có nguồn</option>
                     @foreach($customerSources as $status)
                         <option value="{{ $status->id }}" {{ request('customer_source') == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
                     @endforeach
