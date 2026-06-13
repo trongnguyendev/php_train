@@ -198,15 +198,17 @@ public function index(Request $request)
 
                 $q->where('lead_type', 1);
 
-                // Lead đã chuyển online nhưng vẫn thuộc sale hiện tại
                 $q->orWhere(function ($sub) use ($user) {
                     $sub->where('lead_type', 2)
-                        ->where('sale_information_id', $user->id);
+                        ->where(function ($x) use ($user) {
+                            $x->where('sale_information_id', $user->id)
+                            ->orWhere('sale_support_id', $user->id);
+                        });
                 });
 
             })
             ->latest()
-        ->paginate(30, ['*'], 'direct_page');
+            ->paginate(30, ['*'], 'direct_page');
         $leadsOnline = $queryOnline->where('lead_type', 2)->latest()->paginate(30, ['*'], 'online_page');
 
         // Thông báo khách online cần chăm sóc hôm nay
@@ -616,10 +618,8 @@ public function update(Request $request, Lead $lead)
     $rules = [
         'phone' => 'nullable|array', 
         'phone.*' => [
-            'required',
-            'string',
-            'size:10',
-            'regex:/^(03|05|07|08|09)[0-9]{8}$/' 
+                'string',
+                'regex:/^(0[0-9]{9}|\+[1-9]\d{7,14})$/'
         ],
         'first_interaction_date' => 'required|date',
         'name' => 'required|string',
