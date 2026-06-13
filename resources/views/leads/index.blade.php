@@ -30,7 +30,7 @@
     <!-- Filter Section -->
     <div class="card-body border-bottom bg-light">
         <form action="{{ route('leads.index') }}" method="GET" class="row g-3">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label for="type_phone" class="form-label">
                     <i class="bi bi-telephone me-1"></i><span class="text-primary fw-bold">Số điện thoại</span>
                 </label>
@@ -43,7 +43,7 @@
                     value="{{ request('type_phone') }}"
                 >
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label for="customer_code" class="form-label">
                     <i class="bi bi-person me-1"></i><span class="text-primary fw-bold">Mã Khách Hàng</span>
                 </label>
@@ -104,7 +104,21 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-3">
+            <!-- lọc nguồn -->
+            <div class="col-md-2">
+                <label for="customer_source" class="form-label">
+                    <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Nguồn</span>
+                </label>
+                <select name="customer_source" id="customer_source" class="form-select">
+                    <option value="">Tất cả nguồn</option>
+                    <option value="null">Chưa có nguồn</option
+                    @foreach($customerSources as $status)
+                        <option value="{{ $status->id }}" {{ request('customer_source') == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-2">
                 <label for="sale_user" class="form-label">
                     <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Sale hỗ trợ</span>
                 </label>
@@ -116,7 +130,7 @@
                 </select>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label for="sale_information" class="form-label">
                     <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Sale nhận thông tin</span>
                 </label>
@@ -126,6 +140,23 @@
                         <option value="{{ $sales->id }}" {{ request('sale_information') == $sales->id ? 'selected' : '' }}>{{ $sales->name }}</option>
                     @endforeach
                 </select>
+            </div>
+            <!-- lọc tmdt -->
+            <div class="col-md-2">
+                <label for="tmdt" class="form-label">
+                    <i class="bi bi-calendar me-1"></i>
+                    <span class="text-primary fw-bold">Đã Chuyển TMDT</span>
+                </label>
+
+                <div class="form-control d-flex align-items-center" style="height: 38px;">
+                    <input type="checkbox"
+                        name="tmdt"
+                        id="tmdt"
+                        value="TMDT"
+                        {{ request('tmdt') == 'TMDT' ? 'checked' : '' }}
+                        style="width:18px;height:18px;accent-color:#28a745;">
+                    <label for="tmdt" class="ms-2 mb-0">TMDT</label>
+                </div>
             </div>
             <!-- tìm bằng tên khách hàng -->
             <div class="col-md-3">

@@ -85,10 +85,10 @@ public function index(Request $request)
             $saleUsers = User::where('id', $user->id)->get();
 
             // Ép điều kiện lọc SQL: Chỉ xem các Lead của chính mình phụ trách hoặc hỗ trợ
-            $query->where(function($q) use ($user) {
-                $q->where('sale_information_id', $user->id)
-                ->orWhere('sale_support_id', $user->id);
-            });
+            // $query->where(function($q) use ($user) {
+            //     $q->where('sale_information_id', $user->id)
+            //     ->orWhere('sale_support_id', $user->id);
+            // });
 
             // $queryOnline->where(function($q) use ($user) {
             //     $q->where('sale_information_id', $user->id)
@@ -128,6 +128,29 @@ public function index(Request $request)
             $query->where('current_customer_status_id', $request->current_status);
             $queryOnline->where('current_customer_status_id', $request->current_status);
         }
+        // tmdt 
+        if ($request->tmdt) {
+            $query->where('tmdt', $request->tmdt);
+            $queryOnline->where('tmdt', $request->tmdt);
+        }
+
+        // nguồn khách hàng
+        if ($request->customer_source === 'null') {
+            $query->where(function ($q) {
+                $q->whereNull('source_id')
+                ->orWhere('source_id', '');
+            });
+
+            $queryOnline->where(function ($q) {
+                $q->whereNull('source_id')
+                ->orWhere('source_id', '');
+            });
+        } elseif ($request->customer_source) {
+            $query->where('source_id', $request->customer_source);
+            $queryOnline->where('source_id', $request->customer_source);
+        }
+        
+
             // tên khách hàng
         if ($request->customer_name) {
             // Chuẩn hóa từ khóa về chữ thường
@@ -169,7 +192,21 @@ public function index(Request $request)
 
         
         // Paginate results to improve performance (30 rows per page)
-        $leads = $query->where('lead_type', 1)->latest()->paginate(30, ['*'], 'direct_page');
+        // $leads = $query->where('lead_type', 1)->latest()->paginate(30, ['*'], 'direct_page');
+        $leads = $query
+            ->where(function ($q) use ($user) {
+
+                $q->where('lead_type', 1);
+
+                // Lead đã chuyển online nhưng vẫn thuộc sale hiện tại
+                $q->orWhere(function ($sub) use ($user) {
+                    $sub->where('lead_type', 2)
+                        ->where('sale_information_id', $user->id);
+                });
+
+            })
+            ->latest()
+        ->paginate(30, ['*'], 'direct_page');
         $leadsOnline = $queryOnline->where('lead_type', 2)->latest()->paginate(30, ['*'], 'online_page');
 
         // Thông báo khách online cần chăm sóc hôm nay
@@ -205,7 +242,7 @@ public function index(Request $request)
             'saleUsers',
             'customerCode'
         ));
-    }
+}
 
 
 /**
