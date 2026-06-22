@@ -222,21 +222,28 @@
     <div class="card-header bg-light border-bottom p-0">
         <ul class="nav nav-tabs nav-fill" id="leadTabs" role="tablist">
            
-                @if($hasOnlineLead)
+               @if($canViewOnlineTab)
+
                     <li class="nav-item" role="presentation">
+
                         <button class="nav-link"
                                 id="online-tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#online-pane"
-                                type="button">
+                                type="button"
+                                role="tab">
+
                             <i class="bi bi-globe me-2"></i>
                             Lead Online
 
                             <span class="badge bg-info ms-2">
                                 {{ $leadsOnline->total() }}
                             </span>
+
                         </button>
+
                     </li>
+
                 @endif
             
             <li class="nav-item" role="presentation">
