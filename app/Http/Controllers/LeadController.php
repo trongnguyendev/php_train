@@ -214,6 +214,20 @@ public function index(Request $request)
 
         /*
         |--------------------------------------------------------------------------
+        | Check user có lead type 2 không
+        |--------------------------------------------------------------------------
+        */
+        $hasOnlineLead = $isAdminOrManager ||
+            Lead::where('lead_type', 2)
+                ->where(function ($q) use ($user) {
+                    $q->where('sale_information_id', $user->id)
+                    ->orWhere('sale_support_id', $user->id);
+                })
+                ->exists();
+
+
+        /*
+        |--------------------------------------------------------------------------
         | Lead online
         |--------------------------------------------------------------------------
         */
@@ -253,6 +267,7 @@ public function index(Request $request)
             'careOnline',
             'saleUsers',
             'customerCode',
+            'hasOnlineLead'
         ));
 }
 

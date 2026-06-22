@@ -222,17 +222,22 @@
     <div class="card-header bg-light border-bottom p-0">
         <ul class="nav nav-tabs nav-fill" id="leadTabs" role="tablist">
            
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link"
-                            id="online-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#online-pane">
-                        <i class="bi bi-globe me-2"></i>Lead Online
-                        <span class="badge bg-info ms-2">
-                            {{ $leadsOnline->total() }}
-                        </span>
-                    </button>
-                </li>
+                @if($hasOnlineLead)
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link"
+                                id="online-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#online-pane"
+                                type="button">
+                            <i class="bi bi-globe me-2"></i>
+                            Lead Online
+
+                            <span class="badge bg-info ms-2">
+                                {{ $leadsOnline->total() }}
+                            </span>
+                        </button>
+                    </li>
+                @endif
             
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="direct-tab" data-bs-toggle="tab" data-bs-target="#direct-pane" type="button" role="tab" aria-controls="direct-pane" aria-selected="false">
