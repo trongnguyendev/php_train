@@ -205,9 +205,21 @@ $isAdminOrManager = $user->roles()
 |--------------------------------------------------------------------------
 */
 $leads = $query
-    ->whereIn('lead_type', [1, 2])
-    ->when(!$isAdminOrManager, function ($q) use ($user) {
-        $q->where('sale_information_id', $user->id);
+    ->where(function ($q) use ($user) {
+
+        $q->where('lead_type', 1)
+          ->where('sale_information_id', $user->id)
+
+          ->orWhere(function ($sub) use ($user) {
+              $sub->where('lead_type', 2)
+                  ->where('sale_information_id', $user->id);
+          });
+
+    })
+    ->when($isAdminOrManager, function ($q) {
+        $q->orWhere(function ($sub) {
+            $sub->whereIn('lead_type', [1, 2]);
+        });
     })
     ->latest()
     ->paginate(30, ['*'], 'direct_page');
