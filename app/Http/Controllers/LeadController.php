@@ -204,16 +204,10 @@ public function index(Request $request)
         |--------------------------------------------------------------------------
         */
         $leads = $query
-            ->when(!$isAdminOrManager, function ($q) use ($user) {
-                $q->where(function ($sub) use ($user) {
-                    $sub->where('lead_type', 1)
-                        ->where('sale_information_id', $user->id)
-                        ->orWhere(function ($x) use ($user) {
-                            $x->where('lead_type', 2)
-                            ->where('sale_information_id', $user->id);
-                        });
-                });
-            })
+            ->when(
+                !$isAdminOrManager,
+                fn ($q) => $q->where('sale_information_id', $user->id)
+            )
             ->latest()
             ->paginate(30, ['*'], 'direct_page');
 
@@ -227,20 +221,6 @@ public function index(Request $request)
             ->where('lead_type', 2)
             ->latest()
             ->paginate(30, ['*'], 'online_page');
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Hiển thị tab Lead Online
-        |--------------------------------------------------------------------------
-        */
-        $canViewOnlineTab = $isAdminOrManager ||
-        Lead::where('lead_type', 2)
-            ->where(function ($q) use ($user) {
-                $q->where('sale_information_id', $user->id)
-                ->orWhere('sale_support_id', $user->id);
-            })
-            ->exists();
         // Thông báo khách online cần chăm sóc hôm nay
         // $today = now()->toDateString();
         // $careOnline = \App\Models\LeadTakeCare::whereIn('lead_id', $leadsOnline->pluck('id'))
