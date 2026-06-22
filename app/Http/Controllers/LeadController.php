@@ -203,46 +203,14 @@ $isAdminOrManager = $user->roles()
 |--------------------------------------------------------------------------
 | Lead trực tiếp
 |--------------------------------------------------------------------------
-| Type 1 + Type 2 có sale_information_id của user
-|--------------------------------------------------------------------------
 */
 $leads = $query
-    ->where(function ($q) use ($user) {
-
-        $q->where('lead_type', 1)
-          ->where('sale_information_id', $user->id)
-
-          ->orWhere(function ($sub) use ($user) {
-              $sub->where('lead_type', 2)
-                  ->where('sale_information_id', $user->id);
-          });
-
-    })
+    ->where('lead_type', 1)
     ->when(!$isAdminOrManager, function ($q) use ($user) {
         $q->where('sale_information_id', $user->id);
     })
     ->latest()
     ->paginate(30, ['*'], 'direct_page');
-
-
-
-/*
-|--------------------------------------------------------------------------
-| Lead online
-|--------------------------------------------------------------------------
-| Type 2 thấy chung nhau
-| Không lấy type 1
-| Không lấy lead type 2 đã thuộc sale_information của user
-|--------------------------------------------------------------------------
-*/
-// |--------------------------------------------------------------------------
-// // | Check user có trong lead type 2 không
-// |--------------------------------------------------------------------------
-// */
-$hasOnlineLead = $isAdminOrManager ||
-    Lead::where('lead_type', 2)
-        ->where('sale_support_id', $user->id)
-        ->exists();
 
 
 
@@ -256,6 +224,17 @@ $leadsOnline = $queryOnline
     ->latest()
     ->paginate(30, ['*'], 'online_page');
 
+
+
+/*
+|--------------------------------------------------------------------------
+| Hiện tab Online
+|--------------------------------------------------------------------------
+*/
+$hasOnlineLead = $isAdminOrManager ||
+    Lead::where('lead_type', 2)
+        ->where('sale_support_id', $user->id)
+        ->exists();
 
 /*
 |--------------------------------------------------------------------------
