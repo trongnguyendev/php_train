@@ -235,19 +235,37 @@ $leads = $query
 | Không lấy lead type 2 đã thuộc sale_information của user
 |--------------------------------------------------------------------------
 */
+// |--------------------------------------------------------------------------
+// // | Check user có trong lead type 2 không
+// |--------------------------------------------------------------------------
+// */
+$hasOnlineLead = $isAdminOrManager ||
+    Lead::where('lead_type', 2)
+        ->where(function ($q) use ($user) {
+            $q->where('sale_support_id', $user->id)
+              ->orWhere('sale_information_id', $user->id);
+        })
+        ->exists();
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Lead online
+|--------------------------------------------------------------------------
+*/
 $leadsOnline = $queryOnline
     ->where('lead_type', 2)
     ->when(!$isAdminOrManager, function ($q) use ($user) {
-        $q->where(function ($sub) use ($user) {
 
+        $q->where(function ($sub) use ($user) {
             $sub->whereNull('sale_information_id')
                 ->orWhere('sale_information_id', '!=', $user->id);
-
         });
+
     })
     ->latest()
     ->paginate(30, ['*'], 'online_page');
-
 
 
 /*
@@ -255,8 +273,7 @@ $leadsOnline = $queryOnline
 | Hiện tab online
 |--------------------------------------------------------------------------
 */
-$canViewOnlineTab = $isAdminOrManager ||
-    $leadsOnline->total() > 0;
+
         // Thông báo khách online cần chăm sóc hôm nay
         // $today = now()->toDateString();
         // $careOnline = \App\Models\LeadTakeCare::whereIn('lead_id', $leadsOnline->pluck('id'))
@@ -289,7 +306,7 @@ $canViewOnlineTab = $isAdminOrManager ||
             'careOnline',
             'saleUsers',
             'customerCode',
-            'canViewOnlineTab'
+            'hasOnlineLead'
         ));
 }
 

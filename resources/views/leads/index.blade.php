@@ -223,7 +223,8 @@
         <ul class="nav nav-tabs nav-fill" id="leadTabs" role="tablist">
            
 <li class="nav-item" role="presentation">
-@if($canViewOnlineTab)
+@if($hasOnlineLead)
+<li class="nav-item" role="presentation">
     <button class="nav-link"
             id="online-tab"
             data-bs-toggle="tab"
@@ -237,7 +238,6 @@
         </span>
 
     </button>
-
 </li>
 @endif
 
