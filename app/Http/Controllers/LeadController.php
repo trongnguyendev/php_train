@@ -194,13 +194,7 @@ public function index(Request $request)
         // Paginate results to improve performance (30 rows per page)
         // $leads = $query->where('lead_type', 1)->latest()->paginate(30, ['*'], 'direct_page');
         $leads = $query
-            ->where(function ($q) use ($user) {
-                $q->where('lead_type', 2)
-                ->orWhere(function ($sub) use ($user) {
-                    $sub->where('lead_type', 1)
-                        ->where('sale_information_id', $user->id);
-                });
-            })
+            ->where('sale_information_id', $user->id)
             ->latest()
             ->paginate(30, ['*'], 'direct_page');
         $leadsOnline = $queryOnline->where('lead_type', 2)->latest()->paginate(30, ['*'], 'online_page');
