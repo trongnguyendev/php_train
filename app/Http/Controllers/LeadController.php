@@ -193,48 +193,25 @@ public function index(Request $request)
         
         // Paginate results to improve performance (30 rows per page)
         // $leads = $query->where('lead_type', 1)->latest()->paginate(30, ['*'], 'direct_page');
-$isAdminOrManager = $user->roles()
-    ->whereIn('slug', ['admin', 'manager', 'supporter'])
-    ->exists();
+        $isAdminOrManager = $user->roles()
+            ->whereIn('slug', ['admin', 'manager', 'supporter'])
+            ->exists();
 
+        $leads = $query
+            ->whereIn('lead_type', [1, 2])
+            ->when(!$isAdminOrManager, function ($q) use ($user) {
+                $q->where('sale_information_id', $user->id);
+            })
+            ->latest()
+            ->paginate(30, ['*'], 'direct_page');
 
-/*
-|--------------------------------------------------------------------------
-| Lead trực tiếp
-|--------------------------------------------------------------------------
-*/
-$leads = $query
-    ->where('lead_type', 1)
-    ->when(!$isAdminOrManager, function ($q) use ($user) {
-        $q->where('sale_information_id', $user->id);
-    })
-    ->latest()
-    ->paginate(30, ['*'], 'direct_page');
+        
+        $leadsOnline = $queryOnline
+            ->where('lead_type', 2)
+            ->latest()
+            ->paginate(30, ['*'], 'online_page');
 
-
-
-/*
-|--------------------------------------------------------------------------
-| Check quyền xem Online
-|--------------------------------------------------------------------------
-*/
-$hasOnlineLead = $isAdminOrManager ||
-    Lead::where('lead_type', 2)
-        ->where('sale_support_id', $user->id)
-        ->exists();
-
-
-
-/*
-|--------------------------------------------------------------------------
-| Lead Online
-|--------------------------------------------------------------------------
-*/
-$leadsOnline = $queryOnline
-    ->where('lead_type', 2)
-    ->latest()
-    ->paginate(30, ['*'], 'online_page');
-
+    
         // Thông báo khách online cần chăm sóc hôm nay
         // $today = now()->toDateString();
         // $careOnline = \App\Models\LeadTakeCare::whereIn('lead_id', $leadsOnline->pluck('id'))
@@ -267,7 +244,6 @@ $leadsOnline = $queryOnline
             'careOnline',
             'saleUsers',
             'customerCode',
-            'hasOnlineLead'
         ));
 }
 
