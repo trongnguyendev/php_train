@@ -232,9 +232,6 @@ $hasOnlineLead = $isAdminOrManager ||
 */
 $leadsOnline = $queryOnline
     ->where('lead_type', 2)
-    ->when(!$isAdminOrManager, function ($q) use ($user) {
-        $q->where('sale_support_id', $user->id);
-    })
     ->latest()
     ->paginate(30, ['*'], 'online_page');
 
