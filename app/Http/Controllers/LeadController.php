@@ -198,10 +198,12 @@ public function index(Request $request)
             ->exists();
 
         $leads = $query
-            ->when(
-                !$isAdminOrManager,
-                fn ($q) => $q->where('sale_information_id', $user->id)
-            )
+            ->when(!$isAdminOrManager, function ($q) use ($user) {
+                $q->where(function ($sub) use ($user) {
+                    $sub->where('sale_information_id', $user->id)
+                        ->orWhereNull('sale_information_id');
+                });
+            })
             ->latest()
             ->paginate(30, ['*'], 'direct_page');
         $leadsOnline = $queryOnline->where('lead_type', 2)->latest()->paginate(30, ['*'], 'online_page');
