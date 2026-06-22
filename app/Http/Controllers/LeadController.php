@@ -193,9 +193,13 @@ public function index(Request $request)
         
         // Paginate results to improve performance (30 rows per page)
         // $leads = $query->where('lead_type', 1)->latest()->paginate(30, ['*'], 'direct_page');
+        $isAdminOrManager = $user->roles()
+            ->whereIn('slug', ['admin', 'manager', 'supporter'])
+            ->exists();
+
         $leads = $query
             ->when(
-                !in_array($user->position, ['admin', 'manager', 'supporter']),
+                !$isAdminOrManager,
                 fn ($q) => $q->where('sale_information_id', $user->id)
             )
             ->latest()
