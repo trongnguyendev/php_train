@@ -236,6 +236,7 @@ $hasOnlineLead = $isAdminOrManager ||
         ->where('sale_support_id', $user->id)
         ->exists();
 
+        
 /*
 |--------------------------------------------------------------------------
 | Hiện tab online
