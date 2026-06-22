@@ -222,7 +222,6 @@
     <div class="card-header bg-light border-bottom p-0">
         <ul class="nav nav-tabs nav-fill" id="leadTabs" role="tablist">
            
-                @if($hasOnlineLead)
 <li class="nav-item" role="presentation">
 
     <button class="nav-link"
@@ -240,7 +239,7 @@
     </button>
 
 </li>
-@endif
+
             
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="direct-tab" data-bs-toggle="tab" data-bs-target="#direct-pane" type="button" role="tab" aria-controls="direct-pane" aria-selected="false">

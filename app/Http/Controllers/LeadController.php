@@ -193,7 +193,8 @@ public function index(Request $request)
         
         // Paginate results to improve performance (30 rows per page)
         // $leads = $query->where('lead_type', 1)->latest()->paginate(30, ['*'], 'direct_page');
-    $isAdminOrManager = $user->roles()
+
+$isAdminOrManager = $user->roles()
     ->whereIn('slug', ['admin', 'manager', 'supporter'])
     ->exists();
 
@@ -212,20 +213,6 @@ $leads = $query
     ->paginate(30, ['*'], 'direct_page');
 
 
-/*
-|--------------------------------------------------------------------------
-| Check user có tham gia lead type 2 không
-|--------------------------------------------------------------------------
-*/
-$hasOnlineLead = $isAdminOrManager ||
-    Lead::where('lead_type', 2)
-        ->where(function ($q) use ($user) {
-            $q->where('sale_information_id', $user->id)
-              ->orWhere('sale_support_id', $user->id);
-        })
-        ->exists();
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -234,13 +221,13 @@ $hasOnlineLead = $isAdminOrManager ||
 */
 $leadsOnline = $queryOnline
     ->where('lead_type', 2)
-    ->when(!$hasOnlineLead, function ($q) {
-        // user không có lead type 2 => trả rỗng
-        $q->whereRaw('1 = 0');
+    ->when(!$isAdminOrManager, function ($q) use ($user) {
+
+        $q->where('sale_support_id', $user->id);
+
     })
     ->latest()
     ->paginate(30, ['*'], 'online_page');
-
         // Thông báo khách online cần chăm sóc hôm nay
         // $today = now()->toDateString();
         // $careOnline = \App\Models\LeadTakeCare::whereIn('lead_id', $leadsOnline->pluck('id'))
@@ -273,8 +260,6 @@ $leadsOnline = $queryOnline
             'careOnline',
             'saleUsers',
             'customerCode',
-            'hasOnlineLead',
-            'isAdminOrManager'
         ));
 }
 
