@@ -215,7 +215,7 @@ public function index(Request $request)
 
         $leadsOnline = $queryOnline
             ->where('lead_type', 2)
-            ->when(!$isAdminOrManagerOrSupporter && !in_array($user->id, $supportUsers), function ($q) {
+            ->when(!$isAdminOrManager && !in_array($user->id, $supportUsers), function ($q) {
                 $q->whereRaw('1 = 0');
             })
             ->latest()
