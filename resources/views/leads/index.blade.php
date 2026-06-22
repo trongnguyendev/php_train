@@ -262,8 +262,10 @@
 
     <!-- Tab Content -->
     <div class="tab-content" id="leadTabsContent">
+
         <!-- Lead Online Tab -->
         <div class="tab-pane fade show active" id="online-pane" role="tabpanel" aria-labelledby="online-tab">
+             @if($hasOnlineLead)
             <!-- Online Leads Table -->
             <div class="card-body p-0">
                 @if($leadsOnline->count() > 0)
@@ -668,6 +670,7 @@
                 @endif
             </div>
         </div>
+        @endif
 
         <!-- Lead Trực tiếp Tab -->
         <div class="tab-pane fade" id="direct-pane" role="tabpanel" aria-labelledby="direct-tab">
