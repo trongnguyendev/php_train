@@ -197,17 +197,44 @@ public function index(Request $request)
             ->whereIn('slug', ['admin', 'manager', 'supporter'])
             ->exists();
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Lead trực tiếp
+        |--------------------------------------------------------------------------
+        */
         $leads = $query
+            ->when(
+                !$isAdminOrManager,
+                fn ($q) => $q->where('sale_information_id', $user->id)
+            )
+            ->latest()
+            ->paginate(30, ['*'], 'direct_page');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Lead online
+        |--------------------------------------------------------------------------
+        */
+        $leadsOnline = $queryOnline
+            ->where('lead_type', 2)
             ->when(!$isAdminOrManager, function ($q) use ($user) {
                 $q->where(function ($sub) use ($user) {
                     $sub->where('sale_information_id', $user->id)
-                        ->orWhereNull('sale_information_id');
+                        ->orWhere('sale_support_id', $user->id);
                 });
             })
             ->latest()
-            ->paginate(30, ['*'], 'direct_page');
-        $leadsOnline = $queryOnline->where('lead_type', 2)->latest()->paginate(30, ['*'], 'online_page');
+            ->paginate(30, ['*'], 'online_page');
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Hiển thị tab Lead Online
+        |--------------------------------------------------------------------------
+        */
+        $canViewOnlineTab = $isAdminOrManager || $leadsOnline->total() > 0;
         // Thông báo khách online cần chăm sóc hôm nay
         // $today = now()->toDateString();
         // $careOnline = \App\Models\LeadTakeCare::whereIn('lead_id', $leadsOnline->pluck('id'))
@@ -239,7 +266,8 @@ public function index(Request $request)
             'supportChannel',
             'careOnline',
             'saleUsers',
-            'customerCode'
+            'customerCode',
+            'canViewOnlineTab'
         ));
 }
 
