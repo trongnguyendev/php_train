@@ -195,17 +195,11 @@ public function index(Request $request)
         // $leads = $query->where('lead_type', 1)->latest()->paginate(30, ['*'], 'direct_page');
         $leads = $query
             ->where(function ($q) use ($user) {
-
-                $q->where('lead_type', 1);
-
-                $q->orWhere(function ($sub) use ($user) {
-                    $sub->where('lead_type', 2)
-                        ->where(function ($x) use ($user) {
-                            $x->where('sale_information_id', $user->id)
-                            ->orWhere('sale_support_id', $user->id);
-                        });
+                $q->where('lead_type', 2)
+                ->orWhere(function ($sub) use ($user) {
+                    $sub->where('lead_type', 1)
+                        ->where('sale_information_id', $user->id);
                 });
-
             })
             ->latest()
             ->paginate(30, ['*'], 'direct_page');
