@@ -206,13 +206,20 @@ public function index(Request $request)
             ->paginate(30, ['*'], 'direct_page');
 
         
+        // lấy danh sách user có trong sale_support_id
+        $supportUsers = Lead::whereNotNull('sale_support_id')
+            ->pluck('sale_support_id')
+            ->unique()
+            ->toArray();
+
+
         $leadsOnline = $queryOnline
             ->where('lead_type', 2)
-            ->when(!$isAdminOrManager, function ($q) use ($user) {
-                $q->where('sale_support_id', $user->id);
+            ->when(!$isAdminOrManagerOrSupporter && !in_array($user->id, $supportUsers), function ($q) {
+                $q->whereRaw('1 = 0');
             })
             ->latest()
-        ->paginate(30, ['*'], 'online_page');
+            ->paginate(30, ['*'], 'online_page');
 
     
         // Thông báo khách online cần chăm sóc hôm nay
