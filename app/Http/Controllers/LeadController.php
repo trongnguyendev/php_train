@@ -253,7 +253,6 @@ public function index(Request $request)
             'careOnline',
             'saleUsers',
             'customerCode',
-            'canViewOnlineTab'
         ));
 }
 
