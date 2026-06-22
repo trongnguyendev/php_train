@@ -219,7 +219,7 @@
     </div>
 
     <!-- Tab Navigation -->
-   <div class="card-header bg-light border-bottom p-0">
+<div class="card-header bg-light border-bottom p-0">
             <ul class="nav nav-tabs nav-fill" id="leadTabs">
 
                 <li class="nav-item">
@@ -922,9 +922,9 @@
             </ul>
         </div>
     @endif
-</div>
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        </div>
+        <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
