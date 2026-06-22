@@ -204,10 +204,16 @@ public function index(Request $request)
         |--------------------------------------------------------------------------
         */
         $leads = $query
-            ->when(
-                !$isAdminOrManager,
-                fn ($q) => $q->where('sale_information_id', $user->id)
-            )
+            ->when(!$isAdminOrManager, function ($q) use ($user) {
+                $q->where(function ($sub) use ($user) {
+                    $sub->where('lead_type', 1)
+                        ->where('sale_information_id', $user->id)
+                        ->orWhere(function ($x) use ($user) {
+                            $x->where('lead_type', 2)
+                            ->where('sale_information_id', $user->id);
+                        });
+                });
+            })
             ->latest()
             ->paginate(30, ['*'], 'direct_page');
 
