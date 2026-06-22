@@ -241,10 +241,7 @@ $leads = $query
 // */
 $hasOnlineLead = $isAdminOrManager ||
     Lead::where('lead_type', 2)
-        ->where(function ($q) use ($user) {
-            $q->where('sale_support_id', $user->id)
-              ->orWhere('sale_information_id', $user->id);
-        })
+        ->where('sale_support_id', $user->id)
         ->exists();
 
 
@@ -256,14 +253,6 @@ $hasOnlineLead = $isAdminOrManager ||
 */
 $leadsOnline = $queryOnline
     ->where('lead_type', 2)
-    ->when(!$isAdminOrManager, function ($q) use ($user) {
-
-        $q->where(function ($sub) use ($user) {
-            $sub->whereNull('sale_information_id')
-                ->orWhere('sale_information_id', '!=', $user->id);
-        });
-
-    })
     ->latest()
     ->paginate(30, ['*'], 'online_page');
 
