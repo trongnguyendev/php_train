@@ -221,41 +221,41 @@
     <!-- Tab Navigation -->
     <div class="card-header bg-light border-bottom p-0">
         <ul class="nav nav-tabs nav-fill" id="leadTabs">
+                @if($leadsOnline->total() > 0)
+                    <li class="nav-item">
+                        <button class="nav-link"
+                                data-bs-toggle="tab"
+                                data-bs-target="#online-pane">
 
-            @if($hasOnlineLead && $leadsOnline->total() > 0)
-                <li class="nav-item">
-                    <button class="nav-link"
-                            data-bs-toggle="tab"
-                            data-bs-target="#online-pane">
+                            <i class="bi bi-globe me-2"></i>
+                            Lead Online
 
-                        <i class="bi bi-globe me-2"></i>
-                        Lead Online
+                            <span class="badge bg-info">
+                                {{ $leadsOnline->total() }}
+                            </span>
 
-                        <span class="badge bg-info">
-                            {{ $leadsOnline->total() }}
-                        </span>
+                        </button>
+                    </li>
+                @endif
+            
+        
+                @if($leads->total() > 0)
+                    <li class="nav-item">
+                        <button class="nav-link active"
+                                data-bs-toggle="tab"
+                                data-bs-target="#direct-pane">
 
-                    </button>
-                </li>
-            @endif
+                            <i class="bi bi-telephone me-2"></i>
+                            Lead Trực tiếp
 
+                            <span class="badge bg-warning">
+                                {{ $leads->total() }}
+                            </span>
 
-            @if($leads->total() > 0)
-                <li class="nav-item">
-                    <button class="nav-link active"
-                            data-bs-toggle="tab"
-                            data-bs-target="#direct-pane">
-
-                        <i class="bi bi-telephone me-2"></i>
-                        Lead Trực tiếp
-
-                        <span class="badge bg-warning">
-                            {{ $leads->total() }}
-                        </span>
-
-                    </button>
-                </li>
-            @endif
+                        </button>
+                    </li>
+                @endif
+           
 
         </ul>
     </div>
@@ -265,7 +265,7 @@
 
         <!-- Lead Online Tab -->
         <div class="tab-pane fade show active" id="online-pane" role="tabpanel" aria-labelledby="online-tab">
-             @if($hasOnlineLead)
+            @if($hasOnlineLead && $leadsOnline->total() > 0)
             <!-- Online Leads Table -->
             <div class="card-body p-0">
                 @if($leadsOnline->count() > 0)
@@ -669,8 +669,10 @@
                     </div>
                 @endif
             </div>
+            @endif
         </div>
-        @endif
+        
+       
 
         <!-- Lead Trực tiếp Tab -->
         <div class="tab-pane fade" id="direct-pane" role="tabpanel" aria-labelledby="direct-tab">
