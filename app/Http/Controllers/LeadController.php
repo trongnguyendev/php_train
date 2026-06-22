@@ -201,11 +201,23 @@ $isAdminOrManager = $user->roles()
 
 /*
 |--------------------------------------------------------------------------
-| Lead trực tiếp (type 1)
+| Lead trực tiếp
+|--------------------------------------------------------------------------
+| Type 1 + Type 2 có sale_information_id của user
 |--------------------------------------------------------------------------
 */
 $leads = $query
-    ->where('lead_type', 1)
+    ->where(function ($q) use ($user) {
+
+        $q->where('lead_type', 1)
+          ->where('sale_information_id', $user->id)
+
+          ->orWhere(function ($sub) use ($user) {
+              $sub->where('lead_type', 2)
+                  ->where('sale_information_id', $user->id);
+          });
+
+    })
     ->when(!$isAdminOrManager, function ($q) use ($user) {
         $q->where('sale_information_id', $user->id);
     })
@@ -216,18 +228,35 @@ $leads = $query
 
 /*
 |--------------------------------------------------------------------------
-| Lead online (type 2)
+| Lead online
+|--------------------------------------------------------------------------
+| Type 2 thấy chung nhau
+| Không lấy type 1
+| Không lấy lead type 2 đã thuộc sale_information của user
 |--------------------------------------------------------------------------
 */
 $leadsOnline = $queryOnline
     ->where('lead_type', 2)
     ->when(!$isAdminOrManager, function ($q) use ($user) {
+        $q->where(function ($sub) use ($user) {
 
-        $q->where('sale_support_id', $user->id);
+            $sub->whereNull('sale_information_id')
+                ->orWhere('sale_information_id', '!=', $user->id);
 
+        });
     })
     ->latest()
     ->paginate(30, ['*'], 'online_page');
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Hiện tab online
+|--------------------------------------------------------------------------
+*/
+$canViewOnlineTab = $isAdminOrManager ||
+    $leadsOnline->total() > 0;
         // Thông báo khách online cần chăm sóc hôm nay
         // $today = now()->toDateString();
         // $careOnline = \App\Models\LeadTakeCare::whereIn('lead_id', $leadsOnline->pluck('id'))
@@ -260,6 +289,7 @@ $leadsOnline = $queryOnline
             'careOnline',
             'saleUsers',
             'customerCode',
+            'canViewOnlineTab'
         ));
 }
 
