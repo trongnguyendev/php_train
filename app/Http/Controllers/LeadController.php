@@ -193,7 +193,6 @@ public function index(Request $request)
         
         // Paginate results to improve performance (30 rows per page)
         // $leads = $query->where('lead_type', 1)->latest()->paginate(30, ['*'], 'direct_page');
-
 $isAdminOrManager = $user->roles()
     ->whereIn('slug', ['admin', 'manager', 'supporter'])
     ->exists();
@@ -201,11 +200,11 @@ $isAdminOrManager = $user->roles()
 
 /*
 |--------------------------------------------------------------------------
-| Lead trực tiếp
+| Lead trực tiếp (type 1)
 |--------------------------------------------------------------------------
 */
 $leads = $query
-    ->whereIn('lead_type', [1, 2])
+    ->where('lead_type', 1)
     ->when(!$isAdminOrManager, function ($q) use ($user) {
         $q->where('sale_information_id', $user->id);
     })
@@ -213,21 +212,10 @@ $leads = $query
     ->paginate(30, ['*'], 'direct_page');
 
 
-/*
-|--------------------------------------------------------------------------
-| Lead online
-|--------------------------------------------------------------------------
-*/
-$leadsOnline = $queryOnline
-    ->where('lead_type', 2)
-    ->latest()
-    ->paginate(30, ['*'], 'online_page');
-
-
 
 /*
 |--------------------------------------------------------------------------
-| Hiện tab Online
+| Kiểm tra user có lead online không
 |--------------------------------------------------------------------------
 */
 $hasOnlineLead = $isAdminOrManager ||
@@ -235,12 +223,20 @@ $hasOnlineLead = $isAdminOrManager ||
         ->where('sale_support_id', $user->id)
         ->exists();
 
-        
+
+
 /*
 |--------------------------------------------------------------------------
-| Hiện tab online
+| Lead online (type 2)
 |--------------------------------------------------------------------------
 */
+$leadsOnline = $queryOnline
+    ->where('lead_type', 2)
+    ->when(!$isAdminOrManager, function ($q) use ($user) {
+        $q->where('sale_support_id', $user->id);
+    })
+    ->latest()
+    ->paginate(30, ['*'], 'online_page');
 
         // Thông báo khách online cần chăm sóc hôm nay
         // $today = now()->toDateString();

@@ -220,53 +220,40 @@
 
     <!-- Tab Navigation -->
     <div class="card-header bg-light border-bottom p-0">
-        <ul class="nav nav-tabs nav-fill" id="leadTabs" role="tablist">
+        <ul class="nav nav-tabs nav-fill" id="leadTabs">
 
-            {{-- Lead Online --}}
             @if($hasOnlineLead && $leadsOnline->total() > 0)
-                <li class="nav-item" role="presentation">
-
+                <li class="nav-item">
                     <button class="nav-link"
-                            id="online-tab"
                             data-bs-toggle="tab"
-                            data-bs-target="#online-pane"
-                            type="button"
-                            role="tab">
+                            data-bs-target="#online-pane">
 
                         <i class="bi bi-globe me-2"></i>
                         Lead Online
 
-                        <span class="badge bg-info ms-2">
+                        <span class="badge bg-info">
                             {{ $leadsOnline->total() }}
                         </span>
 
                     </button>
-
                 </li>
             @endif
 
 
-
-            {{-- Lead Trực tiếp --}}
             @if($leads->total() > 0)
-                <li class="nav-item" role="presentation">
-
+                <li class="nav-item">
                     <button class="nav-link active"
-                            id="direct-tab"
                             data-bs-toggle="tab"
-                            data-bs-target="#direct-pane"
-                            type="button"
-                            role="tab">
+                            data-bs-target="#direct-pane">
 
                         <i class="bi bi-telephone me-2"></i>
                         Lead Trực tiếp
 
-                        <span class="badge bg-warning ms-2">
+                        <span class="badge bg-warning">
                             {{ $leads->total() }}
                         </span>
 
                     </button>
-
                 </li>
             @endif
 
