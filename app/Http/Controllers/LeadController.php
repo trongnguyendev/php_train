@@ -193,19 +193,18 @@ public function index(Request $request)
         
         // Paginate results to improve performance (30 rows per page)
         // $leads = $query->where('lead_type', 1)->latest()->paginate(30, ['*'], 'direct_page');
-        $isAdminOrManager = $user->roles()
+    $isAdminOrManager = $user->roles()
     ->whereIn('slug', ['admin', 'manager', 'supporter'])
     ->exists();
 
 
 /*
 |--------------------------------------------------------------------------
-| Lead trực tiếp
-|--------------------------------------------------------------------------
-| Type 1 + Type 2 nhưng chỉ của sale_information_id hiện tại
+| Lead trực tiếp (type 1)
 |--------------------------------------------------------------------------
 */
 $leads = $query
+    ->where('lead_type', 1)
     ->when(!$isAdminOrManager, function ($q) use ($user) {
         $q->where('sale_information_id', $user->id);
     })
@@ -213,36 +212,34 @@ $leads = $query
     ->paginate(30, ['*'], 'direct_page');
 
 
-
 /*
 |--------------------------------------------------------------------------
-| Lead Online
-|--------------------------------------------------------------------------
-| Tất cả lead_type = 2 đều thấy
+| Check user có tham gia lead type 2 không
 |--------------------------------------------------------------------------
 */
-$leadsOnline = $queryOnline
-    ->where('lead_type', 2)
-    ->where(function ($q) {
-        $q->whereNotNull('sale_information_id')
-          ->orWhereNotNull('sale_support_id');
-    })
-    ->latest()
-    ->paginate(30, ['*'], 'online_page');
-
-
-/*
-|--------------------------------------------------------------------------
-| Kiểm tra hiện tab online
-|--------------------------------------------------------------------------
-*/
-$canViewOnlineTab = $isAdminOrManager ||
+$hasOnlineLead = $isAdminOrManager ||
     Lead::where('lead_type', 2)
         ->where(function ($q) use ($user) {
             $q->where('sale_information_id', $user->id)
               ->orWhere('sale_support_id', $user->id);
         })
         ->exists();
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Lead online (type 2)
+|--------------------------------------------------------------------------
+*/
+$leadsOnline = $queryOnline
+    ->where('lead_type', 2)
+    ->when(!$hasOnlineLead, function ($q) {
+        // user không có lead type 2 => trả rỗng
+        $q->whereRaw('1 = 0');
+    })
+    ->latest()
+    ->paginate(30, ['*'], 'online_page');
 
         // Thông báo khách online cần chăm sóc hôm nay
         // $today = now()->toDateString();
@@ -276,7 +273,8 @@ $canViewOnlineTab = $isAdminOrManager ||
             'careOnline',
             'saleUsers',
             'customerCode',
-            'canViewOnlineTab'
+            'hasOnlineLead',
+            'isAdminOrManager'
         ));
 }
 
