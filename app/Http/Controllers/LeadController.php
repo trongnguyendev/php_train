@@ -201,11 +201,11 @@ $isAdminOrManager = $user->roles()
 
 /*
 |--------------------------------------------------------------------------
-| Lead trực tiếp (type 1)
+| Lead trực tiếp
 |--------------------------------------------------------------------------
 */
 $leads = $query
-    ->where('lead_type', 1)
+    ->whereIn('lead_type', [1, 2])
     ->when(!$isAdminOrManager, function ($q) use ($user) {
         $q->where('sale_information_id', $user->id);
     })
@@ -213,10 +213,21 @@ $leads = $query
     ->paginate(30, ['*'], 'direct_page');
 
 
+/*
+|--------------------------------------------------------------------------
+| Lead online
+|--------------------------------------------------------------------------
+*/
+$leadsOnline = $queryOnline
+    ->where('lead_type', 2)
+    ->latest()
+    ->paginate(30, ['*'], 'online_page');
+
+
 
 /*
 |--------------------------------------------------------------------------
-| Check user có thuộc nhóm online không
+| Hiện tab Online
 |--------------------------------------------------------------------------
 */
 $hasOnlineLead = $isAdminOrManager ||
@@ -224,20 +235,12 @@ $hasOnlineLead = $isAdminOrManager ||
         ->where('sale_support_id', $user->id)
         ->exists();
 
-
-
+        
 /*
 |--------------------------------------------------------------------------
-| Lead online (type 2)
+| Hiện tab online
 |--------------------------------------------------------------------------
 */
-$leadsOnline = $queryOnline
-    ->where('lead_type', 2)
-    ->when(!$hasOnlineLead, function ($q) {
-        $q->whereRaw('1 = 0');
-    })
-    ->latest()
-    ->paginate(30, ['*'], 'online_page');
 
         // Thông báo khách online cần chăm sóc hôm nay
         // $today = now()->toDateString();
