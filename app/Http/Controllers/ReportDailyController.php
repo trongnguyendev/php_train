@@ -12,6 +12,8 @@ use DB;
 use Auth;
 use App\Models\Showroom;
 use Illuminate\Support\Facades\Gate;
+use App\Exports\ReportDailyExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class ReportDailyController extends Controller
@@ -61,16 +63,9 @@ class ReportDailyController extends Controller
 
     //     return view('report_daily.index', compact('data', 'today'));
     // }
-    public function exportDaily(Request $request)
-        {
-            abort_unless(auth()->user()->hasPermission('report_daily.view'), 403);
-
-            $date = $request->input('date');
-            $today = $date
-                ? Carbon::parse($date)->toDateString()
-                : Carbon::today()->toDateString();
-
-            $data = DB::table('users')
+    private function getReportDailyData($today)
+    {
+            return DB::table('users')
                 ->leftJoin('leads', function ($join) use ($today) {
                     $join->on('users.id', '=', 'leads.sale_information_id')
                         ->whereDate('leads.first_interaction_date', $today);
@@ -148,28 +143,57 @@ class ReportDailyController extends Controller
                 ->groupBy('users.id', 'users.name')
                 ->orderBy('users.name')
                 ->get();
+    }
+    public function exportDaily(Request $request)
+    {
+        abort_unless(auth()->user()->hasPermission('report_daily.view'), 403);
 
-            // Tổng cộng
-            $total = (object)[
-                'sale_name'             => 'TỔNG',
-                'total_customers'       => $data->sum('total_customers'),
-                'total_new_customers'   => $data->sum('total_new_customers'),
-                'total_old_customers'   => $data->sum('total_old_customers'),
-                'total_new_potential'   => $data->sum('total_new_potential'),
-                'total_old_potential'   => $data->sum('total_old_potential'),
-                'total_potential'       => $data->sum('total_potential'),
-                'total_care'            => $data->sum('total_care'),
-                'total_new_locked'      => $data->sum('total_new_locked'),
-                'total_old_locked'      => $data->sum('total_old_locked'),
-                'total_value'           => $data->sum('total_value'),
-            ];
+        $date = $request->input('date');
 
-            return view('report_daily.index', compact(
-                'data',
-                'today',
-                'total'
-            ));
-        }
+        $today = $date
+            ? Carbon::parse($date)->toDateString()
+            : Carbon::today()->toDateString();
+
+        $data = $this->getReportDailyData($today);
+
+        $total = (object)[
+            'sale_name'             => 'TỔNG',
+            'total_customers'       => $data->sum('total_customers'),
+            'total_new_customers'   => $data->sum('total_new_customers'),
+            'total_old_customers'   => $data->sum('total_old_customers'),
+            'total_new_potential'   => $data->sum('total_new_potential'),
+            'total_old_potential'   => $data->sum('total_old_potential'),
+            'total_potential'       => $data->sum('total_potential'),
+            'total_care'            => $data->sum('total_care'),
+            'total_new_locked'      => $data->sum('total_new_locked'),
+            'total_old_locked'      => $data->sum('total_old_locked'),
+            'total_value'           => $data->sum('total_value'),
+        ];
+
+        return view('report_daily.index', compact(
+            'data',
+            'today',
+            'total'
+        ));
+    }
+    public function exportExcel(Request $request)
+    {
+        abort_unless(auth()->user()->hasPermission('report_daily.view'), 403);
+
+        $date = $request->input('date');
+
+        $today = $date
+            ? Carbon::parse($date)->toDateString()
+            : Carbon::today()->toDateString();
+
+        $data = $this->getReportDailyData($today);
+
+        return Excel::download(
+            new ReportDailyExport($data),
+            'BaoCaoNgay_'.$today.'.xlsx'
+        );
+    }
+
     public function exportCurrentMonth(Request $request)
     {
         abort_unless(auth()->user()->hasPermission('report_month.view'), 403);

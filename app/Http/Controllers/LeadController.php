@@ -124,9 +124,17 @@ public function index(Request $request)
             ]);
         }
 
-        if ($request->current_status) {
-            $query->where('current_customer_status_id', $request->current_status);
-            $queryOnline->where('current_customer_status_id', $request->current_status);
+        if ($request->filled('current_status')) {
+
+            $query->whereIn(
+                'current_customer_status_id',
+                $request->current_status
+            );
+
+            $queryOnline->whereIn(
+                'current_customer_status_id',
+                $request->current_status
+            );
         }
         // tmdt 
         if ($request->tmdt) {

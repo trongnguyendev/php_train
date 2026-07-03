@@ -114,3 +114,6 @@ Route::get('/migrate-customer-data', function () {
         return "Gặp lỗi trong quá trình chuyển đổi: " . $e->getMessage();
     }
 });
+
+Route::get('/report-daily/export-excel', [ReportDailyController::class, 'exportExcel'])
+    ->name('report_daily.exportExcel');

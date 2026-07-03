@@ -16,20 +16,26 @@
     </form> -->
 
     <form method="GET" action="">
-    <label class="form-btn btn-primary btn-sm"
-        style="font-weight: bold; color: white; padding: 5px 10px; border-radius: 5px;">
-        Chọn ngày:
-    </label>
+        <label class="form-btn btn-primary btn-sm"
+            style="font-weight: bold; color: white; padding: 5px 10px; border-radius: 5px;">
+            Chọn ngày:
+        </label>
 
-    <input type="date"
-           id="date"
-           name="date"
-           value="{{ request('date', now()->toDateString()) }}">
+        <input type="date"
+            id="date"
+            name="date"
+            value="{{ request('date', now()->toDateString()) }}">
 
-    <button type="submit" class="btn btn-primary btn-sm">
-        Lọc
-    </button>
-</form>
+        <button type="submit" class="btn btn-primary btn-sm">
+            Lọc
+        </button>
+
+        <a href="{{ route('report_daily.exportExcel', ['date' => request('date')]) }}"
+        class="btn btn-success btn-sm">
+            <i class="bi bi-file-earmark-excel"></i>
+            Xuất Excel
+        </a>
+    </form>
   
 
 <div class="card">

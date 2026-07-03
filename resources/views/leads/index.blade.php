@@ -93,16 +93,40 @@
                 >
             </div>
 
-            <div class="col-md-2">
-                <label for="current_status" class="form-label">
-                    <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Tình trạng hiện tại</span>
+            <div class="col-md-3">
+                <label class="form-label">
+                    <i class="bi bi-calendar me-1"></i>
+                    <span class="text-primary fw-bold">Tình trạng hiện tại</span>
                 </label>
-                <select name="current_status" id="current_status" class="form-select">
-                    <option value="">-- Tất cả --</option>
-                    @foreach($customerStatuses as $status)
-                        <option value="{{ $status->id }}" {{ request('current_status') == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
-                    @endforeach
-                </select>
+
+                <div class="dropdown w-100">
+                    <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            data-bs-auto-close="outside">
+                        Chọn tình trạng
+                    </button>
+
+                    <ul class="dropdown-menu w-100 p-2" style="max-height:250px; overflow-y:auto;">
+                        @foreach($customerStatuses as $status)
+                            <li>
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                        type="checkbox"
+                                        name="current_status[]"
+                                        value="{{ $status->id }}"
+                                        id="status{{ $status->id }}"
+                                        {{ in_array($status->id, request('current_status', [])) ? 'checked' : '' }}>
+
+                                    <label class="form-check-label"
+                                        for="status{{ $status->id }}">
+                                        {{ $status->name }}
+                                    </label>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
             <!-- lọc nguồn -->
             <div class="col-md-2">
@@ -1179,6 +1203,27 @@ document.addEventListener('DOMContentLoaded', function () {
     tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
+});
+// chọn trạng thái để lọc
+
+function updateStatusText() {
+    let selected = [];
+
+    $('input[name="current_status[]"]:checked').each(function () {
+        selected.push($(this).next('label').text().trim());
+    });
+
+    if (selected.length > 0) {
+        $('.dropdown-toggle').text(selected.join(', '));
+    } else {
+        $('.dropdown-toggle').text('Chọn tình trạng');
+    }
+}
+
+$(function () {
+    updateStatusText();
+
+    $('input[name="current_status[]"]').on('change', updateStatusText);
 });
 
 </script>
