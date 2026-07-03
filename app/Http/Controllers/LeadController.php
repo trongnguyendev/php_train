@@ -212,14 +212,27 @@ public function index(Request $request)
             ->unique()
             ->toArray();
 
+        $highlightLead = session('highlight_lead');
 
         $leadsOnline = $queryOnline
             ->where('lead_type', 2)
             ->when(!$isAdminOrManager && !in_array($user->id, $supportUsers), function ($q) {
                 $q->whereRaw('1 = 0');
             })
+            ->when($highlightLead, function ($q) use ($highlightLead) {
+                $q->orderByRaw('CASE WHEN id = ? THEN 0 ELSE 1 END', [$highlightLead]);
+            })
             ->latest()
             ->paginate(30, ['*'], 'online_page');
+
+
+        // $leadsOnline = $queryOnline
+        //     ->where('lead_type', 2)
+        //     ->when(!$isAdminOrManager && !in_array($user->id, $supportUsers), function ($q) {
+        //         $q->whereRaw('1 = 0');
+        //     })
+        //     ->latest()
+        //     ->paginate(30, ['*'], 'online_page');
 
     
         // Thông báo khách online cần chăm sóc hôm nay
@@ -724,7 +737,15 @@ public function update(Request $request, Lead $lead)
             $redirect->with('highlight_lead', $lead->id);
         }
 
-        return $redirect;
+        if ($oldLeadType == 1 && $request->lead_type == 2) {
+                session()->flash('highlight_lead', $lead->id);
+            }
+
+            return redirect()
+                ->route('leads.index', request()->query())
+                ->with('success', 'Cập nhật Lead thành công!');
+
+        // return $redirect;
     // return redirect()->route('leads.index', request()->query())->with('success', 'Cập nhập Lead thành công!');
 }
 

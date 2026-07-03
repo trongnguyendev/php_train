@@ -220,7 +220,7 @@
 
     <!-- Tab Navigation -->
 <div class="card-header bg-light border-bottom p-0">
-            <ul class="nav nav-tabs nav-fill" id="leadTabs">
+            <!-- <ul class="nav nav-tabs nav-fill" id="leadTabs">
 
                 <li class="nav-item">
                     <button class="nav-link active"
@@ -254,7 +254,42 @@
                     </button>
                 </li>
 
-            </ul>
+            </ul> -->
+            <ul class="nav nav-tabs nav-fill" id="leadTabs">
+
+    <li class="nav-item">
+        <button class="nav-link active bg-primary text-white fw-bold"
+                type="button"
+                data-bs-toggle="tab"
+                data-bs-target="#online-pane">
+
+            <i class="bi bi-globe me-2"></i>
+            Lead Online
+
+            <span class="badge bg-light text-primary">
+                {{ $leadsOnline->total() }}
+            </span>
+
+        </button>
+    </li>
+
+    <li class="nav-item">
+        <button class="nav-link"
+                type="button"
+                data-bs-toggle="tab"
+                data-bs-target="#direct-pane">
+
+            <i class="bi bi-telephone me-2"></i>
+            Lead Trực tiếp
+
+            <span class="badge bg-warning">
+                {{ $leads->total() }}
+            </span>
+
+        </button>
+    </li>
+
+</ul>
     </div>
      
     <!-- Tab Content -->
@@ -286,7 +321,7 @@
                                     <th style="min-width: 100px;">Sale Hỗ Trợ Khách</th>
                                     <th style="min-width: 200px;">Tình Trạng Khách Hiện Tại</th>
                                     <th style="min-width: 100px;">Giá trị đơn chốt được</th>
-                                    <th style="min-width: 200px;">Thông tin trạo đổi với KH</th>
+                                    <th style="min-width: 200px;">Thông tin trao đổi với KH</th>
                                     <th style="min-width: 200px;">Chuyển Sang TMDT</th>
                                     <th style="min-width: 200px;">Ngày Chăm Khách Lần 1</th>
                                     <th style="min-width: 200px;">Kế hoạch lần 1</th>
@@ -529,36 +564,34 @@
                                             </span>
                                             <input type="text" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="order_value" value="{{ $lead->order_value }}">
                                         </td>
+                                       
                                         <!-- <td>
-                                            @if($lead->currentStatus)
-                                                <small>
-                                                    {{-- Hiển thị tên nếu có, nếu không thì show toàn bộ object để debug --}}
-                                                    {{ isset($lead->currentStatus->name) ? $lead->currentStatus->name : json_encode($lead->currentStatus) }}
-                                                </small>
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
-                                        </td> -->
-
-                                        <!-- <td>
-                                            @if($lead->customerStatuses)
-                                                <small>{{ $lead->customerStatuses->name }}</small>
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
-                                        </td> -->
-                                        <!-- <td>
-                                            @if($lead->customer_discussion_details)
-                                                <small>{{ $lead->customer_discussion_details }}</small>
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
-                                        </td> -->
-                                        <td>
                                             <span class="editable-text" data-id="{{ $lead->id }}" data-field="customer_discussion_details">
                                                 {{ $lead->customer_discussion_details ?? '-' }}
                                             </span>
                                             <input type="text" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="customer_discussion_details" value="{{ $lead->customer_discussion_details }}">
+                                        </td> -->
+
+                                        <td style="max-width:250px;">
+                                            <span
+                                                class="editable-text text-truncate d-inline-block"
+                                                data-id="{{ $lead->id }}"
+                                                data-field="customer_discussion_details"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="{{ $lead->customer_discussion_details }}"
+                                                style="max-width:250px;"
+                                            >
+                                                {{ $lead->customer_discussion_details ?? '-' }}
+                                            </span>
+
+                                            <input
+                                                type="text"
+                                                class="form-control d-none inline-text"
+                                                data-id="{{ $lead->id }}"
+                                                data-field="customer_discussion_details"
+                                                value="{{ $lead->customer_discussion_details }}"
+                                            >
                                         </td>
 
                                     
@@ -1139,6 +1172,15 @@ $(document).ready(function() {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+
 </script>
 
 @endpush

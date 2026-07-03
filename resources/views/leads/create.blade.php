@@ -48,6 +48,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                    
                         <!-- Basic Information -->
                         <div class="col-md-4">
                            <label class="text-primary fw-bold">Mã khách hàng</label>
@@ -299,13 +300,26 @@
                             <label for="first_customer_status_id" class="form-label">
                                 <i class="bi bi-flag me-1"></i><span class="text-primary fw-bold">Tình trạng KH ban đầu</span>
                             </label>
+                            @php
+                                $quanTamId = 2; // Thay bằng ID của trạng thái "Quan Tâm"
+                            @endphp
                             <select name="first_customer_status_id" id="first_customer_status_id" 
                                     class="form-select @error('first_customer_status_id') is-invalid @enderror">
+                                    
                                 <option value="">-- Chọn tình trạng --</option>
                                 @foreach($customerStatuses as $st)
-                                    <option value="{{ $st->id }}" {{ old('first_customer_status_id') == $st->id ? 'selected' : '' }}>
+                                    <!-- <option value="{{ $st->id }}" {{ old('first_customer_status_id') == $st->id ? 'selected' : '' }}>
+                                        {{ $st->name }}
+                                    </option> -->
+
+                                    <option value="{{ $st->id }}"
+                                        {{ old(
+                                            'first_customer_status_id',
+                                            old('lead_type', '1') == '2' ? $quanTamId : ''
+                                        ) == $st->id ? 'selected' : '' }}>
                                         {{ $st->name }}
                                     </option>
+        
                                 @endforeach
                             </select>
                             @error('first_customer_status_id')
@@ -819,6 +833,18 @@ document.addEventListener('DOMContentLoaded', function () {
         multiple: false
     });
 
+});
+// Online mặc định Quan Tâm
+const quanTamId = {{ $quanTamId }};
+
+$('#lead_type').on('change', function () {
+    if ($(this).val() == '2') {
+        $('#first_customer_status_id').val(quanTamId);
+        $('#first_customer_status_id-field').hide();
+    } else {
+        $('#first_customer_status_id').val('');
+        $('#first_customer_status_id-field').show();
+    }
 });
 </script>
 @endpush
