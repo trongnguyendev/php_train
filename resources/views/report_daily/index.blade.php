@@ -9,11 +9,27 @@
     </div>
     @endif
 
-    <form method="GET" action="">
+    <!-- <form method="GET" action="">
         <label class="form-btn btn-primary btn-sm" style = "font-weight: bold; color: white; padding: 5px 10px; border-radius: 5px;">Chọn ngày:</label>
         <input type="date" id="date" name="date" value="{{ isset($date) ? $date : '' }}">
         <button type="submit" class="btn btn-primary btn-sm">Lọc</button>
-    </form>
+    </form> -->
+
+    <form method="GET" action="">
+    <label class="form-btn btn-primary btn-sm"
+        style="font-weight: bold; color: white; padding: 5px 10px; border-radius: 5px;">
+        Chọn ngày:
+    </label>
+
+    <input type="date"
+           id="date"
+           name="date"
+           value="{{ request('date', now()->toDateString()) }}">
+
+    <button type="submit" class="btn btn-primary btn-sm">
+        Lọc
+    </button>
+</form>
   
 
 <div class="card">
@@ -55,6 +71,21 @@
                         <td colspan="11" class="text-center">Chưa có dữ liệu</td>
                     </tr>
                 @endforelse
+                <tfoot>
+                    <tr class="table-warning fw-bold text-end">
+                        <td>{{ $total->sale_name }}</td>
+                        <td>{{ $total->total_customers }}</td>
+                        <td>{{ $total->total_new_customers }}</td>
+                        <td>{{ $total->total_old_customers }}</td>
+                        <td>{{ $total->total_new_potential }}</td>
+                        <td>{{ $total->total_old_potential }}</td>
+                        <td>{{ $total->total_potential }}</td>
+                        <td>{{ $total->total_care }}</td>
+                        <td>{{ $total->total_new_locked }}</td>
+                        <td>{{ $total->total_old_locked }}</td>
+                        <td>{{ number_format($total->total_value) }}</td>
+                    </tr>
+                </tfoot>
             </tbody>
         </table>
     </div>
