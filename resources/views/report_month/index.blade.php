@@ -50,6 +50,13 @@
             Lọc
         </button>
     </div>
+   <button
+        type="submit"
+        formaction="{{ route('report.month.export') }}"
+        class="btn btn-success btn-sm">
+        <i class="bi bi-file-earmark-excel"></i>
+        Xuất Excel
+    </button>
 
 </form>
   

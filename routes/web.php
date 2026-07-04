@@ -117,3 +117,13 @@ Route::get('/migrate-customer-data', function () {
 
 Route::get('/report-daily/export-excel', [ReportDailyController::class, 'exportExcel'])
     ->name('report_daily.exportExcel');
+
+
+Route::get('/report-month', [ReportDailyController::class, 'exportCurrentMonth'])
+    ->name('report.month');
+
+Route::get('/report-month/export', [ReportDailyController::class, 'exportCurrentMonthExcel'])
+    ->name('report.month.export');
+
+Route::get('/report-showroom/export',[ReportDailyController::class, 'exportShowroomExcel'])  
+    ->name('report_showroom.export');

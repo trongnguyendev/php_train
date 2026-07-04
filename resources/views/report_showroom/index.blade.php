@@ -51,6 +51,11 @@
         </button>
     </div>
 
+    <a href="{{ route('report_showroom.export', request()->all()) }}"
+    class="btn btn-success">
+        Export Excel
+    </a>
+
 </form>
 
 
