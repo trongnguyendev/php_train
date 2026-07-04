@@ -204,6 +204,12 @@ public function index(Request $request)
         $isAdminOrManager = $user->roles()
             ->whereIn('slug', ['admin', 'manager', 'supporter'])
             ->exists();
+        $directLeadCount = (clone $query)
+            ->where('lead_type', 1)
+            ->when(!$isAdminOrManager, function ($q) use ($user) {
+                $q->where('sale_information_id', $user->id);
+            })
+            ->count();
 
         $leads = $query
             ->whereIn('lead_type', [1, 2])
@@ -275,6 +281,7 @@ public function index(Request $request)
             'careOnline',
             'saleUsers',
             'customerCode',
+            'directLeadCount'  
         ));
 }
 

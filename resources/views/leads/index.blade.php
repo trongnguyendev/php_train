@@ -281,39 +281,39 @@
             </ul> -->
             <ul class="nav nav-tabs nav-fill" id="leadTabs">
 
-    <li class="nav-item">
-        <button class="nav-link active bg-primary text-white fw-bold"
-                type="button"
-                data-bs-toggle="tab"
-                data-bs-target="#online-pane">
+                <li class="nav-item">
+                    <button class="nav-link active bg-primary text-white fw-bold"
+                            type="button"
+                            data-bs-toggle="tab"
+                            data-bs-target="#online-pane">
 
-            <i class="bi bi-globe me-2"></i>
-            Lead Online
+                        <i class="bi bi-globe me-2"></i>
+                        Lead Online
 
-            <span class="badge bg-light text-primary">
-                {{ $leadsOnline->total() }}
-            </span>
+                        <span class="badge bg-light text-primary">
+                            {{ $leadsOnline->total() }}
+                        </span>
 
-        </button>
-    </li>
+                    </button>
+                </li>
 
-    <li class="nav-item">
-        <button class="nav-link"
-                type="button"
-                data-bs-toggle="tab"
-                data-bs-target="#direct-pane">
+                <li class="nav-item">
+                    <button class="nav-link"
+                            type="button"
+                            data-bs-toggle="tab"
+                            data-bs-target="#direct-pane">
 
-            <i class="bi bi-telephone me-2"></i>
-            Lead Trực tiếp
+                        <i class="bi bi-telephone me-2"></i>
+                        Lead Trực tiếp
 
-            <span class="badge bg-warning">
-                {{ $leads->total() }}
-            </span>
+                        <span class="badge bg-warning">
+                            {{ $directLeadCount }}
+                        </span>
 
-        </button>
-    </li>
+                    </button>
+                </li>
 
-</ul>
+            </ul>
     </div>
      
     <!-- Tab Content -->
