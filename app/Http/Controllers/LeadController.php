@@ -189,7 +189,8 @@ public function index(Request $request)
             $queryOnline->where('sale_information_id', $request->sale_information);
         }
 
-        if ($request->g) {
+        if ($request->productCategories) {
+        
             $query->whereHas('productCategories', function($q) use ($request) {
                 $q->whereIn('product_category_id', $request->productCategories);
             });
