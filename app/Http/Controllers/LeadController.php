@@ -123,7 +123,7 @@ public function index(Request $request)
                 $request->to_date
             ]);
         }
-
+        
         if ($request->filled('current_status')) {
 
             $query->whereIn(
