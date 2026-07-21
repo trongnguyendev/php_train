@@ -100,7 +100,9 @@
                 </label>
 
                 <div class="dropdown w-100">
-                    <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start"
+                    <button 
+                            id="currentStatusBtn"
+                            class="btn btn-outline-secondary dropdown-toggle w-100 text-start"
                             type="button"
                             data-bs-toggle="dropdown"
                             data-bs-auto-close="outside">
@@ -196,38 +198,54 @@
             </div>
              <!-- tìm bằng tên khách hàng -->
             <div class="col-md-3">
-                <label class="form-label">
-                    <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Danh Mục Sản Phẩm</span>
+                  <label class="form-label">
+                    <i class="bi bi-calendar me-1"></i>
+                    <span class="text-primary fw-bold">Danh Mục Sản Phẩm</span>
                 </label>
+
                 <div class="dropdown">
-                        <button class="btn dropdown-toggle w-100" type="button" id="dropdownProductCategories" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #fff; color: #0d6efd; border: 1px solid #0d6efd; border-radius: 0.375rem;">
-                            <span id="selectedProductNamesFilterBtn">
-                                @php
-                                    $selectedProductNames = collect($productCategories)
-                                        ->whereIn('id', (array)request('productCategories', []))
-                                        ->pluck('name')
-                                        ->toArray();
-                                @endphp
-                                @if(count($selectedProductNames))
-                                    {{ implode(', ', $selectedProductNames) }}
-                                @else
-                                    Chọn danh mục sản phẩm
-                                @endif
-                            </span>
-                        </button>
-                        <div class="dropdown-menu w-100 p-2" aria-labelledby="dropdownProductCategories" style="max-height: 300px; overflow-y: auto; background-color: #fff; color: #0d6efd;">
-                            @foreach($productCategories as $category)
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="productCategories[]" id="productCategory{{ $category->id }}" value="{{ $category->id }}" {{ in_array($category->id, request('productCategories', [])) ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="productCategory{{ $category->id }}" style="color: #0d6efd;">
-                                        {{ $category->name }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
+                    <button
+                        id="productCategoryBtn"
+                        class="btn dropdown-toggle w-100 text-start"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        data-bs-auto-close="outside"
+                        aria-expanded="false"
+                        style="background-color:#fff;color:#0d6efd;border:1px solid #0d6efd;">
+
+                        <span id="selectedProductNamesFilterBtn">
+                            @php
+                                $selectedProductNames = collect($productCategories)
+                                    ->whereIn('id', (array)request('productCategories', []))
+                                    ->pluck('name')
+                                    ->toArray();
+                            @endphp
+
+                            {{ count($selectedProductNames) ? implode(', ', $selectedProductNames) : 'Chọn danh mục sản phẩm' }}
+                        </span>
+                    </button>
+
+                    <div class="dropdown-menu w-100 p-2" style="max-height:300px;overflow-y:auto;">
+
+                        @foreach($productCategories as $category)
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input product-category-checkbox"
+                                    type="checkbox"
+                                    id="productCategory{{ $category->id }}"
+                                    name="productCategories[]"
+                                    value="{{ $category->id }}"
+                                    {{ in_array($category->id, request('productCategories', [])) ? 'checked' : '' }}>
+
+                                <label class="form-check-label" for="productCategory{{ $category->id }}">
+                                    {{ $category->name }}
+                                </label>
+                            </div>
+                        @endforeach
+
+                    </div>
                 </div>
             </div>
-
             <div class="col-md-3">
                 <label class="form-label">&nbsp;</label>
                 <div class="d-flex gap-2">
@@ -1206,24 +1224,49 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 // chọn trạng thái để lọc
 
-function updateStatusText() {
-    let selected = [];
 
-    $('input[name="current_status[]"]:checked').each(function () {
-        selected.push($(this).next('label').text().trim());
+$(document).ready(function () {
+
+    // ===== Tình trạng hiện tại =====
+    function updateStatusText() {
+        let selected = [];
+
+        $('input[name="current_status[]"]:checked').each(function () {
+            selected.push($(this).next('label').text().trim());
+        });
+
+        $('#currentStatusBtn').text(
+            selected.length ? selected.join(', ') : 'Chọn tình trạng'
+        );
+    }
+
+    // ===== Danh mục sản phẩm =====
+    function updateProductCategoryText() {
+        let selected = [];
+
+        $('input[name="productCategories[]"]:checked').each(function () {
+            selected.push($(this).next('label').text().trim());
+        });
+
+        $('#selectedProductNamesFilterBtn').text(
+            selected.length ? selected.join(', ') : 'Chọn danh mục sản phẩm'
+        );
+    }
+
+    // Load lần đầu
+    updateStatusText();
+    updateProductCategoryText();
+
+    // Event Tình trạng
+    $(document).on('change', 'input[name="current_status[]"]', function () {
+        updateStatusText();
     });
 
-    if (selected.length > 0) {
-        $('.dropdown-toggle').text(selected.join(', '));
-    } else {
-        $('.dropdown-toggle').text('Chọn tình trạng');
-    }
-}
+    // Event Danh mục
+    $(document).on('change', 'input[name="productCategories[]"]', function () {
+        updateProductCategoryText();
+    });
 
-$(function () {
-    updateStatusText();
-
-    $('input[name="current_status[]"]').on('change', updateStatusText);
 });
 
 </script>
