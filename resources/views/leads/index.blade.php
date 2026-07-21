@@ -246,6 +246,20 @@
                     </div>
                 </div>
             </div>
+                <!-- lọc ngày quan tâm -->
+            <div class="col-md-2">
+                <label for="date_now" class="form-label">
+                    <i class="bi bi-calendar me-1"></i><span class="text-primary fw-bold">Ngày Chăm</span>
+                </label>
+                <input 
+                    type="date" 
+                    name="date_now" 
+                    id="date_now"
+                    class="form-control" 
+                    value="{{ request('date_now') }}"
+                >
+            </div>
+
             <div class="col-md-3">
                 <label class="form-label">&nbsp;</label>
                 <div class="d-flex gap-2">
@@ -656,24 +670,45 @@
                                                     $carePlan = $care?->take_care_plan ?? '';
                                                     $careResult = $care?->take_care_result ?? '';
                                                 @endphp
-                                                <td>
+                                                <td style="width:200px; max-width:200px;">
                                                     <span class="editable-text" data-id="{{ $careId }}" data-field="take_care_date" data-index="{{ $i }}" data-lead-id="{{ $lead->id }}">
                                                         {{ $careDate ? date('d/m/Y', strtotime($careDate)) : '-' }}
                                                     </span>
                                                 <input type="date" class="form-control d-none inline-text" data-id="{{ $careId }}" data-field="take_care_date" data-index="{{ $i }}" data-lead-id="{{ $lead->id }}" value="{{ $careDate ? \Carbon\Carbon::parse($careDate)->format('Y-m-d') : '' }}">
                                                 </td>
-                                                <td>
-                                                    <span class="editable-text" data-id="{{ $careId }}" data-field="take_care_plan" data-index="{{ $i }}" data-lead-id="{{ $lead->id }}">
+                                            
+                                               <td style="
+                                                    width:200px;
+                                                    max-width:200px;
+                                                    overflow:hidden;
+                                                    white-space:nowrap;
+                                                    text-overflow:ellipsis;
+                                                ">
+                                                    <span class="editable-text">
                                                         {{ $carePlan !== '' ? $carePlan : '-' }}
                                                     </span>
-                                                    <input type="text" class="form-control d-none inline-text" data-id="{{ $careId }}" data-field="take_care_plan" data-index="{{ $i }}" data-lead-id="{{ $lead->id }}" value="{{ $carePlan }}">
+
+                                                    <input type="text"
+                                                        class="form-control d-none inline-text"
+                                                        value="{{ $carePlan }}">
                                                 </td>
-                                                <td>
-                                                    <span class="editable-text" data-id="{{ $careId }}" data-field="take_care_result" data-index="{{ $i }}" data-lead-id="{{ $lead->id }}">
+
+                                                <td style="
+                                                    width:200px;
+                                                    max-width:200px;
+                                                    overflow:hidden;
+                                                    white-space:nowrap;
+                                                    text-overflow:ellipsis;
+                                                ">
+                                                    <span class="editable-text">
                                                         {{ $careResult !== '' ? $careResult : '-' }}
                                                     </span>
-                                                    <input type="text" class="form-control d-none inline-text" data-id="{{ $careId }}" data-field="take_care_result" data-index="{{ $i }}" data-lead-id="{{ $lead->id }}" value="{{ $careResult }}">
+
+                                                    <input type="text"
+                                                        class="form-control d-none inline-text"
+                                                        value="{{ $careResult }}">
                                                 </td>
+                                               
                                             @endfor
                                          <!-- Chăm Khách 3 lần -->
                                                 <td>

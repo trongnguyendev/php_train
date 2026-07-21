@@ -128,20 +128,76 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="province_id" class="form-label">
-                                <i class="bi bi-geo-alt me-1"></i><span class="text-primary fw-bold">Tỉnh/Thành phố</span>
+                            <label class="form-label">
+                                <i class="bi bi-geo-alt me-1"></i>
+                                <span class="text-primary fw-bold">Tỉnh/Thành phố</span>
                             </label>
-                            <select name="province_id" id="province_id" 
-                                    class="form-select @error('province_id') is-invalid @enderror">
-                                <option value="">-- Chọn tỉnh/thành --</option>
-                                @foreach($provinces as $p)
-                                    <option value="{{ $p->id }}" {{ old('province_id') == $p->id ? 'selected' : '' }}>
-                                        {{ $p->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+
+                            <div class="dropdown">
+                                <button
+                                    class="btn dropdown-toggle w-100 @error('province_id') is-invalid border-danger @enderror"
+                                    type="button"
+                                    id="dropdownProvince"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                    style="background-color:#fff;color:#0d6efd;border:1px solid #717375;border-radius:0.375rem;">
+
+                                    <span id="selectedProvinceNameBtn">
+                                        @php
+                                            $selectedProvince = $provinces->firstWhere('id', old('province_id'));
+                                        @endphp
+
+                                        {{ $selectedProvince ? $selectedProvince->name : '-- Chọn tỉnh/thành --' }}
+                                    </span>
+                                </button>
+
+                                <div
+                                    class="dropdown-menu w-100 p-2"
+                                    aria-labelledby="dropdownProvince"
+                                    style="max-height:300px;overflow-y:auto;">
+
+                                    <div class="mb-2 position-sticky top-0 bg-white">
+                                        <input
+                                            type="text"
+                                            id="searchProvinceInput"
+                                            class="form-control form-control-sm"
+                                            placeholder="Nhập tên tỉnh/thành...">
+                                    </div>
+
+                                    <hr class="dropdown-divider">
+
+                                    <div id="provinceList">
+
+                                        @foreach($provinces as $province)
+                                            <div class="form-check province-item">
+
+                                                <input
+                                                    class="form-check-input"
+                                                    type="radio"
+                                                    name="province_id"
+                                                    id="province_{{ $province->id }}"
+                                                    value="{{ $province->id }}"
+                                                    {{ old('province_id') == $province->id ? 'checked' : '' }}>
+
+                                                <label
+                                                    class="form-check-label w-100"
+                                                    for="province_{{ $province->id }}"
+                                                    style="cursor:pointer;color:#1215dd;">
+
+                                                    {{ $province->name }}
+
+                                                </label>
+
+                                            </div>
+                                        @endforeach
+
+                                    </div>
+
+                                </div>
+                            </div>
+
                             @error('province_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -831,6 +887,15 @@ document.addEventListener('DOMContentLoaded', function () {
         textId: 'selectedSourceNameBtn',
         defaultText: '-- Chọn nguồn --',
         multiple: false
+    });
+
+    initSmartDropdown({
+    searchId: 'searchProvinceInput',
+    itemClass: '.province-item',
+    inputName: 'province_id',
+    textId: 'selectedProvinceNameBtn',
+    defaultText: '-- Chọn tỉnh/thành --',
+    multiple: false
     });
 
 });

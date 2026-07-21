@@ -123,6 +123,16 @@ public function index(Request $request)
                 $request->to_date
             ]);
         }
+        // ngày chăm
+        if ($request->date_now) {
+            $query->whereHas('leadTakeCares', function ($q) use ($request) {
+                $q->whereDate('take_care_date', $request->date_now);
+            });
+
+            $queryOnline->whereHas('leadTakeCares', function ($q) use ($request) {
+                $q->whereDate('take_care_date', $request->date_now);
+            });
+        }
         
         if ($request->filled('current_status')) {
 
@@ -703,6 +713,7 @@ public function update(Request $request, Lead $lead)
         'source_id' => $request->source_id,
         'showroom_id' => $request->showroom_id,
         'note' => $request->note,
+        'first_customer_status_id' => $request->first_customer_status_id ?? null,
         'sale_information_id' => $request->sale_information_id,
         'sale_support_id' => $request->sale_support_id ?? 0,
         'current_customer_status_id' => $request->current_customer_status_id,

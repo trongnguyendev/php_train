@@ -179,7 +179,27 @@
             </div>
             @endif
 
-            @if($lead->lead_type != 1)
+            <div class="col-md-4 mb-3" id="firstCustomerStatusWrapper"
+                style="{{ old('lead_type', $lead->lead_type) == 1 ? 'display:none;' : '' }}">
+
+                <label for="first_customer_status_id" class="form-label">
+                    <span class="text-primary fw-bold">Tình trạng KH ban đầu</span>
+                </label>
+
+                <select name="first_customer_status_id" id="first_customer_status_id" class="form-control">
+                    <option value="">-- Chọn Tình trạng KH ban đầu --</option>
+
+                    @foreach($customerStatuses as $customerStatuse)
+                        <option value="{{ $customerStatuse->id }}"
+                            {{ old('first_customer_status_id', $lead->first_customer_status_id) == $customerStatuse->id ? 'selected' : '' }}>
+                            {{ $customerStatuse->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+            </div>
+
+            <!-- @if($lead->lead_type != 1)
             <div class="col-md-4 mb-3">
                 <label for="first_customer_status_id" class="form-label"><span class="text-primary fw-bold">Tình trạng KH ban đầu</span></label>
                 <select name="first_customer_status_id" id="first_customer_status_id" class="form-control">
@@ -192,7 +212,7 @@
                     @endforeach
                 </select>
             </div>
-            @endif
+            @endif -->
 
             <div class="col-md-8 mb-3">
                 <label class="form-label"><span class="text-primary fw-bold">Ghi chú sale nhận khách</span></label>
@@ -406,5 +426,44 @@ document.addEventListener('click', function (e) {
         e.target.closest('.phone-item').remove();
     }
 });
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const leadType = document.querySelector('[name="lead_type"]');
+    const wrapper = document.getElementById('firstCustomerStatusWrapper');
+    const firstCustomerStatus = document.getElementById('first_customer_status_id');
+
+    if (!leadType || !wrapper || !firstCustomerStatus) return;
+
+    const QUAN_TAM_ID = 2; // <-- đổi thành ID của "Quan tâm"
+
+    function toggleFirstCustomerStatus() {
+
+        if (leadType.value == '2') {
+            wrapper.style.display = '';
+
+            // Nếu chưa chọn thì tự chọn "Quan tâm"
+            if (firstCustomerStatus.value === '') {
+                firstCustomerStatus.value = QUAN_TAM_ID;
+            }
+
+        } else {
+            wrapper.style.display = 'none';
+
+            // Nếu muốn chuyển về Lead trực tiếp thì xóa lựa chọn
+            firstCustomerStatus.value = '';
+        }
+
+    }
+
+    toggleFirstCustomerStatus();
+
+    if (leadType.tagName === 'SELECT') {
+        leadType.addEventListener('change', toggleFirstCustomerStatus);
+    }
+
+});
+
 </script>
 @endpush
