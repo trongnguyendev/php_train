@@ -164,7 +164,7 @@
                 </div>
             </div>
 
-            @if($lead->lead_type != 2)
+            <!-- @if($lead->lead_type != 2)
             <div class="col-md-4 mb-3">
                 <label for="showroom_id" class="form-label"><span class="text-primary fw-bold">Showroom</span></label>
                 <select name="showroom_id" id="showroom_id" class="form-control">
@@ -177,7 +177,32 @@
                     @endforeach
                 </select>
             </div>
-            @endif
+            @endif -->
+
+                @if($lead->lead_type != 2)
+                    <div class="col-md-4 mb-3">
+                        <label for="showroom_id" class="form-label">
+                            <span class="text-primary fw-bold">Showroom</span>
+                        </label>
+
+                        <select name="showroom_id" id="showroom_id" class="form-control">
+                            <option value="">-- Chọn Showroom --</option>
+
+                            @foreach($showrooms as $showroom)
+                                <option value="{{ $showroom->id }}"
+                                    {{ old('showroom_id', $lead->showroom_id) == $showroom->id ? 'selected' : '' }}>
+                                    {{ $showroom->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                @else
+                    {{-- Lead Online: không hiển thị nhưng vẫn gửi showroom_id cũ --}}
+                    <input type="hidden"
+                        name="showroom_id"
+                        value="{{ old('showroom_id', $lead->showroom_id) }}">
+                @endif
+
 
             <div class="col-md-4 mb-3" id="firstCustomerStatusWrapper"
                 style="{{ old('lead_type', $lead->lead_type) == 1 ? 'display:none;' : '' }}">
