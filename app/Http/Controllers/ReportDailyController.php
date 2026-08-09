@@ -1248,12 +1248,12 @@ class ReportDailyController extends Controller
     }
 // Tải data excel
 
-//     public function dataExportExcel()
-// {
-//     return Excel::download(
-//         new LeadsExport,
-//         'danh-sach-leads.xlsx'
-//     );
-// }
+    public function dataExportExcel()
+{
+    return Excel::download(
+        new LeadsExport,
+        'danh-sach-leads.xlsx'
+    );
+}
  
 }
