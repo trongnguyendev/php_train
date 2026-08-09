@@ -1246,13 +1246,14 @@ class ReportDailyController extends Controller
 
         return view('potential.index', compact('potentials', 'interested', 'reference', 'out_of_need', 'closed'));
     }
+// Tải data excel
 
-    public function dataExportExcel()
-{
-    return Excel::download(
-        new LeadsExport,
-        'danh-sach-leads.xlsx'
-    );
-}
+//     public function dataExportExcel()
+// {
+//     return Excel::download(
+//         new LeadsExport,
+//         'danh-sach-leads.xlsx'
+//     );
+// }
  
 }
