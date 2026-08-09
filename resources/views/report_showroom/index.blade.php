@@ -55,6 +55,10 @@
     class="btn btn-success">
         Export Excel
     </a>
+    <a href="{{ route('reports.dataExportExcel') }}"
+   class="btn btn-success">
+    📥 Tải Data Excel
+</a>
 
 </form>
 

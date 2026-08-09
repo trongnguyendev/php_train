@@ -127,3 +127,8 @@ Route::get('/report-month/export', [ReportDailyController::class, 'exportCurrent
 
 Route::get('/report-showroom/export',[ReportDailyController::class, 'exportShowroomExcel'])  
     ->name('report_showroom.export');
+// Tải data
+Route::get(
+    '/reports/data-export-excel',
+    [ReportDailyController::class, 'dataExportExcel']
+)->name('reports.dataExportExcel');

@@ -16,6 +16,7 @@ use App\Exports\ReportDailyExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ReportMonthExport;
 use App\Exports\ReportShowroomExport;
+use App\Exports\LeadsExport;
 
 
 class ReportDailyController extends Controller
@@ -1245,5 +1246,13 @@ class ReportDailyController extends Controller
 
         return view('potential.index', compact('potentials', 'interested', 'reference', 'out_of_need', 'closed'));
     }
+
+    public function dataExportExcel()
+{
+    return Excel::download(
+        new LeadsExport,
+        'danh-sach-leads.xlsx'
+    );
+}
  
 }
