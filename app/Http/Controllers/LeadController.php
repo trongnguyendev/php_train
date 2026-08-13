@@ -216,7 +216,13 @@ public function index(Request $request)
             ->whereIn('slug', ['admin', 'manager', 'supporter'])
             ->exists();
         $directLeadCount = (clone $query)
-            ->where('old_lead_type', 1)
+            ->where(function ($q) {
+                $q->where('lead_type', 1)
+                ->orWhere(function ($q) {
+                    $q->where('old_lead_type', 1)
+                        ->where('lead_type', 2);
+                });
+            })
             ->when(!$isAdminOrManager, function ($q) use ($user) {
                 $q->where('sale_information_id', $user->id);
             })
