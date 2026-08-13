@@ -1093,29 +1093,53 @@ class ReportDailyController extends Controller
             ->groupBy('showroom_id')
             ->get();
 
+        // $data_online_prev = DB::table('leads')
+        //     ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
+        //     ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
+        //     ->join('customer_sources', 'customer_sources.id', '=', 'leads.source_id')
+        //     // ->whereBetween('first_interaction_date', [$last_month.'-01', $last_month.'-31'])
+        //     ->whereBetween('first_interaction_date', [$fromDate2, $toDate2])
+        //     ->where('lead_type', 2)
+        //     ->select('source_id',
+        //         DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id THEN 1 ELSE 0 END) as total_customers'),
+        //         DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_customers'),
+        //         DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_customers'),
+        //         DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Tiềm Năng" AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_potential'),
+        //         DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Tiềm Năng" AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_potential'),
+        //         DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Quan Tâm" THEN 1 ELSE 0 END) as total_care'),
+        //         DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Tham Khảo" THEN 1 ELSE 0 END) as total_reference'),
+        //         DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Hết Nhu Cầu" THEN 1 ELSE 0 END) as total_no_need'),
+        //         DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_closed'),
+        //         DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_closed'),
+        //         DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN COALESCE(order_value, 0) ELSE 0 END) as total_new_closed'),
+        //         DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN COALESCE(order_value, 0) ELSE 0 END) as total_old_closed'),
+        //         DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt"  THEN COALESCE(order_value, 0) ELSE 0 END) as total'),
+        //     )
+        //     ->groupBy('source_id')
+        //     ->get();
         $data_online_prev = DB::table('leads')
             ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
             ->join('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
-            ->join('customer_sources', 'customer_sources.id', '=', 'leads.source_id')
+            ->join('showrooms', 'showrooms.id', '=', 'leads.showroom_id')
             // ->whereBetween('first_interaction_date', [$last_month.'-01', $last_month.'-31'])
             ->whereBetween('first_interaction_date', [$fromDate2, $toDate2])
-            ->where('lead_type', 2)
-            ->select('source_id',
-                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id THEN 1 ELSE 0 END) as total_customers'),
-                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_customers'),
-                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_customers'),
-                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Tiềm Năng" AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_potential'),
-                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Tiềm Năng" AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_potential'),
-                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Quan Tâm" THEN 1 ELSE 0 END) as total_care'),
-                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Tham Khảo" THEN 1 ELSE 0 END) as total_reference'),
-                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Hết Nhu Cầu" THEN 1 ELSE 0 END) as total_no_need'),
-                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_closed'),
-                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_closed'),
-                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN COALESCE(order_value, 0) ELSE 0 END) as total_new_closed'),
-                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN COALESCE(order_value, 0) ELSE 0 END) as total_old_closed'),
-                DB::raw('SUM(CASE WHEN lead_type = 2 AND sale_information_id = sale_support_id AND customer_statuses.name = "Đã Chốt"  THEN COALESCE(order_value, 0) ELSE 0 END) as total'),
+            ->where('lead_type', 1)
+            ->select('showroom_id',
+                DB::raw('SUM(CASE WHEN old_lead_type = 1 THEN 1 ELSE 0 END) as total_customers'),
+                DB::raw('SUM(CASE WHEN old_lead_type = 1 AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_customers'),
+                DB::raw('SUM(CASE WHEN old_lead_type = 1 AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_customers'),
+                DB::raw('SUM(CASE WHEN old_lead_type = 1 AND customer_statuses.name = "Tiềm Năng" AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_potential'),
+                DB::raw('SUM(CASE WHEN old_lead_type = 1 AND customer_statuses.name = "Tiềm Năng" AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_potential'),
+                DB::raw('SUM(CASE WHEN old_lead_type = 1 AND customer_statuses.name = "Quan Tâm" THEN 1 ELSE 0 END) as total_care'),
+                DB::raw('SUM(CASE WHEN old_lead_type = 1 AND customer_statuses.name = "Tham Khảo" THEN 1 ELSE 0 END) as total_reference'),
+                DB::raw('SUM(CASE WHEN old_lead_type = 1 AND customer_statuses.name = "Hết Nhu Cầu" THEN 1 ELSE 0 END) as total_no_need'),
+                DB::raw('SUM(CASE WHEN old_lead_type = 1 AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_closed'),
+                DB::raw('SUM(CASE WHEN old_lead_type = 1 AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_closed'),
+                DB::raw('SUM(CASE WHEN old_lead_type = 1 AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN COALESCE(order_value, 0) ELSE 0 END) as total_new_closed'),
+                DB::raw('SUM(CASE WHEN old_lead_type = 1 AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN COALESCE(order_value, 0) ELSE 0 END) as total_old_closed'),
+                DB::raw('SUM(CASE WHEN old_lead_type = 1 THEN COALESCE(order_value, 0) ELSE 0 END) as total'),
             )
-            ->groupBy('source_id')
+            ->groupBy('showroom_id')
             ->get();
 
         $totals_prev = [];
