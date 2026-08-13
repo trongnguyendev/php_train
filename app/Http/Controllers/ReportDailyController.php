@@ -1651,10 +1651,15 @@ class ReportDailyController extends Controller
             $fromDate2,
             $toDate2
         );
-
         return Excel::download(
-            new ReportShowroomExport($result),
-            'BaoCaoShowroom.xlsx'
+            new ReportShowroomExport(
+                $result,
+                $fromDate1,
+                $toDate1,
+                $fromDate2,
+                $toDate2
+            ),
+            'report_showroom.xlsx'
         );
     }
 
