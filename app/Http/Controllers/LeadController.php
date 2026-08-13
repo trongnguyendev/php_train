@@ -222,7 +222,7 @@ public function index(Request $request)
             })
             ->count();
 
-        $leadsTT = $query
+        $leads = $query
             ->where(function ($q) {
                 $q->where('lead_type', 1)
                 ->orWhere(function ($q) {
