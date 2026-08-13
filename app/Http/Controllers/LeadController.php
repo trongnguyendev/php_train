@@ -216,14 +216,14 @@ public function index(Request $request)
             ->whereIn('slug', ['admin', 'manager', 'supporter'])
             ->exists();
         $directLeadCount = (clone $query)
-            ->where('lead_type', 1)
+            ->where('old_lead_type', 1)
             ->when(!$isAdminOrManager, function ($q) use ($user) {
                 $q->where('sale_information_id', $user->id);
             })
             ->count();
 
         $leads = $query
-            ->whereIn('lead_type', [1, 2])
+            ->where('old_lead_type', 1)
             ->when(!$isAdminOrManager, function ($q) use ($user) {
                 $q->where('sale_information_id', $user->id);
             })
@@ -699,7 +699,10 @@ public function update(Request $request, Lead $lead)
     }
 
     // Chỉ cập nhật bản ghi Lead hiện tại
-    
+    $oldLeadType = $lead->lead_type;
+    $newLeadType = $request->lead_type;
+    // dd($oldLeadType, $newLeadType);
+
     $lead->update([
         // Nhận customer_id mới nếu trên giao diện cho phép đổi khách hàng, ngược lại giữ nguyên giá trị cũ
         'customer_id' => $request->input('customer_id', $lead->customer_id),
@@ -721,7 +724,8 @@ public function update(Request $request, Lead $lead)
         'support_channel_id' => $request->support_channel_id ?? null,
         'customer_discussion_details' => $request->customer_discussion_details ?? '',
         'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
-        'lead_type' => $request->lead_type
+        'old_lead_type' => $oldLeadType,
+        'lead_type' => $newLeadType,
     ]);
     $lead->phones()->delete();
 

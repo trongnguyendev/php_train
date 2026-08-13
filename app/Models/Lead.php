@@ -30,6 +30,7 @@ class Lead extends Model
         'customer_discussion_details',
         'tmdt',
         'lead_type',
+        'old_lead_type', // 4. THÊM TRƯỜNG NÀY ĐỂ LƯU GIÁ TRỊ lead_type CŨ KHI CẬP NHẬT
         'created_by', // 3. THÊM TRƯỜNG NÀY ĐỂ LƯU ID NGƯỜI TẠO
     ];
     
