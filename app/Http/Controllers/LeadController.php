@@ -711,12 +711,13 @@ public function update(Request $request, Lead $lead)
     }
 
     // Chỉ cập nhật bản ghi Lead hiện tại
-    $oldLeadType = $lead->lead_type;
+    $oldLeadType = $lead->old_lead_type ?? $lead->lead_type;
     $newLeadType = $request->lead_type;
 
-    if ($oldLeadType == 1 && $newLeadType == 2) {
+    if ($oldLeadType == 1 && $newLeadType == 2 && $lead->lead_type == 1) {
         $lead->update([
-            'lead_type' => 2
+            'old_lead_type' => $oldLeadType,
+            'lead_type' => 2,
         ]);
     }
     // dd($oldLeadType, $newLeadType);
