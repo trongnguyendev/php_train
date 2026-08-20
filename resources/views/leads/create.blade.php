@@ -94,11 +94,33 @@
                                 + Thêm số điện thoại
                             </button>
 
-                            <div id="phone-wrapper" class="d-flex gap-2 flex-wrap">
+                            <!-- <div id="phone-wrapper" class="d-flex gap-2 flex-wrap">
                                 <div class="phone-item d-flex align-items-center gap-1">
                                     <input type="text" name="phone[]" class="form-control" placeholder="Nhập số điện thoại">
                                     <button type="button" class="btn btn-danger btn-sm remove-phone">x</button>
                                 </div>
+                            </div> -->
+                            <div id="phone-wrapper" class="d-flex gap-2 flex-wrap">
+
+                                @php
+                                    $phones = old('phone', ['']);
+                                @endphp
+
+                                @foreach ($phones as $phone)
+                                    <div class="phone-item d-flex align-items-center gap-1 mb-2">
+                                        <input type="text"
+                                            name="phone[]"
+                                            class="form-control"
+                                            placeholder="Nhập số điện thoại"
+                                            value="{{ $phone }}">
+
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm remove-phone">
+                                            X
+                                        </button>
+                                    </div>
+                                @endforeach
+
                             </div>
                         </div>
             
