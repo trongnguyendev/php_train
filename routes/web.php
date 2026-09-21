@@ -15,6 +15,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SupportChannelController;
 use App\Http\Controllers\ReportDailyController;
+use App\Http\Controllers\AuditLogController;
 
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -132,3 +133,6 @@ Route::get(
     '/reports/data-export-excel',
     [ReportDailyController::class, 'dataExportExcel']
 )->name('reports.dataExportExcel');
+
+Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit_logs.index');
+Route::get('/leads/{lead}/history', [AuditLogController::class, 'leadHistory'])->name('leads.history');

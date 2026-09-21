@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class Lead extends Model
 {
@@ -127,6 +128,23 @@ class Lead extends Model
                     $lead->order_code = $customer->customer_code . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
                 }
             });
+        });
+
+        static::updating(function ($lead) {
+            $changes = $lead->getDirty();
+
+            if (empty($changes)) {
+                return;
+            }
+
+            AuditLog::create([
+                'model_type' => Lead::class,
+                'model_id' => $lead->id,
+                'user_id' => Auth::id(),
+                'action' => 'updated',
+                'old_values' => $lead->getOriginal(),
+                'new_values' => $changes,
+            ]);
         });
     }
 }
