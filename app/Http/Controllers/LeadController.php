@@ -40,7 +40,8 @@ public function index(Request $request)
             'saleSupport',
             'leadTakeCares',
             'supportedChannel',
-            'creator' // 4. THÊM QUAN HỆ NGƯỜI TẠO ĐỂ LẤY TÊN HIỂN THỊ RA INDEX
+            'creator', // 4. THÊM QUAN HỆ NGƯỜI TẠO ĐỂ LẤY TÊN HIỂN THỊ RA INDEX
+            
         ]);
         $queryOnline = Lead::with([
             'province',
@@ -54,7 +55,8 @@ public function index(Request $request)
             'saleSupport',
             'leadTakeCares',
             'supportedChannel',
-            'creator' // 4. THÊM QUAN HỆ NGƯỜI TẠO ĐỂ LẤY TÊN HIỂN THỊ RA INDEX
+            'creator', // 4. THÊM QUAN HỆ NGƯỜI TẠO ĐỂ LẤY TÊN HIỂN THỊ RA INDEX
+            
         ]);
         $customerStatuses = CustomerStatus::all();
         $productCategories = ProductCategory::all();

@@ -389,6 +389,7 @@
                                     <th style="min-width: 200px;">Kế hoạch lần 3</th>
                                     <th style="min-width: 200px;">Kết quả lần 3</th>
                                     <th style="min-width: 200px;">Người Tạo</th>
+                                    <th style="min-width: 200px;">Thời Gian Tạo</th>
                                     <th style="min-width: 200px;">Hành động</th>
                                 </tr>
                             </thead>
@@ -716,6 +717,11 @@
                                                         <small>{{ $lead->creator->name }}</small>
                                                     @endif
                                                 </td>
+                                                <td>
+                                                    @if($lead->created_at)
+                                                        <small>{{ $lead->created_at->format('d/m/Y H:i') }}</small>
+                                                    @endif
+                                                </td>
 
                                         <td>
                                             <div class="btn-group" role="group">
@@ -805,6 +811,7 @@
                                     <th style="min-width: 100px;">Giá trị đơn chốt được</th>
                                     <th style="min-width: 100px;">Chuyển Sang TMDT</th>
                                     <th style="min-width: 200px;">Người Tạo</th>
+                                    <th style="min-width: 200px;">Thời Gian Tạo</th>
                                     <th style="min-width: 100px;">Hành động</th>
                                 </tr>
                             </thead>
@@ -949,6 +956,12 @@
                                                 <small>{{ $lead->creator->name }}</small>
                                             @endif
                                         </td>
+                                        <td>
+                                            @if($lead->created_at)
+                                                <small>{{ $lead->created_at->format('d/m/Y H:i') }}</small>
+                                            @endif 
+                                        </td>
+                                        
                                         <td>
                                             <div class="btn-group" role="group">
                                                 <a href="{{ route('leads.show', $lead->id) . '?' . http_build_query(request()->query()) }}"
