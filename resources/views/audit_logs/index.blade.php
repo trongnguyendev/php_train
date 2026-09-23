@@ -3456,22 +3456,59 @@
         ===================================================== --}}
         @if($auditLogs instanceof \Illuminate\Pagination\LengthAwarePaginator)
 
+            @php
+                $currentPage = $auditLogs->currentPage();
+                $lastPage = $auditLogs->lastPage();
+
+                $pages = [];
+
+                // Luôn hiển thị trang đầu
+                $pages[] = 1;
+
+                // Các trang xung quanh trang hiện tại
+                for ($i = $currentPage - 1; $i <= $currentPage + 1; $i++) {
+                    if ($i > 1 && $i < $lastPage) {
+                        $pages[] = $i;
+                    }
+                }
+
+                // Luôn hiển thị trang cuối
+                if ($lastPage > 1) {
+                    $pages[] = $lastPage;
+                }
+
+                $pages = collect($pages)->unique()->sort()->values()->toArray();
+            @endphp
+
             <div class="audit-pagination-wrapper">
                 <div class="audit-pagination">
                     <ul class="pagination">
 
-                        @foreach($auditLogs->getUrlRange(1, $auditLogs->lastPage()) as $page => $url)
+                        @php
+                            $previousPage = null;
+                        @endphp
 
-                            <li class="page-item {{ $page == $auditLogs->currentPage() ? 'active' : '' }}">
+                        @foreach($pages as $page)
 
+                            {{-- Hiển thị dấu ... khi có khoảng cách --}}
+                            @if($previousPage !== null && $page - $previousPage > 1)
+                                <li class="page-item disabled">
+                                    <span class="page-link pagination-dots">...</span>
+                                </li>
+                            @endif
+
+                            <li class="page-item {{ $page == $currentPage ? 'active' : '' }}">
                                 <a
                                     class="page-link"
-                                    href="{{ $url }}"
+                                    href="{{ $auditLogs->url($page) }}"
                                 >
                                     {{ $page }}
                                 </a>
-
                             </li>
+
+                            @php
+                                $previousPage = $page;
+                            @endphp
 
                         @endforeach
 
