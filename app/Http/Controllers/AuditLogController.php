@@ -123,12 +123,24 @@ private function applyFilters(
         |
         */
 
-        if ($request->filled('event')) {
+        if ($request->filled('customer_code')) {
+            $keyword = trim($request->customer_code);
 
-            $query->where(
-                'event',
-                $request->event
-            );
+            $query->whereHas('auditable', function ($q) use ($keyword) {
+                $q->whereHas('customerCode', function ($q2) use ($keyword) {
+                    $q2->where('customer_code', 'like', '%' . $keyword . '%');
+                });
+            });
+        }
+
+        if ($request->filled('phone')) {
+            $keyword = trim($request->phone);
+
+            $query->whereHas('auditable', function ($q) use ($keyword) {
+                $q->whereHas('phones', function ($q2) use ($keyword) {
+                    $q2->where('phone', 'like', '%' . $keyword . '%');
+                });
+            });
         }
 
 

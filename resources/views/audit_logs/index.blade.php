@@ -2116,53 +2116,28 @@
                 </div>
 
 
-                {{-- Hành động --}}
+                {{-- Mã Khách Hàng --}}
                 <div>
 
                     <label
                         class="audit-field-label"
-                        for="af-event"
+                        for="af-customer-code"
                     >
-                        Hành động
+                        Mã Khách Hàng
                     </label>
 
                     <div class="audit-field-control">
+                        <i class="bi bi-person-vcard"></i>
 
-                        <i class="bi bi-lightning-charge"></i>
-
-                        <select
-                            id="af-event"
-                            name="event"
-                            class="audit-input form-select"
+                        <input
+                            type="text"
+                            id="af-customer-code"
+                            name="customer_code"
+                            value="{{ request('customer_code') }}"
+                            class="audit-input form-control"
+                            placeholder="Nhập mã khách hàng..."
+                            autocomplete="off"
                         >
-
-                            <option value="">
-                                Tất cả hành động
-                            </option>
-
-                            <option
-                                value="created"
-                                {{ request('event') === 'created' ? 'selected' : '' }}
-                            >
-                                Thêm mới
-                            </option>
-
-                            <option
-                                value="updated"
-                                {{ request('event') === 'updated' ? 'selected' : '' }}
-                            >
-                                Cập nhật
-                            </option>
-
-                            <option
-                                value="deleted"
-                                {{ request('event') === 'deleted' ? 'selected' : '' }}
-                            >
-                                Xóa
-                            </option>
-
-                        </select>
-
                     </div>
 
                 </div>
@@ -2219,6 +2194,22 @@
 
                     </div>
 
+                </div>
+
+                <div>
+                    <div class="audit-field-control">
+                        <i class="bi bi-person-vcard"></i>
+
+                        <input
+                            type="text"
+                            id="af-phone"
+                            name="phone"
+                            value="{{ request('phone') }}"
+                            class="audit-input form-control"
+                            placeholder="Nhập sdt khách hàng..."
+                            autocomplete="off"
+                        >
+                    </div>
                 </div>
 
 
