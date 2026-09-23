@@ -18,38 +18,123 @@ use App\Models\LeadProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AuditLogController extends Controller
 {
     /**
      * Route: audit_logs.index
      */
+    // public function index(Request $request)
+    // {
+    //     $query = AuditLog::with('user');
+
+    //     // 1. Áp dụng bộ lọc
+    //     $this->applyFilters($query, $request);
+
+    //     // 2. Phân trang
+    //     $auditLogs = $query
+    //         ->latest()
+    //         ->paginate(30)
+    //         ->withQueryString();
+
+    //     // 3. Xây dựng danh sách ID -> Tên
+    //     $maps = $this->buildLookupMaps($auditLogs);
+
+    //     // 4. Danh sách nhân viên filter
+    //     $users = User::pluck('name', 'id');
+
+    //     return view('audit_logs.index', compact(
+    //         'auditLogs',
+    //         'maps',
+    //         'users'
+    //     ));
+    // }
+/**
+ * Route: audit_logs.index
+ */
     public function index(Request $request)
-    {
-        $query = AuditLog::with('user');
+        {
+            $query = AuditLog::with('user');
 
-        // 1. Áp dụng bộ lọc
-        $this->applyFilters($query, $request);
+            // 1. Áp dụng bộ lọc
+            $this->applyFilters($query, $request);
 
-        // 2. Phân trang
-        $auditLogs = $query
-            ->latest()
-            ->paginate(30)
-            ->withQueryString();
+            // 2. Sắp xếp và lấy toàn bộ AuditLog phù hợp
+            $allAuditLogs = $query
+                ->latest('created_at')
+                ->get();
 
-        // 3. Xây dựng danh sách ID -> Tên
-        $maps = $this->buildLookupMaps($auditLogs);
+            // 3. Gom nhóm trước khi phân trang
+            //
+            // Mỗi nhóm gồm:
+            // - Cùng người sửa
+            // - Cùng ngày
+            // - Cùng giờ và phút
+            //
+            // Ví dụ:
+            // user_id = 5
+            // created_at = 2026-09-23 14:30
+            //
+            // sẽ thuộc cùng một nhóm.
+            $groupedLogs = $allAuditLogs->groupBy(function ($log) {
 
-        // 4. Danh sách nhân viên filter
-        $users = User::pluck('name', 'id');
+                $time = $log->created_at
+                    ? $log->created_at->format('Y-m-d H:i')
+                    : 'no-time';
 
-        return view('audit_logs.index', compact(
-            'auditLogs',
-            'maps',
-            'users'
-        ));
-    }
+                return ($log->user_id ?? 0) . '_' . $time;
+            });
 
+            // 4. Phân trang theo nhóm
+            //
+            // 30 ở đây là 30 nhóm mỗi trang,
+            // không phải 30 bản ghi AuditLog.
+            $perPage = 30;
+
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+            $totalGroups = $groupedLogs->count();
+
+            $currentGroups = $groupedLogs
+                ->slice(
+                    ($currentPage - 1) * $perPage,
+                    $perPage
+                );
+
+            // 5. Chuyển các nhóm của trang hiện tại
+            // thành danh sách AuditLog để Blade hiện tại sử dụng.
+            $currentPageLogs = $currentGroups
+                ->flatten(1)
+                ->values();
+
+            // 6. Tạo paginator thủ công
+            $auditLogs = new LengthAwarePaginator(
+                $currentPageLogs,
+                $totalGroups,
+                $perPage,
+                $currentPage,
+                [
+                    'path' => $request->url(),
+                    'query' => $request->query(),
+                ]
+            );
+
+            // 7. Xây dựng danh sách ID -> Tên
+            //
+            // Chỉ lấy dữ liệu của các nhóm đang hiển thị
+            // trên trang hiện tại.
+            $maps = $this->buildLookupMaps($auditLogs);
+
+            // 8. Danh sách nhân viên filter
+            $users = User::pluck('name', 'id');
+
+            return view('audit_logs.index', compact(
+                'auditLogs',
+                'maps',
+                'users'
+            ));
+        }
 
     /**
      * Route: leads.history
