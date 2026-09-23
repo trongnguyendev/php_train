@@ -620,22 +620,206 @@ public function store(Request $request)
 /**
  * Display the specified resource.
  */
+// public function show(Lead $lead)
+// {
+//     Gate::authorize('view', $lead);
+//     // 1. Eager load mối quan hệ với bảng mã khách hàng để tối ưu câu lệnh truy vấn
+//     $lead->load('customerCode');
+//     $phones = $lead->phones;
+//     $leadTakeCare = $lead->leadTakeCare;
+//     // 3. (TÙY CHỌN NÂNG CAO) Lấy toàn bộ lịch sử các đơn hàng khác của khách hàng này
+//     $otherLeads = [];
+//     if ($lead->customer_id) {
+//         $otherLeads = Lead::where('customer_id', $lead->customer_id)
+//             ->where('id', '!=', $lead->id) // Loại trừ đơn hàng hiện tại đang xem
+//             ->orderBy('created_at', 'desc')
+//             ->get();
+//     }
+//     $auditLogs = AuditLog::with('user')
+//         ->where('model_type', Lead::class)
+//         ->where('model_id', $lead->id)
+//         ->latest()
+//         ->get();
+//     return view('leads.show', compact('lead', 'phones', 'leadTakeCare', 'otherLeads', 'auditLogs'));
+// }
+
 public function show(Lead $lead)
 {
     Gate::authorize('view', $lead);
-    // 1. Eager load mối quan hệ với bảng mã khách hàng để tối ưu câu lệnh truy vấn
-    $lead->load('customerCode');
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOAD LEAD + CÁC QUAN HỆ
+    |--------------------------------------------------------------------------
+    */
+
+    $lead->load([
+        'customerCode',
+        'province',
+        'customerType',
+        'customerSource',
+        'productCategories',
+        'showroom',
+        'firstStatus',
+        'currentStatus',
+        'saleInformation',
+        'saleSupport',
+        'supportedChannel',
+        'leadTakeCares',
+        'phones',
+        'auditLogs.user',
+    ]);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PHONES
+    |--------------------------------------------------------------------------
+    */
+
     $phones = $lead->phones;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | LEAD TAKE CARE
+    |--------------------------------------------------------------------------
+    */
+
     $leadTakeCare = $lead->leadTakeCare;
-    // 3. (TÙY CHỌN NÂNG CAO) Lấy toàn bộ lịch sử các đơn hàng khác của khách hàng này
-    $otherLeads = [];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CÁC LEAD KHÁC CÙNG KHÁCH HÀNG
+    |--------------------------------------------------------------------------
+    */
+
+    $otherLeads = collect();
+
     if ($lead->customer_id) {
-        $otherLeads = Lead::where('customer_id', $lead->customer_id)
-            ->where('id', '!=', $lead->id) // Loại trừ đơn hàng hiện tại đang xem
-            ->orderBy('created_at', 'desc')
-            ->get();
+
+        $otherLeads = Lead::with([
+            'customerCode',
+            'province',
+            'customerType',
+            'customerSource',
+            'productCategories',
+            'showroom',
+            'firstStatus',
+            'currentStatus',
+            'saleInformation',
+            'saleSupport',
+            'supportedChannel',
+            'phones',
+        ])
+        ->where('customer_id', $lead->customer_id)
+        ->where('id', '!=', $lead->id)
+        ->orderBy('created_at', 'desc')
+        ->get();
     }
-    return view('leads.show', compact('lead', 'phones', 'leadTakeCare', 'otherLeads'));
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | AUDIT LOG
+    |--------------------------------------------------------------------------
+    |
+    | Không cần join SQL.
+    |
+    | auditLogs.user
+    | sẽ lấy luôn User tương ứng với user_id
+    |
+    */
+
+    $auditLogs = $lead->auditLogs()
+        ->with('user')
+        ->latest('created_at')
+        ->get();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | MAP DỮ LIỆU CHO AUDIT LOG
+    |--------------------------------------------------------------------------
+    |
+    | Blade của bạn đang dùng:
+    |
+    | $maps['province_id']
+    | $maps['customer_type_id']
+    | $maps['source_id']
+    | $maps['product_categories_id']
+    | $maps['showroom_id']
+    | $maps['customer_status_id']
+    | $maps['users']
+    | $maps['support_channel_id']
+    | $maps['customer_id']
+    |
+    */
+
+    $maps = [
+
+        'province_id' => \App\Models\Province::pluck(
+            'name',
+            'id'
+        )->toArray(),
+
+        'customer_type_id' => \App\Models\CustomerType::pluck(
+            'name',
+            'id'
+        )->toArray(),
+
+        'source_id' => \App\Models\CustomerSource::pluck(
+            'name',
+            'id'
+        )->toArray(),
+
+        'showroom_id' => \App\Models\Showroom::pluck(
+            'name',
+            'id'
+        )->toArray(),
+
+        'customer_status_id' => \App\Models\CustomerStatus::pluck(
+            'name',
+            'id'
+        )->toArray(),
+
+        'support_channel_id' => \App\Models\SupportChannel::pluck(
+            'name',
+            'id'
+        )->toArray(),
+
+        'users' => \App\Models\User::pluck(
+            'name',
+            'id'
+        )->toArray(),
+
+        'customer_id' => \App\Models\CustomerCode::pluck(
+            'customer_code',
+            'id'
+        )->toArray(),
+
+        'product_categories_id' => \App\Models\ProductCategory::pluck(
+            'name',
+            'id'
+        )->toArray(),
+    ];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RETURN VIEW
+    |--------------------------------------------------------------------------
+    */
+
+    return view('leads.show', compact(
+        'lead',
+        'phones',
+        'leadTakeCare',
+        'otherLeads',
+        'auditLogs',
+        'maps'
+    ));
 }
 
 /**

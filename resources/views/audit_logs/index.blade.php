@@ -1069,6 +1069,7 @@
     href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
     rel="stylesheet"
 >
+  </div>
 
 
 <style>
@@ -2020,7 +2021,376 @@
         }
     }
 
+    /* phân trang*/ 
+    /* =========================================================
+        PAGINATION
+        ========================================================= */
+
+        /* =========================================================
+   AUDIT PAGINATION - MODERN PROFESSIONAL STYLE
+   ========================================================= */
+
+.audit-pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px 18px;
+
+    background: #ffffff;
+    border: 1px solid #edf0f5;
+    border-radius: 18px;
+
+    box-shadow:
+        0 3px 12px rgba(15, 23, 42, 0.035),
+        0 1px 3px rgba(15, 23, 42, 0.025);
+}
+
+/* =========================================================
+   THÔNG TIN PHÂN TRANG
+   ========================================================= */
+
+.audit-pagination-info {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    color: #8b95a7;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+.audit-pagination-info strong {
+    color: #374151;
+    font-weight: 700;
+}
+
+/* =========================================================
+   KHU VỰC CÁC NÚT PHÂN TRANG
+   ========================================================= */
+
+.audit-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.audit-pagination nav {
+    display: flex;
+    align-items: center;
+}
+
+.audit-pagination .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+/* =========================================================
+   TẤT CẢ NÚT PHÂN TRANG
+   ========================================================= */
+
+.audit-pagination .page-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.audit-pagination .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+
+    color: #64748b;
+    background: transparent;
+
+    border: 1px solid transparent;
+    border-radius: 50% !important;
+
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* =========================================================
+   HOVER NÚT SỐ TRANG
+   ========================================================= */
+
+.audit-pagination .page-item:not(.active):not(.disabled)
+.page-link:hover {
+    color: #7c3aed;
+    background: #f3efff;
+    border-color: transparent;
+
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+   TRANG ĐANG ĐƯỢC CHỌN
+   ========================================================= */
+
+.audit-pagination .page-item.active .page-link {
+    color: #ffffff;
+    background: linear-gradient(
+        135deg,
+        #8b5cf6 0%,
+        #7c3aed 100%
+    );
+
+    border-color: transparent;
+
+    box-shadow:
+        0 4px 10px rgba(124, 58, 237, 0.22),
+        0 2px 4px rgba(124, 58, 237, 0.12);
+
+    font-weight: 700;
+}
+
+/* Không phóng to quá mạnh khi hover trang active */
+.audit-pagination .page-item.active .page-link:hover {
+    color: #ffffff;
+    background: linear-gradient(
+        135deg,
+        #8b5cf6 0%,
+        #7c3aed 100%
+    );
+
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+   NÚT PREVIOUS / NEXT
+   ========================================================= */
+
+.audit-pagination .page-item:first-child .page-link,
+.audit-pagination .page-item:last-child .page-link {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    padding: 0;
+
+    color: #64748b;
+    background: #f5f6fa;
+
+    border: 1px solid #f0f1f5;
+    border-radius: 50% !important;
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Hover nút trước / sau */
+.audit-pagination .page-item:first-child:not(.disabled)
+.page-link:hover,
+.audit-pagination .page-item:last-child:not(.disabled)
+.page-link:hover {
+    color: #ffffff;
+    background: #7c3aed;
+    border-color: #7c3aed;
+
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
+
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+   NÚT BỊ DISABLED
+   ========================================================= */
+
+.audit-pagination .page-item.disabled .page-link {
+    color: #cbd5e1;
+    background: #f8f9fc;
+
+    border-color: #f1f3f7;
+
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* Không có hiệu ứng hover cho nút disabled */
+.audit-pagination .page-item.disabled .page-link:hover {
+    color: #cbd5e1;
+    background: #f8f9fc;
+    border-color: #f1f3f7;
+
+    box-shadow: none;
+    transform: none;
+}
+
+/* =========================================================
+   DẤU BA CHẤM (...)
+   ========================================================= */
+
+.audit-pagination .page-item.disabled
+.page-link[aria-disabled="true"] {
+    color: #94a3b8;
+    background: transparent;
+    border-color: transparent;
+
+    cursor: default;
+}
+
+/* =========================================================
+   ICON MŨI TÊN BOOTSTRAP
+   ========================================================= */
+
+.audit-pagination .page-link svg {
+    width: 15px;
+    height: 15px;
+}
+
+.audit-pagination .page-link i {
+    font-size: 15px;
+    line-height: 1;
+}
+
+/* =========================================================
+   XÓA STYLE BOOTSTRAP KHÔNG CẦN THIẾT
+   ========================================================= */
+
+.audit-pagination .page-link:focus {
+    color: inherit;
+    background-color: inherit;
+    border-color: transparent;
+
+    box-shadow: none;
+    outline: none;
+}
+
+.audit-pagination .page-item.active .page-link:focus {
+    color: #ffffff;
+    background: #7c3aed;
+    border-color: transparent;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+    .audit-pagination-wrapper {
+        padding: 14px 16px;
+        gap: 14px;
+    }
+
+    .audit-pagination .pagination {
+        gap: 4px;
+    }
+
+    .audit-pagination .page-link {
+        min-width: 34px;
+        height: 34px;
+        padding: 0 8px;
+    }
+
+    .audit-pagination .page-item:first-child .page-link,
+    .audit-pagination .page-item:last-child .page-link {
+        width: 36px;
+        min-width: 36px;
+        height: 36px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+    .audit-pagination-wrapper {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        gap: 14px;
+        padding: 16px 12px;
+
+        border-radius: 16px;
+    }
+
+    .audit-pagination-info {
+        justify-content: center;
+        text-align: center;
+        font-size: 11px;
+    }
+
+    .audit-pagination {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .audit-pagination .pagination {
+        gap: 4px;
+        max-width: 100%;
+    }
+
+    .audit-pagination .page-link {
+        min-width: 32px;
+        height: 32px;
+        padding: 0 7px;
+
+        font-size: 11px;
+    }
+
+    .audit-pagination .page-item:first-child .page-link,
+    .audit-pagination .page-item:last-child .page-link {
+        width: 34px;
+        min-width: 34px;
+        height: 34px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE - MÀN HÌNH RẤT NHỎ
+   ========================================================= */
+
+@media (max-width: 400px) {
+    .audit-pagination .pagination {
+        gap: 2px;
+    }
+
+    .audit-pagination .page-link {
+        min-width: 29px;
+        height: 29px;
+        padding: 0 5px;
+
+        font-size: 10px;
+    }
+
+    .audit-pagination .page-item:first-child .page-link,
+    .audit-pagination .page-item:last-child .page-link {
+        width: 31px;
+        min-width: 31px;
+        height: 31px;
+    }
+}
 </style>
+
 
 
 <div class="audit-scope">
@@ -3081,5 +3451,34 @@
         });
     </script>
 
+        {{-- =====================================================
+            PAGINATION
+        ===================================================== --}}
+        @if($auditLogs instanceof \Illuminate\Pagination\LengthAwarePaginator)
 
+            <div class="audit-pagination-wrapper">
+                <div class="audit-pagination">
+                    <ul class="pagination">
+
+                        @foreach($auditLogs->getUrlRange(1, $auditLogs->lastPage()) as $page => $url)
+
+                            <li class="page-item {{ $page == $auditLogs->currentPage() ? 'active' : '' }}">
+
+                                <a
+                                    class="page-link"
+                                    href="{{ $url }}"
+                                >
+                                    {{ $page }}
+                                </a>
+
+                            </li>
+
+                        @endforeach
+
+                    </ul>
+                </div>
+            </div>
+
+        @endif
+        
 </div>

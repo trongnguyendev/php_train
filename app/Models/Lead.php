@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AuditLog;
 
 class Lead extends Model
 {
@@ -148,5 +149,11 @@ class Lead extends Model
         
         });
     }
+    public function auditLogs()
+        {
+            return $this->hasMany(AuditLog::class, 'model_id')
+                ->where('model_type', self::class)
+                ->latest('created_at');
+        }
 }
 
