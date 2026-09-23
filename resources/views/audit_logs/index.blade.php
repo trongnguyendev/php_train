@@ -406,10 +406,29 @@
         |--------------------------------------------------------------------------
         */
 
-        if ($field === 'support_channel_id') {
+       if ($field === 'support_channel_id') {
+
+            $map = $maps['support_channel_id'] ?? [];
+
+            if (is_array($value)) {
+
+                return e(
+                    collect($value)
+                        ->map(function ($id) use ($map) {
+
+                            return $map[$id]
+                                ?? $map[(string) $id]
+                                ?? $id;
+
+                        })
+                        ->unique()
+                        ->implode(', ')
+                );
+            }
 
             return e(
-                $maps['support_channel_id'][$value]
+                $map[$value]
+                    ?? $map[(string) $value]
                     ?? $value
             );
         }
