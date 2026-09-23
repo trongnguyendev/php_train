@@ -131,20 +131,21 @@ class Lead extends Model
         });
 
         static::updating(function ($lead) {
-            $changes = $lead->getDirty();
+                $changes = $lead->getDirty();
 
-            if (empty($changes)) {
-                return;
-            }
+                if (empty($changes)) {
+                    return;
+                }
 
-            AuditLog::create([
-                'model_type' => Lead::class,
-                'model_id' => $lead->id,
-                'user_id' => Auth::id(),
-                'action' => 'updated',
-                'old_values' => $lead->getOriginal(),
-                'new_values' => $changes,
-            ]);
+                AuditLog::create([
+                    'model_type' => Lead::class,
+                    'model_id' => $lead->id,
+                    'user_id' => Auth::id(),
+                    'action' => 'updated',
+                    'old_values' => $lead->getOriginal(),
+                    'new_values' => $changes,
+                ]);
+        
         });
     }
 }

@@ -61,6 +61,15 @@
                         </li>
                     @endif
 
+                    @if(auth()->user()->hasPermission('audit_logs.view-any'))
+                        <li class="{{ request()->routeIs('audit_logs.*') ? 'active' : '' }}">
+                            <a href="{{ route('audit_logs.index') }}" class="nav-link">
+                                <i class="bi bi-people-fill"></i>
+                                <span>Lịch Sử</span>
+                            </a>
+                        </li>
+                    @endif
+
                     @if(auth()->user()->hasPermission('users.view-any'))
                         <li class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
                             <a href="{{ route('users.index') }}" class="nav-link">

@@ -19,6 +19,8 @@ use App\Models\Role;
 use App\Models\Permission;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use App\Policies\AuditLogPolicy;
+
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -40,6 +42,7 @@ class AuthServiceProvider extends ServiceProvider
     Permission::class => PermissionPolicy::class,
     Potential::class => PotentialPolicy::class,
     SupportChannel::class => SupportChannelPolicy::class,
+    AuditLog::class => AuditLogPolicy::class,
     ];
 
     /**

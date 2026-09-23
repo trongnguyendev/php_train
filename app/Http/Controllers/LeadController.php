@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Phone;
 use App\Models\CustomerCode;
+use App\Models\AuditLog;
+use Illuminate\Support\Facades\Auth;
 
 class LeadController extends Controller
 {
@@ -676,14 +678,158 @@ public function edit(Lead $lead)
 /**
  * Update the specified resource in storage.
  */
+// public function update(Request $request, Lead $lead)
+// {
+//     Gate::authorize('update', $lead);
+//     $rules = [
+//         'phone' => 'nullable|array', 
+//         'phone.*' => [
+//                 'string',
+//                 'regex:/^(0[0-9]{9}|\+[1-9]\d{7,14})$/'
+//         ],
+//         'first_interaction_date' => 'required|date',
+//         'name' => 'required|string',
+//         'customer_type_id' => 'required',
+//         'productCategories' => 'required|array|min:1',
+//         'note' => 'required',
+//         'lead_type' => 'required',
+//         'sale_support_id' => 'nullable',
+//     ]; 
+    
+//     $messages = [
+//         'phone.*.required' => 'Vui lòng không để trống ô số điện thoại.',
+//         'phone.*.regex'    => 'Số điện thoại :value không đúng định dạng (phải có 10 số và bắt đầu bằng 03,05,07,08,09).',
+//         'productCategories.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
+//         'first_interaction_date.required' => 'Vui lòng nhập Ngày tương tác đầu tiên.',
+//         'name.required' => 'Vui lòng nhập Tên khách hàng.',
+//         'note.required' => 'Vui lòng nhập Ghi chú về khách hàng.',
+//         'customer_type_id.required' => 'Vui lòng chọn Loại khách hàng.',
+//     ];
+//     $request->validate($rules, $messages);
+//     // Check để coi lead tô màu từ trực tiếp sang online 
+//     $oldLeadType = $lead->lead_type;
+
+//     $orderValue = 0;
+//     if ($request->order_value) {
+//         $orderValue = (int) str_replace('.', '', $request->order_value);
+//     }
+
+//     // Chỉ cập nhật bản ghi Lead hiện tại
+//     $oldLeadType = $lead->old_lead_type ?? $lead->lead_type;
+//     $newLeadType = $request->lead_type;
+
+//     if ($oldLeadType == 1 && $newLeadType == 2 && $lead->lead_type == 1) {
+//         $lead->update([
+//             'old_lead_type' => $oldLeadType,
+//             'lead_type' => 2,
+//         ]);
+//     }
+//     // dd($oldLeadType, $newLeadType);
+
+//     $lead->update([
+//         // Nhận customer_id mới nếu trên giao diện cho phép đổi khách hàng, ngược lại giữ nguyên giá trị cũ
+//         'customer_id' => $request->input('customer_id', $lead->customer_id),
+//         'first_interaction_date' => $request->first_interaction_date,
+//         'name' => $request->name,
+        
+//         'province_id' => $request->province_id,
+//         'address' => $request->address,
+//         'zalo' => $request->zalo ?? '',
+//         'customer_type_id' => $request->customer_type_id,
+//         'source_id' => $request->source_id,
+//         'showroom_id' => $request->showroom_id,
+//         'note' => $request->note,
+//         'first_customer_status_id' => $request->first_customer_status_id ?? null,
+//         'sale_information_id' => $request->sale_information_id,
+//         'sale_support_id' => $request->sale_support_id ?? 0,
+//         'current_customer_status_id' => $request->current_customer_status_id,
+//         'order_value' => $orderValue,
+//         'support_channel_id' => $request->support_channel_id ?? null,
+//         'customer_discussion_details' => $request->customer_discussion_details ?? '',
+//         'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
+//         'old_lead_type' => $oldLeadType,
+//         'lead_type' => $newLeadType,
+//     ]);
+//     $lead->phones()->delete();
+
+//     $phones = collect($request->phone ?? [])
+//         ->filter()
+//         ->unique()
+//         ->map(fn($p) => ['phone' => $p])
+//         ->toArray();
+
+//     $lead->phones()->createMany($phones);
+
+//     // Lưu nhiều product category khi cập nhật
+//     if ($request->has('productCategories')) {
+//         $lead->productCategories()->sync($request->productCategories);
+//     }
+
+//     $leadTakeCare = LeadTakeCare::where('lead_id', $lead->id)->delete();
+
+//         foreach ((array) $request->take_care_plan as $index => $plan) {
+
+//             $date = $request->take_care_date[$index] ?? null;
+
+//             if (!$date && !$plan) {
+//                 continue;
+//             }
+
+//             LeadTakeCare::create([
+//                 'lead_id' => $lead->id,
+//                 'take_care_plan' => $plan,
+//                 'take_care_date' => $date,
+//                 'take_care_result' => $request->take_care_result[$index] ?? null,
+//             ]);
+//         }
+
+//         $redirect = redirect()
+//             ->route('leads.index', request()->query())
+//             ->with('success', 'Cập nhập Lead thành công!');
+
+//         if ($oldLeadType == 1 && $request->lead_type == 2) {
+//             $redirect->with('highlight_lead', $lead->id);
+//         }
+
+//         if ($oldLeadType == 1 && $request->lead_type == 2) {
+//                 session()->flash('highlight_lead', $lead->id);
+//             }
+
+//             return redirect()
+//                 ->route('leads.index', request()->query())
+//                 ->with('success', 'Cập nhật Lead thành công!');
+
+//         // return $redirect;
+//     // return redirect()->route('leads.index', request()->query())->with('success', 'Cập nhập Lead thành công!');
+// }
+
+
 public function update(Request $request, Lead $lead)
 {
     Gate::authorize('update', $lead);
+
+    // 1) Snapshot dữ liệu cũ trước khi update/sync
+    $oldLeadValues = $lead->getOriginal();
+    $oldPhones = $lead->phones()->pluck('phone')->toArray();
+    $oldCategoryIds = $lead->productCategories()->get()->pluck('id')->toArray();
+    $oldSupportChannelId = $lead->support_channel_id;
+    $oldSourceId = $lead->source_id;
+    $oldTakeCare = $lead->leadTakeCares()
+    ->get()
+    ->map(function ($item) {
+        return [
+            'take_care_plan' => $item->take_care_plan,
+            'take_care_date' => $item->take_care_date ? $item->take_care_date->format('Y-m-d') : null,
+            'take_care_result' => $item->take_care_result,
+        ];
+    })
+    ->toArray();
+
     $rules = [
-        'phone' => 'nullable|array', 
+        'phone' => 'nullable|array',
         'phone.*' => [
-                'string',
-                'regex:/^(0[0-9]{9}|\+[1-9]\d{7,14})$/'
+            'string',
+            'regex:/^(0[0-9]{9}|\+[1-9]\d{7,14})$/'
         ],
         'first_interaction_date' => 'required|date',
         'name' => 'required|string',
@@ -692,8 +838,8 @@ public function update(Request $request, Lead $lead)
         'note' => 'required',
         'lead_type' => 'required',
         'sale_support_id' => 'nullable',
-    ]; 
-    
+    ];
+
     $messages = [
         'phone.*.required' => 'Vui lòng không để trống ô số điện thoại.',
         'phone.*.regex'    => 'Số điện thoại :value không đúng định dạng (phải có 10 số và bắt đầu bằng 03,05,07,08,09).',
@@ -703,33 +849,22 @@ public function update(Request $request, Lead $lead)
         'note.required' => 'Vui lòng nhập Ghi chú về khách hàng.',
         'customer_type_id.required' => 'Vui lòng chọn Loại khách hàng.',
     ];
+
     $request->validate($rules, $messages);
-    // Check để coi lead tô màu từ trực tiếp sang online 
-    $oldLeadType = $lead->lead_type;
+
+    $oldLeadType = $lead->old_lead_type ?? $lead->lead_type;
+    $newLeadType = $request->lead_type;
 
     $orderValue = 0;
     if ($request->order_value) {
         $orderValue = (int) str_replace('.', '', $request->order_value);
     }
 
-    // Chỉ cập nhật bản ghi Lead hiện tại
-    $oldLeadType = $lead->old_lead_type ?? $lead->lead_type;
-    $newLeadType = $request->lead_type;
-
-    if ($oldLeadType == 1 && $newLeadType == 2 && $lead->lead_type == 1) {
-        $lead->update([
-            'old_lead_type' => $oldLeadType,
-            'lead_type' => 2,
-        ]);
-    }
-    // dd($oldLeadType, $newLeadType);
-
+    // 2) Update lead
     $lead->update([
-        // Nhận customer_id mới nếu trên giao diện cho phép đổi khách hàng, ngược lại giữ nguyên giá trị cũ
         'customer_id' => $request->input('customer_id', $lead->customer_id),
         'first_interaction_date' => $request->first_interaction_date,
         'name' => $request->name,
-        
         'province_id' => $request->province_id,
         'address' => $request->address,
         'zalo' => $request->zalo ?? '',
@@ -748,57 +883,88 @@ public function update(Request $request, Lead $lead)
         'old_lead_type' => $oldLeadType,
         'lead_type' => $newLeadType,
     ]);
+
+    // 3) Cập nhật phones
     $lead->phones()->delete();
 
     $phones = collect($request->phone ?? [])
         ->filter()
+        ->map(fn ($phone) => trim((string) $phone))
+        ->filter(fn ($phone) => $phone !== '')
         ->unique()
-        ->map(fn($p) => ['phone' => $p])
+        ->values()
+        ->map(fn ($phone) => ['phone' => $phone])
         ->toArray();
 
-    $lead->phones()->createMany($phones);
+    if (!empty($phones)) {
+        $lead->phones()->createMany($phones);
+    }
 
-    // Lưu nhiều product category khi cập nhật
+    // 4) Cập nhật danh mục sản phẩm
     if ($request->has('productCategories')) {
         $lead->productCategories()->sync($request->productCategories);
     }
+    $lead->leadTakeCares()->delete();
 
-    $leadTakeCare = LeadTakeCare::where('lead_id', $lead->id)->delete();
+        if ($request->has('take_care_plan')) {
+            foreach ((array) $request->take_care_plan as $index => $plan) {
+                $date = $request->take_care_date[$index] ?? null;
+                $result = $request->take_care_result[$index] ?? null;
 
-        foreach ((array) $request->take_care_plan as $index => $plan) {
+                if (empty($plan) && empty($date) && empty($result)) {
+                    continue;
+                }
 
-            $date = $request->take_care_date[$index] ?? null;
-
-            if (!$date && !$plan) {
-                continue;
+                $lead->leadTakeCares()->create([
+                    'take_care_plan' => $plan,
+                    'take_care_date' => $date,
+                    'take_care_result' => $result,
+                ]);
             }
-
-            LeadTakeCare::create([
-                'lead_id' => $lead->id,
-                'take_care_plan' => $plan,
-                'take_care_date' => $date,
-                'take_care_result' => $request->take_care_result[$index] ?? null,
-            ]);
         }
 
-        $redirect = redirect()
-            ->route('leads.index', request()->query())
-            ->with('success', 'Cập nhập Lead thành công!');
+    // 5) Snapshot mới sau khi sync
+    $newLeadValues = $lead->fresh()->toArray();
+    $newPhones = $lead->fresh()->phones()->pluck('phone')->toArray();
+    $newCategoryIds = $lead->fresh()->productCategories()->get()->pluck('id')->toArray();
+    $newSupportChannelId = $lead->fresh()->support_channel_id;
+    $newSourceId = $lead->fresh()->source_id;
+    $newTakeCare = $lead->fresh()->leadTakeCares()
+    ->get()
+    ->map(function ($item) {
+        return [
+            'take_care_plan' => $item->take_care_plan,
+            'take_care_date' => $item->take_care_date ? $item->take_care_date->format('Y-m-d') : null,
+            'take_care_result' => $item->take_care_result,
+        ];
+    })
+    ->toArray();
 
-        if ($oldLeadType == 1 && $request->lead_type == 2) {
-            $redirect->with('highlight_lead', $lead->id);
-        }
+    // 6) Lưu audit với mảng relation
+    AuditLog::create([
+        'model_type' => Lead::class,
+        'model_id' => $lead->id,
+        'user_id' => Auth::id(),
+        'action' => 'updated',
+        'old_values' => array_merge($oldLeadValues, [
+            'phones' => $oldPhones,
+            'product_categories_id' => $oldCategoryIds,
+            'support_channel_id' => $oldSupportChannelId,
+            'source_id' => $oldSourceId,
+            'lead_take_care' => $oldTakeCare,
+        ]),
+        'new_values' => array_merge($newLeadValues, [
+            'phones' => $newPhones,
+            'product_categories_id' => $newCategoryIds,
+            'support_channel_id' => $newSupportChannelId,
+            'source_id' => $newSourceId,
+            'lead_take_care' => $newTakeCare,
+        ]),
+    ]);
 
-        if ($oldLeadType == 1 && $request->lead_type == 2) {
-                session()->flash('highlight_lead', $lead->id);
-            }
-
-            return redirect()
-                ->route('leads.index', request()->query())
-                ->with('success', 'Cập nhật Lead thành công!');
-
-        // return $redirect;
-    // return redirect()->route('leads.index', request()->query())->with('success', 'Cập nhập Lead thành công!');
+    return redirect()
+        ->route('leads.index', request()->query())
+        ->with('success', 'Cập nhật Lead thành công!');
 }
 
 /**

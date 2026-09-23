@@ -29,6 +29,7 @@ class PermissionSeeder extends Seeder
             'report_showroom' => 'ReportShowroom',
             'potential' => 'Potential',
             'support-channels' => 'Support Channels',
+            'audit_logs' => 'Audit Logs',
             
 
         ];
