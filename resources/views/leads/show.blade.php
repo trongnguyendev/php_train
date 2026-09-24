@@ -154,7 +154,10 @@
                                         {{ $allOrder->firstStatus->name ?? '-' }}
                                     @endif
                                 </td>
-                                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">{{ $allOrder->note ?? '-' }}</td>
+                                <td style="max-width: 200px; white-space: normal; overflow-wrap: anywhere;">
+                                    {{ $allOrder->note ?? '-' }}
+                                </td>
+                                
                                 <td>{{ $allOrder->saleInformation->name ?? '-' }}</td>
                                 <td>{{ $allOrder->saleSupport->name ?? '-' }}</td>
                                 <td>{{ $allOrder->currentStatus->name ?? '-' }}</td>
@@ -1426,7 +1429,7 @@
             return '
                 <span
                     class="audit-single-value"
-                    style="white-space:nowrap !important;"
+                   
                 >
                     ' .
                     e(
@@ -1469,7 +1472,7 @@
         return '
             <span
                 class="audit-field-change"
-                style="white-space:nowrap !important;"
+               
             >
 
                 <span class="audit-old-value">
@@ -1638,7 +1641,7 @@
                 'html' => '
                     <span
                         class="audit-single-value"
-                        style="white-space:nowrap !important;"
+                        
                     >
                         ' .
                         e(
@@ -1675,7 +1678,7 @@
             'html' => '
                 <span
                     class="audit-field-change"
-                    style="white-space:nowrap !important;"
+                    
                 >
 
                     <span class="audit-old-value">
@@ -2055,7 +2058,18 @@
     .audit-table-horizontal td {
         vertical-align: middle !important;
         background-clip: padding-box;
+    }
+
+    /* Chỉ header giữ 1 dòng */
+    .audit-table-horizontal th {
         white-space: nowrap !important;
+    }
+
+    /* Ô dữ liệu cho phép xuống dòng */
+    .audit-table-horizontal td {
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
 
@@ -2373,17 +2387,15 @@
 
 
     .audit-new-value {
-        display: inline-flex;
-        align-items: center;
+        display: inline-block;
 
         max-width: 250px;
 
         padding: 5px 8px;
 
-        overflow: hidden;
-        text-overflow: ellipsis;
-
-        white-space: nowrap;
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+        word-break: break-word;
 
         color: var(--au-success);
         background: var(--au-success-bg);
@@ -2392,6 +2404,8 @@
 
         font-size: 10px;
         font-weight: 700;
+
+        line-height: 1.5;
     }
 
 
@@ -2722,6 +2736,7 @@
         margin-left: auto;
         margin-right: auto;
     }
+    
   
   
 </style>
@@ -2747,7 +2762,7 @@
 
                         <th
                             class="audit-user-col"
-                            style="white-space:nowrap !important;"
+                           
                         >
                             Người sửa
                         </th>
@@ -2755,7 +2770,7 @@
 
                         <th
                             class="audit-type-col"
-                            style="white-space:nowrap !important;"
+                            
                         >
                             Thao tác
                         </th>
@@ -2768,7 +2783,7 @@
 
                                 <th
                                     class="audit-field-header"
-                                    style="white-space:nowrap !important;"
+                                   
                                 >
                                     {{ $label }}
                                 </th>
@@ -2950,7 +2965,7 @@
 
                             <td
                                 class="audit-user-col"
-                                style="white-space:nowrap !important;"
+                               
                             >
 
                                 <div
@@ -3014,7 +3029,6 @@
 
                             <td
                                 class="audit-type-col"
-                                style="white-space:nowrap !important;"
                             >
 
                                 <span
