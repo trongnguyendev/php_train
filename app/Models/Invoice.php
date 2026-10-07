@@ -13,6 +13,7 @@ class Invoice extends Model
     protected $fillable = [
         'lead_id',
         'invoice_code',
+        'showroom_id',
 
         // Thông tin khách hàng
         'customer_name',
@@ -58,6 +59,10 @@ class Invoice extends Model
     public function items()
     {
         return $this->hasMany(InvoiceItem::class);
+    }
+    public function showroom()
+    {
+        return $this->belongsTo(\App\Models\Showroom::class, 'showroom_id');
     }
 
     

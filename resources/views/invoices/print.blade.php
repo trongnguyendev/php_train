@@ -292,7 +292,9 @@
                 Ngày {{ $invoice->created_at ? $invoice->created_at->format('d') : date('d') }} Tháng {{ $invoice->created_at ? $invoice->created_at->format('m') : date('m') }} Năm {{ $invoice->created_at ? $invoice->created_at->format('Y') : date('Y') }}
             </div>
             <div class="invoice-number">Số: {{ $invoice->invoice_code }}</div>
-            <div class="showroom">Showroom Quận 1</div>
+            <div class="showroom">
+                {{ $invoice->showroom->name ?? 'Chưa chọn showroom' }}
+            </div>
         </div>
 
         <div class="clear"></div>

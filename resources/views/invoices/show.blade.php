@@ -1196,19 +1196,19 @@
             </div>
 
 
-            {{-- PAYMENT --}}
+            {{-- SHOWROOM --}}
             <div class="invoice-info-card">
 
                 <div class="invoice-info-icon invoice-icon-green">
-                    <i class="bi bi-wallet2"></i>
+                    <i class="bi bi-shop"></i>
                 </div>
 
                 <div class="invoice-info-label">
-                    Hình thức thanh toán
+                    Showroom
                 </div>
 
                 <div class="invoice-info-value">
-                    {{ $paymentMethod }}
+                    {{ $invoice->showroom->name ?? 'Chưa chọn showroom' }}
                 </div>
 
             </div>
@@ -1351,6 +1351,22 @@
 
                                     <span class="customer-detail-value">
                                         {{ $invoice->sale_name ?? (auth()->user()->name ?? 'N/A') }}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <div class="customer-detail-item">
+
+                                <i class="bi bi-shop"></i>
+
+                                <div>
+                                    <span class="customer-detail-label">
+                                        Showroom
+                                    </span>
+
+                                    <span class="customer-detail-value">
+                                        {{ $invoice->showroom->name ?? 'Chưa chọn showroom' }}
                                     </span>
                                 </div>
 
@@ -1926,7 +1942,8 @@
 
 
                             <div class="inv-showroom">
-                                Showroom Quận 1
+                                Showroom:
+                                {{ $invoice->showroom->name ?? 'Chưa chọn showroom' }}
                             </div>
 
                         </div>

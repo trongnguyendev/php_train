@@ -793,6 +793,39 @@
 
                         </div>
 
+                        {{-- SR / SHOWROOM --}}
+                        <div class="form-group">
+                            <label class="form-label-modern">
+                                <i class="bi bi-shop"></i>
+                                Showroom
+                                <span class="required">*</span>
+                            </label>
+
+                            <select
+                                name="showroom_id"
+                                id="showroom_id"
+                                class="form-select"
+                                required
+                            >
+                                <option value="">-- Chọn Showroom --</option>
+
+                                @foreach($showrooms as $showroom)
+                                    <option
+                                        value="{{ $showroom->id }}"
+                                        {{ old('showroom_id') == $showroom->id ? 'selected' : '' }}
+                                    >
+                                        {{ $showroom->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            @error('showroom_id')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
 
                         {{-- SEARCH PHONE --}}
                         <div class="form-group">

@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Product;
 use App\Models\Lead;
+use App\Models\Showroom;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,9 +21,11 @@ class InvoiceController extends Controller
         $invoices = Invoice::with('lead')
             ->latest()
             ->paginate(30);
+        $showrooms = Showroom::orderBy('name')->get();
 
         return view('invoices.index', [
             'invoices' => $invoices,
+            'showrooms' => $showrooms,
         ]);
     }
     /**
@@ -43,10 +46,12 @@ class InvoiceController extends Controller
         $products = Product::where('is_active', 1)
             ->orderBy('name', 'asc')
             ->get();
+        $showrooms = Showroom::orderBy('name')->get();
 
         return view('invoices.create', [
             'lead' => $lead,
             'products' => $products,
+            'showrooms' => $showrooms,
         ]);
     }
 
@@ -119,6 +124,7 @@ class InvoiceController extends Controller
             'customer_phone'   => 'nullable|string|max:50',
             'customer_address' => 'nullable|string',
             'note'             => 'nullable|string',
+            'showroom_id' => ['required','exists:showrooms,id',],
 
             // Nhận đúng biến từ Form create
             'discount_amount'  => 'nullable|numeric|min:0', // Chiết khấu (đ)
@@ -152,7 +158,9 @@ class InvoiceController extends Controller
 
             // Safe fallback nếu không có Lead
             $invoice->lead_id          = $lead ? $lead->id : null;
+            $invoice->showroom_id      = $validated['showroom_id'] ?? null;
             $invoice->invoice_code     = $this->generateInvoiceCode();
+            
             
             // Tự động fallback lấy thông tin từ Lead nếu Form không nhập
             $defaultPhone              = $lead && $lead->phones->isNotEmpty() ? $lead->phones->first()->phone : '';
@@ -244,10 +252,13 @@ class InvoiceController extends Controller
         $invoice->load([
             'lead',
             'items.product',
+            'showroom',
         ]);
+        
 
         return view('invoices.print', [
             'invoice' => $invoice,
+        
         ]);
     }
 
