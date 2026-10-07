@@ -1256,10 +1256,6 @@
                             Thông tin khách hàng
                         </h2>
 
-                        <span class="badge rounded-pill text-bg-light">
-                            Khách hàng
-                        </span>
-
                     </div>
 
 
@@ -1276,12 +1272,6 @@
                                 <div class="customer-name">
                                     {{ $customerName }}
                                 </div>
-
-                                <div class="customer-subtitle">
-                                    Khách hàng của hóa đơn
-                                    #{{ $invoice->invoice_code }}
-                                </div>
-
                             </div>
 
                         </div>
@@ -1747,50 +1737,6 @@
                         </div>
 
 
-                        {{-- SALE --}}
-                        <div class="invoice-note-box">
-
-                            <div class="invoice-note-title">
-
-                                <i class="bi bi-person-badge"></i>
-
-                                Nhân viên bán hàng
-
-                            </div>
-
-                            <div class="invoice-note-content">
-
-                                <strong>
-                                    {{ $invoice->sale_name ?? (auth()->user()->name ?? 'N/A') }}
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
-                        {{-- PAYMENT METHOD --}}
-                        <div class="invoice-note-box">
-
-                            <div class="invoice-note-title">
-
-                                <i class="bi bi-wallet2"></i>
-
-                                Hình thức thanh toán
-
-                            </div>
-
-                            <div class="invoice-note-content">
-
-                                <strong>
-                                    {{ $paymentMethod }}
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
                         {{-- PRINT BUTTON --}}
                         <a
                             href="{{ route('invoices.print', $invoice) }}"
@@ -1829,15 +1775,6 @@
                     </h2>
 
                 </div>
-
-                <div class="invoice-preview-label">
-
-                    <i class="bi bi-filetype-pdf"></i>
-
-                    Khổ giấy A4
-
-                </div>
-
             </div>
 
 
@@ -1942,7 +1879,7 @@
 
 
                             <div class="inv-showroom">
-                                Showroom:
+                            
                                 {{ $invoice->showroom->name ?? 'Chưa chọn showroom' }}
                             </div>
 
