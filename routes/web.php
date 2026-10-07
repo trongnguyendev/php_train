@@ -16,6 +16,9 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SupportChannelController;
 use App\Http\Controllers\ReportDailyController;
 use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\InvoiceController;
+use Illuminate\Support\Facades\Http;
 
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -136,3 +139,93 @@ Route::get(
 
 Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit_logs.index');
 Route::get('/leads/{lead}/history', [AuditLogController::class, 'leadHistory'])->name('leads.history');
+
+// Hoá đơn
+
+
+Route::middleware(['auth'])->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | PRODUCTS
+    |--------------------------------------------------------------------------
+    */
+
+    Route::resource(
+        'products',
+        ProductController::class
+    )->except([
+        'show',
+    ]);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | INVOICES
+    |--------------------------------------------------------------------------
+    */
+
+    // Danh sách hóa đơn
+    Route::get(
+        '/invoices',
+        [InvoiceController::class, 'index']
+    )->name('invoices.index');
+
+
+    // Tạo hóa đơn
+    Route::get(
+        '/invoices/create',
+        [InvoiceController::class, 'create']
+    )->name('invoices.create');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | AJAX - TÌM LEAD THEO SỐ ĐIỆN THOẠI
+    |--------------------------------------------------------------------------
+    |
+    | Route này PHẢI đặt trước /invoices/{invoice}
+    |
+    */
+
+    Route::get(
+        '/invoices/search-leads-by-phone',
+        [InvoiceController::class, 'searchLeadsByPhone']
+    )->name('invoices.search-leads-by-phone');
+
+
+    // Lưu hóa đơn
+    Route::post(
+        '/invoices',
+        [InvoiceController::class, 'store']
+    )->name('invoices.store');
+
+
+    // Xem hóa đơn
+    Route::get(
+        '/invoices/{invoice}',
+        [InvoiceController::class, 'show']
+    )->name('invoices.show');
+
+
+    // In hóa đơn
+    Route::get(
+        '/invoices/{invoice}/print',
+        [InvoiceController::class, 'print']
+    )->name('invoices.print');
+
+});
+
+
+Route::get('/drive-image/{id}', function ($id) {
+    // Gọi đến Google Drive lấy dữ liệu ảnh gốc
+    $url = "https://drive.google.com/uc?export=download&id=" . $id;
+    $response = Http::get($url);
+
+    if ($response->successful()) {
+        return response($response->body())
+            ->header('Content-Type', $response->header('Content-Type') ?? 'image/png');
+    }
+
+    return response('', 404);
+})->name('drive.image');

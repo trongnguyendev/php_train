@@ -32,6 +32,7 @@ return new class extends Migration
             $table->text('customer_discussion_details')->nullable();
             $table->string('tmdt')->nullable();
             $table->string('lead_type');
+            $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamps();
         });
     }

@@ -30,6 +30,8 @@ class PermissionSeeder extends Seeder
             'potential' => 'Potential',
             'support-channels' => 'Support Channels',
             'audit_logs' => 'Audit Logs',
+            'products' => 'Products',
+            'invoices' => 'Invoices',
             
 
         ];

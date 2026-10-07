@@ -20,7 +20,7 @@
                 <div class="sidebar-header">
                     <h3 class="text-white">
                         <i class="bi bi-rocket-takeoff"></i>
-                        LEAD SYSTEM
+                        LEAD CHILUX
                     </h3>
                 </div>
 
@@ -66,6 +66,23 @@
                             <a href="{{ route('audit_logs.index') }}" class="nav-link">
                                 <i class="bi bi-people-fill"></i>
                                 <span>Lịch Sử</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if(auth()->user()->hasPermission('invoices.view-any'))
+                        <li class="{{ request()->routeIs('invoices.*') ? 'active' : '' }}">
+                            <a href="{{ route('invoices.index') }}" class="nav-link">
+                                <i class="bi bi-people-fill"></i>
+                                <span>Hóa Đơn</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    @if(auth()->user()->hasPermission('products.view-any'))
+                        <li class="{{ request()->routeIs('products.*') ? 'active' : '' }}">
+                            <a href="{{ route('products.index') }}" class="nav-link">
+                                <i class="bi bi-people-fill"></i>
+                                <span>Sản Phẩm</span>
                             </a>
                         </li>
                     @endif

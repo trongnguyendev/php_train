@@ -41,8 +41,10 @@ class AdminUserSeeder extends Seeder
                   ->orWhere('slug', 'like', 'report_daily.%')
                   ->orWhere('slug', 'like', 'report_month.%')
                   ->orWhere('slug', 'like', 'report_showroom.%')
-                  ->orWhere('slug', 'like', 'potential.%');
-                  ->orWhere('slug', 'like', 'audit_logs.%');
+                  ->orWhere('slug', 'like', 'potential.%')
+                  ->orWhere('slug', 'like', 'audit_logs.%')
+                  ->orWhere('slug', 'like', 'products.%')
+                  ->orWhere('slug', 'like', 'invoices.%');
                   
         })->get();
 

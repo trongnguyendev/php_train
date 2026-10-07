@@ -20,6 +20,8 @@ use App\Models\Permission;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Policies\AuditLogPolicy;
+use App\Policies\ProductPolicy;
+use App\Policies\InvoicePolicy;
 
 
 class AuthServiceProvider extends ServiceProvider
@@ -43,6 +45,8 @@ class AuthServiceProvider extends ServiceProvider
     Potential::class => PotentialPolicy::class,
     SupportChannel::class => SupportChannelPolicy::class,
     AuditLog::class => AuditLogPolicy::class,
+    Product::class => ProductPolicy::class,
+    Invoice::class => InvoicePolicy::class,
     ];
 
     /**

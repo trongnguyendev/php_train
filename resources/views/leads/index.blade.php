@@ -13,7 +13,7 @@
 
 @section('content')
 <!-- Main Content Card -->
-<div class="card">
+<div class="card lead-page">
     <div class="card-header bg-white border-bottom">
         <div class="d-flex justify-content-between align-items-center">
             <div>
