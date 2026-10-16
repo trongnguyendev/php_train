@@ -1240,6 +1240,13 @@
                                                 Quẹt thẻ
                                             </option>
 
+                                            <option
+                                                value="Trống"
+                                                {{ old('deposit_type') == ' ' ? 'selected' : '' }}
+                                            >
+                                                  
+                                            </option>
+
                                         </select>
 
                                     </div>
