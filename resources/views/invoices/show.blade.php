@@ -1085,6 +1085,15 @@
                     <i class="bi bi-arrow-left"></i>
                     Quay lại
                 </a>
+                    @can('update', $invoice)
+                        <a
+                            href="{{ route('invoices.edit', $invoice) }}"
+                            class="btn-modern btn-invoice-print"
+                        >
+                            <i class="bi bi-pencil-square"></i>
+                            Chỉnh sửa hóa đơn
+                        </a>
+                    @endcan
 
             </div>
 

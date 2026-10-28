@@ -21,6 +21,7 @@ use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Http;
 
 
+
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
@@ -214,7 +215,16 @@ Route::middleware(['auth'])->group(function () {
         [InvoiceController::class, 'print']
     )->name('invoices.print');
 
-});
+    Route::get('/invoices/{invoice}/edit', [
+    \App\Http\Controllers\InvoiceController::class,
+    'edit',
+])->name('invoices.edit');
+
+Route::put('/invoices/{invoice}', [
+    \App\Http\Controllers\InvoiceController::class,
+    'updateDetails',
+])->name('invoices.update');
+    });
 
 
 Route::get('/drive-image/{id}', function ($id) {

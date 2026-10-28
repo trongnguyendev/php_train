@@ -1173,9 +1173,29 @@
                                             </option>
 
                                             <option
-                                                value="Trống"
-                                                {{ old('deposit_type') == 'Trống' ? 'selected' : '' }}
-                                            ></option>
+                                                value="-"
+                                                {{ old('deposit_type') == '-' ? 'selected' : '' }}
+                                            >
+                                                Trống
+                                            </option>
+                                            <option
+                                                value="Tiền Mặt + Chuyển Khoản"
+                                                {{ old('deposit_type') == 'Tiền Mặt + Chuyển Khoản' ? 'selected' : '' }}
+                                            >
+                                                Tiền Mặt + Chuyển Khoản
+                                            </option>
+                                            <option
+                                                value="Chuyển Khoản + Quẹt Thẻ"
+                                                {{ old('deposit_type') == 'Chuyển Khoản + Quẹt Thẻ' ? 'selected' : '' }}
+                                            >
+                                                Chuyển Khoản + Quẹt Thẻ
+                                            </option>
+                                            <option
+                                                value="Tiền Mặt + Quẹt Thẻ"
+                                                {{ old('deposit_type') == 'Tiền Mặt + Quẹt Thẻ' ? 'selected' : '' }}
+                                                >
+                                                Tiền Mặt + Quẹt Thẻ
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
