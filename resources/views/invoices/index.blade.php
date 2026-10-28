@@ -626,6 +626,16 @@
                                     >
                                         🖨 In
                                     </a>
+                                    </a>
+                                      
+                                    <a
+                                        href="{{ route('invoices.edit', $invoice) }}"
+                                        
+                                        class="btn-action btn-print"
+                                    >
+                                        ✏️ Chỉnh sửa
+                                    </a>
+                                    
 
                                 </div>
 
