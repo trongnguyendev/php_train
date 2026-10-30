@@ -319,9 +319,15 @@
 
         <div class="customer-row">
             <div class="customer-label">Hình Thức Cọc:</div>
-            <div class="customer-value">{{ $invoice->deposit_type ?: ($invoice->payment_method ?: 'Chuyển khoản') }}</div>
+                <div class="customer-value">
+                    @if(filled($invoice->deposit_type) && !in_array(trim($invoice->deposit_type), ['-', 'Trống'], true))
+                        {{ $invoice->deposit_type }}
+                    @else
+                        &nbsp;
+                    @endif
+                </div>
+            </div>
         </div>
-    </div>
 
     {{-- PRODUCTS TABLE --}}
     <table class="product-table">

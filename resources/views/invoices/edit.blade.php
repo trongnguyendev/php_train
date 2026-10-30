@@ -1014,21 +1014,29 @@
                                         >
                                             Hình thức cọc
                                         </label>
-
                                         <select
                                             name="deposit_type"
                                             id="deposit_type"
                                             class="form-select"
                                         >
-                                            @foreach(['Chuyển khoản', 'Tiền mặt', 'Quẹt thẻ', 'Trống'] as $method)
+                                            @foreach([
+                                                'Trống',
+                                                'Chuyển khoản',
+                                                'Tiền mặt',
+                                                'Quẹt thẻ',
+                                                'Tiền Mặt + Chuyển Khoản',
+                                                'Chuyển Khoản + Quẹt Thẻ',
+                                                'Tiền Mặt + Quẹt Thẻ'
+                                            ] as $method)
                                                 <option
                                                     value="{{ $method }}"
-                                                    {{ $formValue('deposit_type') === $method ? 'selected' : '' }}
+                                                    {{ ($formValue('deposit_type') ?: '-') === $method ? 'selected' : '' }}
                                                 >
-                                                    {{ $method === 'Trống' ? '—' : $method }}
+                                                    {{ $method === '-' ? '— Để trống —' : $method }}
                                                 </option>
                                             @endforeach
                                         </select>
+                                       
                                     </div>
                                 </div>
                             </div>
