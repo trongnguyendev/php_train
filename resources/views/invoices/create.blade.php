@@ -389,15 +389,12 @@
         left: 0;
         right: 0;
         z-index: 1050;
-
         max-height: 320px;
         overflow-y: auto;
         overflow-x: hidden;
-
         overscroll-behavior: contain;
         touch-action: pan-y;
         -webkit-overflow-scrolling: touch;
-
         color: #111827;
         background: #fff;
         border: 1px solid #d1d5db;
@@ -690,16 +687,11 @@
 
             <div class="page-title">
                 <h2>Tạo hóa đơn</h2>
-                <p>
-                    Tạo đơn hàng mới và quản lý thông tin khách hàng
-                </p>
+                <p>Tạo đơn hàng mới và quản lý thông tin khách hàng</p>
             </div>
         </div>
 
-        <a
-            href="{{ route('invoices.index') }}"
-            class="btn-back"
-        >
+        <a href="{{ route('invoices.index') }}" class="btn-back">
             <i class="bi bi-arrow-left"></i>
             Danh sách hóa đơn
         </a>
@@ -754,10 +746,7 @@
 
                         {{-- SALE --}}
                         <div class="form-group">
-                            <label
-                                for="sale_name"
-                                class="form-label-modern"
-                            >
+                            <label for="sale_name" class="form-label-modern">
                                 Tên Sale
                                 <span class="required">*</span>
                             </label>
@@ -775,10 +764,7 @@
 
                         {{-- SHOWROOM --}}
                         <div class="form-group">
-                            <label
-                                for="showroom_id"
-                                class="form-label-modern"
-                            >
+                            <label for="showroom_id" class="form-label-modern">
                                 <i class="bi bi-shop"></i>
                                 Showroom
                                 <span class="required">*</span>
@@ -790,9 +776,7 @@
                                 class="form-select"
                                 required
                             >
-                                <option value="">
-                                    -- Chọn Showroom --
-                                </option>
+                                <option value="">-- Chọn Showroom --</option>
 
                                 @foreach ($showrooms as $showroom)
                                     <option
@@ -813,10 +797,7 @@
 
                         {{-- TÌM KHÁCH HÀNG --}}
                         <div class="form-group">
-                            <label
-                                for="search_phone"
-                                class="form-label-modern"
-                            >
+                            <label for="search_phone" class="form-label-modern">
                                 <i class="bi bi-search"></i>
                                 Tìm khách hàng
                             </label>
@@ -860,19 +841,13 @@
                             class="lead-result"
                             style="display:none;"
                         >
-                            <label class="form-label-modern">
-                                Chọn Lead
-                            </label>
-
+                            <label class="form-label-modern">Chọn Lead</label>
                             <div id="leadResultList"></div>
                         </div>
 
                         {{-- TÊN KHÁCH HÀNG --}}
                         <div class="form-group">
-                            <label
-                                for="customer_name"
-                                class="form-label-modern"
-                            >
+                            <label for="customer_name" class="form-label-modern">
                                 Khách hàng
                                 <span class="required">*</span>
                             </label>
@@ -890,10 +865,7 @@
 
                         {{-- SỐ ĐIỆN THOẠI --}}
                         <div class="form-group">
-                            <label
-                                for="customer_phone"
-                                class="form-label-modern"
-                            >
+                            <label for="customer_phone" class="form-label-modern">
                                 Số điện thoại
                                 <span class="required">*</span>
                             </label>
@@ -911,10 +883,7 @@
 
                         {{-- ĐỊA CHỈ --}}
                         <div class="form-group">
-                            <label
-                                for="customer_address"
-                                class="form-label-modern"
-                            >
+                            <label for="customer_address" class="form-label-modern">
                                 <i class="bi bi-geo-alt"></i>
                                 Địa chỉ giao hàng
                             </label>
@@ -978,7 +947,6 @@
 
                         {{-- THANH TÌM SẢN PHẨM --}}
                         <div class="product-search-bar">
-
                             <div class="product-search-box">
                                 <input
                                     type="text"
@@ -1010,7 +978,6 @@
                                 <i class="bi bi-plus-lg"></i>
                                 Thêm sản phẩm
                             </button>
-
                         </div>
                     </div>
 
@@ -1020,26 +987,12 @@
                             <thead>
                                 <tr>
                                     <th>Sản phẩm</th>
-
-                                    <th class="text-end">
-                                        Đơn giá
-                                    </th>
-
-                                    <th
-                                        class="text-center"
-                                        style="width:100px;"
-                                    >
+                                    <th class="text-end">Đơn giá</th>
+                                    <th class="text-center" style="width:100px;">
                                         SL
                                     </th>
-
-                                    <th class="text-end">
-                                        Thành tiền
-                                    </th>
-
-                                    <th
-                                        class="text-center"
-                                        style="width:60px;"
-                                    >
+                                    <th class="text-end">Thành tiền</th>
+                                    <th class="text-center" style="width:60px;">
                                         #
                                     </th>
                                 </tr>
@@ -1061,83 +1014,70 @@
                                     <span class="payment-title-icon">
                                         <i class="bi bi-sliders"></i>
                                     </span>
-
                                     Chiết khấu & Chi phí
                                 </div>
 
                                 <div class="form-group">
-                                    <label
-                                        for="discount_amount"
-                                        class="form-label-modern"
-                                    >
+                                    <label for="discount_amount" class="form-label-modern">
                                         Chiết khấu
                                     </label>
 
                                     <input
-                                        type="number"
+                                        type="text"
                                         name="discount_amount"
                                         id="discount_amount"
-                                        class="form-control calculate-trigger"
-                                        min="0"
-                                        step="any"
+                                        class="form-control calculate-trigger money-input"
+                                        inputmode="numeric"
+                                        autocomplete="off"
                                         value="{{ old('discount_amount', 0) }}"
                                     >
                                 </div>
 
                                 <div class="form-group">
-                                    <label
-                                        for="other_discount"
-                                        class="form-label-modern"
-                                    >
+                                    <label for="other_discount" class="form-label-modern">
                                         Chiết khấu khác
                                     </label>
 
                                     <input
-                                        type="number"
+                                        type="text"
                                         name="other_discount"
                                         id="other_discount"
-                                        class="form-control calculate-trigger"
-                                        min="0"
-                                        step="any"
+                                        class="form-control calculate-trigger money-input"
+                                        inputmode="numeric"
+                                        autocomplete="off"
                                         value="{{ old('other_discount', 0) }}"
                                     >
                                 </div>
 
                                 <div class="form-group">
-                                    <label
-                                        for="other_fee"
-                                        class="form-label-modern"
-                                    >
+                                    <label for="other_fee" class="form-label-modern">
                                         Phí khác
                                     </label>
 
                                     <input
-                                        type="number"
+                                        type="text"
                                         name="other_fee"
                                         id="other_fee"
-                                        class="form-control calculate-trigger"
-                                        min="0"
-                                        step="any"
+                                        class="form-control calculate-trigger money-input"
+                                        inputmode="numeric"
+                                        autocomplete="off"
                                         value="{{ old('other_fee', 0) }}"
                                     >
                                 </div>
 
                                 <div class="row g-2">
                                     <div class="col-6">
-                                        <label
-                                            for="deposit_amount"
-                                            class="form-label-modern"
-                                        >
+                                        <label for="deposit_amount" class="form-label-modern">
                                             Tiền cọc
                                         </label>
 
                                         <input
-                                            type="number"
+                                            type="text"
                                             name="deposit_amount"
                                             id="deposit_amount"
-                                            class="form-control calculate-trigger"
-                                            min="0"
-                                            step="any"
+                                            class="form-control calculate-trigger money-input"
+                                            inputmode="numeric"
+                                            autocomplete="off"
                                             value="{{ old('deposit_amount', 0) }}"
                                         >
                                     </div>
@@ -1147,10 +1087,7 @@
                                             Hình thức cọc
                                         </label>
 
-                                        <select
-                                            name="deposit_type"
-                                            class="form-select"
-                                        >
+                                        <select name="deposit_type" class="form-select">
                                             <option
                                                 value="Chuyển khoản"
                                                 {{ old('deposit_type') == 'Chuyển khoản' ? 'selected' : '' }}
@@ -1178,22 +1115,25 @@
                                             >
                                                 Trống
                                             </option>
+
                                             <option
                                                 value="Tiền Mặt + Chuyển Khoản"
                                                 {{ old('deposit_type') == 'Tiền Mặt + Chuyển Khoản' ? 'selected' : '' }}
                                             >
                                                 Tiền Mặt + Chuyển Khoản
                                             </option>
+
                                             <option
                                                 value="Chuyển Khoản + Quẹt Thẻ"
                                                 {{ old('deposit_type') == 'Chuyển Khoản + Quẹt Thẻ' ? 'selected' : '' }}
                                             >
                                                 Chuyển Khoản + Quẹt Thẻ
                                             </option>
+
                                             <option
                                                 value="Tiền Mặt + Quẹt Thẻ"
                                                 {{ old('deposit_type') == 'Tiền Mặt + Quẹt Thẻ' ? 'selected' : '' }}
-                                                >
+                                            >
                                                 Tiền Mặt + Quẹt Thẻ
                                             </option>
                                         </select>
@@ -1208,48 +1148,32 @@
                                         <span class="payment-title-icon">
                                             <i class="bi bi-calculator"></i>
                                         </span>
-
                                         Tổng kết thanh toán
                                     </div>
 
                                     <div class="summary-row">
                                         <span>Tổng tiền sản phẩm</span>
-
-                                        <strong id="itemsTotalDisplay">
-                                            0 ₫
-                                        </strong>
+                                        <strong id="itemsTotalDisplay">0 ₫</strong>
                                     </div>
 
                                     <div class="summary-row discount">
                                         <span>Chiết khấu hóa đơn</span>
-
-                                        <strong id="discountDisplay">
-                                            - 0 ₫
-                                        </strong>
+                                        <strong id="discountDisplay">- 0 ₫</strong>
                                     </div>
 
                                     <div class="summary-row discount">
                                         <span>Chiết khấu khác</span>
-
-                                        <strong id="otherDiscountDisplay">
-                                            - 0 ₫
-                                        </strong>
+                                        <strong id="otherDiscountDisplay">- 0 ₫</strong>
                                     </div>
 
                                     <div class="summary-row fee">
                                         <span>Phí khác</span>
-
-                                        <strong id="otherFeeDisplay">
-                                            + 0 ₫
-                                        </strong>
+                                        <strong id="otherFeeDisplay">+ 0 ₫</strong>
                                     </div>
 
                                     <div class="summary-total">
                                         <span>TỔNG THANH TOÁN</span>
-
-                                        <strong id="grandTotalDisplay">
-                                            0 ₫
-                                        </strong>
+                                        <strong id="grandTotalDisplay">0 ₫</strong>
                                     </div>
 
                                     <div class="deposit-row">
@@ -1257,10 +1181,7 @@
                                             <i class="bi bi-wallet2"></i>
                                             Đã cọc
                                         </span>
-
-                                        <strong id="depositDisplay">
-                                            0 ₫
-                                        </strong>
+                                        <strong id="depositDisplay">0 ₫</strong>
                                     </div>
 
                                     <div class="remaining-box">
@@ -1290,17 +1211,11 @@
 
                 {{-- NÚT LƯU --}}
                 <div class="form-actions">
-                    <a
-                        href="{{ route('invoices.index') }}"
-                        class="btn-cancel"
-                    >
+                    <a href="{{ route('invoices.index') }}" class="btn-cancel">
                         Hủy
                     </a>
 
-                    <button
-                        type="submit"
-                        class="btn-save"
-                    >
+                    <button type="submit" class="btn-save">
                         <i class="bi bi-check2-circle"></i>
                         LƯU HÓA ĐƠN
                     </button>
@@ -1320,6 +1235,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // ELEMENTS
     // ==========================================
 
+    const invoiceForm = document.getElementById('invoiceForm');
+
     const searchPhone = document.getElementById('search_phone');
     const searchButton = document.getElementById('searchPhoneBtn');
     const searchLoading = document.getElementById('searchLoading');
@@ -1338,52 +1255,30 @@ document.addEventListener('DOMContentLoaded', function () {
     const itemsBody = document.getElementById('itemsBody');
     const addItemButton = document.getElementById('addItemBtn');
 
-    const quickProductSearch =
-        document.getElementById('quickProductSearch');
+    const quickProductSearch = document.getElementById('quickProductSearch');
+    const quickProductResults = document.getElementById('quickProductResults');
 
-    const quickProductResults =
-        document.getElementById('quickProductResults');
+    const discountAmountInput = document.getElementById('discount_amount');
+    const otherDiscountInput = document.getElementById('other_discount');
+    const otherFeeInput = document.getElementById('other_fee');
+    const depositAmountInput = document.getElementById('deposit_amount');
 
-    const discountAmountInput =
-        document.getElementById('discount_amount');
+    const itemsTotalDisplay = document.getElementById('itemsTotalDisplay');
+    const discountDisplay = document.getElementById('discountDisplay');
+    const otherDiscountDisplay = document.getElementById('otherDiscountDisplay');
+    const otherFeeDisplay = document.getElementById('otherFeeDisplay');
+    const grandTotalDisplay = document.getElementById('grandTotalDisplay');
+    const depositDisplay = document.getElementById('depositDisplay');
 
-    const otherDiscountInput =
-        document.getElementById('other_discount');
+    const remainingLabel = document.getElementById('remainingLabel');
+    const remainingDisplay = document.getElementById('remainingDisplay');
 
-    const otherFeeInput =
-        document.getElementById('other_fee');
-
-    const depositAmountInput =
-        document.getElementById('deposit_amount');
-
-    const itemsTotalDisplay =
-        document.getElementById('itemsTotalDisplay');
-
-    const discountDisplay =
-        document.getElementById('discountDisplay');
-
-    const otherDiscountDisplay =
-        document.getElementById('otherDiscountDisplay');
-
-    const otherFeeDisplay =
-        document.getElementById('otherFeeDisplay');
-
-    const grandTotalDisplay =
-        document.getElementById('grandTotalDisplay');
-
-    const depositDisplay =
-        document.getElementById('depositDisplay');
-
-    const remainingLabel =
-        document.getElementById('remainingLabel');
-
-    const remainingDisplay =
-        document.getElementById('remainingDisplay');
+    const moneyInputs = invoiceForm.querySelectorAll('.money-input');
 
     let activeProductIndex = -1;
 
     // ==========================================
-    // FORMAT TIỀN
+    // FORMAT TIỀN HIỂN THỊ
     // ==========================================
 
     function formatMoney(value) {
@@ -1399,6 +1294,61 @@ document.addEventListener('DOMContentLoaded', function () {
         div.textContent = String(value ?? '');
 
         return div.innerHTML;
+    }
+
+    // ==========================================
+    // ĐỊNH DẠNG TIỀN KHI NHẬP
+    // Các ô tiền nhập số nguyên VND.
+    // 1000000 → 1.000.000
+    // ==========================================
+
+    function getMoneyDigits(value) {
+        const digits = String(value ?? '')
+            .replace(/\D/g, '')
+            .replace(/^0+(?=\d)/, '');
+
+        return digits;
+    }
+
+    function readMoney(value) {
+        return Number(getMoneyDigits(value)) || 0;
+    }
+
+    function formatMoneyInput(input) {
+        const original = input.value;
+        const cursorPosition = input.selectionStart ?? original.length;
+
+        const digitsBeforeCursor = original
+            .slice(0, cursorPosition)
+            .replace(/\D/g, '')
+            .length;
+
+        const digits = getMoneyDigits(original);
+
+        const formatted = digits.replace(
+            /\B(?=(\d{3})+(?!\d))/g,
+            '.'
+        );
+
+        input.value = formatted;
+
+        let newPosition = 0;
+        let digitCount = 0;
+
+        while (
+            newPosition < formatted.length &&
+            digitCount < digitsBeforeCursor
+        ) {
+            if (/\d/.test(formatted[newPosition])) {
+                digitCount++;
+            }
+
+            newPosition++;
+        }
+
+        if (document.activeElement === input) {
+            input.setSelectionRange(newPosition, newPosition);
+        }
     }
 
     // ==========================================
@@ -1421,21 +1371,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         activeProductIndex = -1;
 
-        quickProductSearch.setAttribute(
-            'aria-expanded',
-            'false'
-        );
-
-        quickProductSearch.removeAttribute(
-            'aria-activedescendant'
-        );
+        quickProductSearch.setAttribute('aria-expanded', 'false');
+        quickProductSearch.removeAttribute('aria-activedescendant');
     }
 
     function setActiveProduct(index) {
         const buttons = Array.from(
-            quickProductResults.querySelectorAll(
-                '.quick-product-item'
-            )
+            quickProductResults.querySelectorAll('.quick-product-item')
         );
 
         if (!buttons.length) {
@@ -1448,22 +1390,13 @@ document.addEventListener('DOMContentLoaded', function () {
         );
 
         buttons.forEach(function (button, buttonIndex) {
-            const isActive =
-                buttonIndex === activeProductIndex;
+            const isActive = buttonIndex === activeProductIndex;
 
-            button.classList.toggle(
-                'is-active',
-                isActive
-            );
-
-            button.setAttribute(
-                'aria-selected',
-                String(isActive)
-            );
+            button.classList.toggle('is-active', isActive);
+            button.setAttribute('aria-selected', String(isActive));
         });
 
-        const selectedButton =
-            buttons[activeProductIndex];
+        const selectedButton = buttons[activeProductIndex];
 
         quickProductSearch.setAttribute(
             'aria-activedescendant',
@@ -1486,7 +1419,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (emptySelect) {
             emptySelect.value = String(product.id);
 
-            // Dùng sự kiện có sẵn để cập nhật giá.
             emptySelect.dispatchEvent(
                 new Event('change', {
                     bubbles: true
@@ -1508,9 +1440,7 @@ document.addEventListener('DOMContentLoaded', function () {
             quickProductSearch.value
         );
 
-        const words = keyword
-            ? keyword.split(' ')
-            : [];
+        const words = keyword ? keyword.split(' ') : [];
 
         hideQuickProductResults();
 
@@ -1518,12 +1448,9 @@ document.addEventListener('DOMContentLoaded', function () {
             ? productsData
             : [];
 
-        // Không giới hạn 30 kết quả:
-        // có thể cuộn để xem toàn bộ kết quả phù hợp.
+        // Hiển thị toàn bộ kết quả phù hợp, có thể cuộn.
         const matches = productList.filter(function (product) {
-            const productName = normalizeProductKeyword(
-                product.name
-            );
+            const productName = normalizeProductKeyword(product.name);
 
             return words.every(function (word) {
                 return productName.includes(word);
@@ -1531,11 +1458,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         quickProductResults.hidden = false;
-
-        quickProductSearch.setAttribute(
-            'aria-expanded',
-            'true'
-        );
+        quickProductSearch.setAttribute('aria-expanded', 'true');
 
         if (!matches.length) {
             const empty = document.createElement('div');
@@ -1569,20 +1492,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const price = document.createElement('span');
 
             price.className = 'quick-product-price';
-
-            price.textContent = formatMoney(
-                Number(product.price) || 0
-            );
+            price.textContent = formatMoney(Number(product.price) || 0);
 
             button.append(name, price);
 
-            // Không làm mất focus thanh tìm khi nhấn chuột.
-            button.addEventListener(
-                'mousedown',
-                function (event) {
-                    event.preventDefault();
-                }
-            );
+            button.addEventListener('mousedown', function (event) {
+                event.preventDefault();
+            });
 
             button.addEventListener('click', function () {
                 chooseQuickProduct(product);
@@ -1592,7 +1508,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         quickProductResults.appendChild(fragment);
-
         quickProductResults.scrollTop = 0;
     }
 
@@ -1612,97 +1527,82 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    quickProductSearch.addEventListener(
-        'keydown',
-        function (event) {
-            if (event.isComposing) {
-                return;
-            }
-
-            if (
-                event.key === 'ArrowDown' ||
-                event.key === 'ArrowUp'
-            ) {
-                event.preventDefault();
-
-                if (quickProductResults.hidden) {
-                    renderQuickProductResults();
-                }
-
-                const count =
-                    quickProductResults.querySelectorAll(
-                        '.quick-product-item'
-                    ).length;
-
-                if (!count) {
-                    return;
-                }
-
-                let nextIndex;
-
-                if (activeProductIndex < 0) {
-                    nextIndex =
-                        event.key === 'ArrowDown'
-                            ? 0
-                            : count - 1;
-                } else {
-                    nextIndex =
-                        activeProductIndex +
-                        (
-                            event.key === 'ArrowDown'
-                                ? 1
-                                : -1
-                        );
-                }
-
-                setActiveProduct(nextIndex);
-
-                return;
-            }
-
-            if (event.key === 'Enter') {
-                // Enter chọn sản phẩm, không gửi form.
-                event.preventDefault();
-
-                if (quickProductResults.hidden) {
-                    renderQuickProductResults();
-                    return;
-                }
-
-                const buttons =
-                    quickProductResults.querySelectorAll(
-                        '.quick-product-item'
-                    );
-
-                const selectedIndex =
-                    activeProductIndex < 0
-                        ? 0
-                        : activeProductIndex;
-
-                const selectedButton =
-                    buttons[selectedIndex];
-
-                if (selectedButton) {
-                    selectedButton.click();
-                }
-
-                return;
-            }
-
-            if (
-                event.key === 'Escape' ||
-                event.key === 'Tab'
-            ) {
-                hideQuickProductResults();
-            }
+    quickProductSearch.addEventListener('keydown', function (event) {
+        if (event.isComposing) {
+            return;
         }
-    );
+
+        if (
+            event.key === 'ArrowDown' ||
+            event.key === 'ArrowUp'
+        ) {
+            event.preventDefault();
+
+            if (quickProductResults.hidden) {
+                renderQuickProductResults();
+            }
+
+            const count = quickProductResults.querySelectorAll(
+                '.quick-product-item'
+            ).length;
+
+            if (!count) {
+                return;
+            }
+
+            let nextIndex;
+
+            if (activeProductIndex < 0) {
+                nextIndex = event.key === 'ArrowDown'
+                    ? 0
+                    : count - 1;
+            } else {
+                nextIndex = activeProductIndex + (
+                    event.key === 'ArrowDown' ? 1 : -1
+                );
+            }
+
+            setActiveProduct(nextIndex);
+
+            return;
+        }
+
+        if (event.key === 'Enter') {
+            event.preventDefault();
+
+            if (quickProductResults.hidden) {
+                renderQuickProductResults();
+                return;
+            }
+
+            const buttons = quickProductResults.querySelectorAll(
+                '.quick-product-item'
+            );
+
+            const selectedIndex = activeProductIndex < 0
+                ? 0
+                : activeProductIndex;
+
+            const selectedButton = buttons[selectedIndex];
+
+            if (selectedButton) {
+                selectedButton.click();
+            }
+
+            return;
+        }
+
+        if (
+            event.key === 'Escape' ||
+            event.key === 'Tab'
+        ) {
+            hideQuickProductResults();
+        }
+    });
 
     document.addEventListener('click', function (event) {
         if (
-            !quickProductSearch.parentElement.contains(
-                event.target
-            )
+            !quickProductSearch.parentElement.contains(event.target)
         ) {
             hideQuickProductResults();
         }
@@ -1713,19 +1613,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // ==========================================
 
     function buildProductOptions(selectedProductId) {
-        let options =
-            '<option value="">-- Chọn sản phẩm --</option>';
+        let options = '<option value="">-- Chọn sản phẩm --</option>';
 
         if (Array.isArray(productsData)) {
             productsData.forEach(function (product) {
-                const isSelected =
-                    String(product.id) ===
+                const isSelected = String(product.id) ===
                     String(selectedProductId)
-                        ? 'selected'
-                        : '';
+                    ? 'selected'
+                    : '';
 
-                const productPrice =
-                    Number(product.price) || 0;
+                const productPrice = Number(product.price) || 0;
 
                 options += `
                     <option
@@ -1748,25 +1645,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function selectLead(lead) {
         leadId.value = lead.id || '';
-
         customerName.value = lead.name || '';
 
-        customerPhone.value =
-            lead.phone || searchPhone.value.trim();
-
-        customerAddress.value =
-            lead.address || '';
+        customerPhone.value = lead.phone || searchPhone.value.trim();
+        customerAddress.value = lead.address || '';
 
         selectedLeadId.textContent = lead.id;
-
         selectedLeadBox.style.display = 'block';
 
         leadResults.style.display = 'none';
-
         leadResultList.innerHTML = '';
 
-        searchPhone.value =
-            lead.phone || searchPhone.value.trim();
+        searchPhone.value = lead.phone || searchPhone.value.trim();
     }
 
     // ==========================================
@@ -1777,27 +1667,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const phone = searchPhone.value.trim();
 
         if (phone.length < 6) {
-            alert(
-                'Vui lòng nhập ít nhất 6 số điện thoại.'
-            );
-
+            alert('Vui lòng nhập ít nhất 6 số điện thoại.');
             return;
         }
 
         searchLoading.style.display = 'block';
-
         leadResults.style.display = 'none';
-
         leadResultList.innerHTML = '';
 
-        const url =
-            "{{ route('invoices.search-leads-by-phone') }}" +
-            '?phone=' +
-            encodeURIComponent(phone);
+        const url = "{{ route('invoices.search-leads-by-phone') }}" +
+            '?phone=' + encodeURIComponent(phone);
 
         fetch(url, {
             method: 'GET',
-
             headers: {
                 'Accept': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest'
@@ -1810,29 +1692,18 @@ document.addEventListener('DOMContentLoaded', function () {
             searchLoading.style.display = 'none';
 
             if (!data.success) {
-                alert(
-                    data.message ||
-                    'Không thể tìm khách hàng.'
-                );
-
+                alert(data.message || 'Không thể tìm khách hàng.');
                 return;
             }
 
-            if (
-                !data.leads ||
-                data.leads.length === 0
-            ) {
+            if (!data.leads || data.leads.length === 0) {
                 leadResults.style.display = 'block';
 
                 leadResultList.innerHTML = `
                     <div class="alert alert-warning mb-0">
                         <i class="bi bi-exclamation-triangle"></i>
-
                         Không tìm thấy Lead có số điện thoại:
-
-                        <strong>
-                            ${escapeHtml(phone)}
-                        </strong>
+                        <strong>${escapeHtml(phone)}</strong>
                     </div>
                 `;
 
@@ -1857,31 +1728,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     >
                         <div class="d-flex justify-content-between">
                             <strong>
-                                ${escapeHtml(
-                                    lead.name || 'Chưa có tên'
-                                )}
+                                ${escapeHtml(lead.name || 'Chưa có tên')}
                             </strong>
 
-                            <span>
-                                #${escapeHtml(lead.id)}
-                            </span>
+                            <span>#${escapeHtml(lead.id)}</span>
                         </div>
 
                         <div class="small mt-1">
                             <i class="bi bi-telephone"></i>
-
-                            ${escapeHtml(
-                                lead.phone || phone
-                            )}
+                            ${escapeHtml(lead.phone || phone)}
                         </div>
 
                         <div class="small text-muted mt-1">
                             <i class="bi bi-geo-alt"></i>
-
-                            ${escapeHtml(
-                                lead.address ||
-                                'Chưa có địa chỉ'
-                            )}
+                            ${escapeHtml(lead.address || 'Chưa có địa chỉ')}
                         </div>
                     </button>
                 `;
@@ -1892,42 +1752,28 @@ document.addEventListener('DOMContentLoaded', function () {
             leadResultList
                 .querySelectorAll('.lead-option')
                 .forEach(function (button) {
-                    button.addEventListener(
-                        'click',
-                        function () {
-                            const id = this.dataset.leadId;
+                    button.addEventListener('click', function () {
+                        const id = this.dataset.leadId;
 
-                            const selected = data.leads.find(
-                                function (item) {
-                                    return (
-                                        String(item.id) ===
-                                        String(id)
-                                    );
-                                }
-                            );
+                        const selected = data.leads.find(function (item) {
+                            return String(item.id) === String(id);
+                        });
 
-                            if (selected) {
-                                selectLead(selected);
-                            }
+                        if (selected) {
+                            selectLead(selected);
                         }
-                    );
+                    });
                 });
         })
         .catch(function (error) {
             searchLoading.style.display = 'none';
-
             console.error(error);
 
-            alert(
-                'Có lỗi xảy ra khi tìm khách hàng.'
-            );
+            alert('Có lỗi xảy ra khi tìm khách hàng.');
         });
     }
 
-    searchButton.addEventListener(
-        'click',
-        searchLead
-    );
+    searchButton.addEventListener('click', searchLead);
 
     searchPhone.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
@@ -1941,25 +1787,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // ==========================================
 
     function addItem(productId = '', quantity = 1) {
-        const index =
-            itemsBody.querySelectorAll('tr').length;
-
+        const index = itemsBody.querySelectorAll('tr').length;
         const row = document.createElement('tr');
 
         let price = 0;
 
-        if (
-            productId &&
-            Array.isArray(productsData)
-        ) {
-            const matchedProduct = productsData.find(
-                function (product) {
-                    return (
-                        String(product.id) ===
-                        String(productId)
-                    );
-                }
-            );
+        if (productId && Array.isArray(productsData)) {
+            const matchedProduct = productsData.find(function (product) {
+                return String(product.id) === String(productId);
+            });
 
             if (matchedProduct) {
                 price = Number(matchedProduct.price) || 0;
@@ -2026,7 +1862,6 @@ document.addEventListener('DOMContentLoaded', function () {
         itemsBody.appendChild(row);
 
         bindRow(row);
-
         calculateTotals();
     }
 
@@ -2035,25 +1870,18 @@ document.addEventListener('DOMContentLoaded', function () {
     // ==========================================
 
     function reindexRows() {
-        itemsBody
-            .querySelectorAll('tr')
-            .forEach(function (row, index) {
-                const select =
-                    row.querySelector('.product-select');
+        itemsBody.querySelectorAll('tr').forEach(function (row, index) {
+            const select = row.querySelector('.product-select');
+            const quantity = row.querySelector('.quantity');
 
-                const quantity =
-                    row.querySelector('.quantity');
+            if (select) {
+                select.name = `items[${index}][product_id]`;
+            }
 
-                if (select) {
-                    select.name =
-                        `items[${index}][product_id]`;
-                }
-
-                if (quantity) {
-                    quantity.name =
-                        `items[${index}][quantity]`;
-                }
-            });
+            if (quantity) {
+                quantity.name = `items[${index}][quantity]`;
+            }
+        });
     }
 
     // ==========================================
@@ -2071,8 +1899,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const total = price * quantity;
 
-        row.querySelector('.line-total').textContent =
-            formatMoney(total);
+        row.querySelector('.line-total').textContent = formatMoney(total);
 
         calculateTotals();
     }
@@ -2082,54 +1909,36 @@ document.addEventListener('DOMContentLoaded', function () {
     // ==========================================
 
     function bindRow(row) {
-        const productSelect =
-            row.querySelector('.product-select');
+        const productSelect = row.querySelector('.product-select');
+        const quantity = row.querySelector('.quantity');
+        const removeButton = row.querySelector('.remove-item');
 
-        const quantity =
-            row.querySelector('.quantity');
+        productSelect.addEventListener('change', function () {
+            const option = this.options[this.selectedIndex];
 
-        const removeButton =
-            row.querySelector('.remove-item');
+            const price = Number(
+                option ? option.dataset.price : 0
+            ) || 0;
 
-        productSelect.addEventListener(
-            'change',
-            function () {
-                const option =
-                    this.options[this.selectedIndex];
+            row.querySelector('.unit-price').value = price;
 
-                const price = Number(
-                    option
-                        ? option.dataset.price
-                        : 0
-                ) || 0;
+            row.querySelector('.unit-price-display').value =
+                formatMoney(price);
 
-                row.querySelector('.unit-price').value =
-                    price;
-
-                row.querySelector('.unit-price-display').value =
-                    formatMoney(price);
-
-                calculateRow(row);
-            }
-        );
+            calculateRow(row);
+        });
 
         quantity.addEventListener('input', function () {
             calculateRow(row);
         });
 
         removeButton.addEventListener('click', function () {
-            if (
-                itemsBody.querySelectorAll('tr').length > 1
-            ) {
+            if (itemsBody.querySelectorAll('tr').length > 1) {
                 row.remove();
-
                 reindexRows();
-
                 calculateTotals();
             } else {
-                alert(
-                    'Hóa đơn phải có ít nhất 1 sản phẩm.'
-                );
+                alert('Hóa đơn phải có ít nhất 1 sản phẩm.');
             }
         });
     }
@@ -2141,101 +1950,56 @@ document.addEventListener('DOMContentLoaded', function () {
     function calculateTotals() {
         let itemsTotal = 0;
 
-        itemsBody
-            .querySelectorAll('tr')
-            .forEach(function (row) {
-                const price = Number(
-                    row.querySelector('.unit-price').value
-                ) || 0;
+        itemsBody.querySelectorAll('tr').forEach(function (row) {
+            const price = Number(
+                row.querySelector('.unit-price').value
+            ) || 0;
 
-                const quantity = Number(
-                    row.querySelector('.quantity').value
-                ) || 0;
+            const quantity = Number(
+                row.querySelector('.quantity').value
+            ) || 0;
 
-                itemsTotal += price * quantity;
-            });
+            itemsTotal += price * quantity;
+        });
 
-        const discountAmount = Number(
-            discountAmountInput.value
-        ) || 0;
-
-        const otherDiscount = Number(
-            otherDiscountInput.value
-        ) || 0;
-
-        const otherFee = Number(
-            otherFeeInput.value
-        ) || 0;
-
-        const depositAmount = Number(
-            depositAmountInput.value
-        ) || 0;
+        // Bỏ dấu phân cách trước khi tính tiền.
+        const discountAmount = readMoney(discountAmountInput.value);
+        const otherDiscount = readMoney(otherDiscountInput.value);
+        const otherFee = readMoney(otherFeeInput.value);
+        const depositAmount = readMoney(depositAmountInput.value);
 
         const grandTotal = Math.max(
             0,
-            itemsTotal -
-            discountAmount -
-            otherDiscount +
-            otherFee
+            itemsTotal - discountAmount - otherDiscount + otherFee
         );
 
-        const difference =
-            grandTotal - depositAmount;
+        const difference = grandTotal - depositAmount;
 
-        itemsTotalDisplay.textContent =
-            formatMoney(itemsTotal);
-
-        discountDisplay.textContent =
-            '- ' + formatMoney(discountAmount);
-
-        otherDiscountDisplay.textContent =
-            '- ' + formatMoney(otherDiscount);
-
-        otherFeeDisplay.textContent =
-            '+ ' + formatMoney(otherFee);
-
-        grandTotalDisplay.textContent =
-            formatMoney(grandTotal);
-
-        depositDisplay.textContent =
-            formatMoney(depositAmount);
+        itemsTotalDisplay.textContent = formatMoney(itemsTotal);
+        discountDisplay.textContent = '- ' + formatMoney(discountAmount);
+        otherDiscountDisplay.textContent = '- ' + formatMoney(otherDiscount);
+        otherFeeDisplay.textContent = '+ ' + formatMoney(otherFee);
+        grandTotalDisplay.textContent = formatMoney(grandTotal);
+        depositDisplay.textContent = formatMoney(depositAmount);
 
         if (difference < 0) {
-            remainingLabel.textContent =
-                'HOÀN TRẢ LẠI:';
+            remainingLabel.textContent = 'HOÀN TRẢ LẠI:';
+            remainingLabel.className = 'remaining-label text-primary';
 
-            remainingLabel.className =
-                'remaining-label text-primary';
-
-            remainingDisplay.textContent =
-                formatMoney(Math.abs(difference));
-
-            remainingDisplay.className =
-                'remaining-value text-primary';
+            remainingDisplay.textContent = formatMoney(Math.abs(difference));
+            remainingDisplay.className = 'remaining-value text-primary';
         } else if (difference === 0) {
-            remainingLabel.textContent =
-                'CÒN LẠI PHẢI THU:';
+            remainingLabel.textContent = 'CÒN LẠI PHẢI THU:';
+            remainingLabel.className = 'remaining-label';
 
-            remainingLabel.className =
-                'remaining-label';
-
-            remainingDisplay.textContent =
-                '0 ₫ (Đã đủ)';
-
-            remainingDisplay.className =
-                'remaining-value';
+            remainingDisplay.textContent = '0 ₫ (Đã đủ)';
+            remainingDisplay.className = 'remaining-value';
         } else {
-            remainingLabel.textContent =
-                'CÒN LẠI PHẢI THU:';
+            remainingLabel.textContent = 'CÒN LẠI PHẢI THU:';
+            remainingLabel.className = 'remaining-label text-danger';
 
-            remainingLabel.className =
-                'remaining-label text-danger';
-
-            remainingDisplay.textContent =
-                formatMoney(difference);
-
-            remainingDisplay.className =
-                'remaining-value text-danger';
+            remainingDisplay.textContent = formatMoney(difference);
+            remainingDisplay.className = 'remaining-value text-danger';
         }
     }
 
@@ -2243,14 +2007,41 @@ document.addEventListener('DOMContentLoaded', function () {
     // CẬP NHẬT KHI NHẬP CHI PHÍ
     // ==========================================
 
-    document
-        .querySelectorAll('.calculate-trigger')
-        .forEach(function (input) {
-            input.addEventListener(
-                'input',
-                calculateTotals
+    moneyInputs.forEach(function (input) {
+        // old() do Laravel trả về là giá trị số chưa phân cách.
+        // Chuẩn hóa về số nguyên VND trước khi định dạng.
+        const initialValue = input.value.trim();
+
+        if (/^\d+(?:\.\d+)?$/.test(initialValue)) {
+            input.value = String(Math.round(Number(initialValue)));
+        }
+
+        formatMoneyInput(input);
+
+        input.addEventListener('input', function () {
+            formatMoneyInput(this);
+            calculateTotals();
+        });
+
+        input.addEventListener('blur', function () {
+            if (!this.value) {
+                this.value = '0';
+            }
+
+            calculateTotals();
+        });
+    });
+
+    // Khi gửi form:
+    // Hiển thị 1.000.000, nhưng Laravel nhận 1000000.
+    invoiceForm.addEventListener('formdata', function (event) {
+        moneyInputs.forEach(function (input) {
+            event.formData.set(
+                input.name,
+                getMoneyDigits(input.value) || '0'
             );
         });
+    });
 
     // ==========================================
     // NÚT THÊM DÒNG

@@ -83,10 +83,8 @@
         --edit-dark: #111827;
         --edit-muted: #6b7280;
         --edit-border: #e8eaf0;
-
         min-height: calc(100vh - 60px);
         padding: 28px;
-
         background:
             radial-gradient(
                 circle at top right,
@@ -592,6 +590,7 @@
 
 <div class="invoice-edit-page">
 
+    {{-- HEADER --}}
     <div class="page-top">
         <div class="page-title-wrapper">
             <div class="page-title-icon">
@@ -613,6 +612,7 @@
         </a>
     </div>
 
+    {{-- THÔNG BÁO LỖI --}}
     @if($errors->any())
         <div class="alert alert-danger mb-4">
             <strong>Chưa lưu được hóa đơn:</strong>
@@ -668,7 +668,8 @@
                                 for="sale_name"
                                 class="form-label-modern"
                             >
-                                Tên Sale <span class="required">*</span>
+                                Tên Sale
+                                <span class="required">*</span>
                             </label>
 
                             <input
@@ -687,7 +688,8 @@
                                 for="showroom_id"
                                 class="form-label-modern"
                             >
-                                Showroom <span class="required">*</span>
+                                Showroom
+                                <span class="required">*</span>
                             </label>
 
                             <select
@@ -696,7 +698,9 @@
                                 class="form-select"
                                 required
                             >
-                                <option value="">-- Chọn Showroom --</option>
+                                <option value="">
+                                    -- Chọn Showroom --
+                                </option>
 
                                 @foreach($showrooms as $showroom)
                                     <option
@@ -709,6 +713,7 @@
                             </select>
                         </div>
 
+                        {{-- TÌM KHÁCH HÀNG --}}
                         <div class="form-group">
                             <label
                                 for="search_phone"
@@ -746,9 +751,9 @@
                         <div
                             id="searchLoading"
                             class="small text-primary mb-3"
-                            role="status"
                             hidden
                         >
+                            <span class="spinner-border spinner-border-sm"></span>
                             Đang tìm khách hàng...
                         </div>
 
@@ -759,7 +764,8 @@
                                 for="customer_name"
                                 class="form-label-modern"
                             >
-                                Khách hàng <span class="required">*</span>
+                                Khách hàng
+                                <span class="required">*</span>
                             </label>
 
                             <input
@@ -778,7 +784,8 @@
                                 for="customer_phone"
                                 class="form-label-modern"
                             >
-                                Số điện thoại <span class="required">*</span>
+                                Số điện thoại
+                                <span class="required">*</span>
                             </label>
 
                             <input
@@ -787,7 +794,6 @@
                                 id="customer_phone"
                                 class="form-control"
                                 value="{{ $formValue('customer_phone') }}"
-                                maxlength="50"
                                 required
                             >
                         </div>
@@ -797,6 +803,7 @@
                                 for="customer_address"
                                 class="form-label-modern"
                             >
+                                <i class="bi bi-geo-alt"></i>
                                 Địa chỉ giao hàng
                             </label>
 
@@ -805,7 +812,6 @@
                                 id="customer_address"
                                 class="form-control"
                                 rows="3"
-                                maxlength="1000"
                             >{{ $formValue('customer_address') }}</textarea>
                         </div>
 
@@ -816,6 +822,7 @@
                         >
                             <i class="bi bi-check-circle-fill"></i>
                             Lead đang chọn:
+
                             <strong id="selectedLeadId">
                                 #{{ $formValue('lead_id') }}
                             </strong>
@@ -823,7 +830,7 @@
 
                         <div>
                             <label
-                                for="invoice_note"
+                                for="note"
                                 class="form-label-modern"
                             >
                                 <i class="bi bi-chat-left-text"></i>
@@ -832,10 +839,9 @@
 
                             <textarea
                                 name="note"
-                                id="invoice_note"
+                                id="note"
                                 class="form-control"
                                 rows="3"
-                                maxlength="5000"
                             >{{ $formValue('note') }}</textarea>
                         </div>
 
@@ -848,6 +854,7 @@
 
                 <div class="modern-card product-search-card">
                     <div class="modern-card-header gradient">
+
                         <div class="card-heading">
                             <span class="card-heading-icon">
                                 <i class="bi bi-box-seam"></i>
@@ -874,7 +881,7 @@
                                 <div
                                     id="quickProductResults"
                                     role="listbox"
-                                    aria-label="Kết quả tìm sản phẩm"
+                                    aria-label="Danh sách sản phẩm tìm được"
                                     hidden
                                 ></div>
                             </div>
@@ -888,6 +895,7 @@
                                 Thêm sản phẩm
                             </button>
                         </div>
+
                     </div>
 
                     <div class="product-table-wrapper">
@@ -896,11 +904,22 @@
                                 <tr>
                                     <th>Sản phẩm</th>
                                     <th class="text-end">Đơn giá</th>
-                                    <th class="text-center" style="width:100px">
+
+                                    <th
+                                        class="text-center"
+                                        style="width:100px;"
+                                    >
                                         SL
                                     </th>
+
                                     <th class="text-end">Thành tiền</th>
-                                    <th style="width:60px"></th>
+
+                                    <th
+                                        class="text-center"
+                                        style="width:60px;"
+                                    >
+                                        #
+                                    </th>
                                 </tr>
                             </thead>
 
@@ -909,11 +928,13 @@
                     </div>
                 </div>
 
+                {{-- THANH TOÁN --}}
                 <div class="modern-card payment-card">
                     <div class="payment-content">
                         <div class="row g-4">
 
                             <div class="col-md-6">
+
                                 <div class="payment-title">
                                     <span class="payment-title-icon">
                                         <i class="bi bi-sliders"></i>
@@ -931,13 +952,13 @@
                                     </label>
 
                                     <input
-                                        type="number"
+                                        type="text"
                                         name="discount_amount"
                                         id="discount_amount"
-                                        class="form-control calculate-trigger"
-                                        min="0"
-                                        max="999999999999"
-                                        step="1"
+                                        class="form-control calculate-trigger money-input"
+                                        inputmode="numeric"
+                                        data-max="999999999999"
+                                        autocomplete="off"
                                         value="{{ $formValue('discount_amount', 0) }}"
                                         required
                                     >
@@ -952,13 +973,13 @@
                                     </label>
 
                                     <input
-                                        type="number"
+                                        type="text"
                                         name="other_discount"
                                         id="other_discount"
-                                        class="form-control calculate-trigger"
-                                        min="0"
-                                        max="999999999999"
-                                        step="1"
+                                        class="form-control calculate-trigger money-input"
+                                        inputmode="numeric"
+                                        data-max="999999999999"
+                                        autocomplete="off"
                                         value="{{ $formValue('other_discount', 0) }}"
                                         required
                                     >
@@ -973,19 +994,20 @@
                                     </label>
 
                                     <input
-                                        type="number"
+                                        type="text"
                                         name="other_fee"
                                         id="other_fee"
-                                        class="form-control calculate-trigger"
-                                        min="0"
-                                        max="999999999999"
-                                        step="1"
+                                        class="form-control calculate-trigger money-input"
+                                        inputmode="numeric"
+                                        data-max="999999999999"
+                                        autocomplete="off"
                                         value="{{ $formValue('other_fee', 0) }}"
                                         required
                                     >
                                 </div>
 
                                 <div class="row g-2">
+
                                     <div class="col-6">
                                         <label
                                             for="deposit_amount"
@@ -995,13 +1017,13 @@
                                         </label>
 
                                         <input
-                                            type="number"
+                                            type="text"
                                             name="deposit_amount"
                                             id="deposit_amount"
-                                            class="form-control calculate-trigger"
-                                            min="0"
-                                            max="999999999999"
-                                            step="1"
+                                            class="form-control calculate-trigger money-input"
+                                            inputmode="numeric"
+                                            data-max="999999999999"
+                                            autocomplete="off"
                                             value="{{ $formValue('deposit_amount', 0) }}"
                                             required
                                         >
@@ -1014,6 +1036,7 @@
                                         >
                                             Hình thức cọc
                                         </label>
+
                                         <select
                                             name="deposit_type"
                                             id="deposit_type"
@@ -1036,12 +1059,13 @@
                                                 </option>
                                             @endforeach
                                         </select>
-                                       
                                     </div>
+
                                 </div>
                             </div>
 
                             <div class="col-md-6">
+
                                 <div class="payment-title">
                                     <span class="payment-title-icon">
                                         <i class="bi bi-calculator"></i>
@@ -1084,15 +1108,18 @@
                                     <strong id="depositDisplay">0 ₫</strong>
                                 </div>
 
-                                <div class="remaining-box" aria-live="polite">
+                                <div
+                                    class="remaining-box"
+                                    aria-live="polite"
+                                >
                                     <span id="remainingLabel">
                                         CÒN LẠI PHẢI THU:
                                     </span>
 
                                     <strong id="remainingDisplay">0 ₫</strong>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1120,6 +1147,7 @@
     </form>
 </div>
 
+{{-- MẪU DÒNG SẢN PHẨM --}}
 <template id="invoiceItemTemplate">
     <tr>
         <td>
@@ -1202,6 +1230,10 @@ document.addEventListener('DOMContentLoaded', function () {
     let activeProductIndex = -1;
     let leadSearchController = null;
 
+    // ==========================================
+    // ĐỊNH DẠNG TIỀN HIỂN THỊ
+    // ==========================================
+
     const money = function (value) {
         return new Intl.NumberFormat('vi-VN', {
             maximumFractionDigits: 0
@@ -1209,9 +1241,76 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function readNumber(input) {
-        const value = Number(input.value);
-        return Number.isFinite(value) ? Math.max(0, value) : 0;
+        const value = Number(
+            input.classList.contains('money-input')
+                ? input.value.replace(/\D/g, '')
+                : input.value
+        );
+
+        return Number.isFinite(value)
+            ? Math.max(0, value)
+            : 0;
     }
+
+    // ==========================================
+    // PHÂN CÁCH TIỀN KHI NHẬP
+    // ==========================================
+
+    function moneyDigits(value) {
+        return String(value ?? '')
+            .replace(/\D/g, '')
+            .replace(/^0+(?=\d)/, '');
+    }
+
+    function formatMoneyInput(input) {
+        const original = input.value;
+
+        const cursor = input.selectionStart
+            ?? original.length;
+
+        const digitCount = original
+            .slice(0, cursor)
+            .replace(/\D/g, '')
+            .length;
+
+        const digits = moneyDigits(original);
+
+        input.value = digits.replace(
+            /\B(?=(\d{3})+(?!\d))/g,
+            '.'
+        );
+
+        let position = 0;
+        let count = 0;
+
+        while (
+            position < input.value.length &&
+            count < digitCount
+        ) {
+            if (/\d/.test(input.value[position])) {
+                count++;
+            }
+
+            position++;
+        }
+
+        if (document.activeElement === input) {
+            input.setSelectionRange(position, position);
+        }
+
+        const exceedsMax =
+            Number(digits) > Number(input.dataset.max);
+
+        input.setCustomValidity(
+            exceedsMax
+                ? 'Số tiền tối đa là 999.999.999.999 đồng.'
+                : ''
+        );
+    }
+
+    // ==========================================
+    // CHUẨN HÓA TỪ KHÓA TÌM SẢN PHẨM
+    // ==========================================
 
     function normalize(value) {
         return String(value ?? '')
@@ -1223,41 +1322,69 @@ document.addEventListener('DOMContentLoaded', function () {
             .trim();
     }
 
+    // ==========================================
+    // ĐÁNH LẠI CHỈ SỐ DÒNG SẢN PHẨM
+    // ==========================================
+
     function reindexRows() {
-        itemsBody.querySelectorAll('tr').forEach(function (row, index) {
-            row.querySelectorAll('[data-field]').forEach(function (input) {
-                input.name = `items[${index}][${input.dataset.field}]`;
+        itemsBody.querySelectorAll('tr')
+            .forEach(function (row, index) {
+                row.querySelectorAll('[data-field]')
+                    .forEach(function (input) {
+                        input.name =
+                            `items[${index}][${input.dataset.field}]`;
+                    });
             });
-        });
     }
+
+    // ==========================================
+    // TÍNH TỔNG THANH TOÁN
+    // ==========================================
 
     function calculateTotals() {
         let subtotal = 0;
 
-        itemsBody.querySelectorAll('tr').forEach(function (row) {
-            const price = readNumber(row.querySelector('.unit-price'));
-            const quantity = readNumber(row.querySelector('.quantity'));
-            const total = Math.round(price * quantity);
+        itemsBody.querySelectorAll('tr')
+            .forEach(function (row) {
+                const price = readNumber(
+                    row.querySelector('.unit-price')
+                );
 
-            row.querySelector('.line-total').textContent = money(total);
-            subtotal += total;
-        });
+                const quantity = readNumber(
+                    row.querySelector('.quantity')
+                );
 
-        const discount = Math.round(readNumber(
-            document.getElementById('discount_amount')
-        ));
+                const total = Math.round(price * quantity);
 
-        const otherDiscount = Math.round(readNumber(
-            document.getElementById('other_discount')
-        ));
+                row.querySelector('.line-total').textContent =
+                    money(total);
 
-        const fee = Math.round(readNumber(
-            document.getElementById('other_fee')
-        ));
+                subtotal += total;
+            });
 
-        const deposit = Math.round(readNumber(
-            document.getElementById('deposit_amount')
-        ));
+        const discount = Math.round(
+            readNumber(
+                document.getElementById('discount_amount')
+            )
+        );
+
+        const otherDiscount = Math.round(
+            readNumber(
+                document.getElementById('other_discount')
+            )
+        );
+
+        const fee = Math.round(
+            readNumber(
+                document.getElementById('other_fee')
+            )
+        );
+
+        const deposit = Math.round(
+            readNumber(
+                document.getElementById('deposit_amount')
+            )
+        );
 
         const grandTotal = Math.max(
             0,
@@ -1295,9 +1422,20 @@ document.addEventListener('DOMContentLoaded', function () {
             ? '0 ₫ (Đã đủ)'
             : money(Math.abs(difference));
 
-        label.classList.toggle('text-primary', difference < 0);
-        display.classList.toggle('text-primary', difference < 0);
+        label.classList.toggle(
+            'text-primary',
+            difference < 0
+        );
+
+        display.classList.toggle(
+            'text-primary',
+            difference < 0
+        );
     }
+
+    // ==========================================
+    // THÊM DÒNG SẢN PHẨM
+    // ==========================================
 
     function addItem(item = {}, focus = false) {
         if (itemsBody.children.length >= 200) {
@@ -1316,11 +1454,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
         idInput.value = item.id ?? '';
 
-        select.add(new Option('-- Chọn sản phẩm --', ''));
+        select.add(
+            new Option('-- Chọn sản phẩm --', '')
+        );
 
         products.forEach(function (product) {
-            const option = new Option(product.name, product.id);
-            option.dataset.price = Number(product.price) || 0;
+            const option = new Option(
+                product.name,
+                product.id
+            );
+
+            option.dataset.price =
+                Number(product.price) || 0;
+
             select.add(option);
         });
 
@@ -1330,20 +1476,22 @@ document.addEventListener('DOMContentLoaded', function () {
             return String(product.id) === String(productId);
         });
 
-        // Giữ sản phẩm cũ ngay cả khi không còn trong danh mục chọn mới.
+        // Giữ sản phẩm cũ dù không còn trong danh mục chọn mới.
         if (productId && !catalogProduct) {
             const option = new Option(
                 item.product_name || 'Sản phẩm đã lưu',
                 productId
             );
 
-            option.dataset.price = Number(item.unit_price) || 0;
+            option.dataset.price =
+                Number(item.unit_price) || 0;
+
             select.add(option);
         }
 
         select.value = String(productId);
 
-        // Nạp giá đã bán; không tự đổi sang giá danh mục hiện tại.
+        // Giữ giá đã bán khi mở hóa đơn cũ.
         const savedPrice = Number(item.unit_price);
 
         const price = (
@@ -1357,11 +1505,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         priceInput.value = price;
         priceDisplay.value = money(price);
+
         quantityInput.value = item.quantity ?? 1;
 
         select.addEventListener('change', function () {
             const option = this.options[this.selectedIndex];
-            const selectedPrice = Number(option?.dataset.price) || 0;
+
+            const selectedPrice =
+                Number(option?.dataset.price) || 0;
 
             priceInput.value = selectedPrice;
             priceDisplay.value = money(selectedPrice);
@@ -1369,18 +1520,23 @@ document.addEventListener('DOMContentLoaded', function () {
             calculateTotals();
         });
 
-        quantityInput.addEventListener('input', calculateTotals);
+        quantityInput.addEventListener(
+            'input',
+            calculateTotals
+        );
 
-        row.querySelector('.remove-item').addEventListener('click', function () {
-            if (itemsBody.children.length <= 1) {
-                alert('Hóa đơn phải có ít nhất một sản phẩm.');
-                return;
-            }
+        row.querySelector('.remove-item')
+            .addEventListener('click', function () {
+                if (itemsBody.children.length <= 1) {
+                    alert('Hóa đơn phải có ít nhất một sản phẩm.');
+                    return;
+                }
 
-            row.remove();
-            reindexRows();
-            calculateTotals();
-        });
+                row.remove();
+
+                reindexRows();
+                calculateTotals();
+            });
 
         itemsBody.appendChild(fragment);
 
@@ -1392,13 +1548,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // ==========================================
+    // TÌM NHANH SẢN PHẨM
+    // ==========================================
+
     function hideProductResults() {
         quickResults.hidden = true;
         quickResults.replaceChildren();
+
         activeProductIndex = -1;
 
-        quickSearch.setAttribute('aria-expanded', 'false');
-        quickSearch.removeAttribute('aria-activedescendant');
+        quickSearch.setAttribute(
+            'aria-expanded',
+            'false'
+        );
+
+        quickSearch.removeAttribute(
+            'aria-activedescendant'
+        );
     }
 
     function chooseProduct(product) {
@@ -1410,7 +1577,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (emptySelect) {
             emptySelect.value = String(product.id);
-            emptySelect.dispatchEvent(new Event('change'));
+
+            emptySelect.dispatchEvent(
+                new Event('change')
+            );
         } else {
             if (itemsBody.children.length >= 200) {
                 alert('Mỗi hóa đơn tối đa 200 dòng sản phẩm.');
@@ -1424,13 +1594,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         quickSearch.value = '';
+
         hideProductResults();
         quickSearch.focus();
     }
 
     function renderProductResults() {
         const keyword = normalize(quickSearch.value);
-        const words = keyword ? keyword.split(' ') : [];
+
+        const words = keyword
+            ? keyword.split(' ')
+            : [];
 
         hideProductResults();
 
@@ -1443,13 +1617,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         quickResults.hidden = false;
-        quickSearch.setAttribute('aria-expanded', 'true');
+
+        quickSearch.setAttribute(
+            'aria-expanded',
+            'true'
+        );
 
         if (!matches.length) {
             const message = document.createElement('div');
+
             message.className = 'p-3 text-muted';
             message.textContent = 'Không tìm thấy sản phẩm.';
+
             quickResults.appendChild(message);
+
             return;
         }
 
@@ -1467,10 +1648,12 @@ document.addEventListener('DOMContentLoaded', function () {
             button.setAttribute('aria-selected', 'false');
 
             const name = document.createElement('span');
+
             name.className = 'quick-product-name';
             name.textContent = product.name;
 
             const price = document.createElement('span');
+
             price.className = 'quick-product-price';
             price.textContent = money(product.price);
 
@@ -1507,8 +1690,15 @@ document.addEventListener('DOMContentLoaded', function () {
         buttons.forEach(function (button, buttonIndex) {
             const active = buttonIndex === activeProductIndex;
 
-            button.classList.toggle('is-active', active);
-            button.setAttribute('aria-selected', String(active));
+            button.classList.toggle(
+                'is-active',
+                active
+            );
+
+            button.setAttribute(
+                'aria-selected',
+                String(active)
+            );
         });
 
         const activeButton = buttons[activeProductIndex];
@@ -1523,8 +1713,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    quickSearch.addEventListener('input', renderProductResults);
-    quickSearch.addEventListener('focus', renderProductResults);
+    quickSearch.addEventListener(
+        'input',
+        renderProductResults
+    );
+
+    quickSearch.addEventListener(
+        'focus',
+        renderProductResults
+    );
 
     quickSearch.addEventListener('click', function () {
         if (quickResults.hidden) {
@@ -1537,7 +1734,10 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        if (
+            event.key === 'ArrowDown' ||
+            event.key === 'ArrowUp'
+        ) {
             event.preventDefault();
 
             if (quickResults.hidden) {
@@ -1553,12 +1753,17 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             const nextIndex = activeProductIndex < 0
-                ? (event.key === 'ArrowDown' ? 0 : buttons.length - 1)
+                ? (
+                    event.key === 'ArrowDown'
+                        ? 0
+                        : buttons.length - 1
+                )
                 : activeProductIndex + (
                     event.key === 'ArrowDown' ? 1 : -1
                 );
 
             setActiveProduct(nextIndex);
+
             return;
         }
 
@@ -1575,22 +1780,33 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
             buttons[Math.max(0, activeProductIndex)]?.click();
+
             return;
         }
 
-        if (event.key === 'Escape' || event.key === 'Tab') {
+        if (
+            event.key === 'Escape' ||
+            event.key === 'Tab'
+        ) {
             hideProductResults();
         }
     });
 
     document.addEventListener('click', function (event) {
-        if (!quickSearch.parentElement.contains(event.target)) {
+        if (
+            !quickSearch.parentElement.contains(event.target)
+        ) {
             hideProductResults();
         }
     });
 
+    // ==========================================
+    // CHỌN LEAD
+    // ==========================================
+
     function selectLead(lead) {
-        document.getElementById('lead_id').value = lead.id ?? '';
+        document.getElementById('lead_id').value =
+            lead.id ?? '';
 
         document.getElementById('customer_name').value =
             lead.name ?? lead.customer_name ?? '';
@@ -1606,11 +1822,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('selectedLeadBox').hidden = false;
 
-        searchPhone.value = lead.phone || searchPhone.value.trim();
+        searchPhone.value =
+            lead.phone || searchPhone.value.trim();
 
         leadResults.hidden = true;
         leadResults.replaceChildren();
     }
+
+    // ==========================================
+    // TÌM LEAD THEO SỐ ĐIỆN THOẠI
+    // ==========================================
 
     async function searchLead() {
         const phone = searchPhone.value.trim();
@@ -1623,6 +1844,7 @@ document.addEventListener('DOMContentLoaded', function () {
         leadSearchController?.abort();
 
         const controller = new AbortController();
+
         leadSearchController = controller;
 
         searchLoading.hidden = false;
@@ -1630,12 +1852,17 @@ document.addEventListener('DOMContentLoaded', function () {
         leadResults.replaceChildren();
 
         try {
-            const url = new URL(leadSearchUrl, location.origin);
+            const url = new URL(
+                leadSearchUrl,
+                location.origin
+            );
+
             url.searchParams.set('phone', phone);
 
             const response = await fetch(url, {
                 method: 'GET',
                 signal: controller.signal,
+
                 headers: {
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest'
@@ -1654,7 +1881,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 );
             }
 
-            const leads = Array.isArray(data.leads) ? data.leads : [];
+            const leads = Array.isArray(data.leads)
+                ? data.leads
+                : [];
 
             if (leads.length === 1) {
                 selectLead(leads[0]);
@@ -1665,11 +1894,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!leads.length) {
                 const message = document.createElement('div');
-                message.className = 'alert alert-warning mb-0';
+
+                message.className =
+                    'alert alert-warning mb-0';
+
                 message.textContent =
-                    'Không tìm thấy khách hàng có số điện thoại: ' + phone;
+                    'Không tìm thấy khách hàng có số điện thoại: ' +
+                    phone;
 
                 leadResults.appendChild(message);
+
                 return;
             }
 
@@ -1680,20 +1914,34 @@ document.addEventListener('DOMContentLoaded', function () {
                 button.className = 'lead-option';
 
                 const name = document.createElement('strong');
+
                 name.textContent =
-                    (lead.name || lead.customer_name || 'Chưa có tên') +
-                    ' — #' + lead.id;
+                    (
+                        lead.name ||
+                        lead.customer_name ||
+                        'Chưa có tên'
+                    ) +
+                    ' — #' +
+                    lead.id;
 
                 const phoneLine = document.createElement('div');
+
                 phoneLine.className = 'small mt-1';
                 phoneLine.textContent = lead.phone || phone;
 
                 const address = document.createElement('div');
-                address.className = 'small text-muted mt-1';
+
+                address.className =
+                    'small text-muted mt-1';
+
                 address.textContent =
                     lead.address || 'Chưa có địa chỉ';
 
-                button.append(name, phoneLine, address);
+                button.append(
+                    name,
+                    phoneLine,
+                    address
+                );
 
                 button.addEventListener('click', function () {
                     selectLead(lead);
@@ -1703,7 +1951,10 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         } catch (error) {
             if (error.name !== 'AbortError') {
-                alert(error.message || 'Có lỗi khi tìm khách hàng.');
+                alert(
+                    error.message ||
+                    'Có lỗi khi tìm khách hàng.'
+                );
             }
         } finally {
             if (leadSearchController === controller) {
@@ -1712,7 +1963,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    searchButton.addEventListener('click', searchLead);
+    searchButton.addEventListener(
+        'click',
+        searchLead
+    );
 
     searchPhone.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
@@ -1721,15 +1975,61 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // ==========================================
+    // NÚT THÊM SẢN PHẨM
+    // ==========================================
+
     document.getElementById('addItemBtn')
         .addEventListener('click', function () {
             addItem({}, true);
         });
 
-    document.querySelectorAll('.calculate-trigger')
-        .forEach(function (input) {
-            input.addEventListener('input', calculateTotals);
+    // ==========================================
+    // KHỞI TẠO VÀ THEO DÕI CÁC Ô TIỀN
+    // ==========================================
+
+    const moneyInputs = form.querySelectorAll('.money-input');
+
+    moneyInputs.forEach(function (input) {
+        // Database có thể trả về dạng 1000000.00.
+        const initial = input.value.trim();
+
+        if (/^\d+(?:\.\d+)?$/.test(initial)) {
+            input.value = String(
+                Math.round(Number(initial))
+            );
+        }
+
+        formatMoneyInput(input);
+
+        input.addEventListener('input', function () {
+            formatMoneyInput(this);
+            calculateTotals();
         });
+
+        input.addEventListener('blur', function () {
+            if (!this.value) {
+                this.value = '0';
+            }
+
+            formatMoneyInput(this);
+            calculateTotals();
+        });
+    });
+
+    // Hiển thị 1.000.000 nhưng gửi Laravel là 1000000.
+    form.addEventListener('formdata', function (event) {
+        moneyInputs.forEach(function (input) {
+            event.formData.set(
+                input.name,
+                moneyDigits(input.value) || '0'
+            );
+        });
+    });
+
+    // ==========================================
+    // KHÔI PHỤC SẢN PHẨM ĐÃ LƯU / OLD()
+    // ==========================================
 
     const restoredItems = Object.values(initialItems || {});
 
@@ -1741,10 +2041,15 @@ document.addEventListener('DOMContentLoaded', function () {
         addItem();
     }
 
+    // ==========================================
+    // LƯU HÓA ĐƠN
+    // ==========================================
+
     form.addEventListener('submit', function () {
         reindexRows();
 
         const button = document.getElementById('saveInvoiceBtn');
+
         button.disabled = true;
         button.textContent = 'Đang lưu...';
     });
