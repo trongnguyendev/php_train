@@ -1186,9 +1186,9 @@
                 class="form-control text-center quantity"
                 data-field="quantity"
                 aria-label="Số lượng"
-                min="0.01"
+                min="1"
                 max="1000000"
-                step="0.01"
+                step="1"
                 required
             >
         </td>
