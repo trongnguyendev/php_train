@@ -1506,7 +1506,7 @@ document.addEventListener('DOMContentLoaded', function () {
         priceInput.value = price;
         priceDisplay.value = money(price);
 
-        quantityInput.value = item.quantity ?? 1;
+        quantityInput.value = Number(item.quantity ?? 1);
 
         select.addEventListener('change', function () {
             const option = this.options[this.selectedIndex];
