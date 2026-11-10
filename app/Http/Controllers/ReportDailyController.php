@@ -179,21 +179,48 @@ class ReportDailyController extends Controller
             'total'
         ));
     }
+    // public function exportExcel(Request $request)
+    // {
+    //     abort_unless(auth()->user()->hasPermission('report_daily.view'), 403);
+
+    //     $date = $request->input('date');
+
+    //     $today = $date
+    //         ? Carbon::parse($date)->toDateString()
+    //         : Carbon::today()->toDateString();
+
+    //     $data = $this->getReportDailyData($today);
+
+    //     return Excel::download(
+    //         new ReportDailyExport($data),
+    //         'BaoCaoNgay_'.$today.'.xlsx'
+    //     );
+    // }
     public function exportExcel(Request $request)
     {
         abort_unless(auth()->user()->hasPermission('report_daily.view'), 403);
 
-        $date = $request->input('date');
+        $filters = $request->validate([
+            'date' => ['nullable', 'date_format:Y-m-d'],
+            'sale_names' => ['sometimes', 'array', 'min:1'],
+            'sale_names.*' => ['required', 'string', 'max:255'],
+        ]);
 
-        $today = $date
-            ? Carbon::parse($date)->toDateString()
-            : Carbon::today()->toDateString();
-
+        $today = $filters['date'] ?? Carbon::today()->toDateString();
         $data = $this->getReportDailyData($today);
+        $selectedNames = $filters['sale_names'] ?? [];
+
+        if ($selectedNames !== []) {
+            $data = collect($data)
+                ->filter(function ($item) use ($selectedNames) {
+                    return in_array((string) $item->sale_name, $selectedNames, true);
+                })
+                ->values();
+        }
 
         return Excel::download(
             new ReportDailyExport($data),
-            'BaoCaoNgay_'.$today.'.xlsx'
+            'BaoCaoNgay_' . $today . '.xlsx'
         );
     }
 
