@@ -19,15 +19,15 @@
         [
             'id' => 1,
             'title' => 'Kỳ 1',
-            'from' => request('from_date_1'),
-            'to' => request('to_date_1'),
+            'from' => $from_date_1,
+            'to' => $to_date_1,
             'rows' => collect($data),
         ],
         [
             'id' => 2,
             'title' => 'Kỳ 2',
-            'from' => request('from_date_2'),
-            'to' => request('to_date_2'),
+            'from' => $from_date_2,
+            'to' => $to_date_2,
             'rows' => collect($data_prev),
         ],
     ];
@@ -140,6 +140,26 @@
         min-width: 0;
         border-color: var(--mr-border);
         border-radius: 8px;
+    }
+
+    .monthly-report .mr-sales {
+        margin-top: 12px;
+    }
+
+    .monthly-report .mr-sale-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 18px;
+        max-height: 180px;
+        overflow-y: auto;
+    }
+
+    .monthly-report .mr-sale-option {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin: 0;
+        cursor: pointer;
     }
 
     .monthly-report .mr-actions {
@@ -306,7 +326,36 @@
     </header>
 
     <form method="GET" class="mr-panel mr-filter">
-        <h2 class="mr-filter-title">Chọn khoảng thời gian</h2>
+        <h2 class="mr-filter-title">Lọc báo cáo theo ngày và Sale</h2>
+
+        <fieldset class="mr-range mr-sales">
+            <legend>Chọn nhân viên Sale</legend>
+
+            <div class="mr-sale-list">
+                @forelse ($sales as $sale)
+                    <label class="mr-sale-option">
+                        <input
+                            type="checkbox"
+                            name="sale_ids[]"
+                            value="{{ $sale->id }}"
+                            @checked(in_array((int) $sale->id, $sale_ids, true))
+                        >
+                        <span>{{ $sale->name }}</span>
+                    </label>
+                @empty
+                    <span>Chưa có tài khoản nhân viên.</span>
+                @endforelse
+            </div>
+
+            <p class="mr-muted mb-0 mt-2">Bỏ tích tất cả để xem toàn bộ Sale.</p>
+
+            @error('sale_ids')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+            @error('sale_ids.*')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </fieldset>
 
         <div class="mr-filter-grid">
             @foreach($periods as $period)

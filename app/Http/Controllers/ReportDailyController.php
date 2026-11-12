@@ -225,167 +225,297 @@ class ReportDailyController extends Controller
     }
 
 
-    private function getReportMonthData($from, $to)
-    {
-        return DB::table('users')
-            ->leftJoin('leads', function ($join) use ($from, $to) {
-                $join->on('users.id', '=', 'leads.sale_information_id')
-                    ->whereBetween('leads.first_interaction_date', [$from, $to]);
-            })
-            ->leftJoin('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
-            ->leftJoin('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
-            ->select(
-                'users.id',
-                'users.name as sale_name',
+    // private function getReportMonthData($from, $to)
+    // {
+    //     return DB::table('users')
+    //         ->leftJoin('leads', function ($join) use ($from, $to) {
+    //             $join->on('users.id', '=', 'leads.sale_information_id')
+    //                 ->whereBetween('leads.first_interaction_date', [$from, $to]);
+    //         })
+    //         ->leftJoin('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
+    //         ->leftJoin('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
+    //         ->select(
+    //             'users.id',
+    //             'users.name as sale_name',
 
-                DB::raw('COUNT(leads.id) as total_customers'),
+    //             DB::raw('COUNT(leads.id) as total_customers'),
 
-                DB::raw('SUM(
-                    CASE
-                        WHEN customer_types.name = "Khách Hàng Mới"
-                        THEN 1 ELSE 0
-                    END
-                ) as total_new_customers'),
+    //             DB::raw('SUM(
+    //                 CASE
+    //                     WHEN customer_types.name = "Khách Hàng Mới"
+    //                     THEN 1 ELSE 0
+    //                 END
+    //             ) as total_new_customers'),
 
-                DB::raw('SUM(
-                    CASE
-                        WHEN customer_types.name = "Khách Hàng Cũ"
-                        THEN 1 ELSE 0
-                    END
-                ) as total_old_customers'),
+    //             DB::raw('SUM(
+    //                 CASE
+    //                     WHEN customer_types.name = "Khách Hàng Cũ"
+    //                     THEN 1 ELSE 0
+    //                 END
+    //             ) as total_old_customers'),
 
-                DB::raw('SUM(
-                    CASE
-                        WHEN customer_types.name = "Khách Hàng Mới"
-                        AND customer_statuses.name = "Tiềm Năng"
-                        THEN 1 ELSE 0
-                    END
-                ) as total_new_potential'),
+    //             DB::raw('SUM(
+    //                 CASE
+    //                     WHEN customer_types.name = "Khách Hàng Mới"
+    //                     AND customer_statuses.name = "Tiềm Năng"
+    //                     THEN 1 ELSE 0
+    //                 END
+    //             ) as total_new_potential'),
 
-                DB::raw('SUM(
-                    CASE
-                        WHEN customer_types.name = "Khách Hàng Cũ"
-                        AND customer_statuses.name = "Tiềm Năng"
-                        THEN 1 ELSE 0
-                    END
-                ) as total_old_potential'),
+    //             DB::raw('SUM(
+    //                 CASE
+    //                     WHEN customer_types.name = "Khách Hàng Cũ"
+    //                     AND customer_statuses.name = "Tiềm Năng"
+    //                     THEN 1 ELSE 0
+    //                 END
+    //             ) as total_old_potential'),
 
-                DB::raw('SUM(
-                    CASE
-                        WHEN customer_statuses.name = "Tiềm Năng"
-                        THEN 1 ELSE 0
-                    END
-                ) as total_potential'),
+    //             DB::raw('SUM(
+    //                 CASE
+    //                     WHEN customer_statuses.name = "Tiềm Năng"
+    //                     THEN 1 ELSE 0
+    //                 END
+    //             ) as total_potential'),
 
-                DB::raw('SUM(
-                    CASE
-                        WHEN customer_statuses.name = "Quan Tâm"
-                        THEN 1 ELSE 0
-                    END
-                ) as total_care'),
+    //             DB::raw('SUM(
+    //                 CASE
+    //                     WHEN customer_statuses.name = "Quan Tâm"
+    //                     THEN 1 ELSE 0
+    //                 END
+    //             ) as total_care'),
 
-                DB::raw('SUM(
-                    CASE
-                        WHEN customer_types.name = "Khách Hàng Mới"
-                        AND customer_statuses.name = "Đã Chốt"
-                        THEN 1 ELSE 0
-                    END
-                ) as total_new_locked'),
+    //             DB::raw('SUM(
+    //                 CASE
+    //                     WHEN customer_types.name = "Khách Hàng Mới"
+    //                     AND customer_statuses.name = "Đã Chốt"
+    //                     THEN 1 ELSE 0
+    //                 END
+    //             ) as total_new_locked'),
 
-                DB::raw('SUM(
-                    CASE
-                        WHEN customer_types.name = "Khách Hàng Cũ"
-                        AND customer_statuses.name = "Đã Chốt"
-                        THEN 1 ELSE 0
-                    END
-                ) as total_old_locked'),
+    //             DB::raw('SUM(
+    //                 CASE
+    //                     WHEN customer_types.name = "Khách Hàng Cũ"
+    //                     AND customer_statuses.name = "Đã Chốt"
+    //                     THEN 1 ELSE 0
+    //                 END
+    //             ) as total_old_locked'),
 
-                DB::raw('COALESCE(SUM(leads.order_value),0) as total_value')
-            )
-            ->groupBy('users.id', 'users.name')
-            ->orderBy('users.name')
-            ->get();
-    }  
+    //             DB::raw('COALESCE(SUM(leads.order_value),0) as total_value')
+    //         )
+    //         ->groupBy('users.id', 'users.name')
+    //         ->orderBy('users.name')
+    //         ->get();
+    // }  
     
-    public function exportCurrentMonth(Request $request)
-    {
-        abort_unless(auth()->user()->hasPermission('report_month.view'), 403);
+    // public function exportCurrentMonth(Request $request)
+    // {
+    //     abort_unless(auth()->user()->hasPermission('report_month.view'), 403);
 
-        $request->validate([
-            'from_date_1' => 'nullable|date',
-            'to_date_1'   => 'nullable|date',
-            'from_date_2' => 'nullable|date',
-            'to_date_2'   => 'nullable|date',
-        ]);
+    //     $request->validate([
+    //         'from_date_1' => 'nullable|date',
+    //         'to_date_1'   => 'nullable|date',
+    //         'from_date_2' => 'nullable|date',
+    //         'to_date_2'   => 'nullable|date',
+    //     ]);
 
-        // Khoảng 1
-        $fromDate1 = $request->filled('from_date_1')
-            ? Carbon::parse($request->from_date_1)->startOfDay()
-            : Carbon::now()->startOfMonth();
+    //     // Khoảng 1
+    //     $fromDate1 = $request->filled('from_date_1')
+    //         ? Carbon::parse($request->from_date_1)->startOfDay()
+    //         : Carbon::now()->startOfMonth();
 
-        $toDate1 = $request->filled('to_date_1')
-            ? Carbon::parse($request->to_date_1)->endOfDay()
-            : Carbon::now()->endOfMonth();
+    //     $toDate1 = $request->filled('to_date_1')
+    //         ? Carbon::parse($request->to_date_1)->endOfDay()
+    //         : Carbon::now()->endOfMonth();
 
-        // Khoảng 2
-        $fromDate2 = $request->filled('from_date_2')
-            ? Carbon::parse($request->from_date_2)->startOfDay()
-            : Carbon::now()->subMonth()->startOfMonth();
+    //     // Khoảng 2
+    //     $fromDate2 = $request->filled('from_date_2')
+    //         ? Carbon::parse($request->from_date_2)->startOfDay()
+    //         : Carbon::now()->subMonth()->startOfMonth();
 
-        $toDate2 = $request->filled('to_date_2')
-            ? Carbon::parse($request->to_date_2)->endOfDay()
-            : Carbon::now()->subMonth()->endOfMonth();
+    //     $toDate2 = $request->filled('to_date_2')
+    //         ? Carbon::parse($request->to_date_2)->endOfDay()
+    //         : Carbon::now()->subMonth()->endOfMonth();
 
-        $data = $this->getReportMonthData($fromDate1, $toDate1);
-        $data_prev = $this->getReportMonthData($fromDate2, $toDate2);
+    //     $data = $this->getReportMonthData($fromDate1, $toDate1);
+    //     $data_prev = $this->getReportMonthData($fromDate2, $toDate2);
 
-        return view('report_month.index', [
-            'data' => $data,
-            'data_prev' => $data_prev,
-            'from_date_1' => $fromDate1->toDateString(),
-            'to_date_1' => $toDate1->toDateString(),
-            'from_date_2' => $fromDate2->toDateString(),
-            'to_date_2' => $toDate2->toDateString(),
-        ]);
-    }
+    //     return view('report_month.index', [
+    //         'data' => $data,
+    //         'data_prev' => $data_prev,
+    //         'from_date_1' => $fromDate1->toDateString(),
+    //         'to_date_1' => $toDate1->toDateString(),
+    //         'from_date_2' => $fromDate2->toDateString(),
+    //         'to_date_2' => $toDate2->toDateString(),
+    //     ]);
+    // }
 
 
-    public function exportCurrentMonthExcel(Request $request)
-    {
-        abort_unless(auth()->user()->hasPermission('report_month.view'), 403);
+    // public function exportCurrentMonthExcel(Request $request)
+    // {
+    //     abort_unless(auth()->user()->hasPermission('report_month.view'), 403);
 
-        $request->validate([
-            'from_date_1' => 'nullable|date',
-            'to_date_1'   => 'nullable|date',
-            'from_date_2' => 'nullable|date',
-            'to_date_2'   => 'nullable|date',
-        ]);
+    //     $request->validate([
+    //         'from_date_1' => 'nullable|date',
+    //         'to_date_1'   => 'nullable|date',
+    //         'from_date_2' => 'nullable|date',
+    //         'to_date_2'   => 'nullable|date',
+    //     ]);
 
-        $fromDate1 = $request->filled('from_date_1')
-            ? Carbon::parse($request->from_date_1)->startOfDay()
-            : Carbon::now()->startOfMonth();
+    //     $fromDate1 = $request->filled('from_date_1')
+    //         ? Carbon::parse($request->from_date_1)->startOfDay()
+    //         : Carbon::now()->startOfMonth();
 
-        $toDate1 = $request->filled('to_date_1')
-            ? Carbon::parse($request->to_date_1)->endOfDay()
-            : Carbon::now()->endOfMonth();
+    //     $toDate1 = $request->filled('to_date_1')
+    //         ? Carbon::parse($request->to_date_1)->endOfDay()
+    //         : Carbon::now()->endOfMonth();
 
-        $fromDate2 = $request->filled('from_date_2')
-            ? Carbon::parse($request->from_date_2)->startOfDay()
-            : Carbon::now()->subMonth()->startOfMonth();
+    //     $fromDate2 = $request->filled('from_date_2')
+    //         ? Carbon::parse($request->from_date_2)->startOfDay()
+    //         : Carbon::now()->subMonth()->startOfMonth();
 
-        $toDate2 = $request->filled('to_date_2')
-            ? Carbon::parse($request->to_date_2)->endOfDay()
-            : Carbon::now()->subMonth()->endOfMonth();
+    //     $toDate2 = $request->filled('to_date_2')
+    //         ? Carbon::parse($request->to_date_2)->endOfDay()
+    //         : Carbon::now()->subMonth()->endOfMonth();
 
-        $data = $this->getReportMonthData($fromDate1, $toDate1);
-        $data_prev = $this->getReportMonthData($fromDate2, $toDate2);
+    //     $data = $this->getReportMonthData($fromDate1, $toDate1);
+    //     $data_prev = $this->getReportMonthData($fromDate2, $toDate2);
 
-        return Excel::download(
-            new ReportMonthExport($data, $data_prev),
-            'BaoCaoThang_'.$fromDate1->format('Ymd').'_'.$toDate1->format('Ymd').'.xlsx'
-        );
+    //     return Excel::download(
+    //         new ReportMonthExport($data, $data_prev),
+    //         'BaoCaoThang_'.$fromDate1->format('Ymd').'_'.$toDate1->format('Ymd').'.xlsx'
+    //     );
         
-    }
+    // }
+
+
+    private function getReportMonthData($from, $to, array $saleIds = [])
+{
+    return DB::table('users')
+        ->when($saleIds !== [], function ($query) use ($saleIds) {
+            $query->whereIn('users.id', $saleIds);
+        })
+        ->leftJoin('leads', function ($join) use ($from, $to) {
+            $join->on('users.id', '=', 'leads.sale_information_id')
+                ->whereBetween('leads.first_interaction_date', [$from, $to]);
+        })
+        ->leftJoin('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
+        ->leftJoin('customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id')
+        ->select('users.id', 'users.name as sale_name')
+        ->selectRaw('COUNT(leads.id) as total_customers')
+        ->selectRaw(
+            'SUM(CASE WHEN customer_types.name = ? THEN 1 ELSE 0 END) as total_new_customers',
+            ['Khách Hàng Mới']
+        )
+        ->selectRaw(
+            'SUM(CASE WHEN customer_types.name = ? THEN 1 ELSE 0 END) as total_old_customers',
+            ['Khách Hàng Cũ']
+        )
+        ->selectRaw(
+            'SUM(CASE WHEN customer_types.name = ? AND customer_statuses.name = ?
+                THEN 1 ELSE 0 END) as total_new_potential',
+            ['Khách Hàng Mới', 'Tiềm Năng']
+        )
+        ->selectRaw(
+            'SUM(CASE WHEN customer_types.name = ? AND customer_statuses.name = ?
+                THEN 1 ELSE 0 END) as total_old_potential',
+            ['Khách Hàng Cũ', 'Tiềm Năng']
+        )
+        ->selectRaw(
+            'SUM(CASE WHEN customer_statuses.name = ? THEN 1 ELSE 0 END) as total_potential',
+            ['Tiềm Năng']
+        )
+        ->selectRaw(
+            'SUM(CASE WHEN customer_statuses.name = ? THEN 1 ELSE 0 END) as total_care',
+            ['Quan Tâm']
+        )
+        ->selectRaw(
+            'SUM(CASE WHEN customer_types.name = ? AND customer_statuses.name = ?
+                THEN 1 ELSE 0 END) as total_new_locked',
+            ['Khách Hàng Mới', 'Đã Chốt']
+        )
+        ->selectRaw(
+            'SUM(CASE WHEN customer_types.name = ? AND customer_statuses.name = ?
+                THEN 1 ELSE 0 END) as total_old_locked',
+            ['Khách Hàng Cũ', 'Đã Chốt']
+        )
+        ->selectRaw('COALESCE(SUM(leads.order_value), 0) as total_value')
+        ->groupBy('users.id', 'users.name')
+        ->orderBy('users.name')
+        ->orderBy('users.id')
+        ->get();
+}
+
+public function exportCurrentMonth(Request $request)
+{
+    abort_unless(auth()->user()->hasPermission('report_month.view'), 403);
+
+    $report = $this->prepareMonthReport($request);
+
+    $report['sales'] = DB::table('users')
+        ->orderBy('name')
+        ->orderBy('id')
+        ->get(['id', 'name']);
+
+    return view('report_month.index', $report);
+}
+
+public function exportCurrentMonthExcel(Request $request)
+{
+    abort_unless(auth()->user()->hasPermission('report_month.view'), 403);
+
+    $report = $this->prepareMonthReport($request);
+
+    $from = Carbon::parse($report['from_date_1'])->format('Ymd');
+    $to = Carbon::parse($report['to_date_1'])->format('Ymd');
+
+    return Excel::download(
+        new ReportMonthExport($report['data'], $report['data_prev']),
+        "BaoCaoThang_{$from}_{$to}.xlsx"
+    );
+}
+
+private function prepareMonthReport(Request $request): array
+{
+    $filters = $request->validate([
+        'from_date_1' => 'nullable|date',
+        'to_date_1'   => 'nullable|date',
+        'from_date_2' => 'nullable|date',
+        'to_date_2'   => 'nullable|date',
+        'sale_ids'    => 'nullable|array',
+        'sale_ids.*'  => 'required|integer|distinct|exists:users,id',
+    ]);
+
+    $saleIds = array_map('intval', $filters['sale_ids'] ?? []);
+
+    $currentMonth = Carbon::now()->startOfMonth();
+    $previousMonth = $currentMonth->copy()->subMonth();
+
+    $fromDate1 = isset($filters['from_date_1'])
+        ? Carbon::parse($filters['from_date_1'])->startOfDay()
+        : $currentMonth->copy();
+
+    $toDate1 = isset($filters['to_date_1'])
+        ? Carbon::parse($filters['to_date_1'])->endOfDay()
+        : $currentMonth->copy()->endOfMonth();
+
+    $fromDate2 = isset($filters['from_date_2'])
+        ? Carbon::parse($filters['from_date_2'])->startOfDay()
+        : $previousMonth->copy();
+
+    $toDate2 = isset($filters['to_date_2'])
+        ? Carbon::parse($filters['to_date_2'])->endOfDay()
+        : $previousMonth->copy()->endOfMonth();
+
+    return [
+        'data'        => $this->getReportMonthData($fromDate1, $toDate1, $saleIds),
+        'data_prev'   => $this->getReportMonthData($fromDate2, $toDate2, $saleIds),
+        'sale_ids'    => $saleIds,
+        'from_date_1' => $fromDate1->toDateString(),
+        'to_date_1'   => $toDate1->toDateString(),
+        'from_date_2' => $fromDate2->toDateString(),
+        'to_date_2'   => $toDate2->toDateString(),
+    ];
+}
     // public function exportCurrentMonth(Request $request)
     // {
     //     abort_unless(auth()->user()->hasPermission('report_month.view'), 403);
