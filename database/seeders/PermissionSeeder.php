@@ -27,6 +27,7 @@ class PermissionSeeder extends Seeder
             'report_daily' => 'ReportDaily',
             'report_month' => 'ReportMonth',
             'report_showroom' => 'ReportShowroom',
+            'report-tt' => 'ReportTT',
             'potential' => 'Potential',
             'support-channels' => 'Support Channels',
             'audit_logs' => 'Audit Logs',

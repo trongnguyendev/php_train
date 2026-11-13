@@ -52,6 +52,15 @@
                         </li>
                     @endif
 
+                    @if(auth()->user()->hasPermission('report-tt.view'))
+                        <li class="{{ request()->routeIs('report.tt*') ? 'active' : '' }}">
+                            <a href="{{ route('report.tt') }}" class="nav-link">
+                                <i class="bi bi-people-fill"></i>
+                                <span>Báo Cáo Showroom TT</span>
+                            </a>
+                        </li>
+                    @endif
+
                     @if(auth()->user()->hasPermission('potential.view'))
                         <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
                             <a href="{{ route('potential.index') }}" class="nav-link">

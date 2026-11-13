@@ -481,10 +481,11 @@ public function store(Request $request)
         ];
     }
     $request->validate($rules, $messages);
-    $orderValue = 0;
-        if ($request->order_value) {
-            $orderValue = (int) str_replace('.', '', $request->order_value);
-        }
+    $orderValueDirect = (int) str_replace('.', '', $request->order_value_direct ?? 0);
+        $orderValueOnline = (int) str_replace('.', '', $request->order_value_online ?? 0);
+
+        // Tổng giá trị đơn hàng
+        $orderValue = $orderValueDirect + $orderValueOnline;
      // 3. LOGIC XỬ LÝ CUSTOMER_ID (Đảm bảo khách cũ dùng lại ID, khách mới sinh ID mới)
     if ($request->filled('customer_id')) {
         $customerId = $request->customer_id; // Lấy ID khách hàng từ input (nếu có)
@@ -514,6 +515,8 @@ public function store(Request $request)
             'sale_support_id' => $request->sale_support_id ?? 0,
             'current_customer_status_id' => $request->current_customer_status_id,
             'order_value' => $orderValue,
+            'order_value_direct' => $orderValueDirect,
+            'order_value_online' => $orderValueOnline,
             'support_channel_id' => $request->support_channel_id ?? null,
             'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
             'lead_type' => $request->lead_type,
@@ -555,6 +558,8 @@ public function store(Request $request)
             'sale_information_id' => $request->sale_information_id,
             'sale_support_id' => $request->sale_support_id,
             'order_value' => $orderValue,
+            'order_value_direct' => $request->order_value_direct ?? 0,
+            'order_value_online' => $request->order_value_online ?? 0,
             'current_customer_status_id' => $request->current_customer_status_id,
             'customer_discussion_details' => $request->customer_discussion_details,
             'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
@@ -859,134 +864,6 @@ public function edit(Lead $lead)
     ));
 }
 
-/**
- * Update the specified resource in storage.
- */
-// public function update(Request $request, Lead $lead)
-// {
-//     Gate::authorize('update', $lead);
-//     $rules = [
-//         'phone' => 'nullable|array', 
-//         'phone.*' => [
-//                 'string',
-//                 'regex:/^(0[0-9]{9}|\+[1-9]\d{7,14})$/'
-//         ],
-//         'first_interaction_date' => 'required|date',
-//         'name' => 'required|string',
-//         'customer_type_id' => 'required',
-//         'productCategories' => 'required|array|min:1',
-//         'note' => 'required',
-//         'lead_type' => 'required',
-//         'sale_support_id' => 'nullable',
-//     ]; 
-    
-//     $messages = [
-//         'phone.*.required' => 'Vui lòng không để trống ô số điện thoại.',
-//         'phone.*.regex'    => 'Số điện thoại :value không đúng định dạng (phải có 10 số và bắt đầu bằng 03,05,07,08,09).',
-//         'productCategories.required' => 'Vui lòng chọn ít nhất một Loại sản phẩm.',
-//         'first_interaction_date.required' => 'Vui lòng nhập Ngày tương tác đầu tiên.',
-//         'name.required' => 'Vui lòng nhập Tên khách hàng.',
-//         'note.required' => 'Vui lòng nhập Ghi chú về khách hàng.',
-//         'customer_type_id.required' => 'Vui lòng chọn Loại khách hàng.',
-//     ];
-//     $request->validate($rules, $messages);
-//     // Check để coi lead tô màu từ trực tiếp sang online 
-//     $oldLeadType = $lead->lead_type;
-
-//     $orderValue = 0;
-//     if ($request->order_value) {
-//         $orderValue = (int) str_replace('.', '', $request->order_value);
-//     }
-
-//     // Chỉ cập nhật bản ghi Lead hiện tại
-//     $oldLeadType = $lead->old_lead_type ?? $lead->lead_type;
-//     $newLeadType = $request->lead_type;
-
-//     if ($oldLeadType == 1 && $newLeadType == 2 && $lead->lead_type == 1) {
-//         $lead->update([
-//             'old_lead_type' => $oldLeadType,
-//             'lead_type' => 2,
-//         ]);
-//     }
-//     // dd($oldLeadType, $newLeadType);
-
-//     $lead->update([
-//         // Nhận customer_id mới nếu trên giao diện cho phép đổi khách hàng, ngược lại giữ nguyên giá trị cũ
-//         'customer_id' => $request->input('customer_id', $lead->customer_id),
-//         'first_interaction_date' => $request->first_interaction_date,
-//         'name' => $request->name,
-        
-//         'province_id' => $request->province_id,
-//         'address' => $request->address,
-//         'zalo' => $request->zalo ?? '',
-//         'customer_type_id' => $request->customer_type_id,
-//         'source_id' => $request->source_id,
-//         'showroom_id' => $request->showroom_id,
-//         'note' => $request->note,
-//         'first_customer_status_id' => $request->first_customer_status_id ?? null,
-//         'sale_information_id' => $request->sale_information_id,
-//         'sale_support_id' => $request->sale_support_id ?? 0,
-//         'current_customer_status_id' => $request->current_customer_status_id,
-//         'order_value' => $orderValue,
-//         'support_channel_id' => $request->support_channel_id ?? null,
-//         'customer_discussion_details' => $request->customer_discussion_details ?? '',
-//         'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
-//         'old_lead_type' => $oldLeadType,
-//         'lead_type' => $newLeadType,
-//     ]);
-//     $lead->phones()->delete();
-
-//     $phones = collect($request->phone ?? [])
-//         ->filter()
-//         ->unique()
-//         ->map(fn($p) => ['phone' => $p])
-//         ->toArray();
-
-//     $lead->phones()->createMany($phones);
-
-//     // Lưu nhiều product category khi cập nhật
-//     if ($request->has('productCategories')) {
-//         $lead->productCategories()->sync($request->productCategories);
-//     }
-
-//     $leadTakeCare = LeadTakeCare::where('lead_id', $lead->id)->delete();
-
-//         foreach ((array) $request->take_care_plan as $index => $plan) {
-
-//             $date = $request->take_care_date[$index] ?? null;
-
-//             if (!$date && !$plan) {
-//                 continue;
-//             }
-
-//             LeadTakeCare::create([
-//                 'lead_id' => $lead->id,
-//                 'take_care_plan' => $plan,
-//                 'take_care_date' => $date,
-//                 'take_care_result' => $request->take_care_result[$index] ?? null,
-//             ]);
-//         }
-
-//         $redirect = redirect()
-//             ->route('leads.index', request()->query())
-//             ->with('success', 'Cập nhập Lead thành công!');
-
-//         if ($oldLeadType == 1 && $request->lead_type == 2) {
-//             $redirect->with('highlight_lead', $lead->id);
-//         }
-
-//         if ($oldLeadType == 1 && $request->lead_type == 2) {
-//                 session()->flash('highlight_lead', $lead->id);
-//             }
-
-//             return redirect()
-//                 ->route('leads.index', request()->query())
-//                 ->with('success', 'Cập nhật Lead thành công!');
-
-//         // return $redirect;
-//     // return redirect()->route('leads.index', request()->query())->with('success', 'Cập nhập Lead thành công!');
-// }
-
 
 public function update(Request $request, Lead $lead)
 {
@@ -1039,10 +916,12 @@ public function update(Request $request, Lead $lead)
     $oldLeadType = $lead->old_lead_type ?? $lead->lead_type;
     $newLeadType = $request->lead_type;
 
-    $orderValue = 0;
-    if ($request->order_value) {
-        $orderValue = (int) str_replace('.', '', $request->order_value);
-    }
+    // Xử lý giá trị đơn hàng
+    $orderValueDirect = (int) str_replace('.', '', $request->order_value_direct ?? 0);
+    $orderValueOnline = (int) str_replace('.', '', $request->order_value_online ?? 0);
+
+    // Tổng giá trị đơn hàng
+    $orderValue = $orderValueDirect + $orderValueOnline;
 
     // 2) Update lead
     $lead->update([
@@ -1061,6 +940,8 @@ public function update(Request $request, Lead $lead)
         'sale_support_id' => $request->sale_support_id ?? 0,
         'current_customer_status_id' => $request->current_customer_status_id,
         'order_value' => $orderValue,
+        'order_value_direct' => $orderValueDirect,
+        'order_value_online' => $orderValueOnline,
         'support_channel_id' => $request->support_channel_id ?? null,
         'customer_discussion_details' => $request->customer_discussion_details ?? '',
         'tmdt' => $request->has('tmdt') ? $request->tmdt : null,

@@ -361,17 +361,38 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6" id="order-value-field">
-                            <label for="order_value" class="form-label">
-                                <i class="bi bi-currency-dollar me-1"></i><span class="text-primary fw-bold">Giá trị đơn chốt được</span>
-                            </label>
-                            <input type="text" name="order_value" id="order_value" 
-                                class="form-control @error('order_value') is-invalid @enderror"
-                                value="{{ old('order_value') }}" placeholder="Nhập giá trị đơn chốt được">
-                            @error('order_value')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+<!-- Giá trị đơn trực tiếp -->
+<div class="col-md-6" id="order-value-direct-field">
+    <label class="form-label">
+        <span class="text-primary fw-bold">
+            Giá trị đơn chốt được (Trực tiếp)
+        </span>
+    </label>
+
+    <input type="text"
+        name="order_value_direct"
+        id="order_value_direct"
+        class="form-control"
+        value="{{ old('order_value_direct') }}"
+        placeholder="Nhập giá trị đơn trực tiếp">
+</div>
+
+<!-- Giá trị đơn Online -->
+<div class="col-md-6" id="order-value-online-field" style="display: none;">
+    <label class="form-label">
+        <span class="text-primary fw-bold">
+            Giá trị đơn chốt được (Online)
+        </span>
+    </label>
+
+    <input type="text"
+        name="order_value_online"
+        id="order_value_online"
+        class="form-control"
+        value="{{ old('order_value_online') }}"
+        placeholder="Nhập giá trị đơn Online">
+</div>
+
 
                         <!-- Status Information -->
                         <div class="col-md-6" id="first_customer_status_id-field" style="display: {{ old('lead_type', '1') == '2' ? 'none' : 'block' }};">
@@ -705,6 +726,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const customerCareCard = document.getElementById('customer-care-card');
     const showroomField = document.getElementById('showroom-field');
     const orderValueField = document.getElementById('order-value-field');
+    const directField = document.getElementById('order-value-direct-field');
+    const onlineField = document.getElementById('order-value-online-field');
+
+    const directInput = document.getElementById('order_value_direct');
+    const onlineInput = document.getElementById('order_value_online');
     const firstCustomerStatusField = document.getElementById('first_customer_status_id-field');
     const saleSupportField = document.getElementById('sale-support-field');
     const supportChannelField = document.getElementById('support-channel-field');
@@ -716,6 +742,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (customerCareCard) {
             customerCareCard.style.display = isOnline ? 'block' : 'none';
             customerCareCard.classList.toggle('fade-in', isOnline);
+        }
+        // Giá trị đơn trực tiếp / Online
+        if (directField && onlineField) {
+
+            directField.style.display = isOnline ? 'none' : 'block';
+            onlineField.style.display = isOnline ? 'block' : 'none';
+
+            directInput.disabled = isOnline;
+            onlineInput.disabled = !isOnline;
         }
         if (showroomField) {
             showroomField.style.display = isOnline ? 'none' : 'block';
@@ -774,10 +809,18 @@ setTimeout(function() {
     });
 }, 5000);
 
-// tự thêm dấu chấm hàng nghìn cho giá trị đơn chốt được
-document.getElementById('order_value').addEventListener('input', function (e) {
-    let value = this.value.replace(/\D/g, ""); // bỏ ký tự không phải số
-    this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // thêm dấu chấm
+// Định dạng tiền cho cả 2 trường
+['order_value_direct', 'order_value_online'].forEach(function(id) {
+
+    const input = document.getElementById(id);
+
+    if (input) {
+        input.addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        });
+    }
+
 });
 
 document.getElementById('add-phone').addEventListener('click', function () {
@@ -933,5 +976,6 @@ $('#lead_type').on('change', function () {
         $('#first_customer_status_id-field').show();
     }
 });
+
 </script>
 @endpush

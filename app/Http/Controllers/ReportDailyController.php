@@ -1857,5 +1857,324 @@ private function prepareMonthReport(Request $request): array
         'danh-sach-leads.xlsx'
     );
 }
+
+
+ private function getReportShowroomDataTT($fromDate1, $toDate1, $fromDate2, $toDate2)
+{
+    $showrooms = Showroom::all();
+    $metrics = [
+        'SL KHÁCH HÀNG ĐẾN SR' => 'sr_total_customers',
+        'SL KHÁCH HÀNG MỚI'   => 'sr_new_customers',
+        'SL KHÁCH HÀNG CŨ'    => 'sr_old_customers',
+        'KH MỚI TIỀM NĂNG'    => 'sr_new_potential',
+        'KH CŨ TIỀM NĂNG'     => 'sr_old_potential',
+        'KH TIỀM NĂNG'        => 'sr_total_potential',
+        'KH QUAN TÂM'         => 'sr_total_care',
+        'KH THAM KHẢO'        => 'sr_total_reference',
+        'KH HẾT NHU CẦU'      => 'sr_total_no_need',
+        'KH ĐÃ CHỐT MỚI'      => 'sr_new_closed',
+        'KH ĐÃ CHỐT CŨ'       => 'sr_old_closed',
+        'DOANH SỐ MỚI'        => 'sr_total_new_closed',
+        'DOANH SỐ CŨ'         => 'sr_total_old_closed',
+        'TỔNG DOANH SỐ CHỐT LIỀN' => 'sr_total_sale_closed',
+        'TỔNG DOANH SỐ THÁNG' => 'sr_total',
+    ];
+    // ============================================================
+    // THÁNG HIỆN TẠI - KHÁCH TRỰC TIẾP / SR
+    // ============================================================
+
+    $data_offline = DB::table('leads')
+        ->join('customer_types', 'customer_types.id', '=', 'leads.customer_type_id')
+        ->join('customer_statuses', 'customer_statuses.id', '=','leads.current_customer_status_id')
+        ->join('showrooms', 'showrooms.id', '=', 'leads.showroom_id')
+        ->whereBetween('first_interaction_date', [$fromDate1, $toDate1])
+        ->where(function ($q) { $q->where('leads.lead_type', 1)->orWhere('leads.old_lead_type', 1);})
+        ->select(
+            'showroom_id',
+
+            DB::raw('SUM(CASE WHEN leads.lead_type = 1 OR leads.old_lead_type = 1 THEN 1 ELSE 0 END) as total_customers'),
+            DB::raw('SUM(CASE WHEN (leads.lead_type = 1 OR leads.old_lead_type = 1) AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_customers'),
+            DB::raw('SUM(CASE WHEN (leads.lead_type = 1 OR leads.old_lead_type = 1) AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END ) as old_customers'),
+            DB::raw('SUM(CASE WHEN (leads.lead_type = 1 OR leads.old_lead_type = 1) AND customer_statuses.name = "Tiềm Năng" AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END) as new_potential'),
+            DB::raw('SUM(CASE WHEN (leads.lead_type = 1 OR leads.old_lead_type = 1) AND customer_statuses.name = "Tiềm Năng" AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END) as old_potential'),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 OR leads.old_lead_type = 1 ) AND customer_statuses.name = "Quan Tâm" THEN 1 ELSE 0 END ) as total_care '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 OR leads.old_lead_type = 1 ) AND customer_statuses.name = "Tham Khảo" THEN 1 ELSE 0 END ) as total_reference '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 OR leads.old_lead_type = 1 ) AND customer_statuses.name = "Hết Nhu Cầu" THEN 1 ELSE 0 END ) as total_no_need '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 OR leads.old_lead_type = 1 ) AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END ) as new_closed '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 OR leads.old_lead_type = 1 ) AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END ) as old_closed '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 OR leads.old_lead_type = 1 ) AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN COALESCE(order_value_direct, 0) ELSE 0 END ) as total_new_closed '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 OR leads.old_lead_type = 1 ) AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN COALESCE(order_value_direct, 0) ELSE 0 END ) as total_old_closed '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 OR leads.old_lead_type = 1 ) THEN COALESCE(order_value_direct, 0) ELSE 0 END ) as total '))
+        ->groupBy('showroom_id')
+        ->get();
+
+
+    // ============================================================
+    // THÁNG HIỆN TẠI - KHÁCH ONLINE
+    // GIỮ NGUYÊN LOGIC ONLINE
+    // ============================================================
+
+
+    // ============================================================
+    // KHỞI TẠO TỔNG
+    // ============================================================
+
+    $sr_total_customers = 0;
+    $sr_new_customers = 0;
+    $sr_old_customers = 0;
+    $sr_new_potential = 0;
+    $sr_old_potential = 0;
+    $sr_total_potential = 0;
+    $sr_total_care = 0;
+    $sr_total_reference = 0;
+    $sr_total_no_need = 0;
+    $sr_new_closed = 0;
+    $sr_old_closed = 0;
+    $sr_total_new_closed = 0;
+    $sr_total_old_closed = 0;
+    $sr_total_sale_closed = 0;
+    $sr_total = 0;
+
+
+    // ============================================================
+    // KHỞI TẠO TỔNG THEO SHOWROOM
+    // ============================================================
+
+    $totals_current = [];
+
+    foreach ($showrooms as $showroom) {
+        foreach ($metrics as $key) {
+            $totals_current[$showroom->id][$key] = 0;
+        }
+    }
+
+
+    // ============================================================
+    // CỘNG DỮ LIỆU SR THÁNG HIỆN TẠI
+    // ============================================================
+
+    foreach ($data_offline as $item) {
+
+        $sr_total_customers += (int) $item->total_customers;
+        $sr_new_customers += (int) $item->new_customers;
+        $sr_old_customers += (int) $item->old_customers;
+        $sr_new_potential += (int) $item->new_potential;
+        $sr_old_potential += (int) $item->old_potential;
+        $sr_total_care += (int) $item->total_care;
+        $sr_total_reference += (int) $item->total_reference;
+        $sr_total_no_need += (int) $item->total_no_need;
+        $sr_new_closed += (int) $item->new_closed;
+        $sr_old_closed += (int) $item->old_closed;
+        $sr_total_new_closed += (float) $item->total_new_closed;
+        $sr_total_old_closed += (float) $item->total_old_closed;
+
+        $sr_total_sale_closed +=
+            (float) $item->total_new_closed +
+            (float) $item->total_old_closed;
+
+        $sr_total += (float) $item->total;
+
+
+        // Gán theo showroom
+        foreach ($metrics as $label => $key) {
+
+            switch ($key) {
+
+                case 'sr_total_customers': $totals_current[$item->showroom_id][$key] += (int) $item->total_customers; break;
+                case 'sr_new_customers': $totals_current[$item->showroom_id][$key] += (int) $item->new_customers; break;
+                case 'sr_old_customers': $totals_current[$item->showroom_id][$key] += (int) $item->old_customers; break;
+                case 'sr_new_potential': $totals_current[$item->showroom_id][$key] += (int) $item->new_potential; break;
+                case 'sr_old_potential': $totals_current[$item->showroom_id][$key] += (int) $item->old_potential; break;
+                case 'sr_total_potential': $totals_current[$item->showroom_id][$key] += (int) $item->old_potential + (int) $item->new_potential; break;
+                case 'sr_total_care': $totals_current[$item->showroom_id][$key] += (int) $item->total_care; break;
+                case 'sr_total_reference': $totals_current[$item->showroom_id][$key] += (int) $item->total_reference; break;
+                case 'sr_total_no_need': $totals_current[$item->showroom_id][$key] += (int) $item->total_no_need; break;
+                case 'sr_new_closed': $totals_current[$item->showroom_id][$key] += (int) $item->new_closed; break;
+                case 'sr_old_closed': $totals_current[$item->showroom_id][$key] += (int) $item->old_closed; break;
+                case 'sr_total_new_closed': $totals_current[$item->showroom_id][$key] += (float) $item->total_new_closed; break;
+                case 'sr_total_old_closed': $totals_current[$item->showroom_id][$key] += (float) $item->total_old_closed; break;
+                case 'sr_total_sale_closed': $totals_current[$item->showroom_id][$key] += (float) $item->total_new_closed + (float) $item->total_old_closed; break;
+                case 'sr_total': $totals_current[$item->showroom_id][$key] += (float) $item->total; break;
+            }
+        }
+    }
+
+    $totals_sum = [
+        'sr_total_customers' => $sr_total_customers,
+        'sr_new_customers' => $sr_new_customers,
+        'sr_old_customers' => $sr_old_customers,
+        'sr_new_potential' => $sr_new_potential,
+        'sr_old_potential' => $sr_old_potential,
+        'sr_total_potential' => $sr_new_potential + $sr_old_potential,
+        'sr_total_care' => $sr_total_care,
+        'sr_total_reference' => $sr_total_reference,
+        'sr_total_no_need' => $sr_total_no_need,
+        'sr_new_closed' => $sr_new_closed,
+        'sr_old_closed' => $sr_old_closed,
+        'sr_total_new_closed' => $sr_total_new_closed,
+        'sr_total_old_closed' => $sr_total_old_closed,
+        'sr_total_sale_closed' => $sr_total_sale_closed,
+        'sr_total' => $sr_total,
+    ];
+
+
+    // ============================================================
+    // THÁNG TRƯỚC - SR
+    // ============================================================
+
+    $data_offline_prev = DB::table('leads')
+        ->join( 'customer_types', 'customer_types.id', '=', 'leads.customer_type_id' )
+        ->join( 'customer_statuses', 'customer_statuses.id', '=', 'leads.current_customer_status_id' )
+        ->join( 'showrooms', 'showrooms.id', '=', 'leads.showroom_id' )
+        ->whereBetween( 'first_interaction_date', [$fromDate2, $toDate2] )
+        ->where('leads.lead_type', 1)
+        ->select(
+            'showroom_id',
+
+            DB::raw(' SUM( CASE WHEN leads.lead_type = 1 THEN 1 ELSE 0 END ) as total_customers '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 ) AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END ) as new_customers '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 ) AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END ) as old_customers '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 ) AND customer_statuses.name = "Tiềm Năng" AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END ) as new_potential '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 ) AND customer_statuses.name = "Tiềm Năng" AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END ) as old_potential '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 ) AND customer_statuses.name = "Quan Tâm" THEN 1 ELSE 0 END ) as total_care '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 ) AND customer_statuses.name = "Tham Khảo" THEN 1 ELSE 0 END ) as total_reference '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 ) AND customer_statuses.name = "Hết Nhu Cầu" THEN 1 ELSE 0 END ) as total_no_need '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 ) AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN 1 ELSE 0 END ) as new_closed '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 ) AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN 1 ELSE 0 END ) as old_closed '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 ) AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Mới" THEN COALESCE(order_value_direct, 0) ELSE 0 END ) as total_new_closed '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 ) AND customer_statuses.name = "Đã Chốt" AND customer_types.name = "Khách Hàng Cũ" THEN COALESCE(order_value_direct, 0) ELSE 0 END ) as total_old_closed '),
+            DB::raw(' SUM( CASE WHEN ( leads.lead_type = 1 ) THEN COALESCE(order_value_direct, 0) ELSE 0 END ) as total ')
+        )
+        ->groupBy('showroom_id')
+        ->get();
+
+
+    // ============================================================
+    // THÁNG TRƯỚC - ONLINE
+    // ============================================================
+
+
+    $totals_prev = [];
+
+    foreach ($showrooms as $showroom) {
+        foreach ($metrics as $key) {
+            $totals_prev[$showroom->id][$key] = 0;
+        }
+    }
+
+
+    // ============================================================
+    // CỘNG SR THÁNG TRƯỚC
+    // ============================================================
+
+    foreach ($data_offline_prev as $item) {
+
+        foreach ($metrics as $label => $key) {
+
+            switch ($key) {
+
+                case 'sr_total_customers': $totals_prev[$item->showroom_id][$key] += (int) $item->total_customers; break;
+                case 'sr_new_customers': $totals_prev[$item->showroom_id][$key] += (int) $item->new_customers; break;
+                case 'sr_old_customers': $totals_prev[$item->showroom_id][$key] += (int) $item->old_customers; break;
+                case 'sr_new_potential': $totals_prev[$item->showroom_id][$key] += (int) $item->new_potential; break;
+                case 'sr_old_potential': $totals_prev[$item->showroom_id][$key] += (int) $item->old_potential; break;
+                case 'sr_total_potential': $totals_prev[$item->showroom_id][$key] += (int) $item->old_potential + (int) $item->new_potential; break;
+                case 'sr_total_care': $totals_prev[$item->showroom_id][$key] += (int) $item->total_care; break;
+                case 'sr_total_reference': $totals_prev[$item->showroom_id][$key] += (int) $item->total_reference; break;
+                case 'sr_total_no_need': $totals_prev[$item->showroom_id][$key] += (int) $item->total_no_need; break;
+                case 'sr_new_closed': $totals_prev[$item->showroom_id][$key] += (int) $item->new_closed; break;
+                case 'sr_old_closed': $totals_prev[$item->showroom_id][$key] += (int) $item->old_closed; break;
+                case 'sr_total_new_closed': $totals_prev[$item->showroom_id][$key] += (float) $item->total_new_closed; break;
+                case 'sr_total_old_closed': $totals_prev[$item->showroom_id][$key] += (float) $item->total_old_closed; break;
+                case 'sr_total_sale_closed': $totals_prev[$item->showroom_id][$key] += (float) $item->total_new_closed + (float) $item->total_old_closed; break;
+                case 'sr_total': $totals_prev[$item->showroom_id][$key] += (float) $item->total; break;
+            }
+        }
+    }
+
+
+    // ============================================================
+    // CỘNG ONLINE THÁNG TRƯỚC
+    // ============================================================
+
+    // ============================================================
+    // RETURN
+    // ============================================================
+
+    return [
+    'showrooms'      => $showrooms,
+    'metrics'        => $metrics,
+    'data_offline'   => $data_offline,
+    'totals_current' => $totals_current,
+    'totals_prev'    => $totals_prev,
+    'totals_sum'     => $totals_sum,
+    ];
+}
+    // fix
+
+    public function reportShowroomTT(Request $request)
+    {
+        $fromDate1 = $request->filled('from_date_1')
+            ? Carbon::parse($request->from_date_1)->startOfDay()
+            : Carbon::now()->startOfMonth();
+
+        $toDate1 = $request->filled('to_date_1')
+            ? Carbon::parse($request->to_date_1)->endOfDay()
+            : Carbon::now()->endOfMonth();
+
+        $fromDate2 = $request->filled('from_date_2')
+            ? Carbon::parse($request->from_date_2)->startOfDay()
+            : Carbon::now()->subMonth()->startOfMonth();
+
+        $toDate2 = $request->filled('to_date_2')
+            ? Carbon::parse($request->to_date_2)->endOfDay()
+            : Carbon::now()->subMonth()->endOfMonth();
+
+        $result = $this->getReportShowroomDataTT(
+            $fromDate1,
+            $toDate1,
+            $fromDate2,
+            $toDate2
+        );
+
+        return view('report_showroom.index', $result);
+    }
+    public function exportShowroomExcelTT(Request $request)
+    {
+        abort_unless(auth()->user()->hasPermission('report_showroom.view'), 403);
+
+        $fromDate1 = $request->filled('from_date_1')
+            ? Carbon::parse($request->from_date_1)->startOfDay()
+            : Carbon::now()->startOfMonth();
+
+        $toDate1 = $request->filled('to_date_1')
+            ? Carbon::parse($request->to_date_1)->endOfDay()
+            : Carbon::now()->endOfMonth();
+
+        $fromDate2 = $request->filled('from_date_2')
+            ? Carbon::parse($request->from_date_2)->startOfDay()
+            : Carbon::now()->subMonth()->startOfMonth();
+
+        $toDate2 = $request->filled('to_date_2')
+            ? Carbon::parse($request->to_date_2)->endOfDay()
+            : Carbon::now()->subMonth()->endOfMonth();
+
+        $result = $this->getReportShowroomData(
+            $fromDate1,
+            $toDate1,
+            $fromDate2,
+            $toDate2
+        );
+        return Excel::download(
+            new ReportShowroomExport(
+                $result,
+                $fromDate1,
+                $toDate1,
+                $fromDate2,
+                $toDate2
+            ),
+            'report_showroom.xlsx'
+        );
+    }
  
 }

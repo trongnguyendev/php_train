@@ -27,6 +27,8 @@ class Lead extends Model
         'sale_support_id',
         'current_customer_status_id',
         'order_value',
+        'order_value_direct',
+        'order_value_online',
         'support_channel_id',
         'source_id',
         'customer_discussion_details',

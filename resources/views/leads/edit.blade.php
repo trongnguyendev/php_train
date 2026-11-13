@@ -27,7 +27,7 @@
             @if(auth()->user()->roles()->whereIn('slug', ['admin', 'manager','supporter'])->exists())
                 <div class="col-md-4 mb-3">
                     <label class="form-label"><span class="text-primary fw-bold">Loại Lead</span></label>
-                    <select name="lead_type" class="form-select fw-bold">
+                    <select name="lead_type" id="lead_type" class="form-select fw-bold">
                         <option value="1" {{ old('lead_type', $lead->lead_type) == 1 ? 'selected' : '' }}>Trực tiếp</option>
                         <option value="2" {{ old('lead_type', $lead->lead_type) == 2 ? 'selected' : '' }}>Online</option>
                     </select>
@@ -303,18 +303,43 @@
             </div>
 
             
-            <div class="col-md-4 mb-3">
-                <label class="form-label">
-                    <span class="text-primary fw-bold">Giá trị đơn hàng</span>
-                </label>
+            {{-- Giá trị đơn trực tiếp --}}
+<div class="col-md-4 mb-3" id="order-value-direct-field">
+    <label class="form-label">
+        <span class="text-primary fw-bold">
+            Giá trị đơn hàng (Trực tiếp)
+        </span>
+    </label>
 
-                <input type="text" id="order_value_display" 
-                    value="{{ number_format(old('order_value', $lead->order_value), 0, ',', '.') }}" 
-                    class="form-control">
+    <input type="text"
+        id="order_value_direct_display"
+        value="{{ number_format((float) old('order_value_direct', $lead->order_value_direct ?? 0), 0, ',', '.') }}"
+        class="form-control">
 
-                <input type="hidden" name="order_value" id="order_value" 
-                    value="{{ old('order_value', $lead->order_value) }}">
-            </div>
+    <input type="hidden"
+        name="order_value_direct"
+        id="order_value_direct"
+        value="{{ old('order_value_direct', $lead->order_value_direct ?? 0) }}">
+</div>
+
+{{-- Giá trị đơn Online --}}
+<div class="col-md-4 mb-3" id="order-value-online-field">
+    <label class="form-label">
+        <span class="text-primary fw-bold">
+            Giá trị đơn hàng (Online)
+        </span>
+    </label>
+
+    <input type="text"
+        id="order_value_online_display"
+        value="{{ number_format((float) old('order_value_online', $lead->order_value_online ?? 0), 0, ',', '.') }}"
+        class="form-control">
+
+    <input type="hidden"
+        name="order_value_online"
+        id="order_value_online"
+        value="{{ old('order_value_online', $lead->order_value_online ?? 0) }}">
+</div>
            
 
             @if($lead->lead_type != 2)
@@ -423,16 +448,44 @@ document.addEventListener('DOMContentLoaded', function() {
     updateProductNamesEditBtn();
 });
 
-const display = document.getElementById('order_value_display');
-const real = document.getElementById('order_value');
+document.addEventListener('DOMContentLoaded', function () {
+    const leadType = document.getElementById('lead_type');
 
-function formatNumber(n) {
-    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
+    const directField = document.getElementById('order-value-direct-field');
+    const onlineField = document.getElementById('order-value-online-field');
 
-display.addEventListener('input', function () {
-    this.value = formatNumber(this.value);
-    real.value = this.value.replace(/\./g, '');
+    if (!leadType || !directField || !onlineField) {
+        console.error('Không tìm thấy trường loại Lead hoặc trường giá trị đơn hàng');
+        return;
+    }
+
+    function toggleOrderValue() {
+        const isOnline = leadType.value === '2';
+
+        directField.style.display = isOnline ? 'none' : '';
+        onlineField.style.display = isOnline ? '' : 'none';
+    }
+
+    // Chạy ngay khi mở trang
+    toggleOrderValue();
+
+    // Chạy khi thay đổi loại Lead
+    leadType.addEventListener('change', toggleOrderValue);
+
+    // Định dạng tiền cho cả hai ô
+    ['order_value_direct', 'order_value_online'].forEach(function (id) {
+        const input = document.getElementById(id + '_display');
+        const hidden = document.getElementById(id);
+
+        if (!input || !hidden) return;
+
+        input.addEventListener('input', function () {
+            let value = this.value.replace(/\D/g, '');
+
+            this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            hidden.value = value;
+        });
+    });
 });
 
 document.getElementById('add-phone').addEventListener('click', function () {
@@ -488,6 +541,42 @@ document.addEventListener('DOMContentLoaded', function () {
         leadType.addEventListener('change', toggleFirstCustomerStatus);
     }
 
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const leadType = document.getElementById('lead_type');
+
+    const directField = document.getElementById('order-value-direct-field');
+    const onlineField = document.getElementById('order-value-online-field');
+
+    if (!leadType || !directField || !onlineField) return;
+
+    function toggleOrderValue() {
+        if (leadType.value === '2') {
+            directField.style.display = 'none';
+            onlineField.style.display = 'block';
+        } else {
+            directField.style.display = 'block';
+            onlineField.style.display = 'none';
+        }
+    }
+
+    toggleOrderValue();
+    leadType.addEventListener('change', toggleOrderValue);
+
+    // Định dạng tiền
+    ['order_value_direct', 'order_value_online'].forEach(function (id) {
+        const input = document.getElementById(id + '_display');
+        const hidden = document.getElementById(id);
+
+        if (!input || !hidden) return;
+
+        input.addEventListener('input', function () {
+            let value = this.value.replace(/\D/g, '');
+            this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            hidden.value = value;
+        });
+    });
 });
 
 </script>

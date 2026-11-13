@@ -138,6 +138,13 @@ Route::get(
     [ReportDailyController::class, 'dataExportExcel']
 )->name('reports.dataExportExcel');
 
+// tt
+Route::get('/report-tt', [ReportDailyController::class, 'reportShowroomTT'])
+    ->name('report.tt');
+
+Route::get('/report-tt/export', [ReportDailyController::class, 'exportReportShowroomTT'])
+    ->name('report.tt.export');
+
 Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit_logs.index');
 Route::get('/leads/{lead}/history', [AuditLogController::class, 'leadHistory'])->name('leads.history');
 

@@ -377,6 +377,7 @@
                                     <th style="min-width: 100px;">Sale Hỗ Trợ Khách</th>
                                     <th style="min-width: 200px;">Tình Trạng Khách Hiện Tại</th>
                                     <th style="min-width: 100px;">Giá trị đơn chốt được</th>
+                                    <th style="min-width: 100px;">Giá trị đơn chốt được Online</th>
                                     <th style="min-width: 200px;">Thông tin trao đổi với KH</th>
                                     <th style="min-width: 200px;">Chuyển Sang TMDT</th>
                                     <th style="min-width: 200px;">Ngày Chăm Khách Lần 1</th>
@@ -615,11 +616,18 @@
                                             </select>
                                         </td>
 
-                                         <td>
+                                        <td>
                                             <span class="editable-text" data-id="{{ $lead->id }}" data-field="order_value">
                                                 {{ number_format($lead->order_value) ?? '-' }}
                                             </span>
                                             <input type="text" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="order_value" value="{{ $lead->order_value }}">
+                                        </td>
+
+                                        <td>
+                                            <span class="editable-text" data-id="{{ $lead->id }}" data-field="order_value_online">
+                                                {{ number_format($lead->order_value_online) ?? '-' }}
+                                            </span>
+                                            <input type="text" class="form-control d-none inline-text" data-id="{{ $lead->id }}" data-field="order_value_online" value="{{ $lead->order_value_online }}">
                                         </td>
                                        
                                         <!-- <td>
@@ -808,7 +816,8 @@
                                     <th style="min-width: 100px;">Sale Nhận Thông Tin</th>
                                     <th style="min-width: 100px;">Tình Trạng Khách Hiện Tại</th>
                                     <th style="min-width: 100px;">KH đã được hỗ trợ trước qua kênh nào?</th>
-                                    <th style="min-width: 100px;">Giá trị đơn chốt được</th>
+                                    <th style="min-width: 100px;">Giá trị đơn chốt được Tổng</th>
+                                    <th style="min-width: 100px;">Giá trị đơn chốt được Trực Tiếp</th>
                                     <th style="min-width: 100px;">Chuyển Sang TMDT</th>
                                     <th style="min-width: 200px;">Người Tạo</th>
                                     <th style="min-width: 200px;">Thời Gian Tạo</th>
@@ -947,6 +956,17 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
+
+                                        <td>
+                                            @if($lead->order_value_direct)
+                                                <span class="fw-medium text-success">{{ number_format($lead->order_value_direct) }}đ</span>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+
+                    
+
 
                                         <td>
                                             <input type="checkbox" disabled {{ $lead->tmdt == 'TMDT' ? 'checked' : '' }}>
