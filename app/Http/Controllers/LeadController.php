@@ -495,6 +495,13 @@ public function store(Request $request)
     }
     // Lấy ID của User đang đăng nhập hệ thống
     $currentUserId = auth()->id();
+
+    // Chuẩn hóa tiền tệ trước khi lưu database
+        $orderValue = (int) str_replace(['.', ',', ' '], '', $request->order_value ?? 0);
+
+        $orderValueDirect = (int) str_replace(['.', ',', ' '], '', $request->order_value_direct ?? 0);
+
+        $orderValueOnline = (int) str_replace(['.', ',', ' '], '', $request->order_value_online ?? 0);
         
 
     if ($request->lead_type == 1) { // Trực tiếp
@@ -558,8 +565,8 @@ public function store(Request $request)
             'sale_information_id' => $request->sale_information_id,
             'sale_support_id' => $request->sale_support_id,
             'order_value' => $orderValue,
-            'order_value_direct' => $request->order_value_direct ?? 0,
-            'order_value_online' => $request->order_value_online ?? 0,
+            'order_value_direct' => $orderValueDirect,
+            'order_value_online' => $orderValueOnline,
             'current_customer_status_id' => $request->current_customer_status_id,
             'customer_discussion_details' => $request->customer_discussion_details,
             'tmdt' => $request->has('tmdt') ? $request->tmdt : null,
