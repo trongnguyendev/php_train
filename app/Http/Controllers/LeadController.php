@@ -482,10 +482,8 @@ public function store(Request $request)
     }
     $request->validate($rules, $messages);
     $orderValueDirect = (int) str_replace('.', '', $request->order_value_direct ?? 0);
-        $orderValueOnline = (int) str_replace('.', '', $request->order_value_online ?? 0);
-
-        // Tổng giá trị đơn hàng
-        $orderValue = $orderValueDirect + $orderValueOnline;
+    $orderValueOnline = (int) str_replace('.', '', $request->order_value_online ?? 0);
+    $orderValue = $orderValueDirect + $orderValueOnline;
      // 3. LOGIC XỬ LÝ CUSTOMER_ID (Đảm bảo khách cũ dùng lại ID, khách mới sinh ID mới)
     if ($request->filled('customer_id')) {
         $customerId = $request->customer_id; // Lấy ID khách hàng từ input (nếu có)
@@ -496,13 +494,6 @@ public function store(Request $request)
     // Lấy ID của User đang đăng nhập hệ thống
     $currentUserId = auth()->id();
 
-    // Chuẩn hóa tiền tệ trước khi lưu database
-        $orderValue = (int) str_replace(['.', ',', ' '], '', $request->order_value ?? 0);
-
-        $orderValueDirect = (int) str_replace(['.', ',', ' '], '', $request->order_value_direct ?? 0);
-
-        $orderValueOnline = (int) str_replace(['.', ',', ' '], '', $request->order_value_online ?? 0);
-        
 
     if ($request->lead_type == 1) { // Trực tiếp
     
