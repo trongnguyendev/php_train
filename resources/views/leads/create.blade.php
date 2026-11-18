@@ -707,7 +707,8 @@
                     <a href="{{ route('leads.index') }}" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left me-2"></i>Quay lại
                     </a>
-                    <button type="submit" class="btn btn-primary">
+
+                    <button type="submit" id="submitLeadBtn" class="btn btn-primary">
                         <i class="bi bi-check-lg me-2"></i>Lưu Lead
                     </button>
                 </div>
@@ -976,6 +977,37 @@ $('#lead_type').on('change', function () {
         $('#first_customer_status_id-field').show();
     }
 });
+//khóa nút gửi 
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('leadForm');
+
+    if (!form) return;
+
+    let isSubmitting = false;
+
+    form.addEventListener('submit', function (e) {
+
+        // Nếu đã gửi rồi thì chặn lần gửi tiếp theo
+        if (isSubmitting) {
+            e.preventDefault();
+            return;
+        }
+
+        // Đánh dấu đang gửi
+        isSubmitting = true;
+
+        // Khóa nút submit
+        const btn = form.querySelector('[type="submit"]');
+
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = 'Đang gửi...';
+            btn.style.opacity = '0.6';
+            btn.style.cursor = 'not-allowed';
+        }
+    });
+});
+
 
 </script>
 @endpush
