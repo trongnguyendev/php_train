@@ -17,7 +17,7 @@
 @endsection
 
 @section('content')
-<form action="{{ route('leads.store') }}" method="POST">
+<form  action="{{ route('leads.store') }}" method="POST">
     @csrf
     <div class="row">
         <div class="col-lg-8 col-md-8">
@@ -978,36 +978,52 @@ $('#lead_type').on('change', function () {
     }
 });
 //khóa nút gửi 
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('leadForm');
+// Chống gửi Lead nhiều lần
+// ========================================
+// ========================================
+// CHỐNG GỬI LEAD NHIỀU LẦN
+// Không cần thêm ID vào form
+// ========================================
+(function () {
 
-    if (!form) return;
+    const btn = document.getElementById('submitLeadBtn');
+
+    if (!btn) {
+        console.error('Không tìm thấy nút Lưu Lead');
+        return;
+    }
+
+    const form = btn.closest('form');
+
+    if (!form) {
+        console.error('Không tìm thấy form chứa nút Lưu Lead');
+        return;
+    }
 
     let isSubmitting = false;
 
     form.addEventListener('submit', function (e) {
 
-        // Nếu đã gửi rồi thì chặn lần gửi tiếp theo
         if (isSubmitting) {
             e.preventDefault();
-            return;
+            e.stopImmediatePropagation();
+            return false;
         }
 
-        // Đánh dấu đang gửi
         isSubmitting = true;
 
-        // Khóa nút submit
-        const btn = form.querySelector('[type="submit"]');
+        btn.disabled = true;
 
-        if (btn) {
-            btn.disabled = true;
-            btn.innerHTML = 'Đang gửi...';
-            btn.style.opacity = '0.6';
-            btn.style.cursor = 'not-allowed';
-        }
-    });
-});
+        btn.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Đang lưu Lead...
+        `;
 
+        btn.style.opacity = '0.7';
+        btn.style.cursor = 'not-allowed';
 
+    }, true);
+
+})();
 </script>
 @endpush
