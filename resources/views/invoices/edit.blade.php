@@ -1052,10 +1052,10 @@
                                                 'Tiền Mặt + Quẹt Thẻ'
                                             ] as $method)
                                                 <option
-                                                    value="{{ $method }}"
-                                                    {{ ($formValue('deposit_type') ?: '-') === $method ? 'selected' : '' }}
+                                                    value="{{ $method === 'Trống' ? '-' : $method }}"
+                                                    {{ ($formValue('deposit_type') ?: '-') === ($method === 'Trống' ? '-' : $method) ? 'selected' : '' }}
                                                 >
-                                                    {{ $method === '-' ? '— Để trống —' : $method }}
+                                                    {{ $method === 'Trống' ? '— Để trống —' : $method }}
                                                 </option>
                                             @endforeach
                                         </select>

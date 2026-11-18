@@ -391,15 +391,7 @@ class InvoiceController extends Controller
                 'max:999999999999',
             ],
 
-            'deposit_type' => [
-                'required',
-                Rule::in([
-                    'Chuyển khoản',
-                    'Tiền mặt',
-                    'Quẹt thẻ',
-                    'Trống',
-                ]),
-            ],
+            'deposit_type' => 'nullable|in:-,Chuyển khoản,Tiền mặt,Quẹt thẻ,Tiền Mặt + Chuyển Khoản,Chuyển Khoản + Quẹt Thẻ,Tiền Mặt + Quẹt Thẻ',
 
             'items' => [
                 'required',

@@ -320,7 +320,7 @@
         <div class="customer-row">
             <div class="customer-label">Hình Thức Cọc:</div>
                 <div class="customer-value">
-                    @if(filled($invoice->deposit_type) && !in_array(trim($invoice->deposit_type), ['-', 'Trống'], true))
+                    @if(filled($invoice->deposit_type) && !in_array(trim($invoice->deposit_type), ['-', '-'], true))
                         {{ $invoice->deposit_type }}
                     @else
                         &nbsp;
